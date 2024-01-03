@@ -7,6 +7,7 @@
 
 import UIKit
 extension SignUpView{
+    
     func configureCollectionView(){
         
     }

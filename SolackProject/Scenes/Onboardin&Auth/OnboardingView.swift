@@ -17,7 +17,12 @@ final class OnboardingView:BaseVC,View{
             let vc = SignUpView()
             vc.reactor = .init(provider: reactor.provider)
             let nav = UINavigationController(rootViewController: vc)
-            nav.modalPresentationStyle = .fullScreen
+            if let sheet = nav.sheetPresentationController{
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+                sheet.selectedDetentIdentifier = .large
+                sheet.preferredCornerRadius = 10
+            }
             owner.present(nav,animated: true)
         }.disposed(by: disposeBag)
         reactor.state.map{($0.isLoading , $0.signInType)}.subscribe(with: self){ owner,val in
@@ -40,10 +45,10 @@ final class OnboardingView:BaseVC,View{
             let vc = AuthPresentView()
             let nav = UINavigationController(rootViewController: vc)
             if let sheet = nav.sheetPresentationController{
-                sheet.detents = [.custom(resolver: { context in
-                    280
-                })]
+                let sheetHeight:UISheetPresentationController.Detent = .custom(resolver: { context in 280})
+                sheet.detents = [sheetHeight]
                 sheet.prefersGrabberVisible = true
+                sheet.selectedDetentIdentifier = sheetHeight.identifier
                 sheet.preferredCornerRadius = 10
             }
             vc.reactor = reactor.reactorForAuth()

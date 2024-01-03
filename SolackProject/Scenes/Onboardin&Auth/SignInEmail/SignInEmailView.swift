@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 final class SignInEmailView: BaseVC{
+    let emailField = InputFieldView(field: "이메일", placeholder: "이메일을 입력하세요")
+    let pwField = InputFieldView(field: "비밀번호", placeholder: "비밀번호를 입력하세요")
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .gray6

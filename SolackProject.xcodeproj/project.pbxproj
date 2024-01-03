@@ -42,6 +42,8 @@
 		63A148A82B45564F005CF155 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148A72B45564F005CF155 /* RxBlocking */; };
 		63A148AC2B45564F005CF155 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AB2B45564F005CF155 /* RxCocoa */; };
 		63A148B02B45564F005CF155 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AF2B45564F005CF155 /* RxRelay */; };
+		63C4C3082B45AF9300A48E69 /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */; };
+		63C4C3092B45AF9300A48E69 /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,6 +88,8 @@
 		639DEAFA2B452E8300108979 /* AuthViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewReactor.swift; sourceTree = "<group>"; };
 		639DEAFD2B45338A00108979 /* SignUpView+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignUpView+CollectionView.swift"; sourceTree = "<group>"; };
 		639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewReactor.swift; sourceTree = "<group>"; };
+		63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
+		63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,8 @@
 		631A60D02B44EDF5005509C2 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				63C4C3052B45AF9200A48E69 /* Library */,
+				63C4C3042B45AF7300A48E69 /* AnyModels */,
 				631A60D12B44EDF5005509C2 /* Extensions */,
 				631A60D22B44EDF5005509C2 /* UIHelpers */,
 			);
@@ -270,6 +276,22 @@
 			path = SignUp;
 			sourceTree = "<group>";
 		};
+		63C4C3042B45AF7300A48E69 /* AnyModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AnyModels;
+			sourceTree = "<group>";
+		};
+		63C4C3052B45AF9200A48E69 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */,
+				63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -372,10 +394,12 @@
 				631A60F02B44EE15005509C2 /* OnboardingReactor.swift in Sources */,
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
 				631A60AA2B44ECEE005509C2 /* AppDelegate.swift in Sources */,
+				63C4C3082B45AF9300A48E69 /* UserDefaults+State.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
 				631A60FF2B452976005509C2 /* SecretKey.swift in Sources */,
 				631A60AC2B44ECEE005509C2 /* SceneDelegate.swift in Sources */,
 				631A60D72B44EDF5005509C2 /* ButtonConfiguration.swift in Sources */,
+				63C4C3092B45AF9300A48E69 /* AnyModelStore.swift in Sources */,
 				631A60E32B44EE02005509C2 /* KeyCores.swift in Sources */,
 				631A60D62B44EDF5005509C2 /* BaseVC.swift in Sources */,
 				631A60F92B452058005509C2 /* AuthPresentView.swift in Sources */,
