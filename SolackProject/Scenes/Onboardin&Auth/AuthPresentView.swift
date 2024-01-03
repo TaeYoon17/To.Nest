@@ -8,8 +8,28 @@
 import UIKit
 import SnapKit
 import RxSwift
+import ReactorKit
 
-final class AuthPresentView: BaseVC{
+final class AuthPresentView: BaseVC,View{
+    func bind(reactor: AuthViewReactor){
+        appleBtn.rx.tap.map{Reactor.Action.appleSignIn}.bind(to: reactor.action).disposed(by: disposeBag)
+        kakaoBtn.rx.tap.map{Reactor.Action.kakaoSignIn}.bind(to: reactor.action).disposed(by: disposeBag)
+        emailBtn.rx.tap.map{Reactor.Action.emailSignIn}.bind(to: reactor.action).disposed(by: disposeBag)
+        signUpBtn.rx.tap.map{Reactor.Action.signUp}.bind(to: reactor.action).disposed(by: disposeBag)
+        reactor.state.map{$0.shouldDimsiss}.distinctUntilChanged().bind(with: self) { owner, val in
+            guard val else {return}
+            owner.dismiss(animated: true) {
+                reactor.provider.authService.navigation.onNext(.dismissCompleted)
+            }
+        }.disposed(by: disposeBag)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    deinit{
+        print("is deinited!!")
+    }
+    var disposeBag = DisposeBag()
     
     let appleBtn = {
         let btn = UIButton()
@@ -28,8 +48,8 @@ final class AuthPresentView: BaseVC{
     }()
     let signInLabel = {
         let label = UILabel()
-//        label.text = "또는"
         label.attributedText = "또는".title2
+        label.textColor = .text 
         label.font = FontType.title2.get()
         return label
     }()
@@ -82,6 +102,6 @@ final class AuthPresentView: BaseVC{
             make.horizontalEdges.equalToSuperview().inset(35)
             make.bottom.equalTo(signStView.snp.top).inset(-16)
         }
-       
+        
     }
 }
