@@ -110,6 +110,7 @@
 		639DEAFD2B45338A00108979 /* SignUpView+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignUpView+CollectionView.swift"; sourceTree = "<group>"; };
 		639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewReactor.swift; sourceTree = "<group>"; };
 		63ADEA172B4651CF000A0CB4 /* KakaoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoManager.swift; sourceTree = "<group>"; };
+		63ADEA192B467CCD000A0CB4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,16 +212,12 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
-		631A60D82B44EDFA005509C2 /* ServiceManagers */ = {
+		631A60D82B44EDFA005509C2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-				6324D6D62B46DC1500AA1AC0 /* Network */,
-=======
 				63ADEA162B4651BB000A0CB4 /* KakaoService */,
->>>>>>> 9962467 (New v.1.0.0) 카카오 SDK 연결)
 			);
-			path = ServiceManagers;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		631A60D92B44EE01005509C2 /* Core */ = {
@@ -243,6 +240,7 @@
 				631A60DC2B44EE01005509C2 /* AppFont.swift */,
 				631A60FC2B452953005509C2 /* .gitignore */,
 				631A60FE2B452976005509C2 /* SecretKey.swift */,
+				63ADEA192B467CCD000A0CB4 /* Config.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -355,12 +353,12 @@
 			path = SignUp;
 			sourceTree = "<group>";
 		};
-		63ADEA162B4651BB000A0CB4 /* KakaoService */ = {
+		63ADEA162B4651BB000A0CB4 /* KakaoManager */ = {
 			isa = PBXGroup;
 			children = (
 				63ADEA172B4651CF000A0CB4 /* KakaoManager.swift */,
 			);
-			path = KakaoService;
+			path = KakaoManager;
 			sourceTree = "<group>";
 		};
 		63C4C3042B45AF7300A48E69 /* AnyModels */ = {
