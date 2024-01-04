@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  SolackProject
+//
+//  Created by 김태윤 on 1/4/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+KAKAO_NATIVE_APP_KEY = 068fe8f196837767fbdc122ea4614b46

@@ -32,8 +32,11 @@ final class OnboardingView:BaseVC,View{
                 let vc = SignInEmailView()
                 owner.present(vc,animated: true)
             case .email:
-                let vc = SignInEmailView()
-                owner.present(vc,animated: true)
+//                let vc = SignInEmailView()
+//                owner.present(vc,animated: true)
+                Task{
+                    try await NM.shared.signUp(.init(email: "a@c.com", pw: "1q!A1q!Abb", nick: "Toast", phone: "010-1111-2222"))
+                }
             case .kakao:
                 let vc = SignInEmailView()
                 owner.present(vc,animated: true)
