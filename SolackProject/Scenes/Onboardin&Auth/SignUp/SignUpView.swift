@@ -133,6 +133,7 @@ final class CheckInputFieldView: UIStackView{
         self.axis = .vertical
         self.distribution = .fillProportionally
         self.alignment = .fill
+        spacing = 4
         label.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(24)
         }
