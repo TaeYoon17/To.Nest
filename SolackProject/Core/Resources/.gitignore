@@ -4,5 +4,8 @@ SecretKey.swift
 UserInterfaceState.xcuserstate
 =======
 Config.xcconfig
+<<<<<<< HEAD
 *.xcuserstate
 >>>>>>> a2a59f2 (Kakao key 설정)
+=======
+>>>>>>> 3a447f7 (key 설정 1)
