@@ -239,8 +239,8 @@
 				631A60DB2B44EE01005509C2 /* AppConstraints.swift */,
 				631A60DC2B44EE01005509C2 /* AppFont.swift */,
 				631A60FC2B452953005509C2 /* .gitignore */,
-				631A60FE2B452976005509C2 /* SecretKey.swift */,
 				63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */,
+				631A60FE2B452976005509C2 /* SecretKey.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -542,6 +542,7 @@
 /* Begin XCBuildConfiguration section */
 		631A60B82B44ECEF005509C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -605,6 +606,7 @@
 		};
 		631A60B92B44ECEF005509C2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -661,6 +663,7 @@
 		};
 		631A60BB2B44ECEF005509C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -694,6 +697,7 @@
 		};
 		631A60BC2B44ECEF005509C2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

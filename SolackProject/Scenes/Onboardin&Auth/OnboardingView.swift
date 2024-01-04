@@ -38,8 +38,8 @@ final class OnboardingView:BaseVC,View{
                     try await NM.shared.signUp(.init(email: "a@c.com", pw: "1q!A1q!Abb", nick: "Toast", phone: "010-1111-2222"))
                 }
             case .kakao:
-                let vc = SignInEmailView()
-                owner.present(vc,animated: true)
+                KakaoManager.shared.startLogIn()
+//                owner.present(vc,animated: true)
             }
         }.disposed(by: disposeBag)
         reactor.state.map{$0.isLoading && $0.isAuthPresent}.throttle(.nanoseconds(1000), scheduler: MainScheduler.instance).subscribe(with: self) { owner, val in

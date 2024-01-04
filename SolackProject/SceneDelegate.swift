@@ -7,6 +7,8 @@
 
 import UIKit
 import RxKakaoSDKCommon
+import RxKakaoSDKAuth
+import KakaoSDKAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -17,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
-        RxKakaoSDK.initSDK(appKey: "${\(Kakao.nativeKey)}")
+        print("key:",Kakao.nativeKey)
+        RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         window = UIWindow(windowScene: scene)
         let reactor = OnboardingViewReactor()
         let vc = OnboardingView()
@@ -25,7 +28,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
     }
-
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                _ = AuthController.rx.handleOpenUrl(url: url)
+            }
+        }
+    }
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
