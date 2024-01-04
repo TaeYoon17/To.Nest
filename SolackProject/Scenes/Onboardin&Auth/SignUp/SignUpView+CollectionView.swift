@@ -8,9 +8,7 @@
 import UIKit
 extension SignUpView{
     
-    func configureCollectionView(){
-        
-    }
+    func configureCollectionView(){ }
     var layout: UICollectionViewCompositionalLayout{
         let config = UICollectionLayoutListConfiguration(appearance: .plain)
         let layout = UICollectionViewCompositionalLayout.list(using: config)
