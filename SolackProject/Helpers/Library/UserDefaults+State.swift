@@ -21,5 +21,3 @@ struct DefaultsState<Value>{
         self.path = location
     }
 }
-extension UserDefaults{
-}
