@@ -17,12 +17,7 @@ final class OnboardingView:BaseVC,View{
             let vc = SignUpView()
             vc.reactor = .init(provider: reactor.provider)
             let nav = UINavigationController(rootViewController: vc)
-            if let sheet = nav.sheetPresentationController{
-                sheet.detents = [.large()]
-                sheet.prefersGrabberVisible = true
-                sheet.selectedDetentIdentifier = .large
-                sheet.preferredCornerRadius = 10
-            }
+            owner.authSheetSetting(nav: nav)
             owner.present(nav,animated: true)
         }.disposed(by: disposeBag)
         reactor.state.map{($0.isLoading , $0.signInType)}.subscribe(with: self){ owner,val in
@@ -33,11 +28,13 @@ final class OnboardingView:BaseVC,View{
                 let vc = SignInEmailView()
                 owner.present(vc,animated: true)
             case .email:
-                //                let vc = SignInEmailView()
-                //                owner.present(vc,animated: true)
-                Task{
-                    try await NM.shared.signUp(.init(email: "a@c.com", pw: "1q!A1q!Abb", nick: "Toast", phone: "010-1111-2222"))
-                }
+                let vc = SignInEmailView()
+                let nav = UINavigationController(rootViewController: vc)
+                owner.authSheetSetting(nav: nav)
+                owner.present(nav,animated: true)
+                //                Task{
+                //                    try await NM.shared.signUp(.init(email: "a@c.com", pw: "1q!A1q!Abb", nick: "Toast", phone: "010-1111-2222"))
+                //                }
             case .kakao:
                 Task{
                     do {
@@ -103,5 +100,15 @@ final class OnboardingView:BaseVC,View{
         titleImage.image = .onboardText1
         titleImage.contentMode = .scaleAspectFit
         startBtn.config.backgroundColor(.accent).cornerRadius(8).text("시작하기", font: .title2).foregroundColor(.white).apply()
+    }
+}
+extension OnboardingView{
+    func authSheetSetting(nav: UINavigationController){
+        if let sheet = nav.sheetPresentationController{
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.selectedDetentIdentifier = .large
+            sheet.preferredCornerRadius = 10
+        }
     }
 }
