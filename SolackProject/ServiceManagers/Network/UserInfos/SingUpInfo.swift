@@ -7,8 +7,8 @@
 
 import Foundation
 struct SignUpInfo{
-    let email:String
-    let pw:String
-    let nick:String
-    let phone:String
+    var email:String = ""
+    var pw:String = ""
+    var nick:String = ""
+    var phone:String = ""
 }

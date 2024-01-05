@@ -21,11 +21,16 @@ final class SignUpView:BaseVC,View{
         actionBinding(contactField.inputText.map{A.setPhone($0)})
         actionBinding(pwField.inputText.map{A.setSecret($0)})
         actionBinding(checkPW.inputText.map{A.setCheckSecret($0)})
+        [emailField,nicknameField,contactField,pwField,checkPW].forEach{[weak self] (val:AuthFieldAble) in
+            actionBinding(val.accAction.map{A.signUpCheck})
+        }
+        actionBinding(signUpBtn.rx.tap.map{A.signUpCheck})
+        
         
         //MARK: -- State Binding
         reactor.state.map{$0.email}.distinctUntilChanged().bind(to: emailField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.nickName}.distinctUntilChanged().bind(to: nicknameField.inputText).disposed(by: disposeBag)
-        reactor.state.map{$0.phone}.distinctUntilChanged().bind(to: contactField.inputText).disposed(by: disposeBag)
+        reactor.state.map{$0.phone}.bind(to: contactField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.secret}.distinctUntilChanged().bind(to: pwField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.checkSecret}.distinctUntilChanged().bind(to: checkPW.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.signUpToast}.distinctUntilChanged().bind(with: self) { owner, type in
@@ -44,11 +49,12 @@ final class SignUpView:BaseVC,View{
     }
     let scrollView = UIScrollView()
     let signUpBtn = UIButton()
-    let emailField = CheckInputFieldView(field: "이메일", placeholder: "이메일을 입력하세요")
-    let nicknameField = InputFieldView(field: "닉네임", placeholder: "닉네임을 입력하세요")
-    let contactField = InputFieldView(field: "연락처", placeholder: "전화번호를 입력하세요")
-    let pwField = InputFieldView(field: "비밀번호", placeholder: "비밀번호를 입력하세요")
-    let checkPW = InputFieldView(field: "비밀번호 확인", placeholder: "비밀번호를 한 번 더 입력하세요")
+    let emailField = CheckInputFieldView(field: "이메일", placeholder: "이메일을 입력하세요",keyType: .emailAddress,accessoryText: "회원가입")
+    let nicknameField = InputFieldView(field: "닉네임", placeholder: "닉네임을 입력하세요",accessoryText: "회원가입")
+    let contactField = InputFieldView(field: "연락처", placeholder: "전화번호를 입력하세요",keyType: .phonePad, accessoryText: "회원가입")
+    let pwField = InputFieldView(field: "비밀번호", placeholder: "비밀번호를 입력하세요",accessoryText: "회원가입")
+    let checkPW = InputFieldView(field: "비밀번호 확인", placeholder: "비밀번호를 한 번 더 입력하세요",accessoryText: "회원가입")
+    private var isShowKeyboard:CGFloat? = nil
     lazy var stView = {
         let subViews = [emailField,nicknameField,contactField,pwField,checkPW]
         let st = UIStackView(arrangedSubviews: subViews)
@@ -60,10 +66,11 @@ final class SignUpView:BaseVC,View{
     }()
     override func configureView() {
 //        scrollView.keyboardDismissMode = .interactive
-        scrollView.keyboardDismissMode = .onDragWithAccessory
+//        scrollView.keyboardDismissMode = .onDragWithAccessory
         view.endEditing(true)
         scrollView.endEditing(true)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))
+        emailField.tf.autocapitalizationType = .none
     }
     @objc func dismissMyKeyboard(){
         view.endEditing(true)
@@ -101,6 +108,45 @@ final class SignUpView:BaseVC,View{
         }
     }
 }
+//MARK: -- 키보드 설정
+extension SignUpView{
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func handleKeyboardShow(notification: Notification) {
+        
+        if let userInfo = notification.userInfo {
+            if let keyboardFrameValue = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue) {
+                let keyboardFrame = keyboardFrameValue.cgRectValue
+//                print(keyboardFrame)
+                self.isShowKeyboard = keyboardFrame.minY
+                let contentInset = UIEdgeInsets(
+                    top: 0.0,
+                    left: 0.0,
+                    bottom: keyboardFrame.size.height,
+                    right: 0.0)
+                scrollView.contentInset = contentInset
+                scrollView.scrollIndicatorInsets = contentInset
+            }
+        }
+    }
+    @objc func handleKeyboardHide(notification: Notification){
+        print("Keyboard will Hide")
+        self.isShowKeyboard = nil
+        let contentInset:UIEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
+        scrollView.scrollIndicatorInsets = contentInset
+        scrollView.contentInset = contentInset
+    }
+}
 extension SignUpView{
     func toastUp(type: SignUpToastType){
         var style = ToastStyle()
@@ -109,15 +155,15 @@ extension SignUpView{
         style.messageColor = .white
         style.verticalPadding = 9
         style.horizontalPadding = 16
-        switch type{
-        case .alreadyAvailable,.vailableEmail:
-            style.backgroundColor = .accent
-        case .emailValidataionError:
-            style.backgroundColor = .gray3
-        }
+        style.backgroundColor = type.getColor
         let toast = try! navigationController!.view.toastViewForMessage(type.contents, title: nil, image: nil, style: style)
         let radiusHeight = toast.frame.height / 2
-        navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: .init(x: signUpBtn.frame.midX, y: signUpBtn.frame.minY - 16 - radiusHeight),completion: nil)
+        let minY = if let isShowKeyboard{
+            isShowKeyboard - 70 - radiusHeight
+        }else{
+            signUpBtn.frame.minY - 16 - radiusHeight
+        }
+        navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: .init(x: signUpBtn.frame.midX, y: minY),completion: nil)
     }
     func isSignUpBtnAvailable(_ val: Bool){
         let config = signUpBtn.config.foregroundColor(.white).cornerRadius(8).text("회원가입", font: .title2)
@@ -132,3 +178,13 @@ extension SignUpView{
 }
 
 
+fileprivate extension SignUpToastType{
+    var getColor:UIColor{
+        switch self{
+        case .alreadyAvailable,.vailableEmail:
+            .accent
+        case .emailValidataionError,.nickNameCondition,.phoneCondition,.invalidateCheckPassword,.other:
+            .error
+        }
+    }
+}

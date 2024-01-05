@@ -11,8 +11,14 @@ import SnapKit
 import RxCocoa
 import RxSwift
 import UIKit
-final class CheckInputFieldView: UIStackView{
+protocol AuthFieldAble{
+    var accAction: ControlEvent<Void>! {get set}
+    func setAccessory(_ accessoryText:String?)
+}
+final class CheckInputFieldView: UIStackView,AuthFieldAble{
     var inputText: ControlProperty<String>!
+    lazy var accAction: ControlEvent<Void>! = btn.rx.tap
+    var valid: BehaviorSubject<Bool> = .init(value: false)
     var isValidate: Bool = false{
         didSet{
             let config = validataion.config.cornerRadius(8).foregroundColor(.white).text("중복 확인", font: .title2)
@@ -23,9 +29,11 @@ final class CheckInputFieldView: UIStackView{
             }
         }
     }
+    
     let tf:UITextField = .init()
     let validataion: UIButton = .init()
     private let label: UILabel = .init()
+    private let btn = AuthBtn()
     private lazy var fieldView = {
         let v = UIView()
         v.addSubview(tf)
@@ -40,15 +48,20 @@ final class CheckInputFieldView: UIStackView{
         }
         return v
     }()
-    init(field:String,placeholder:String){
+    
+    private var disposeBag = DisposeBag()
+    private lazy var accessoryView: UIView = {
+        return UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 70))
+    }()
+    init(field:String,placeholder:String,keyType:UIKeyboardType = .default,accessoryText:String? = nil){
         super.init(frame: .zero)
         self.inputText = tf.rx.text.orEmpty
+        self.tf.keyboardType = keyType
         [label,fieldView].forEach { addArrangedSubview($0) }
         self.axis = .vertical
         self.distribution = .fillProportionally
         self.alignment = .fill
         spacing = 4
-        
         label.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(24)
         }
@@ -70,11 +83,30 @@ final class CheckInputFieldView: UIStackView{
         attr.foregroundColor = .secondary
         tf.attributedPlaceholder = NSAttributedString(attr)
         tf.font = FontType.body.get()
+        setAccessory(accessoryText)
     }
     required init(coder: NSCoder) {
         fatalError("Don't use storyboard")
     }
     func binding(){
         
+    }
+    func setAccessory(_ accessoryText:String?){
+        if let accessoryText{
+            let width = UIScreen.main.bounds.width - 48
+            tf.inputAccessoryView = accessoryView
+            accessoryView.addSubview(btn)
+            accessoryView.backgroundColor = .gray1
+            btn.text = accessoryText
+            btn.snp.makeConstraints { make in
+                make.height.equalTo(44)
+                make.bottom.equalToSuperview().inset(12)
+                make.width.equalToSuperview().inset(24)
+                make.centerX.equalToSuperview()
+            }
+            valid.subscribe(with: self){ owner,val in
+                owner.btn.isAvailable = val
+            }.disposed(by: disposeBag)
+        }
     }
 }
