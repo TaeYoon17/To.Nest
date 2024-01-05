@@ -9,17 +9,22 @@ import SnapKit
 import RxCocoa
 import RxSwift
 import UIKit
-final class InputFieldView: UIStackView{
+final class InputFieldView: UIStackView,AuthFieldAble{
     var inputText: ControlProperty<String>!
+    lazy var accAction: ControlEvent<Void>! = btn.rx.tap
+    var valid: BehaviorSubject<Bool> = .init(value: false)
     let tf:UITextField = .init()
+    private let btn = AuthBtn()
     private let label: UILabel = .init()
-    
-    lazy var accessoryView: UIView = {
+    private var disposeBag = DisposeBag()
+    private lazy var accessoryView: UIView = {
         return UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 70))
     }()
-    init(field:String,placeholder:String){
+    init(field:String,placeholder:String,keyType:UIKeyboardType = .default,accessoryText:String? = nil){
         super.init(frame: .zero)
         self.inputText =  self.tf.rx.text.orEmpty
+        
+        self.tf.keyboardType = keyType
         [label,tf].forEach { addArrangedSubview($0) }
         self.axis = .vertical
         self.distribution = .fillProportionally
@@ -30,18 +35,6 @@ final class InputFieldView: UIStackView{
         tf.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(24)
             make.height.equalTo(44)
-        }
-        let width = UIScreen.main.bounds.width - 48
-        print(width)
-        tf.inputAccessoryView = accessoryView
-        let btn = SignUpBtn()
-        accessoryView.addSubview(btn)
-        accessoryView.backgroundColor = .gray1
-        btn.snp.makeConstraints { make in
-            make.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(12)
-            make.width.equalToSuperview().inset(24)
-            make.centerX.equalToSuperview()
         }
         let labelAttr = field.attr(type: .title2)
         label.text = field
@@ -56,26 +49,29 @@ final class InputFieldView: UIStackView{
         attr.foregroundColor = .secondary
         tf.attributedPlaceholder = NSAttributedString(attr)
         tf.font = FontType.body.get()
+        setAccessory(accessoryText)
     }
     required init(coder: NSCoder) {
         fatalError("Don't use storyboard")
     }
-}
-final class SignUpBtn: UIButton{
-    var isAvailable: Bool = false{
-        didSet{
-            var con = config.cornerRadius(10).foregroundColor(.white).text("회원가입", font: .title2)
-            con.backgroundColor(isAvailable ? .accent : .gray3).apply()
-            self.isUserInteractionEnabled = isAvailable
+    func setAccessory(_ accessoryText:String?){
+        if let accessoryText{
+            let width = UIScreen.main.bounds.width - 48
+            tf.inputAccessoryView = accessoryView
+            accessoryView.addSubview(btn)
+            accessoryView.backgroundColor = .gray1
+            btn.text = accessoryText
+            btn.snp.makeConstraints { make in
+                make.height.equalTo(44)
+                make.bottom.equalToSuperview().inset(12)
+                make.width.equalToSuperview().inset(24)
+                make.centerX.equalToSuperview()
+            }
+            valid.subscribe(with: self){ owner,val in
+                owner.btn.isAvailable = val
+            }.disposed(by: disposeBag)
+            
         }
     }
-    required init?(coder: NSCoder) {
-        fatalError("Don't use storyboard")
-    }
-    init() {
-        super.init(frame: .zero)
-        var con = config.cornerRadius(10).foregroundColor(.white).text("회원가입", font: .title2)
-        con.backgroundColor(isAvailable ? .accent : .gray3).apply()
-        self.isUserInteractionEnabled = false
-    }
 }
+

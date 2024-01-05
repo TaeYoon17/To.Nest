@@ -39,7 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func userAccessConnect(){
         AppManager.shared.userAccessable.debounce(.nanoseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, isLogIn in
             guard let view = owner.window?.rootViewController?.view else {return}
-            print("발생한다")
+            print("userAccessConnect 발생한다")
             let vc = if isLogIn{
                 ViewController()
             }else{

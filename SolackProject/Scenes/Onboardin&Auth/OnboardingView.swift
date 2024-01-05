@@ -66,7 +66,8 @@ final class OnboardingView:BaseVC,View{
     }
     private let titleImage = UIImageView()
     private let imageView = UIImageView()
-    private var startBtn = UIButton()
+//    private var startBtn = UIButton()
+    private var startBtn = AuthBtn()
     var disposeBag = DisposeBag()
     //    let onbardingViewReactor = OnboardingViewReactor()
     override func viewDidLoad() {
@@ -99,7 +100,8 @@ final class OnboardingView:BaseVC,View{
         imageView.contentMode = .scaleAspectFill
         titleImage.image = .onboardText1
         titleImage.contentMode = .scaleAspectFit
-        startBtn.config.backgroundColor(.accent).cornerRadius(8).text("시작하기", font: .title2).foregroundColor(.white).apply()
+        startBtn.text = "시작하기"
+        startBtn.isAvailable = true
     }
 }
 extension OnboardingView{
