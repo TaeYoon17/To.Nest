@@ -26,20 +26,28 @@ final class OnboardingView:BaseVC,View{
             owner.present(nav,animated: true)
         }.disposed(by: disposeBag)
         reactor.state.map{($0.isLoading , $0.signInType)}.subscribe(with: self){ owner,val in
-            guard val.0,let signInType = val.1 else {return}
+            let (a,b) = val
+            guard a, let signInType = b else {return}
             switch signInType{
             case .apple:
                 let vc = SignInEmailView()
                 owner.present(vc,animated: true)
             case .email:
-//                let vc = SignInEmailView()
-//                owner.present(vc,animated: true)
+                //                let vc = SignInEmailView()
+                //                owner.present(vc,animated: true)
                 Task{
                     try await NM.shared.signUp(.init(email: "a@c.com", pw: "1q!A1q!Abb", nick: "Toast", phone: "010-1111-2222"))
                 }
             case .kakao:
-                let vc = SignInEmailView()
-                owner.present(vc,animated: true)
+                Task{
+                    do {
+                        let kakaoToken = try await KakaoManager.shared.getKakaoToken()
+                        try await NM.shared.signIn(type: signInType, body: KakaoInfo(oauthToken: kakaoToken))
+                        AppManager.shared.userAccessable.onNext(true)
+                    }catch{
+                        print(error)
+                    }
+                }
             }
         }.disposed(by: disposeBag)
         reactor.state.map{$0.isLoading && $0.isAuthPresent}.throttle(.nanoseconds(1000), scheduler: MainScheduler.instance).subscribe(with: self) { owner, val in
