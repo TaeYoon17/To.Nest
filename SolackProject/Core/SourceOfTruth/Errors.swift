@@ -9,5 +9,6 @@ import Foundation
 enum Errors{
     enum API:Error{
         case FailFetchToken
+        
     }
 }

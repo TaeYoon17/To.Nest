@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import UIKit
+import RxSwift
+final class AppManager{
+    static let shared = AppManager()
+    let userAccessable = PublishSubject<Bool>()
+    
+}

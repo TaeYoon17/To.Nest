@@ -9,19 +9,20 @@ import UIKit
 import RxKakaoSDKCommon
 import RxKakaoSDKAuth
 import KakaoSDKAuth
+import RxSwift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var disposeBag = DisposeBag()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
-        print("key:",Kakao.nativeKey)
-        RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         window = UIWindow(windowScene: scene)
+        RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
+        userAccessConnect()
         let reactor = OnboardingViewReactor()
         let vc = OnboardingView()
         vc.reactor = reactor
@@ -34,6 +35,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 _ = AuthController.rx.handleOpenUrl(url: url)
             }
         }
+    }
+    func userAccessConnect(){
+        AppManager.shared.userAccessable.debounce(.nanoseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, isLogIn in
+            guard let view = owner.window?.rootViewController?.view else {return}
+            print("발생한다")
+            let vc = if isLogIn{
+                ViewController()
+            }else{
+                OnboardingView()
+            }
+            let coverView = UIView()
+            coverView.backgroundColor = .gray1
+            vc.view.addSubview(coverView)
+            coverView.frame = vc.view.bounds
+            owner.window?.rootViewController = vc
+            owner.window?.makeKeyAndVisible()
+            UIView.animate(withDuration: 0.5) {
+                coverView.alpha = 0
+            }completion: { _ in
+                coverView.removeFromSuperview()
+            }
+        }.disposed(by: disposeBag)
     }
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

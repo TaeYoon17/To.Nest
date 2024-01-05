@@ -32,7 +32,7 @@ final class KakaoManager{
                 }
             }
             if (UserApi.isKakaoTalkLoginAvailable()){
-                apiShared.loginWithKakaoAccount( completion: handler)
+                apiShared.loginWithKakaoTalk( completion: handler)
             }else{
                 apiShared.loginWithKakaoAccount(completion:handler)
             }
