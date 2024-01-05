@@ -7,7 +7,41 @@
 import UIKit
 import SnapKit
 import ReactorKit
+import RxCocoa
+import Toast
 final class SignUpView:BaseVC,View{
+    var disposeBag: DisposeBag = .init()
+    typealias A = SignUpViewReactor.Action
+    func bind(reactor: SignUpViewReactor) {
+        //MARK: -- Action Binding
+        func actionBinding(_ action : Observable<A>){ action.bind(to: reactor.action).disposed(by: disposeBag) }
+        actionBinding(emailField.inputText.map{A.setEmail($0)})
+        actionBinding(emailField.validataion.rx.tap.map{A.dobuleCheck})
+        actionBinding(nicknameField.inputText.map{A.setNickname($0)})
+        actionBinding(contactField.inputText.map{A.setPhone($0)})
+        actionBinding(pwField.inputText.map{A.setSecret($0)})
+        actionBinding(checkPW.inputText.map{A.setCheckSecret($0)})
+        
+        //MARK: -- State Binding
+        reactor.state.map{$0.email}.distinctUntilChanged().bind(to: emailField.inputText).disposed(by: disposeBag)
+        reactor.state.map{$0.nickName}.distinctUntilChanged().bind(to: nicknameField.inputText).disposed(by: disposeBag)
+        reactor.state.map{$0.phone}.distinctUntilChanged().bind(to: contactField.inputText).disposed(by: disposeBag)
+        reactor.state.map{$0.secret}.distinctUntilChanged().bind(to: pwField.inputText).disposed(by: disposeBag)
+        reactor.state.map{$0.checkSecret}.distinctUntilChanged().bind(to: checkPW.inputText).disposed(by: disposeBag)
+        reactor.state.map{$0.signUpToast}.distinctUntilChanged().bind(with: self) { owner, type in
+            guard let type else {return}
+            owner.toastUp(type: type)
+        }.disposed(by: disposeBag)
+        reactor.state.map{$0.isEmailChecked}.distinctUntilChanged().bind(with: self) { owner, value in
+            owner.emailField.isValidate = value
+            owner.isSignUpBtnAvailable(value)
+        }.disposed(by: disposeBag)
+        
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .gray1
+    }
     let scrollView = UIScrollView()
     let signUpBtn = UIButton()
     let emailField = CheckInputFieldView(field: "이메일", placeholder: "이메일을 입력하세요")
@@ -24,20 +58,15 @@ final class SignUpView:BaseVC,View{
         st.alignment = .fill
         return st
     }()
-    var disposeBag: DisposeBag = .init()
-    func bind(reactor: SignUpViewReactor) {
-        reactor.state.map{$0.isSignUpAble}.subscribe(with: self){ owner,val in
-            let config = owner.signUpBtn.config.foregroundColor(.white).cornerRadius(8).text("가입하기", font: .title2)
-            config.backgroundColor(val ? .accent : .gray3).apply()
-        }.disposed(by: disposeBag)
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .gray1
-    }
-    
     override func configureView() {
-        
+//        scrollView.keyboardDismissMode = .interactive
+        scrollView.keyboardDismissMode = .onDragWithAccessory
+        view.endEditing(true)
+        scrollView.endEditing(true)
+        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))
+    }
+    @objc func dismissMyKeyboard(){
+        view.endEditing(true)
     }
     override func configureLayout() {
         view.addSubview(scrollView)
@@ -72,95 +101,34 @@ final class SignUpView:BaseVC,View{
         }
     }
 }
+extension SignUpView{
+    func toastUp(type: SignUpToastType){
+        var style = ToastStyle()
+        style.messageFont = FontType.body.get()
+        style.cornerRadius = 8
+        style.messageColor = .white
+        style.verticalPadding = 9
+        style.horizontalPadding = 16
+        switch type{
+        case .alreadyAvailable,.vailableEmail:
+            style.backgroundColor = .accent
+        case .emailValidataionError:
+            style.backgroundColor = .gray3
+        }
+        let toast = try! navigationController!.view.toastViewForMessage(type.contents, title: nil, image: nil, style: style)
+        let radiusHeight = toast.frame.height / 2
+        navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: .init(x: signUpBtn.frame.midX, y: signUpBtn.frame.minY - 16 - radiusHeight),completion: nil)
+    }
+    func isSignUpBtnAvailable(_ val: Bool){
+        let config = signUpBtn.config.foregroundColor(.white).cornerRadius(8).text("회원가입", font: .title2)
+        if val{
+            config.backgroundColor(.accent).apply()
+            
+        }else{
+            config.backgroundColor(.gray3).apply()
+            signUpBtn.isUserInteractionEnabled = val
+        }
+    }
+}
 
-final class InputFieldView: UIStackView{
-    let tf:UITextField = .init()
-    private let label: UILabel = .init()
-    init(field:String,placeholder:String){
-        super.init(frame: .zero)
-        [label,tf].forEach { addArrangedSubview($0) }
-        self.axis = .vertical
-        self.distribution = .fillProportionally
-        self.alignment = .fill
-        label.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(24)
-        }
-        tf.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(24)
-            make.height.equalTo(44)
-        }
-        //            self.backgroundColor = .blue/
-        let labelAttr = field.attr(type: .title2)
-        //            label.attributedText = NSAttributedString(labelAttr)
-        label.text = field
-        label.font = FontType.title2.get()
-        tf.placeholder = placeholder
-        tf.backgroundColor = .white
-        tf.borderStyle = .none
-        tf.layer.cornerRadius = 8
-        tf.leftView = .init(frame: .init(x: 0, y: 0, width: 12, height: 44))
-        tf.leftViewMode = .always
-        var attr = placeholder.attr(type: .body)
-        attr.foregroundColor = .secondary
-        tf.attributedPlaceholder = NSAttributedString(attr)
-        tf.font = FontType.body.get()
-    }
-    required init(coder: NSCoder) {
-        fatalError("Don't use storyboard")
-    }
-}
-final class CheckInputFieldView: UIStackView{
-    let tf:UITextField = .init()
-    let validataion: UIButton = .init()
-    private let label: UILabel = .init()
-    private lazy var fieldView = {
-        let v = UIView()
-        v.addSubview(tf)
-        v.addSubview(validataion)
-        validataion.snp.makeConstraints { make in
-            make.width.equalTo(100)
-            make.verticalEdges.trailing.equalToSuperview()
-        }
-        tf.snp.makeConstraints { make in
-            make.verticalEdges.leading.equalToSuperview()
-            make.trailing.equalTo(validataion.snp.leading).inset(-12)
-        }
-        return v
-    }()
-    init(field:String,placeholder:String){
-        super.init(frame: .zero)
-        [label,fieldView].forEach { addArrangedSubview($0) }
-        self.axis = .vertical
-        self.distribution = .fillProportionally
-        self.alignment = .fill
-        spacing = 4
-        label.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(24)
-        }
-        fieldView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(24)
-            make.height.equalTo(44)
-        }
-        var config = validataion.config.cornerRadius(8).foregroundColor(.white).text("중복 확인", font: .title2)
-        config.backgroundColor(.accent).apply()
-        label.text = field
-        label.font = FontType.title2.get()
-        tf.placeholder = placeholder
-        tf.backgroundColor = .white
-        tf.borderStyle = .none
-        tf.layer.cornerRadius = 8
-        tf.leftView = .init(frame: .init(x: 0, y: 0, width: 12, height: 44))
-        tf.leftViewMode = .always
-        var attr = placeholder.attr(type: .body)
-        attr.foregroundColor = .secondary
-        tf.attributedPlaceholder = NSAttributedString(attr)
-        tf.font = FontType.body.get()
-    }
-    required init(coder: NSCoder) {
-        fatalError("Don't use storyboard")
-    }
-    func binding(){
-        
-    }
-}
 

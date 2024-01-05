@@ -8,71 +8,105 @@
 import Foundation
 import ReactorKit
 import RxSwift
+
+enum SignUpToastType{
+    case emailValidataionError
+    case vailableEmail
+    case alreadyAvailable
+    var contents:String{
+        switch self{
+        case .emailValidataionError: "이메일 형식이 올바르지 않습니다."
+        case .vailableEmail: "사용 가능한 이메일입니다."
+        case .alreadyAvailable: "사용 가능한 이메일입니다."
+        }
+    }
+}
 class SignUpViewReactor: Reactor{
     var initialState: State = State()
     let provider: ServiceProviderProtocol
+    var email = ""
     enum Action{
-        case cancel
-        case appleSignIn
-        case kakaoSignIn
-        case emailSignIn
-        case signUp
+        case setEmail(String)
+        case setNickname(String)
+        case setPhone(String)
+        case dobuleCheck
+        case setSecret(String)
+        case setCheckSecret(String)
     }
     enum Mutation{
-        case authorizing(Bool) // 회원 가입 진행 중, 혹은 다른 곳 로그인 중
-        case complete(String) // 무엇이든지 종료, 액세스 토큰 반환
-        case dismiss
+        case setEmail(String)
+        case setNickname(String)
+        case setPhone(String)
+        case doubleCheck(Bool)
+        case setSecret(String)
+        case setCheckSecret(String)
+        case setSignUpToast(SignUpToastType?)
     }
     struct State{
-        var type: SignInType? = nil
-        var isLoading = false
-        var accessToken = ""
-        var isSignUpAble = false
+        var email:String = ""
+        var nickName:String = ""
+        var secret:String = ""
+        var checkSecret:String = ""
+        var phone:String = ""
+        var isEmailChecked:Bool = false
+        var signUpToast:SignUpToastType? = nil
     }
     init(provider: ServiceProviderProtocol){
         self.provider = provider
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
-        case .appleSignIn:
+        case .setEmail(let email):
+            self.email = email
             return Observable.concat([
-                Observable.just(.authorizing(true)),
-                Observable.just(.authorizing(false)),
+                .just(.setEmail(email)),
+                .just(.doubleCheck(false))
             ])
-        case .emailSignIn:
+        case .setNickname(let name):
             return Observable.concat([
-                Observable.just(.authorizing(true)),
-                Observable.just(.authorizing(false)),
+                .just(.setNickname(name))
             ])
-        case .kakaoSignIn:
+        case .setPhone(let phone):
             return Observable.concat([
-                Observable.just(.authorizing(true)),
-                Observable.just(.authorizing(false)),
+                .just(.setPhone(phone))
             ])
-        case .signUp:
+        case .dobuleCheck:
+            let check = NM.shared.emailCheck(email)
+            let doubleCheck = check.map{Mutation.doubleCheck($0)}
+            let toast = check.map{ Mutation.setSignUpToast($0 ? .vailableEmail : .emailValidataionError) }
             return Observable.concat([
-                Observable.just(.authorizing(true)),
-                Observable.just(.authorizing(false)),
+                doubleCheck,
+                toast.delay(.nanoseconds(100), scheduler: MainScheduler.instance),
+                .just(.setSignUpToast(nil)).delay(.nanoseconds(100), scheduler: MainScheduler.instance)
             ])
-        case .cancel:
+        case .setSecret(let secret):
             return Observable.concat([
-                Observable.just(.authorizing(false))
+                .just(.setSecret(secret))
+            ])
+        case .setCheckSecret(let secret):
+            return Observable.concat([
+                .just(.setCheckSecret(secret))
             ])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation{
-        case .authorizing(let value):
-            state.isLoading = value
-        case .complete(let str):
-            state.accessToken = ""
-        case .dismiss:
-            state.isLoading = false
+        case .setEmail(let email):
+            state.email = email
+        case .setNickname(let nick):
+            state.nickName = nick
+        case .setPhone(let phone):
+            state.phone = phone
+        case .doubleCheck(let valiEmail):
+            state.isEmailChecked = valiEmail
+        case .setSecret(let secret):
+            state.secret = secret
+        case .setCheckSecret(let checkSecret):
+            state.checkSecret = checkSecret
+        case .setSignUpToast(let type):
+            state.signUpToast = type
         }
         return state
     }
-    //    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    //
-    //    }
 }

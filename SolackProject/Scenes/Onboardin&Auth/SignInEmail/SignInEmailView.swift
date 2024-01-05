@@ -14,7 +14,7 @@ final class SignInEmailView: BaseVC{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .gray1
-        
+    
     }
     //MARK: -- 뷰 구성
     let scrollView = UIScrollView()
