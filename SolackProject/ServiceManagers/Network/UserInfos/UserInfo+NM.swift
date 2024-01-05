@@ -20,4 +20,23 @@ extension NetworkManager{
             print(res.response?.statusCode)
         }
     }
+    func signIn<T:SignInBody>(type:SignInType,body:T) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            AF.request(UserRouter.signIn(type: type, body: body),interceptor: baseInterceptor).responseString { res in
+                switch res.result{
+                case .success(let value):
+                    print("로그인!! \(value)")
+                    if res.response?.statusCode ?? 0 == 200{
+                        continuation.resume(returning: ())
+                    }else{
+                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                    }
+                case .failure(let error):
+                    print("로그인 실패")
+                    print(error)
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
