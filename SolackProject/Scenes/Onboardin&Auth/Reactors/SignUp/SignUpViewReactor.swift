@@ -95,10 +95,12 @@ final class SignUpViewReactor: Reactor{
             switch event{
             case .failedSignUp(let failed):
                 switch failed{
-                case .doubled:
+                case .signUpDoubled:
                     return Observable.just(.setSignUpToast(.alreadySignedUp))
-                case .wrong:
+                case .signUpwrong:
                     return .just(.setSignUpToast(.other))
+                default:
+                    return Observable.concat([])
                 }
             case .successSignUp:
                 AppManager.shared.userAccessable.onNext(true)

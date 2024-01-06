@@ -8,20 +8,14 @@
 import Foundation
 extension UserDefaults{
     var nickname:String{
-        get{
-            self.string(forKey: "nickname") ?? ""
-        }
+        get{self.string(forKey: "nickname") ?? "" }
         set{
             setValue(newValue, forKey: "nickname")
         }
     }
     var phoneNumber:String?{
-        get{
-            self.string(forKey: "phoneNumber")
-        }
-        set{
-            setValue(newValue,forKey: "phoneNumber")
-        }
+        get{ self.string(forKey: "phoneNumber") }
+        set{ setValue(newValue,forKey: "phoneNumber") }
     }
     var profile:Data?{
         get{data(forKey: "profile")}

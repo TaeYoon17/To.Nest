@@ -22,7 +22,7 @@ final class SignUpService: SignUpServiceProtocol{
 //    let navigation: PublishSubject<Navigation> = .init()
     enum Event{
         case successSignUp
-        case failedSignUp(SignUpFailed)
+        case failedSignUp(SignFailed)
     }
     func signUp(_ info:SignUpInfo){
         Task{
@@ -35,8 +35,10 @@ final class SignUpService: SignUpServiceProtocol{
                 profile = response.profileImage
                 email = response.email
                 event.onNext(.successSignUp)
-            }catch let failed where failed is SignUpFailed{
-                event.onNext(.failedSignUp(failed as! SignUpFailed))
+            }catch let failed where failed is SignFailed{
+                event.onNext(.failedSignUp(failed as! SignFailed))
+            }catch{
+                event.onNext(.failedSignUp(.signUpwrong))
             }
         }
     }

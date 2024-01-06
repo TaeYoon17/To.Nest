@@ -107,8 +107,8 @@ extension SignUpViewReactor{
     }
 }
 //MARK: -- Mutation 변경 확인 사항
-fileprivate extension String{
-    func validationEmail()->Bool{
+ extension String{
+     fileprivate func validationEmail()->Bool{
         let emailRegex = #"@.*\.com"#
         do{
             let val = try Regex(emailRegex)
@@ -117,12 +117,12 @@ fileprivate extension String{
             return false
         }
     }
-    func validationNick()->Bool{
+     fileprivate func validationNick()->Bool{
         0 < self.count && self.count <= 30
     }
-    func validataionPhone()->Bool{
+     fileprivate func validataionPhone()->Bool{
         if self.isEmpty {return true}
-        guard self.prefix(2) == "01"/*, self.count < 13 */else{ return false}
+        guard self.prefix(2) == "01" else{ return false}
         let wow = self.replacingOccurrences(of: "-", with: "").count
         if wow < 10 || wow > 11 {return false}
         return true

@@ -30,6 +30,7 @@ final class OnboardingView:BaseVC,View{
             case .email:
                 let vc = SignInEmailView()
                 let nav = UINavigationController(rootViewController: vc)
+                vc.reactor = .init(provider: reactor.provider)
                 owner.authSheetSetting(nav: nav)
                 owner.present(nav,animated: true)
                 //                Task{
