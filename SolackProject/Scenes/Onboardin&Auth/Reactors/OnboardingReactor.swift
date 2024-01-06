@@ -41,13 +41,12 @@ class OnboardingViewReactor: Reactor {
     }
     
     init(){
-        print("생성!!")
         self.provider = ServiceProvider()
         self.initialState = State()
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let eventMutation = provider.authService.event.flatMap { event -> Observable<Mutation> in
-            print("넘기기 성공!!")
+            
             return switch event{
             case .signIn(let signIn):
                 Observable.concat([

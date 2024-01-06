@@ -37,6 +37,8 @@
 		631E33A22B45553B0053DBD7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 631E33A12B45553B0053DBD7 /* RxSwift */; };
 		633584692B45610C00B83555 /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633584682B45610C00B83555 /* SignInEmailView.swift */; };
 		6368352A2B47A56C00E38683 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636835292B47A56C00E38683 /* AppManager.swift */; };
+		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
+		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
 		6384A9B82B47122500AA2F1B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6324D6EB2B46F15F00AA1AC0 /* Alamofire */; };
 		6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9BA2B47123400AA2F1B /* KakaoAuthManager.swift */; };
 		6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9BF2B47125600AA2F1B /* BaseInterceptor.swift */; };
@@ -47,8 +49,14 @@
 		6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9C52B47125600AA2F1B /* SingInInfo.swift */; };
 		6384A9CE2B47133200AA2F1B /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9CD2B47133200AA2F1B /* Tokens.swift */; };
 		6384A9D12B47134200AA2F1B /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9D02B47134200AA2F1B /* Errors.swift */; };
+		638FCD272B47FB700053D1BB /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 638FCD262B47FB700053D1BB /* Toast */; };
+		638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638FCD292B48000E0053D1BB /* InputFieldView.swift */; };
+		638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */; };
+		639B8A702B491BA40024B4DD /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B8A6F2B491BA40024B4DD /* AuthReactor.swift */; };
+		639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B8A722B491C030024B4DD /* SignUpToastType.swift */; };
+		639B8A752B491C1A0024B4DD /* SignUpFieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B8A742B491C1A0024B4DD /* SignUpFieldType.swift */; };
+		639CCA3B2B499F39005B35DF /* EmailSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639CCA3A2B499F39005B35DF /* EmailSignInService.swift */; };
 		639DEAFB2B452E8300108979 /* AuthViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639DEAFA2B452E8300108979 /* AuthViewReactor.swift */; };
-		639DEAFE2B45338A00108979 /* SignUpView+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639DEAFD2B45338A00108979 /* SignUpView+CollectionView.swift */; };
 		639DEB002B4534CB00108979 /* SignUpViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */; };
 		63A148A82B45564F005CF155 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148A72B45564F005CF155 /* RxBlocking */; };
 		63A148AC2B45564F005CF155 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AB2B45564F005CF155 /* RxCocoa */; };
@@ -60,6 +68,12 @@
 		63ADEA152B4648B2000A0CB4 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 63ADEA142B4648B2000A0CB4 /* RxKakaoSDKUser */; };
 		63C4C3082B45AF9300A48E69 /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */; };
 		63C4C3092B45AF9300A48E69 /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */; };
+		63E4AFCC2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFCB2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift */; };
+		63E4AFCE2B49525300E0B6A1 /* SignResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */; };
+		63E4AFD02B495E6F00E0B6A1 /* SignUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFCF2B495E6F00E0B6A1 /* SignUpService.swift */; };
+		63E4AFD22B49668C00E0B6A1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFD12B49668C00E0B6A1 /* User.swift */; };
+		63E4AFD52B497FC300E0B6A1 /* EmailSignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFD42B497FC300E0B6A1 /* EmailSignInReactor.swift */; };
+		63E4AFD72B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFD62B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -102,6 +116,8 @@
 		631A60FE2B452976005509C2 /* SecretKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretKey.swift; sourceTree = "<group>"; };
 		633584682B45610C00B83555 /* SignInEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
 		636835292B47A56C00E38683 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
+		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
+		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
 		6384A9BA2B47123400AA2F1B /* KakaoAuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KakaoAuthManager.swift; sourceTree = "<group>"; };
 		6384A9BF2B47125600AA2F1B /* BaseInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseInterceptor.swift; sourceTree = "<group>"; };
 		6384A9C02B47125600AA2F1B /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -111,12 +127,23 @@
 		6384A9C52B47125600AA2F1B /* SingInInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingInInfo.swift; sourceTree = "<group>"; };
 		6384A9CD2B47133200AA2F1B /* Tokens.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
 		6384A9D02B47134200AA2F1B /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		638FCD292B48000E0053D1BB /* InputFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldView.swift; sourceTree = "<group>"; };
+		638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckFieldView.swift; sourceTree = "<group>"; };
+		639B8A6F2B491BA40024B4DD /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
+		639B8A722B491C030024B4DD /* SignUpToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpToastType.swift; sourceTree = "<group>"; };
+		639B8A742B491C1A0024B4DD /* SignUpFieldType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpFieldType.swift; sourceTree = "<group>"; };
+		639CCA3A2B499F39005B35DF /* EmailSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailSignInService.swift; sourceTree = "<group>"; };
 		639DEAFA2B452E8300108979 /* AuthViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewReactor.swift; sourceTree = "<group>"; };
-		639DEAFD2B45338A00108979 /* SignUpView+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignUpView+CollectionView.swift"; sourceTree = "<group>"; };
 		639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewReactor.swift; sourceTree = "<group>"; };
 		63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
+		63E4AFCB2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignUpReactor+Mutate.swift"; sourceTree = "<group>"; };
+		63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignResponse.swift; sourceTree = "<group>"; };
+		63E4AFCF2B495E6F00E0B6A1 /* SignUpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpService.swift; sourceTree = "<group>"; };
+		63E4AFD12B49668C00E0B6A1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		63E4AFD42B497FC300E0B6A1 /* EmailSignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailSignInReactor.swift; sourceTree = "<group>"; };
+		63E4AFD62B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmailSignInReactor+Mutate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				638FCD272B47FB700053D1BB /* Toast in Frameworks */,
 				6384A9B82B47122500AA2F1B /* Alamofire in Frameworks */,
 				63ADEA152B4648B2000A0CB4 /* RxKakaoSDKUser in Frameworks */,
 				63ADEA0D2B4648B2000A0CB4 /* RxKakaoSDKCommon in Frameworks */,
@@ -254,9 +282,9 @@
 		631A60E62B44EE0B005509C2 /* ReactorServices */ = {
 			isa = PBXGroup;
 			children = (
+				639CCA3C2B499F3D005B35DF /* Auth */,
 				631A60E72B44EE0B005509C2 /* BaseService.swift */,
 				631A60E82B44EE0B005509C2 /* BasicProvider.swift */,
-				631A60E92B44EE0B005509C2 /* AuthService.swift */,
 			);
 			path = ReactorServices;
 			sourceTree = "<group>";
@@ -279,9 +307,10 @@
 		6324D6E92B46EF5100AA1AC0 /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */,
+				63E4AFD32B497FAA00E0B6A1 /* EmailSignIn */,
+				639B8A712B491BD30024B4DD /* SignUp */,
+				639B8A6E2B491B780024B4DD /* Auth */,
 				631A60EE2B44EE15005509C2 /* OnboardingReactor.swift */,
-				639DEAFA2B452E8300108979 /* AuthViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -290,6 +319,7 @@
 			isa = PBXGroup;
 			children = (
 				633584682B45610C00B83555 /* SignInEmailView.swift */,
+				636C13862B4986BB006D9962 /* SignInToastType.swift */,
 			);
 			path = SignInEmail;
 			sourceTree = "<group>";
@@ -336,6 +366,7 @@
 				6384A9C32B47125600AA2F1B /* UserInfo+NM.swift */,
 				6384A9C42B47125600AA2F1B /* UserRouter.swift */,
 				6384A9C52B47125600AA2F1B /* SingInInfo.swift */,
+				63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */,
 			);
 			path = UserInfos;
 			sourceTree = "<group>";
@@ -344,6 +375,7 @@
 			isa = PBXGroup;
 			children = (
 				6384A9CD2B47133200AA2F1B /* Tokens.swift */,
+				63E4AFD12B49668C00E0B6A1 /* User.swift */,
 			);
 			path = DefaultsValue;
 			sourceTree = "<group>";
@@ -356,9 +388,48 @@
 			path = SourceOfTruth;
 			sourceTree = "<group>";
 		};
+		638FCD282B4800010053D1BB /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				638FCD292B48000E0053D1BB /* InputFieldView.swift */,
+				638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */,
+				636FB15F2B4851B2000E5F03 /* AuthBtn.swift */,
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		639B8A6E2B491B780024B4DD /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				639DEAFA2B452E8300108979 /* AuthViewReactor.swift */,
+				639B8A6F2B491BA40024B4DD /* AuthReactor.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		639B8A712B491BD30024B4DD /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */,
+				63E4AFCB2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		639CCA3C2B499F3D005B35DF /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				631A60E92B44EE0B005509C2 /* AuthService.swift */,
+				63E4AFCF2B495E6F00E0B6A1 /* SignUpService.swift */,
+				639CCA3A2B499F39005B35DF /* EmailSignInService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		639DEAF92B452E3B00108979 /* Onboardin&Auth */ = {
 			isa = PBXGroup;
 			children = (
+				638FCD282B4800010053D1BB /* UIComponents */,
 				6324D6E92B46EF5100AA1AC0 /* Reactors */,
 				633584672B4560F900B83555 /* SignInEmail */,
 				639DEAFC2B4532D900108979 /* SignUp */,
@@ -371,8 +442,9 @@
 		639DEAFC2B4532D900108979 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
+				639B8A722B491C030024B4DD /* SignUpToastType.swift */,
+				639B8A742B491C1A0024B4DD /* SignUpFieldType.swift */,
 				631A60FA2B4528A5005509C2 /* SignUpView.swift */,
-				639DEAFD2B45338A00108979 /* SignUpView+CollectionView.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -391,6 +463,15 @@
 				63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */,
 			);
 			path = Library;
+			sourceTree = "<group>";
+		};
+		63E4AFD32B497FAA00E0B6A1 /* EmailSignIn */ = {
+			isa = PBXGroup;
+			children = (
+				63E4AFD42B497FC300E0B6A1 /* EmailSignInReactor.swift */,
+				63E4AFD62B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift */,
+			);
+			path = EmailSignIn;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -426,6 +507,7 @@
 				63ADEA0C2B4648B2000A0CB4 /* RxKakaoSDKCommon */,
 				63ADEA102B4648B2000A0CB4 /* RxKakaoSDKShare */,
 				63ADEA142B4648B2000A0CB4 /* RxKakaoSDKUser */,
+				638FCD262B47FB700053D1BB /* Toast */,
 			);
 			productName = SolackProject;
 			productReference = 631A60A62B44ECEE005509C2 /* SolackProject.app */;
@@ -461,6 +543,7 @@
 				631E33942B45553B0053DBD7 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				6324D6EA2B46F15F00AA1AC0 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				63ADEA072B4648B2000A0CB4 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
+				638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 631A60A72B44ECEE005509C2 /* Products */;
 			projectDirPath = "";
@@ -492,37 +575,50 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
+				636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */,
+				639B8A702B491BA40024B4DD /* AuthReactor.swift in Sources */,
 				631A60E12B44EE02005509C2 /* AppConstraints.swift in Sources */,
+				63E4AFD52B497FC300E0B6A1 /* EmailSignInReactor.swift in Sources */,
 				639DEAFB2B452E8300108979 /* AuthViewReactor.swift in Sources */,
 				6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */,
 				631A60FB2B4528A5005509C2 /* SignUpView.swift in Sources */,
 				6384A9C92B47125600AA2F1B /* UserInfo+NM.swift in Sources */,
-				639DEAFE2B45338A00108979 /* SignUpView+CollectionView.swift in Sources */,
 				631A60AE2B44ECEE005509C2 /* ViewController.swift in Sources */,
 				6368352A2B47A56C00E38683 /* AppManager.swift in Sources */,
 				631A60E22B44EE02005509C2 /* AppFont.swift in Sources */,
 				6384A9C82B47125600AA2F1B /* SingUpInfo.swift in Sources */,
 				639DEB002B4534CB00108979 /* SignUpViewReactor.swift in Sources */,
+				63E4AFCC2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift in Sources */,
 				6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */,
 				6384A9CA2B47125600AA2F1B /* UserRouter.swift in Sources */,
 				631A60F12B44EE15005509C2 /* OnboardingView.swift in Sources */,
+				639B8A752B491C1A0024B4DD /* SignUpFieldType.swift in Sources */,
+				636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */,
+				63E4AFD22B49668C00E0B6A1 /* User.swift in Sources */,
 				6384A9D12B47134200AA2F1B /* Errors.swift in Sources */,
 				631A60F02B44EE15005509C2 /* OnboardingReactor.swift in Sources */,
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
+				63E4AFD02B495E6F00E0B6A1 /* SignUpService.swift in Sources */,
 				631A60AA2B44ECEE005509C2 /* AppDelegate.swift in Sources */,
 				63C4C3082B45AF9300A48E69 /* UserDefaults+State.swift in Sources */,
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
+				639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */,
 				631A60FF2B452976005509C2 /* SecretKey.swift in Sources */,
 				631A60AC2B44ECEE005509C2 /* SceneDelegate.swift in Sources */,
 				631A60D72B44EDF5005509C2 /* ButtonConfiguration.swift in Sources */,
+				639CCA3B2B499F39005B35DF /* EmailSignInService.swift in Sources */,
 				63C4C3092B45AF9300A48E69 /* AnyModelStore.swift in Sources */,
 				6384A9CE2B47133200AA2F1B /* Tokens.swift in Sources */,
+				63E4AFCE2B49525300E0B6A1 /* SignResponse.swift in Sources */,
 				631A60E32B44EE02005509C2 /* KeyCores.swift in Sources */,
+				63E4AFD72B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift in Sources */,
 				631A60D62B44EDF5005509C2 /* BaseVC.swift in Sources */,
 				631A60F92B452058005509C2 /* AuthPresentView.swift in Sources */,
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
+				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,
 				633584692B45610C00B83555 /* SignInEmailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -794,6 +890,14 @@
 				minimumVersion = 5.8.1;
 			};
 		};
+		638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 		63ADEA072B4648B2000A0CB4 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
@@ -839,6 +943,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6324D6EA2B46F15F00AA1AC0 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		638FCD262B47FB700053D1BB /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 		63A148A72B45564F005CF155 /* RxBlocking */ = {
 			isa = XCSwiftPackageProductDependency;

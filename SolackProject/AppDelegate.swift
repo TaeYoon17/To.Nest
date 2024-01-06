@@ -22,8 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for i in 0..<deviceToken.count {
             token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
-
-        print(token)
     }
     
     // MARK: UISceneSession Lifecycle
