@@ -11,22 +11,77 @@ import RxSwift
 struct DoubleErrorCode:Decodable{
     let errorCode:String
 }
-
+/*
+ wow@gmail.com
+ Aa123@@@qa
+ 토스트
+ 010-1111-2222
+ */
+enum SignUpFailed:String, Error{
+    case doubled = "E12"
+    case wrong = "E11"
+}
 extension NetworkManager{
-    func signUp(_ val : SignUpInfo) async throws {
-        AF.request(UserRouter.signUp(info: val), interceptor: baseInterceptor).responseString { res in
-            switch res.result{
-            case .success(let res):
-                print("회원가입!!")
-            case .failure(let error):
-                print("회원가입 실패")
-                print(error)
+    func signUp(_ info : SignUpInfo) async throws -> SignUpResponse{
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(UserRouter.signUp(info: info),interceptor: self.baseInterceptor).response { res in
+                switch res.result{
+                case .success(let val):
+                    guard let code = res.response?.statusCode else{
+                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        return
+                    }
+                    if code == 400,let val,let errorData = try? JSONDecoder().decode(DoubleErrorCode.self, from: val){
+                        if let failType = SignUpFailed(rawValue: errorData.errorCode){
+                            continuation.resume(throwing: failType)
+                        }else{
+                            continuation.resume(throwing: Errors.API.FailFetchToken)
+                        }
+                    }
+                    else if code == 200,let val,let data = try? JSONDecoder().decode(SignUpResponse.self, from: val){
+                        continuation.resume(returning: data)
+                    }
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
             }
-            print(res.response?.statusCode)
         }
     }
+        func signUp(info: SignUpInfo) -> Observable<SignUpResponse>{
+            Observable.create { [weak self] observer -> Disposable in
+                guard let self else{
+                    observer.onError(Errors.API.FailFetchToken)
+                    return Disposables.create()
+                }
+                AF.request(UserRouter.signUp(info: info),interceptor: self.baseInterceptor).response { res in
+                    switch res.result{
+                    case .success(let val):
+                        guard let code = res.response?.statusCode else{
+                            observer.onError(Errors.API.FailFetchToken)
+                            observer.onCompleted()
+                            break
+                        }
+                        if code == 400,let val,let errorData = try? JSONDecoder().decode(DoubleErrorCode.self, from: val){
+                            if let failType = SignUpFailed(rawValue: errorData.errorCode){
+                                observer.onError(failType)
+                            }else{
+                                observer.onError(Errors.API.FailFetchToken)
+                            }
+                            observer.onCompleted()
+                        }
+                        else if code == 200,let val,let data = try? JSONDecoder().decode(SignUpResponse.self, from: val){
+                            observer.onNext(data)
+                            observer.onCompleted()
+                        }
+                    case .failure(let error):
+                        observer.onError(error)
+                        observer.onCompleted()
+                    }
+                }
+                return Disposables.create()
+            }
+        }
     func emailCheck(_ email:String) -> Observable<Bool>{
-        
         Observable.create {[weak self] observer -> Disposable in
             guard let self else {
                 observer.onError(Errors.API.FailFetchToken)
@@ -62,13 +117,7 @@ extension NetworkManager{
             return Disposables.create()
         }
     }
-    func emailDouble(_ email:String) async throws -> Bool{
-        try await withCheckedThrowingContinuation { continuation in
-            
-        }
-        
-        
-    }
+    
     func signIn<T:SignInBody>(type:SignInType,body:T) async throws {
         try await withCheckedThrowingContinuation { continuation in
             AF.request(UserRouter.signIn(type: type, body: body),interceptor: baseInterceptor).responseString { res in
