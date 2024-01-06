@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct SignUpResponse: Codable {
+struct SignResponse: Codable {
     let userID: Int
     let email, nickname: String
     let profileImage: Data?

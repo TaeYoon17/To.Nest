@@ -38,6 +38,7 @@ final class SignUpView:BaseVC,View{
         reactor.state.map{$0.secret}.distinctUntilChanged().bind(to: pwField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.checkSecret}.distinctUntilChanged().bind(to: checkPW.inputText).disposed(by: disposeBag)
         
+        
         // 회원가입 유효성 에러 뷰 바인딩
         fieldErrorBinding(reactor)
         // 회원가입 버튼 Interactive

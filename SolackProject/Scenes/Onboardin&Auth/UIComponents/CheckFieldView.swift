@@ -95,7 +95,6 @@ final class CheckInputFieldView: UIStackView,AuthFieldAble{
     }
     func binding(){
         validFailed.bind(with: self) { owner, value in
-            print(value)
             self.label.textColor = !value ? .text : .error
         }.disposed(by: disposeBag)
     }

@@ -8,8 +8,8 @@
 import Foundation
 // MARK: -- 추후에 재사용 가능한 타입들
 struct EmailInfo{
-    var email: String
-    var password: String
+    var email: String = ""
+    var password: String = ""
 }
 struct KakaoInfo{
     var oauthToken:String
