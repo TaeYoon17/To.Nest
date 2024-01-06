@@ -13,35 +13,56 @@ final class SignUpView:BaseVC,View{
     var disposeBag: DisposeBag = .init()
     typealias A = SignUpViewReactor.Action
     func bind(reactor: SignUpViewReactor) {
-        //MARK: -- Action Binding
+        let fields:[AuthFieldAble] = [emailField,nicknameField,contactField,pwField,checkPW]
         func actionBinding(_ action : Observable<A>){ action.bind(to: reactor.action).disposed(by: disposeBag) }
+        //MARK: -- Action Binding
         actionBinding(emailField.inputText.map{A.setEmail($0)})
-        actionBinding(emailField.validataion.rx.tap.map{A.dobuleCheck})
         actionBinding(nicknameField.inputText.map{A.setNickname($0)})
         actionBinding(contactField.inputText.map{A.setPhone($0)})
         actionBinding(pwField.inputText.map{A.setSecret($0)})
         actionBinding(checkPW.inputText.map{A.setCheckSecret($0)})
-        [emailField,nicknameField,contactField,pwField,checkPW].forEach{[weak self] (val:AuthFieldAble) in
+        actionBinding(emailField.validataion.rx.tap.map{A.dobuleCheck})
+        // 회원가입 버튼 Action
+        fields.forEach{[weak self] (val:AuthFieldAble) in
             actionBinding(val.accAction.map{A.signUpCheck})
         }
         actionBinding(signUpBtn.rx.tap.map{A.signUpCheck})
         
         
+        
         //MARK: -- State Binding
+        // 텍스트 필드 입력창
         reactor.state.map{$0.email}.distinctUntilChanged().bind(to: emailField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.nickName}.distinctUntilChanged().bind(to: nicknameField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.phone}.bind(to: contactField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.secret}.distinctUntilChanged().bind(to: pwField.inputText).disposed(by: disposeBag)
         reactor.state.map{$0.checkSecret}.distinctUntilChanged().bind(to: checkPW.inputText).disposed(by: disposeBag)
-        reactor.state.map{$0.signUpToast}.distinctUntilChanged().bind(with: self) { owner, type in
+        
+        // 회원가입 유효성 에러 뷰 바인딩
+        fieldErrorBinding(reactor)
+        // 회원가입 버튼 Interactive
+        reactor.state.map{$0.isSignUpAvailable}.distinctUntilChanged().bind(with: self) { owner, isSignUpAvailable in
+            owner.isSignUpBtnAvailable(isSignUpAvailable)
+        }.disposed(by: disposeBag)
+        fields.forEach{ field in
+            reactor.state.map{$0.isSignUpAvailable}.bind(to: field.authValid).disposed(by: disposeBag)
+        }
+        // 이메일 중복 확인 버튼 Interactive
+        reactor.state.map{!$0.email.isEmpty}.bind(with: self) { owner, value in
+            owner.emailField.isValidate = value
+        }.disposed(by: disposeBag)
+        // 토스트
+        reactor.state.map{$0.signUpToast}.bind(with: self) { owner, type in
             guard let type else {return}
             owner.toastUp(type: type)
         }.disposed(by: disposeBag)
-        reactor.state.map{$0.isEmailChecked}.distinctUntilChanged().bind(with: self) { owner, value in
-            owner.emailField.isValidate = value
-            owner.isSignUpBtnAvailable(value)
-        }.disposed(by: disposeBag)
-        
+    }
+    func fieldErrorBinding(_ reactor: SignUpViewReactor){
+        reactor.state.map{$0.emailErrored}.distinctUntilChanged().bind(to:emailField.validFailed).disposed(by: disposeBag)
+        reactor.state.map{$0.nickNameErrored}.distinctUntilChanged().bind(to: nicknameField.validFailed).disposed(by: disposeBag)
+        reactor.state.map{$0.phoneErrored}.distinctUntilChanged().bind(to: contactField.validFailed).disposed(by: disposeBag)
+        reactor.state.map{$0.pwErrored}.distinctUntilChanged().bind(to: pwField.validFailed).disposed(by: disposeBag)
+        reactor.state.map{$0.pwErrored}.distinctUntilChanged().bind(to: checkPW.validFailed).disposed(by: disposeBag)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,12 +86,12 @@ final class SignUpView:BaseVC,View{
         return st
     }()
     override func configureView() {
-//        scrollView.keyboardDismissMode = .interactive
-//        scrollView.keyboardDismissMode = .onDragWithAccessory
         view.endEditing(true)
         scrollView.endEditing(true)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))
         emailField.tf.autocapitalizationType = .none
+        pwField.tf.isSecureTextEntry = true
+        checkPW.tf.isSecureTextEntry = true
     }
     @objc func dismissMyKeyboard(){
         view.endEditing(true)
@@ -127,7 +148,7 @@ extension SignUpView{
         if let userInfo = notification.userInfo {
             if let keyboardFrameValue = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue) {
                 let keyboardFrame = keyboardFrameValue.cgRectValue
-//                print(keyboardFrame)
+                //                print(keyboardFrame)
                 self.isShowKeyboard = keyboardFrame.minY
                 let contentInset = UIEdgeInsets(
                     top: 0.0,
@@ -166,13 +187,12 @@ extension SignUpView{
         navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: .init(x: signUpBtn.frame.midX, y: minY),completion: nil)
     }
     func isSignUpBtnAvailable(_ val: Bool){
+        signUpBtn.isUserInteractionEnabled = val
         let config = signUpBtn.config.foregroundColor(.white).cornerRadius(8).text("회원가입", font: .title2)
         if val{
             config.backgroundColor(.accent).apply()
-            
         }else{
             config.backgroundColor(.gray3).apply()
-            signUpBtn.isUserInteractionEnabled = val
         }
     }
 }
@@ -182,9 +202,17 @@ fileprivate extension SignUpToastType{
     var getColor:UIColor{
         switch self{
         case .alreadyAvailable,.vailableEmail:
-            .accent
+                .accent
         case .emailValidataionError,.nickNameCondition,.phoneCondition,.invalidateCheckPassword,.other:
-            .error
+                .error
+        case .unCheckedValidation:
+                .error
+        case .pwCondition:
+                .error
+        case .others(_):
+                .error
+        case .alreadySignedUp:
+                .error
         }
     }
 }

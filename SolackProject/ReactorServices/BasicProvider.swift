@@ -9,8 +9,10 @@ import Foundation
 import RxSwift
 protocol ServiceProviderProtocol: AnyObject{
     var authService: AuthServiceProtocol { get }
+    var signUpService: SignUpServiceProtocol { get }
 }
 final class ServiceProvider: ServiceProviderProtocol{
     lazy var authService: AuthServiceProtocol = AuthService()
+    lazy var signUpService: SignUpServiceProtocol = SignUpService()
 }
 

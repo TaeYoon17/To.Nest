@@ -13,14 +13,18 @@ import RxSwift
 import UIKit
 protocol AuthFieldAble{
     var accAction: ControlEvent<Void>! {get set}
+    var validFailed:BehaviorSubject<Bool> {get set}
+    var authValid:BehaviorSubject<Bool> {get set}
     func setAccessory(_ accessoryText:String?)
 }
 final class CheckInputFieldView: UIStackView,AuthFieldAble{
     var inputText: ControlProperty<String>!
     lazy var accAction: ControlEvent<Void>! = btn.rx.tap
-    var valid: BehaviorSubject<Bool> = .init(value: false)
+    var validFailed:BehaviorSubject<Bool> = .init(value: false)
+    var authValid: BehaviorSubject<Bool> = .init(value: false)
     var isValidate: Bool = false{
         didSet{
+            self.validataion.isUserInteractionEnabled = isValidate
             let config = validataion.config.cornerRadius(8).foregroundColor(.white).text("중복 확인", font: .title2)
             if isValidate{
                 config.backgroundColor(.accent).apply()
@@ -84,12 +88,16 @@ final class CheckInputFieldView: UIStackView,AuthFieldAble{
         tf.attributedPlaceholder = NSAttributedString(attr)
         tf.font = FontType.body.get()
         setAccessory(accessoryText)
+        binding()
     }
     required init(coder: NSCoder) {
         fatalError("Don't use storyboard")
     }
     func binding(){
-        
+        validFailed.bind(with: self) { owner, value in
+            print(value)
+            self.label.textColor = !value ? .text : .error
+        }.disposed(by: disposeBag)
     }
     func setAccessory(_ accessoryText:String?){
         if let accessoryText{
@@ -104,7 +112,7 @@ final class CheckInputFieldView: UIStackView,AuthFieldAble{
                 make.width.equalToSuperview().inset(24)
                 make.centerX.equalToSuperview()
             }
-            valid.subscribe(with: self){ owner,val in
+            authValid.subscribe(with: self){ owner,val in
                 owner.btn.isAvailable = val
             }.disposed(by: disposeBag)
         }

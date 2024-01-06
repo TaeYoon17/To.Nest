@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum SignUpFieldType{
+enum SignUpFieldType:CaseIterable{
     case email
     case nickname
     case phone
