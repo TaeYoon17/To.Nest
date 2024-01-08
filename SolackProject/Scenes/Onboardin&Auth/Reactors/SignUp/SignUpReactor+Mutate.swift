@@ -97,7 +97,6 @@ extension SignUpViewReactor{
                     .just(.setSignUpToast(nil))
                 ])
             }
-            print(info)
             provider.signUpService.signUp(info)
             return Observable.concat([
 //                .just(.setSignUpToast(.other)),

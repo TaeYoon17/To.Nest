@@ -18,4 +18,6 @@ class BaseVC: UIViewController{
     func configureConstraints(){ }
     func configureView(){ }
     func configureNavigation(){ }
+
+
 }

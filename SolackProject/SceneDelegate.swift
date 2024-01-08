@@ -26,7 +26,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let reactor = OnboardingViewReactor()
         let vc = OnboardingView()
         vc.reactor = reactor
-        window?.rootViewController = vc
+//        TabController()
+        window?.rootViewController = TabController()
         window?.makeKeyAndVisible()
     }
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
