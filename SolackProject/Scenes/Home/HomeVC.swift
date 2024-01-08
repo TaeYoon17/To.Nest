@@ -18,13 +18,11 @@ final class HomeVC: BaseVC{
     var disposeBag = DisposeBag()
     lazy var sideVC = SideVC()
     override var prefersStatusBarHidden: Bool {
-        return true
+        return false
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-
-        
         navBar.workSpaceTap.bind(with: self) { owner, _ in
             // 슬라이드 뷰 구현 with swiftui
             var sideVC = SideVC()

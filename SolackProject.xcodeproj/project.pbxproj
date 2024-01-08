@@ -36,6 +36,7 @@
 		631E339E2B45553B0053DBD7 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 631E339D2B45553B0053DBD7 /* RxRelay */; };
 		631E33A22B45553B0053DBD7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 631E33A12B45553B0053DBD7 /* RxSwift */; };
 		633584692B45610C00B83555 /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633584682B45610C00B83555 /* SignInEmailView.swift */; };
+		6344FBCD2B4C0667003C5933 /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344FBCC2B4C0667003C5933 /* ScreenSize.swift */; };
 		6368352A2B47A56C00E38683 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636835292B47A56C00E38683 /* AppManager.swift */; };
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
@@ -128,6 +129,7 @@
 		631A60FC2B452953005509C2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		631A60FE2B452976005509C2 /* SecretKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretKey.swift; sourceTree = "<group>"; };
 		633584682B45610C00B83555 /* SignInEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
+		6344FBCC2B4C0667003C5933 /* ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
 		636835292B47A56C00E38683 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
@@ -482,6 +484,7 @@
 			children = (
 				63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */,
 				63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */,
+				6344FBCC2B4C0667003C5933 /* ScreenSize.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -668,6 +671,7 @@
 				63F0AECD2B4AE21A000A597B /* AppendListBottom.swift in Sources */,
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
+				6344FBCD2B4C0667003C5933 /* ScreenSize.swift in Sources */,
 				639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */,
 				63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */,
 				631A60FF2B452976005509C2 /* SecretKey.swift in Sources */,
