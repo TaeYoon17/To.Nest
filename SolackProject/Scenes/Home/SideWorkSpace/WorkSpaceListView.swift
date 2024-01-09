@@ -110,7 +110,6 @@ struct WorkSpaceList:View{
                 if item.isSelected{
                     Button{
                         if item.isMyManaging{
-                            //                        defaultWorkSpace.toggle()
                             isManagerSelected.toggle()
                         }else{
                             isUserSelected.toggle()

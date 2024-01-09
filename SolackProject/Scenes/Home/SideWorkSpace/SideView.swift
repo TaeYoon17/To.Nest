@@ -75,9 +75,7 @@ struct Side:View{
                                     vm.isOpen = false
                                     return
                                 }
-                                //                                withAnimation {
                                 nowPo = 0
-                                //                                }
                             })
                     )
                     .zIndex(2)

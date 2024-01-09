@@ -27,17 +27,18 @@ fileprivate struct SolackAlert: View{
                         Text(title)
                             .font(FontType.title2.font)
                         Text(description)
-                            .lineLimit(0)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
                             .font(FontType.body.font)
                             .multilineTextAlignment(.center)
                         if !infos.isEmpty{
                             Text(infos.reduce(into: "") { $0 = $0 + "• \($1)\n" })
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }.frame(maxWidth: .infinity)
-                        
                     if let confirm{
                         double
-                            
                     }else{
                         single
                     }
