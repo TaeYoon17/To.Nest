@@ -123,7 +123,8 @@ struct Side:View{
                     //                    WorkSpaceEmpty {
                     //                        print("EmptyList")
                     //                    }
-                    WorkSpaceList().animation(nil)
+                    WorkSpaceList()
+                        .animation(nil)
                     Spacer()
                     WorkSpaceBottomView()
                         .frame(height: 84)
@@ -136,137 +137,8 @@ struct Side:View{
         }
     }
 }
-struct WorkSpaceEmpty:View {
-    let createAction:()->Void
-    var body: some View {
-        VStack(alignment:.center,spacing:18){
-            Text("워크스페이스를\n찾을 수 없어요.").font(FontType.title1.font)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
-                .lineSpacing(4)
-            Text("관리자에게 초대를 요청하거나,\n다른 이메일로 시도하거나\n새로운 워크스페이스를 생성해주세요").font(FontType.body.font)
-                .lineLimit(3)
-                .multilineTextAlignment(.center)
-            Button(action: {
-                createAction()
-            } , label: {
-                Text("워크스페이스 생성")
-                    .font(FontType.title2.font)
-                    .frame(height: 44)
-                    .frame(maxWidth: .infinity)
-                    .background(.accent).foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal,24)
-            })
-        }
-    }
-}
-struct WorkSpaceList:View{
-    let listItem: [WorkSpaceListItem] = [.init(isSelected: true, imageName: "Metal", name: "iOS Developer Study", date: "22. 03. 23"),
-                                         .init(isSelected: false, imageName: "ARKit", name: "영등포 새싹마을 모임", date:"23. 11. 10"),
-                                         .init(isSelected: false, imageName: "macOS", name: "모여라 댕댕이", date:"22. 02. 02")]
-    @State var managerWorkSpace = false
-    @State var defaultWorkSpace = false
-    @State var fullScreenGo = false
-    @State var isVisible = false
-    var body: some View{
-        VStack(spacing:0){
-            ScrollView {
-                LazyVStack(spacing:12){
-                    ForEach(listItem.indices,id:\.self){ idx in
-                        listItemView(listItem[idx])
-                    }
-                }
-            }
-            Spacer()
-        }
-        .background(.white)
-        // 관리자 액션시트
-        .confirmationDialog("managerWorkSpace", isPresented: $managerWorkSpace) {
-            Button("워크스페이스 편집"){print( "편집 편집")}
-            Button("워크스페이스 나가기"){print("나가기")}
-            Button("워크스페이스 관리자 변경"){print("나가기")}
-            Button("워크스페이스 삭제", role:.destructive){print("나가기")}
-            Button("취소", role:.cancel){print("나가기")}
-        }
-        .confirmationDialog("defaultWorkSpace", isPresented: $defaultWorkSpace) {
-            Button("워크스페이스 나가기"){
-                fullScreenGo.toggle()
-            }
-            Button("취소", role:.cancel){print("나가기")}
-        }
-        .fullScreenCover(isPresented: $fullScreenGo) {
-            ZStack {
-                if isVisible{
-                    VStack(alignment:.center,spacing:16){
-                        VStack(alignment: .center,spacing:8){
-                            Text("워크스페이스 나가기")
-                                .font(FontType.title2.font)
-                            Text("회원님은 워크스페이스 관리자입니다. 워크스페이스 관리자를 다른 멤버를 변경한 후 나갈 수 있습니다.")
-                                .lineLimit(2)
-                                .font(FontType.body.font)
-                                .multilineTextAlignment(.center)
-                        }.frame(maxWidth: .infinity)
-                        Button(action: {
-                            isVisible = false
-                        }, label: {
-                            Text("확인")
-                                .font(FontType.title2.font)
-                                .frame(height: 44)
-                                .frame(maxWidth: .infinity)
-                                .background(.accent)
-                                .foregroundStyle(.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                        })
-                    }.frame(maxWidth: .infinity)
-                        .padding(.vertical,16)
-                        .padding(.horizontal,16.5)
-                        
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .padding(.horizontal,24)
-                        .onDisappear(){
-                            fullScreenGo = false
-                        }
-                }
-            }
-            .onAppear{ isVisible = true }
-            .background(TransparentBackground())
-        }.transaction { transaction in
-            transaction.disablesAnimations = true
-            transaction.animation = .easeInOut(duration: 0.25)
-        }
-    }
-    func listItemView(_ item:WorkSpaceListItem) -> some View{
-        Button{
-            print("리스트 아이템")
-        }label:{
-            HStack(alignment:.center, spacing:8){
-                Image(item.imageName).resizable().frame(width: 44,height:44).clipShape(RoundedRectangle(cornerRadius: 8))
-                VStack(alignment: .leading){
-                    Text(item.name).font(FontType.bodyBold.font)
-                    Text(item.date).font(FontType.body.font).foregroundStyle(.secondary)
-                }
-                Spacer()
-                if item.isSelected{
-                    Button{
-                        defaultWorkSpace.toggle()
-                    }label: {
-                        Image(systemName: "ellipsis").fontWeight(.medium)
-                    }.tint(.text)
-                        .zIndex(2)
-                }
-            }
-        }
-        .padding(.all,8)
-        .background(item.isSelected ? .gray2 : .clear)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .padding(.horizontal,8)
-        .zIndex(1)
-        .listRowSeparator(.hidden)
-        .tint(.text)
-    }
-}
+
+
 struct WorkSpaceBottomView:View{
     var body: some View{
         List{
@@ -297,18 +169,9 @@ struct WorkSpaceBottomView:View{
 struct WorkSpaceListItem:Identifiable{
     var id = UUID()
     var isSelected:Bool
+    var isMyManaging:Bool = false
     var imageName:String
     var name:String
     var date:String // 이거 수정해야함!!
-}
-struct TransparentBackground: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = .gray.withAlphaComponent(0.666)
-        }
-        return view
-    }
     
-    func updateUIView(_ uiView: UIView, context: Context) {}
 }

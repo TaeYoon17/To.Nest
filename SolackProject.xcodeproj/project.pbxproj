@@ -41,6 +41,10 @@
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
 		6373EDDE2B4B8B3F00D24353 /* SideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373EDDD2B4B8B3F00D24353 /* SideView.swift */; };
+		637B15782B4CD62700B68963 /* SolackAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15772B4CD62700B68963 /* SolackAlert.swift */; };
+		637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15792B4CD72500B68963 /* TransparentBackground.swift */; };
+		637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */; };
+		637B157F2B4CF20600B68963 /* WorkSpaceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157E2B4CF20600B68963 /* WorkSpaceListView.swift */; };
 		6384A9B82B47122500AA2F1B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6324D6EB2B46F15F00AA1AC0 /* Alamofire */; };
 		6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9BA2B47123400AA2F1B /* KakaoAuthManager.swift */; };
 		6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9BF2B47125600AA2F1B /* BaseInterceptor.swift */; };
@@ -70,6 +74,8 @@
 		63ADEA152B4648B2000A0CB4 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 63ADEA142B4648B2000A0CB4 /* RxKakaoSDKUser */; };
 		63C4C3082B45AF9300A48E69 /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */; };
 		63C4C3092B45AF9300A48E69 /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */; };
+		63DFDF862B4D00B600F47AB5 /* ManagerDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */; };
+		63DFDF882B4D00DC00F47AB5 /* UserDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */; };
 		63E4AFCC2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFCB2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift */; };
 		63E4AFCE2B49525300E0B6A1 /* SignResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */; };
 		63E4AFD02B495E6F00E0B6A1 /* SignUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E4AFCF2B495E6F00E0B6A1 /* SignUpService.swift */; };
@@ -134,6 +140,10 @@
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
 		6373EDDD2B4B8B3F00D24353 /* SideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideView.swift; sourceTree = "<group>"; };
+		637B15772B4CD62700B68963 /* SolackAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolackAlert.swift; sourceTree = "<group>"; };
+		637B15792B4CD72500B68963 /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
+		637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceEmptyView.swift; sourceTree = "<group>"; };
+		637B157E2B4CF20600B68963 /* WorkSpaceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceListView.swift; sourceTree = "<group>"; };
 		6384A9BA2B47123400AA2F1B /* KakaoAuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KakaoAuthManager.swift; sourceTree = "<group>"; };
 		6384A9BF2B47125600AA2F1B /* BaseInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseInterceptor.swift; sourceTree = "<group>"; };
 		6384A9C02B47125600AA2F1B /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -154,6 +164,8 @@
 		63ADEA1A2B467E20000A0CB4 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		63C4C3062B45AF9200A48E69 /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		63C4C3072B45AF9200A48E69 /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
+		63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDialog.swift; sourceTree = "<group>"; };
+		63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDialog.swift; sourceTree = "<group>"; };
 		63E4AFCB2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignUpReactor+Mutate.swift"; sourceTree = "<group>"; };
 		63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignResponse.swift; sourceTree = "<group>"; };
 		63E4AFCF2B495E6F00E0B6A1 /* SignUpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpService.swift; sourceTree = "<group>"; };
@@ -258,6 +270,7 @@
 		631A60D22B44EDF5005509C2 /* UIHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				637B15762B4CD5C800B68963 /* SwiftUI */,
 				631A60D32B44EDF5005509C2 /* UIKit */,
 			);
 			path = UIHelpers;
@@ -352,6 +365,26 @@
 				636C13862B4986BB006D9962 /* SignInToastType.swift */,
 			);
 			path = SignInEmail;
+			sourceTree = "<group>";
+		};
+		637B15762B4CD5C800B68963 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				637B15772B4CD62700B68963 /* SolackAlert.swift */,
+				637B15792B4CD72500B68963 /* TransparentBackground.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
+		637B157B2B4CE86600B68963 /* SideWorkSpace */ = {
+			isa = PBXGroup;
+			children = (
+				63DFDF842B4D00A900F47AB5 /* Components */,
+				6373EDDD2B4B8B3F00D24353 /* SideView.swift */,
+				637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */,
+				637B157E2B4CF20600B68963 /* WorkSpaceListView.swift */,
+			);
+			path = SideWorkSpace;
 			sourceTree = "<group>";
 		};
 		6384A9B92B47123400AA2F1B /* AuthManager */ = {
@@ -489,6 +522,15 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
+		63DFDF842B4D00A900F47AB5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */,
+				63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		63E4AFD32B497FAA00E0B6A1 /* EmailSignIn */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,12 +555,12 @@
 			isa = PBXGroup;
 			children = (
 				63F0AEC72B4ABBFB000A597B /* Components */,
+				637B157B2B4CE86600B68963 /* SideWorkSpace */,
 				63F0AEC12B4AB8C8000A597B /* HomeVC.swift */,
 				63F0AED22B4B0775000A597B /* HomeVC+CellRegistration.swift */,
 				63F0AECE2B4B001B000A597B /* HomeVC+CollectionStructures.swift */,
 				63F0AEC32B4AB920000A597B /* HomeVC+CollectionView.swift */,
 				63F0AEC52B4ABA1E000A597B /* HomeVC+DS.swift */,
-				6373EDDD2B4B8B3F00D24353 /* SideView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -633,6 +675,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */,
 				63F0AECF2B4B001B000A597B /* HomeVC+CollectionStructures.swift in Sources */,
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
 				636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */,
@@ -642,6 +685,7 @@
 				639DEAFB2B452E8300108979 /* AuthViewReactor.swift in Sources */,
 				6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */,
 				631A60FB2B4528A5005509C2 /* SignUpView.swift in Sources */,
+				637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */,
 				6384A9C92B47125600AA2F1B /* UserInfo+NM.swift in Sources */,
 				631A60AE2B44ECEE005509C2 /* ViewController.swift in Sources */,
 				6373EDDE2B4B8B3F00D24353 /* SideView.swift in Sources */,
@@ -649,10 +693,12 @@
 				63FA653F2B49ADBB00C744C8 /* TabController.swift in Sources */,
 				631A60E22B44EE02005509C2 /* AppFont.swift in Sources */,
 				6384A9C82B47125600AA2F1B /* SingUpInfo.swift in Sources */,
+				63DFDF882B4D00DC00F47AB5 /* UserDialog.swift in Sources */,
 				639DEB002B4534CB00108979 /* SignUpViewReactor.swift in Sources */,
 				63F0AED12B4B03B6000A597B /* DirectMsgListItemView.swift in Sources */,
 				63E4AFCC2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift in Sources */,
 				6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */,
+				637B157F2B4CF20600B68963 /* WorkSpaceListView.swift in Sources */,
 				6384A9CA2B47125600AA2F1B /* UserRouter.swift in Sources */,
 				63F0AED32B4B0775000A597B /* HomeVC+CellRegistration.swift in Sources */,
 				631A60F12B44EE15005509C2 /* OnboardingView.swift in Sources */,
@@ -670,6 +716,7 @@
 				63C4C3082B45AF9300A48E69 /* UserDefaults+State.swift in Sources */,
 				63F0AECD2B4AE21A000A597B /* AppendListBottom.swift in Sources */,
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
+				637B15782B4CD62700B68963 /* SolackAlert.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
 				6344FBCD2B4C0667003C5933 /* ScreenSize.swift in Sources */,
 				639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */,
@@ -686,6 +733,7 @@
 				631A60E32B44EE02005509C2 /* KeyCores.swift in Sources */,
 				63E4AFD72B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift in Sources */,
 				631A60D62B44EDF5005509C2 /* BaseVC.swift in Sources */,
+				63DFDF862B4D00B600F47AB5 /* ManagerDialog.swift in Sources */,
 				631A60F92B452058005509C2 /* AuthPresentView.swift in Sources */,
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
