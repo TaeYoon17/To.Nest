@@ -12,6 +12,7 @@ import RxSwift
 import Combine
 fileprivate class SideVM: ObservableObject{
     @MainActor @Published var isOpen = false
+    var createWorkSpaceTapped: PassthroughSubject<(),Never> = .init()
     var closeAction: PassthroughSubject<(),Never> = .init()
 }
 final class SideVC: UIHostingController<Side>{
@@ -35,6 +36,19 @@ final class SideVC: UIHostingController<Side>{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .clear
+        vm.createWorkSpaceTapped.sink { [weak self] _ in
+            self?.presentCreateWS()
+        }.store(in: &subscription)
+    }
+    func presentCreateWS(){
+        let vc = WSwriterView<WScreateReactor>()
+        vc.reactor = WScreateReactor()
+        let nav = UINavigationController(rootViewController: vc)
+        if let sheet = nav.sheetPresentationController{
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav,animated: true)
     }
 }
 struct Side:View{
@@ -127,6 +141,7 @@ struct Side:View{
                     WorkSpaceBottomView()
                         .frame(height: 84)
                         .padding(.bottom,12)
+                        .environmentObject(vm)
                 }
                 .background(.white)
                 .clipShape(.rect(topLeadingRadius: 0, bottomLeadingRadius: 0, bottomTrailingRadius: 1, topTrailingRadius: 0, style: .continuous))
@@ -138,10 +153,12 @@ struct Side:View{
 
 
 struct WorkSpaceBottomView:View{
+    @EnvironmentObject fileprivate var vm:SideVM
     var body: some View{
         List{
             Button{
-                print("wow world")
+//                print("wow world")
+                vm.createWorkSpaceTapped.send(())
             }label:{
                 Label(
                     title: { Text("워크스페이스 추가").font(FontType.body.font)},

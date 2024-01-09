@@ -56,14 +56,22 @@ final class HomeVC: BaseVC{
             make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
             make.height.width.equalTo(54)
         }
-//        sideVC.view.snp.makeConstraints { make in
-//            make.edges.equalToSuperview()
-//        }
+        
     }
     override func configureView() {
         navBar.title = "iOS Developers"
         collectionView.backgroundColor = .gray1
         configureCollectionView()
+        newMessageBtn.rx.tap.bind(with: self) { owner, _ in
+            let vc = WSwriterView<WScreateReactor>()
+            vc.reactor = WScreateReactor()
+            let nav = UINavigationController(rootViewController: vc)
+            if let sheet = nav.sheetPresentationController{
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+            }
+            owner.present(nav,animated: true)
+        }.disposed(by: disposeBag)
     }
     
 }
