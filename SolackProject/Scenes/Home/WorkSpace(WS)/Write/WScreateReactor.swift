@@ -16,13 +16,14 @@ final class WScreateReactor: WSwriterReactor{
             
             self.workSpace.description = str
             return Observable.concat([
-                .just(Mutation.setDescription(str)),
-                .just(Mutation.isCreatable(!str.isEmpty))
-                                    ])
+                .just(Mutation.setDescription(str))
+            ])
         case .setName(let str):
             let newStr:String = str.count > 30 ? String(str.prefix(30)) : str
             self.workSpace.name = str
-            return Observable.concat([.just(.setName(str))])
+            return Observable.concat([.just(.setName(str)),
+                                      .just(Mutation.isCreatable(!str.isEmpty))
+            ])
         case .create:
             return Observable.concat([])
         }

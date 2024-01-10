@@ -39,7 +39,8 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
         st.alignment = .fill
         return st
     }()
-    var imageView = UIImageView()
+    var profileVC = ProfileImgVC()
+//    var imageView = UIImageView()
     var workSpaceName = InputFieldView(field: "워크스페이스 이름", placeholder: "워크스페이스 이름을 입력하세요 (필수)", accessoryText: "완료")
     var workSpaceDescription = InputFieldView(field: "워크스페이스 설명", placeholder: "워크스페이스를 설명하세요 (옵션)", accessoryText: "완료")
     let createBtn = AuthBtn() // 나중에 이름 수정하기
@@ -48,9 +49,15 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
         view.backgroundColor = .gray1
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        workSpaceName.tf.becomeFirstResponder()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
     override func configureView() {
-        imageView.image = .arKit
-        imageView.contentMode = .scaleAspectFit
         createBtn.text = "완료"
         view.endEditing(true)
         scrollView.endEditing(true)
@@ -63,8 +70,9 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
         view.endEditing(true)
     }
     override func configureLayout() {
+        self.addChild(profileVC)
         view.addSubview(scrollView)
-        scrollView.addSubview(imageView)
+        scrollView.addSubview(profileVC.view)
         scrollView.addSubview(stView)
         view.addSubview(createBtn)
     }
@@ -79,13 +87,13 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
         scrollView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        imageView.snp.makeConstraints { make in
+        profileVC.view.snp.makeConstraints { make in
             make.top.equalTo(scrollView.contentLayoutGuide).inset(24)
             make.width.height.equalTo(70)
             make.centerX.equalTo(scrollView.contentLayoutGuide)
         }
         stView.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).inset(-16)
+            make.top.equalTo(profileVC.view.snp.bottom).inset(-16)
             make.bottom.horizontalEdges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide.snp.width)
         }

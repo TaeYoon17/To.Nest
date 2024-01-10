@@ -40,6 +40,14 @@
 		632D8EB32B4D290200A99293 /* WSwriterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D8EB22B4D290200A99293 /* WSwriterView.swift */; };
 		633584692B45610C00B83555 /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633584682B45610C00B83555 /* SignInEmailView.swift */; };
 		6344FBCD2B4C0667003C5933 /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344FBCC2B4C0667003C5933 /* ScreenSize.swift */; };
+		634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */; };
+		636213012B4E93ED0093D089 /* EditImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213002B4E93ED0093D089 /* EditImageView.swift */; };
+		636213032B4E94F90093D089 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213022B4E94F90093D089 /* CropView.swift */; };
+		636213062B4E95F60093D089 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213052B4E95F60093D089 /* ImageManager.swift */; };
+		636213082B4E96220093D089 /* ImageManager+Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213072B4E96220093D089 /* ImageManager+Fetch.swift */; };
+		6362130A2B4E96360093D089 /* ImageManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213092B4E96360093D089 /* ImageManagerError.swift */; };
+		636213122B4E9FE70093D089 /* CropImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213112B4E9FE70093D089 /* CropImageManager.swift */; };
+		636213142B4EA0DD0093D089 /* CropImageModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213132B4EA0DD0093D089 /* CropImageModifier.swift */; };
 		6368352A2B47A56C00E38683 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636835292B47A56C00E38683 /* AppManager.swift */; };
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
@@ -142,6 +150,14 @@
 		632D8EB22B4D290200A99293 /* WSwriterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSwriterView.swift; sourceTree = "<group>"; };
 		633584682B45610C00B83555 /* SignInEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
 		6344FBCC2B4C0667003C5933 /* ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
+		634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImgView.swift; sourceTree = "<group>"; };
+		636213002B4E93ED0093D089 /* EditImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageView.swift; sourceTree = "<group>"; };
+		636213022B4E94F90093D089 /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
+		636213052B4E95F60093D089 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		636213072B4E96220093D089 /* ImageManager+Fetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageManager+Fetch.swift"; sourceTree = "<group>"; };
+		636213092B4E96360093D089 /* ImageManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManagerError.swift; sourceTree = "<group>"; };
+		636213112B4E9FE70093D089 /* CropImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageManager.swift; sourceTree = "<group>"; };
+		636213132B4EA0DD0093D089 /* CropImageModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageModifier.swift; sourceTree = "<group>"; };
 		636835292B47A56C00E38683 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
@@ -242,7 +258,7 @@
 				631A60ED2B44EE15005509C2 /* Scenes */,
 				631A60E62B44EE0B005509C2 /* ReactorServices */,
 				631A60D92B44EE01005509C2 /* Core */,
-				631A60D82B44EDFA005509C2 /* Services */,
+				631A60D82B44EDFA005509C2 /* Manager */,
 				6384A9BC2B47125600AA2F1B /* ServiceManagers */,
 				631A60D02B44EDF5005509C2 /* Helpers */,
 				631A60A92B44ECEE005509C2 /* AppDelegate.swift */,
@@ -292,12 +308,13 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
-		631A60D82B44EDFA005509C2 /* Services */ = {
+		631A60D82B44EDFA005509C2 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				636213042B4E95EE0093D089 /* ImageManager */,
 				6384A9B92B47123400AA2F1B /* AuthManager */,
 			);
-			path = Services;
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		631A60D92B44EE01005509C2 /* Core */ = {
@@ -370,6 +387,7 @@
 				632A2D602B4DAD1800E21DE8 /* WSwriterReactor.swift */,
 				632A2D622B4DAD7400E21DE8 /* WScreateReactor.swift */,
 				632D8EB22B4D290200A99293 /* WSwriterView.swift */,
+				634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */,
 			);
 			path = Write;
 			sourceTree = "<group>";
@@ -389,6 +407,44 @@
 				636C13862B4986BB006D9962 /* SignInToastType.swift */,
 			);
 			path = SignInEmail;
+			sourceTree = "<group>";
+		};
+		636213042B4E95EE0093D089 /* ImageManager */ = {
+			isa = PBXGroup;
+			children = (
+				636213102B4E9FD00093D089 /* CropImage */,
+				6362130E2B4E9F9D0093D089 /* UIComponents */,
+				636213052B4E95F60093D089 /* ImageManager.swift */,
+				636213072B4E96220093D089 /* ImageManager+Fetch.swift */,
+				636213092B4E96360093D089 /* ImageManagerError.swift */,
+			);
+			path = ImageManager;
+			sourceTree = "<group>";
+		};
+		6362130E2B4E9F9D0093D089 /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		636213102B4E9FD00093D089 /* CropImage */ = {
+			isa = PBXGroup;
+			children = (
+				636213002B4E93ED0093D089 /* EditImageView.swift */,
+				636213152B4EA26E0093D089 /* Cores */,
+			);
+			path = CropImage;
+			sourceTree = "<group>";
+		};
+		636213152B4EA26E0093D089 /* Cores */ = {
+			isa = PBXGroup;
+			children = (
+				636213022B4E94F90093D089 /* CropView.swift */,
+				636213112B4E9FE70093D089 /* CropImageManager.swift */,
+				636213132B4EA0DD0093D089 /* CropImageModifier.swift */,
+			);
+			path = Cores;
 			sourceTree = "<group>";
 		};
 		637B15762B4CD5C800B68963 /* SwiftUI */ = {
@@ -564,7 +620,7 @@
 			path = EmailSignIn;
 			sourceTree = "<group>";
 		};
-		63F0AEC72B4ABBFB000A597B /* Components */ = {
+		63F0AEC72B4ABBFB000A597B /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
 				63F0AEC82B4ABC05000A597B /* NewMessageBtn.swift */,
@@ -572,14 +628,14 @@
 				63F0AECC2B4AE21A000A597B /* AppendListBottom.swift */,
 				63F0AED02B4B03B6000A597B /* DirectMsgListItemView.swift */,
 			);
-			path = Components;
+			path = UIComponents;
 			sourceTree = "<group>";
 		};
 		63FA653D2B49ADA200C744C8 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				632D8EB12B4D28F700A99293 /* WorkSpace(WS) */,
-				63F0AEC72B4ABBFB000A597B /* Components */,
+				63F0AEC72B4ABBFB000A597B /* UIComponents */,
 				637B157B2B4CE86600B68963 /* SideWorkSpace */,
 				63F0AEC12B4AB8C8000A597B /* HomeVC.swift */,
 				63F0AED22B4B0775000A597B /* HomeVC+CellRegistration.swift */,
@@ -700,13 +756,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				636213142B4EA0DD0093D089 /* CropImageModifier.swift in Sources */,
 				637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */,
 				63F0AECF2B4B001B000A597B /* HomeVC+CollectionStructures.swift in Sources */,
 				632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */,
+				636213062B4E95F60093D089 /* ImageManager.swift in Sources */,
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
 				636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */,
 				639B8A702B491BA40024B4DD /* AuthReactor.swift in Sources */,
 				631A60E12B44EE02005509C2 /* AppConstraints.swift in Sources */,
+				634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */,
 				63E4AFD52B497FC300E0B6A1 /* EmailSignInReactor.swift in Sources */,
 				639DEAFB2B452E8300108979 /* AuthViewReactor.swift in Sources */,
 				6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */,
@@ -716,6 +775,7 @@
 				631A60AE2B44ECEE005509C2 /* ViewController.swift in Sources */,
 				6373EDDE2B4B8B3F00D24353 /* SideView.swift in Sources */,
 				6368352A2B47A56C00E38683 /* AppManager.swift in Sources */,
+				636213122B4E9FE70093D089 /* CropImageManager.swift in Sources */,
 				63FA653F2B49ADBB00C744C8 /* TabController.swift in Sources */,
 				631A60E22B44EE02005509C2 /* AppFont.swift in Sources */,
 				6384A9C82B47125600AA2F1B /* SingUpInfo.swift in Sources */,
@@ -745,6 +805,7 @@
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
 				637B15782B4CD62700B68963 /* SolackAlert.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
+				636213032B4E94F90093D089 /* CropView.swift in Sources */,
 				6344FBCD2B4C0667003C5933 /* ScreenSize.swift in Sources */,
 				639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */,
 				63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */,
@@ -755,8 +816,10 @@
 				632D8EB32B4D290200A99293 /* WSwriterView.swift in Sources */,
 				639CCA3B2B499F39005B35DF /* EmailSignInService.swift in Sources */,
 				63C4C3092B45AF9300A48E69 /* AnyModelStore.swift in Sources */,
+				6362130A2B4E96360093D089 /* ImageManagerError.swift in Sources */,
 				63F0AEC92B4ABC05000A597B /* NewMessageBtn.swift in Sources */,
 				6384A9CE2B47133200AA2F1B /* Tokens.swift in Sources */,
+				636213082B4E96220093D089 /* ImageManager+Fetch.swift in Sources */,
 				63E4AFCE2B49525300E0B6A1 /* SignResponse.swift in Sources */,
 				631A60E32B44EE02005509C2 /* KeyCores.swift in Sources */,
 				63E4AFD72B49806B00E0B6A1 /* EmailSignInReactor+Mutate.swift in Sources */,
@@ -765,6 +828,7 @@
 				631A60F92B452058005509C2 /* AuthPresentView.swift in Sources */,
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
+				636213012B4E93ED0093D089 /* EditImageView.swift in Sources */,
 				63F0AED72B4B093A000A597B /* BaseView.swift in Sources */,
 				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,
 				633584692B45610C00B83555 /* SignInEmailView.swift in Sources */,
