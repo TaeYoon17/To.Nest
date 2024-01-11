@@ -32,7 +32,8 @@ final class SignUpService: SignUpServiceProtocol{
                 refreshToken = response.token.refreshToken
                 nickname = response.nickname
                 phoneNumber = response.phone
-                profile = response.profileImage
+                //MARK: -- 여기 수정해야함
+//                profile = response.profileImage
                 email = response.email
                 event.onNext(.successSignUp)
             }catch let failed where failed is SignFailed{

@@ -9,8 +9,8 @@ import Foundation
 struct SignResponse: Codable {
     let userID: Int
     let email, nickname: String
-    let profileImage: Data?
-    let phone: String
+    let profileImage: String? // URL로 바뀜!!
+    let phone: String?
     let vendor: String?
     let createdAt: String
     let token: Token

@@ -71,7 +71,6 @@ enum UserRouter: URLRequestConvertible{
             urlRequest.httpBody = try? JSONEncoding.default.encode(urlRequest, with: parameters).httpBody
         }
         return urlRequest
-//        URLRequest(url: URL(string: "www.naver.com")!)
     }
     
     
@@ -88,7 +87,6 @@ extension SignUpInfo{
         parameters["phone"] = phone
         @DefaultsState(\.deviceToken) var deviceToken
         parameters["deviceToken"] = deviceToken ?? ""
-        
         return parameters
     }
 }

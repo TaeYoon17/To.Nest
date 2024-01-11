@@ -13,7 +13,7 @@ struct EmailInfo{
 }
 struct KakaoInfo{
     var oauthToken:String
-    
+    var deviceToken:String = ""
 }
 struct AppleInfo{
     var idToken: String

@@ -27,13 +27,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let vc = OnboardingView()
         vc.reactor = reactor
 //        TabController()
-        window?.rootViewController = TabController()
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
     }
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                _ = AuthController.rx.handleOpenUrl(url: url)
+                let val: Bool = AuthController.rx.handleOpenUrl(url: url)
+                if val{
+                    print("Success to get kakao Token")
+                    
+                }else{
+                    print("Failed to get kakao Token")
+                }
             }
         }
     }
@@ -42,7 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let view = owner.window?.rootViewController?.view else {return}
             print("userAccessConnect 발생한다")
             let vc = if isLogIn{
-                ViewController()
+                TabController()
             }else{
                 OnboardingView()
             }

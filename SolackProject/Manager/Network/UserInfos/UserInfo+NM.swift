@@ -8,21 +8,13 @@
 import Foundation
 import Alamofire
 import RxSwift
-struct DoubleErrorCode:Decodable{
-    let errorCode:String
-}
+
 /*
  wow@gmail.com
  Aa123@@@qa
  토스트
  010-1111-2222
  */
-enum SignFailed:String, Error{
-    case signUpDoubled = "E12" // 중복
-    case signUpwrong = "E11" // 잘못됨
-    case signInFailed = "E03" // 로그인 실패
-}
-
 extension NetworkManager{
     func signUp(_ info : SignUpInfo) async throws -> SignResponse{
         return try await withCheckedThrowingContinuation {[weak self] continuation in
@@ -53,7 +45,7 @@ extension NetworkManager{
                         observer.onError(Errors.API.FailFetchToken)
                         break
                     }
-                    if code == 400,let val,let errorData = try? JSONDecoder().decode(DoubleErrorCode.self, from: val){
+                    if code == 400,let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
                         if errorData.errorCode == "E12"{
                             observer.onNext(false)
                             observer.onCompleted()
@@ -77,17 +69,17 @@ extension NetworkManager{
     }
     
     func signIn<T:SignInBody>(type:SignInType,body:T) async throws -> SignResponse {
-        try await withCheckedThrowingContinuation {[weak self] continuation in
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
                 continuation.resume(throwing: Errors.API.FailFetchToken)
                 return
             }
-            AF.request(UserRouter.signIn(type: type, body: body),interceptor: baseInterceptor).response {[weak self]res in
+            AF.request(UserRouter.signIn(type: type, body: body),interceptor: baseInterceptor).response {[weak self] res in
                 guard let self else {
                     continuation.resume(throwing: Errors.API.FailFetchToken)
                     return
                 }
-                signResponse(res: res, continuation: continuation)
+                signResponse(res: res, continuation: continuation) 
             }
         }
     }
@@ -101,17 +93,47 @@ extension NetworkManager{
                 continuation.resume(throwing: Errors.API.FailFetchToken)
                 return
             }
-            if code == 400,let val,let errorData = try? JSONDecoder().decode(DoubleErrorCode.self, from: val){
+            if let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
                 if let failType = SignFailed(rawValue: errorData.errorCode){
                     continuation.resume(throwing: failType)
+                    return
+                }else if let failType = CommonFailed(rawValue: errorData.errorCode){
+                    continuation.resume(throwing: failType)
+                    return
                 }else{
                     continuation.resume(throwing: Errors.API.FailFetchToken)
+                    return
                 }
             }
             else if code == 200,let val,let data = try? JSONDecoder().decode(SignResponse.self, from: val){
                 continuation.resume(returning: data)
             }
         case .failure(let error):
+            continuation.resume(throwing: error)
+        }
+    }
+    func generalResponse<Err:FailedProtocol,Response:Decodable>(err: Err.Type, result: Response.Type,res: AFDataResponse<Data?>,continuation: CheckedContinuation<Response,Error>){
+        switch res.result{
+        case .success(let val):
+            guard let code = res.response?.statusCode else{
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            if let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
+                if let failType = err.converter(val: errorData.errorCode){
+                    continuation.resume(throwing: failType)
+                }else if let failType = CommonFailed.converter(val: errorData.errorCode){
+                    print(failType)
+                    continuation.resume(throwing: failType)
+                }else {
+                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                }
+            }
+            else if code == 200,let val,let data = try? JSONDecoder().decode(Response.self, from: val){
+                continuation.resume(returning: data)
+            }
+        case .failure(let error):
+            print("여기로 떨어져 벌임...")
             continuation.resume(throwing: error)
         }
     }

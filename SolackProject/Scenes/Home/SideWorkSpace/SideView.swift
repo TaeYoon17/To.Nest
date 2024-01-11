@@ -42,7 +42,7 @@ final class SideVC: UIHostingController<Side>{
     }
     func presentCreateWS(){
         let vc = WSwriterView<WScreateReactor>()
-        vc.reactor = WScreateReactor()
+        vc.reactor = WScreateReactor(provider: ServiceProvider())
         let nav = UINavigationController(rootViewController: vc)
         if let sheet = nav.sheetPresentationController{
             sheet.detents = [.large()]

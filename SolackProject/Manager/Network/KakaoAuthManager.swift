@@ -15,9 +15,9 @@ final class KakaoManager{
     static let shared = KakaoManager()
     var disposeBag = DisposeBag()
     // 회원 가입 및 로그인을 위한 토큰 값 얻어오기
-    func getKakaoToken() async throws -> String {
+    @MainActor func getKakaoToken() async throws -> String {
         let apiShared = UserApi.shared
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
             let handler:(OAuthToken?,Error?) -> Void = {(oauthToken, error) in
                 if let error = error {
                     print(error)

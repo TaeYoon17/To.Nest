@@ -64,7 +64,7 @@ final class HomeVC: BaseVC{
         configureCollectionView()
         newMessageBtn.rx.tap.bind(with: self) { owner, _ in
             let vc = WSwriterView<WScreateReactor>()
-            vc.reactor = WScreateReactor()
+            vc.reactor = WScreateReactor(provider: ServiceProvider())
             let nav = UINavigationController(rootViewController: vc)
             if let sheet = nav.sheetPresentationController{
                 sheet.detents = [.large()]

@@ -8,11 +8,14 @@
 import UIKit
 import SwiftUI
 import PhotosUI
-
+import RxSwift
+final class ProfileImgVM:ObservableObject{
+    var imageData = PublishSubject<Data>()
+}
 final class ProfileImgVC: UIHostingController<ProfileImgView>{
-    
+    let vm = ProfileImgVM()
     init(){
-        super.init(rootView: ProfileImgView())
+        super.init(rootView: ProfileImgView(vm: vm))
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("Don't use storyboard")
@@ -22,14 +25,13 @@ final class ProfileImgVC: UIHostingController<ProfileImgView>{
         view.backgroundColor = .gray1
     }
 }
-
 struct ProfileImgView:View{
-    //    @State var photosPickerItem:PhotosPickerItem? = nil
+    
+    @ObservedObject var vm: ProfileImgVM
     @State var prevImage = false
     @State var pickerPresent: Bool = false
     let defaultImage:Image? = nil
     let size: CGSize = .init(width: 200, height: 200)
-//    let width:CGFloat = 44
     var body: some View{
         EditImageView(isPresented:$pickerPresent,cropType: .rectangle(size), content: { state in
             switch state{
@@ -45,32 +47,24 @@ struct ProfileImgView:View{
                 Image(uiImage: img).resizable(resizingMode: .stretch).scaledToFill()
                     .animToggler()
                     .onAppear(){
-                        //                            do{
-                        //                                let imgData = try img.jpegData(maxMB: 3)
-                        //                                dataAction(imgData)
-                        //                            }catch{
-                        //                                print(error)
-                        //                            }
+                        do{
+                            if let imgData = img.jpegData(compressionQuality: 0.1){
+                                vm.imageData.onNext(imgData)
+                            }else{
+                                fatalError("이미지 가져오기 실패!!")
+                            }
+                            print("이미지 가져오기 성공!!")
+                        }catch{
+                            print(error)
+                        }
                     }
             }
         })
         .frame(width: 70,height: 70)
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 8 ))
-        .overlay(alignment: .bottomTrailing){
-            Button{
-                self.pickerPresent = true
-            }label:{
-                Image(systemName: "camera.circle.fill")
-                    .resizable().scaledToFit()
-                    .tint(.accent)
-                    .frame(width: 24,height: 24)
-                    .background(.white)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(.white,lineWidth:2))
-            }
-            .contentShape(.rect.offset(x:10,y:10))
-            .offset(x:10,y:10)
+        .overlay(alignment: .bottomTrailing){ // 작은 카메라 아이콘
+            smallCameraIcon
         }
     }
     
@@ -80,5 +74,22 @@ struct ProfileImgView:View{
                 Image(.workspace).resizable().scaledToFit()
                     .frame(width: 48,height: 60)
             }
+    }
+}
+extension ProfileImgView{
+    var smallCameraIcon: some View{
+        Button{
+            self.pickerPresent = true
+        }label:{
+            Image(systemName: "camera.circle.fill")
+                .resizable().scaledToFit()
+                .tint(.accent)
+                .frame(width: 24,height: 24)
+                .background(.white)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(.white,lineWidth:2))
+        }
+        .contentShape(.rect.offset(x:10,y:10))
+        .offset(x:10,y:10)
     }
 }

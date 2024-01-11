@@ -14,7 +14,7 @@ protocol AuthServiceProtocol{
     func requestSignIn(_ type: SignInType) -> Observable<SignInType>
     func requestSignUp() -> Observable<Void>
 }
-class AuthService: AuthServiceProtocol{
+final class AuthService: AuthServiceProtocol{
     let event = PublishSubject<Event>()
     let navigation: PublishSubject<Navigation> = .init()
     enum Event{
