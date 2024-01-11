@@ -64,34 +64,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 coverView.removeFromSuperview()
             }
         }.disposed(by: disposeBag)
-    }    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        if let url = URLContexts.first?.url {
-            if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                _ = AuthController.rx.handleOpenUrl(url: url)
-            }
-        }
-    }
-    func userAccessConnect(){
-        AppManager.shared.userAccessable.debounce(.nanoseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, isLogIn in
-            guard let view = owner.window?.rootViewController?.view else {return}
-            print("userAccessConnect 발생한다")
-            let vc = if isLogIn{
-                ViewController()
-            }else{
-                OnboardingView()
-            }
-            let coverView = UIView()
-            coverView.backgroundColor = .gray1
-            vc.view.addSubview(coverView)
-            coverView.frame = vc.view.bounds
-            owner.window?.rootViewController = vc
-            owner.window?.makeKeyAndVisible()
-            UIView.animate(withDuration: 0.5) {
-                coverView.alpha = 0
-            }completion: { _ in
-                coverView.removeFromSuperview()
-            }
-        }.disposed(by: disposeBag)
     }
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
