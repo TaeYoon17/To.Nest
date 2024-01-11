@@ -48,6 +48,17 @@ struct ButtonConfigure{
         config.baseForegroundColor = color
         return ButtonConfigure(configuration: config, button)
     }
+    func backgroundImage(_ image: UIImage,mode: UIView.ContentMode) -> Self{
+        var config = configuration
+        config.background.image = image
+        config.background.imageContentMode = mode
+        return ButtonConfigure(configuration: config, button)
+    }
+    func cornerStyle(_ style: UIButton.Configuration.CornerStyle)->Self{
+        var config = configuration
+        config.cornerStyle = style
+        return ButtonConfigure(configuration: config, button)
+    }
     func apply(){
         button.configuration = configuration
     }

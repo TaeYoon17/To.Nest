@@ -37,6 +37,15 @@ enum FontType{
             UIFont(name: "SFPro-Bold", size: 14)!
         }
     }
+    var font: Font{
+        switch self{
+        case .body: Font.custom("SFPro-Regular", size: 13)
+        case .bodyBold: Font.custom("SFPro-Bold", size: 13)
+        case .caption: Font.custom("SFPro-Regular", size: 12)
+        case .title1: Font.custom("SFPro-Bold", size: 22)
+        case .title2: Font.custom("SFPro-Bold", size: 14)
+        }
+    }
 }
 extension String{
     

@@ -105,13 +105,11 @@ final class SignUpView:BaseVC,View{
     override func configureNavigation() {
         self.navigationItem.leftBarButtonItem = .init(image: .init(systemName: "xmark"))
         self.navigationItem.leftBarButtonItem?.tintColor = .text
+        self.navigationController?.navigationBar.backgroundColor = .white
         self.isModalInPresentation = true
         self.navigationItem.title = "회원가입"
-        self.navigationController?.navigationBar.backgroundColor = .white
         self.navigationItem.leftBarButtonItem!.rx.tap.bind(with: self) { owner, _ in
-            owner.dismiss(animated: true){
-                //                owner.reactor?.provider.authService.navigation.onNext(.dismissCompleted)
-            }
+            owner.dismiss(animated: true){}
         }.disposed(by: disposeBag)
     }
     override func configureConstraints() {

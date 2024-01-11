@@ -17,6 +17,7 @@ class OnboardingViewReactor: Reactor {
     
     enum Action {
         case auth
+        case signInWithKakaoTalk
     }
     
     /// 처리 단위를 정의합니다.
@@ -46,21 +47,19 @@ class OnboardingViewReactor: Reactor {
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let eventMutation = provider.authService.event.flatMap { event -> Observable<Mutation> in
-            
-            return switch event{
+            switch event{
             case .signIn(let signIn):
-                Observable.concat([
+                return Observable.concat([
                     .just(.setLoading(false)),
                     .just(.requestSignIn(signIn))
                 ])
-                
             case .signUp:
-                Observable.concat([
+                return Observable.concat([
                     .just(.setLoading(false)),
                     .just(.requestSignUp)
                 ])
             case .updateAccessToken(let string):
-                    .just(.requestSignUp)
+                return .just(.requestSignUp)
             }
         }
         let navigationMutation = provider.authService.navigation.flatMap { event -> Observable<Mutation> in
@@ -71,13 +70,16 @@ class OnboardingViewReactor: Reactor {
                 ])
             }
         }
-        return Observable.merge(mutation, eventMutation,navigationMutation)
+        let signInMutation = provider.signInService.event.flatMap { event -> Observable<Mutation> in
+            switch event{
+            case .successSignIn:
+                return Observable.concat([])
+            case .failedSignIn(let failed):
+                return Observable.concat([])
+            }
+        }
+        return Observable.merge(mutation, eventMutation,navigationMutation,signInMutation)
     }
-    /// Action이 들어온 경우 어떤 처리를 할 것인지 분기
-    ///
-    /// Mutation에서 정의한 작업 단위들을 사용하여 Observable로 방출
-    ///
-    /// 액션에 맞게 행동해!
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .auth:
@@ -85,13 +87,13 @@ class OnboardingViewReactor: Reactor {
                 Observable.just(.authPresenting).delay(.microseconds(100), scheduler: MainScheduler.instance),
                 Observable.just(.setLoading(true))
             ])
+        case .signInWithKakaoTalk:
+            provider.signInService.kakaoSignIn()
+            return Observable.concat([
+                
+            ])
         }
     }
-    /// 이전 상태와 처리 단위를 받아서 다음 상태를 반환하는 함수
-    ///
-    /// mutate(action: )이 실행되고 난 후 바로 해당 메소드를 실행
-    ///
-    /// 변화에 맞게끔 값을 설정해!
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         
