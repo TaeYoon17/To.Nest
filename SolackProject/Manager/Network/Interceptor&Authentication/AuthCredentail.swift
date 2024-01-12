@@ -11,9 +11,7 @@ struct AuthCredential : AuthenticationCredential {
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
     let expiration: Date
-    var requiresRefresh: Bool { /*Date(timeIntervalSinceNow: NetworkService.accessExpireSeconds) > expiration*/
-        false
-    }
+    var requiresRefresh: Bool { Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds) > expiration }
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var request = urlRequest
         // 헤더 부분 넣어주기

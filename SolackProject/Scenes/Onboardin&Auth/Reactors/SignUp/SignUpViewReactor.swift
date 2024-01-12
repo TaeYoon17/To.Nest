@@ -91,9 +91,9 @@ final class SignUpViewReactor: Reactor{
         }
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let signMutation = provider.signUpService.event.flatMap { event -> Observable<Mutation> in
+        let signMutation = provider.signService.event.flatMap { event -> Observable<Mutation> in
             switch event{
-            case .failedSignUp(let failed):
+            case .failedSign(let failed):
                 switch failed{
                 case .signUpDoubled:
                     return Observable.just(.setSignUpToast(.alreadySignedUp))
@@ -102,7 +102,7 @@ final class SignUpViewReactor: Reactor{
                 default:
                     return Observable.concat([])
                 }
-            case .successSignUp:
+            case .successSign:
                 AppManager.shared.userAccessable.onNext(true)
                 return Observable.concat([])
             }

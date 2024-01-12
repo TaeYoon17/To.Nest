@@ -13,7 +13,7 @@ enum AuthRouter:URLRequestConvertible{
     static let baseURL = URL(string: API.baseURL + "/v1/auth")
     var endPoint:String{
         switch self{
-        case .refresh: "/endPoint"
+        case .refresh: "/refresh"
         }
     }
     var method:HTTPMethod{

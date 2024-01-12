@@ -18,11 +18,11 @@ final class WorkSpaceService:WorkSpaceProtocol{
         case create(WSResponse)
         case failed(WSFailed)
         case unknownError
+        case requireReSign
     }
     func requestCreate(_ info:WSInfo){
         Task{
             do{
-                
                 let res = try await NetworkManager.shared.createWS(info)
                 event.onNext(.create(res))
             }catch let failed where failed is WSFailed{ // 내 문제
@@ -36,8 +36,9 @@ final class WorkSpaceService:WorkSpaceProtocol{
                     case .unknownAccount: print("재 로그인 필요")
                 }
 //                event.onNext(.unknownError)
-                event.onNext(.unknownError)
+                event.onNext(.requireReSign)
             }catch{
+                print(error)
                 event.onNext(.unknownError)
             }
         }

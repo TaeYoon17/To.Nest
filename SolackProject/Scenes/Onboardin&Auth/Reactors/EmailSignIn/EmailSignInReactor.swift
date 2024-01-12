@@ -67,9 +67,9 @@ final class EmailSignInReactor: Reactor{
         }
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let signIn = provider.signInService.event.flatMap { event -> Observable<Mutation> in
+        let signIn = provider.signService.event.flatMap { event -> Observable<Mutation> in
             switch event{
-            case .failedSignIn(let errorType):
+            case .failedSign(let errorType):
                 switch errorType{
                 case .signInFailed:
                     return Observable.concat([
@@ -83,7 +83,7 @@ final class EmailSignInReactor: Reactor{
                     ])
                 }
                 
-            case .successSignIn:
+            case .successSign:
                 AppManager.shared.userAccessable.onNext(true)
                 return Observable.concat([])
             }

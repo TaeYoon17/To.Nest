@@ -11,7 +11,7 @@ typealias NM = NetworkManager
 final class NetworkManager{
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
-    static let accessExpireSeconds:Double = 60
+    static let accessExpireSeconds:Double = 60 * 60
     static let shared = NetworkManager()
     let baseInterceptor = BaseInterceptor()
     var authInterceptor = AuthenticatorInterceptor()

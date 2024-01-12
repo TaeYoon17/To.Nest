@@ -56,6 +56,9 @@ class WSwriterReactor:Reactor{
             case .create(let response):
                 print("워크 스페이스 만들기 성공!!")
                 return .just(.isLoading(false))
+            case .requireReSign:
+                AppManager.shared.userAccessable.onNext(false)
+                return .just(.isLoading(false))
             default:
                 return Observable.concat([
                     .just(.isLoading(false))

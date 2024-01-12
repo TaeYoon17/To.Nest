@@ -7,22 +7,25 @@
 
 import Foundation
 import RxSwift
-protocol SignInServiceProtocol{
-    var event: PublishSubject<SignInService.Event> {get}
+protocol SignServiceProtocol{
+    var event: PublishSubject<SignService.Event> {get}
     func emailSignIn(_ info:EmailInfo)
     func kakaoSignIn()
+    func signUp(_ info:SignUpInfo)
 }
-final class SignInService: SignInServiceProtocol{
+final class SignService: SignServiceProtocol{
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.nickname) var nickname
     @DefaultsState(\.phoneNumber) var phoneNumber
     @DefaultsState(\.profile) var profile
     @DefaultsState(\.email) var email
+    @DefaultsState(\.expiration) var expiration
+    @DefaultsState(\.userID) var userID
     let event = PublishSubject<Event>()
     enum Event{
-        case successSignIn
-        case failedSignIn(SignFailed)
+        case successSign
+        case failedSign(SignFailed)
     }
     func emailSignIn(_ info:EmailInfo){
         Task{
@@ -30,12 +33,12 @@ final class SignInService: SignInServiceProtocol{
                 let response = try await NM.shared.signIn(type: .email, body: info)
                 // MARK: -- 여기 수정해야함
 //                profile = response.profileImage
-                defaultsSignIn(response)
-                event.onNext(.successSignIn)
+                defaultsSign(response)
+                event.onNext(.successSign)
             }catch let failed where failed is SignFailed{
-                event.onNext(.failedSignIn(failed as! SignFailed))
+                event.onNext(.failedSign(failed as! SignFailed))
             }catch let fail where fail is Errors.API{
-                event.onNext(.failedSignIn(.signInFailed))
+                event.onNext(.failedSign(.signInFailed))
             }
         }
     }
@@ -44,7 +47,7 @@ final class SignInService: SignInServiceProtocol{
             do {
                 let kakaoToken = try await KakaoManager.shared.getKakaoToken()
                 let signResponse = try await NM.shared.signIn(type: .kakao, body: KakaoInfo(oauthToken: kakaoToken))
-                defaultsSignIn(signResponse)
+                defaultsSign(signResponse)
                 AppManager.shared.userAccessable.onNext(true)
             }catch{
                 print("error here:")
@@ -52,13 +55,28 @@ final class SignInService: SignInServiceProtocol{
             }
         }
     }
+    func signUp(_ info:SignUpInfo){
+        Task{
+            do{
+                let response = try await NM.shared.signUp(info)
+                defaultsSign(response)
+                event.onNext(.successSign)
+            }catch let failed where failed is SignFailed{
+                event.onNext(.failedSign(failed as! SignFailed))
+            }catch{
+                event.onNext(.failedSign(.signUpwrong))
+            }
+        }
+    }
 }
-extension SignInService{
-    fileprivate func defaultsSignIn(_ response: SignResponse){
+extension SignService{
+    fileprivate func defaultsSign(_ response: SignResponse){
         accessToken = response.token.accessToken
         refreshToken = response.token.refreshToken
         nickname = response.nickname
         phoneNumber = response.phone
         email = response.email
+        expiration = Date(timeIntervalSince1970: NetworkManager.accessExpireSeconds)
+        userID = response.userID
     }
 }

@@ -70,11 +70,11 @@ class OnboardingViewReactor: Reactor {
                 ])
             }
         }
-        let signInMutation = provider.signInService.event.flatMap { event -> Observable<Mutation> in
+        let signInMutation = provider.signService.event.flatMap { event -> Observable<Mutation> in
             switch event{
-            case .successSignIn:
+            case .successSign:
                 return Observable.concat([])
-            case .failedSignIn(let failed):
+            case .failedSign(let failed):
                 return Observable.concat([])
             }
         }
@@ -88,7 +88,7 @@ class OnboardingViewReactor: Reactor {
                 Observable.just(.setLoading(true))
             ])
         case .signInWithKakaoTalk:
-            provider.signInService.kakaoSignIn()
+            provider.signService.kakaoSignIn()
             return Observable.concat([
                 
             ])

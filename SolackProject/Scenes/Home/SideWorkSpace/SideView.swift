@@ -14,6 +14,9 @@ fileprivate class SideVM: ObservableObject{
     @MainActor @Published var isOpen = false
     var createWorkSpaceTapped: PassthroughSubject<(),Never> = .init()
     var closeAction: PassthroughSubject<(),Never> = .init()
+//    @Published var workspaces: [WorkSpace] = []
+    
+    func 
 }
 final class SideVC: UIHostingController<Side>{
     var isOpen:Bool = false{
@@ -102,7 +105,6 @@ struct Side:View{
             }
         }.statusBar(hidden: true)
             .onReceive(vm.$isOpen, perform: { val in
-                print("Side \(val)")
                 withAnimation(.easeOut(duration: 0.333)) {
                     isOpen = val
                     if val == false{

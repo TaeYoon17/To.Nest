@@ -40,7 +40,7 @@ extension EmailSignInReactor{
                 ])
             }
             // 검사 후...
-            provider.signInService.emailSignIn(info)
+            provider.signService.emailSignIn(info)
             return Observable.concat([
                 .just(.setErrorField([]))
             ])

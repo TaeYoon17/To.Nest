@@ -97,7 +97,7 @@ extension SignUpViewReactor{
                     .just(.setSignUpToast(nil))
                 ])
             }
-            provider.signUpService.signUp(info)
+            provider.signService.signUp(info)
             return Observable.concat([
 //                .just(.setSignUpToast(.other)),
 //                .just(.setSignUpToast(nil)).delay(.nanoseconds(100), scheduler: MainScheduler.instance)

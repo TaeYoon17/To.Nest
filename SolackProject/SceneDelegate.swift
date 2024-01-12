@@ -14,6 +14,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var disposeBag = DisposeBag()
+//    @DefaultsState(\.expiration) var expiration
+    @DefaultsState(\.accessToken) var accessToken
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -23,11 +25,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         userAccessConnect()
-        let reactor = OnboardingViewReactor()
-        let vc = OnboardingView()
-        vc.reactor = reactor
-//        TabController()
-        window?.rootViewController = vc
+        if accessToken.isEmpty{
+            let reactor = OnboardingViewReactor()
+            let vc = OnboardingView()
+            vc.reactor = reactor
+            window?.rootViewController = vc
+        }else{
+            window?.rootViewController = TabController()
+        }
         window?.makeKeyAndVisible()
     }
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
