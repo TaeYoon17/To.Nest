@@ -25,7 +25,7 @@ final class WScreateReactor: WSwriterReactor{
             ])
         case .create:
             print(wsInfo)
-            provider.wsService.requestCreate(wsInfo)
+            provider.wsService.create(wsInfo)
             return Observable.concat([.just(.isLoading(true))])
         case .imageData(let data):
             self.wsInfo.image = data

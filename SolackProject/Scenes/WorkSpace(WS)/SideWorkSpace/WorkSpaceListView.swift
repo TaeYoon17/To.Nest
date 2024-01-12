@@ -8,6 +8,7 @@
 import SwiftUI
 fileprivate struct WorkSpaceListInner<T: View>:View{
     let view:()->T
+    @EnvironmentObject var vm: SideVM
     @Binding var managerWorkSpace:Bool
     @Binding var defaultWorkSpace:Bool
     @State var fullScreenGo = false
@@ -40,7 +41,7 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
             }, cancel: {
                 print("나가기")
             })
-//MARK: -- SolackAlert내부에 애니메이션 처리가 되어있음!!
+        //MARK: -- SolackAlert 내부에 애니메이션 처리가 되어있음!!
             .solackAlert($managerDelete, title: "채널 삭제", description: "정말 이 채널을 삭제하시겠습니까? 삭제 시 멤버/채팅 등 채널 내의 모든 정보가 삭제되며 복구할 수 없습니다.", cancelTitle: "취소", cancel: {
                 
             },confirmTitle: "삭제",confirm: {
@@ -56,13 +57,13 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
                          cancelTitle: "취소",
                          cancel: {
                 
-                        },
+            },
                          confirmTitle:"나가기",
                          confirm: {
                 print("user exit ok")
             })
-            
-            
+        
+        
     }
     private func goAnim(action:()->()){
         var transaction = Transaction()
@@ -74,51 +75,64 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
 }
 
 struct WorkSpaceList:View{
+    @EnvironmentObject var vm: SideVM
     @State fileprivate var isUserSelected:Bool = false
     @State fileprivate var isManagerSelected:Bool = false
-    let listItem: [WorkSpaceListItem] = [.init(isSelected: true,isMyManaging: true, imageName: "Metal", name: "iOS Developer Study", date: "22. 03. 23"),
-                                         .init(isSelected: false, imageName: "ARKit", name: "영등포 새싹마을 모임", date:"23. 11. 10"),
-                                         .init(isSelected: false, imageName: "macOS", name: "모여라 댕댕이", date:"22. 02. 02")]
+    @State private var list:[WorkSpaceListItem] = []
     var body:some View{
         WorkSpaceListInner(manager: $isManagerSelected, user: $isUserSelected) {
             VStack(spacing:0){
-                ScrollView {
-                    LazyVStack(spacing:12){
-                        ForEach(listItem.indices,id:\.self){ idx in
-                            listItemView(listItem[idx]).transaction { transaction in
-                                transaction.disablesAnimations = false
-                                transaction.animation = nil
+                if list.isEmpty{
+                    ProgressView()
+                }else{
+                    ScrollView {
+                        LazyVStack(spacing:12){
+                            ForEach(vm.list.indices,id:\.self){ idx in
+                                Button{
+                                    // 고유 workspaceitemID를 바꾼다.
+                                    vm.selectedWorkSpaceID = vm.list[idx].id
+                                }label:{
+                                    listItemView(vm.list[idx])
+                                }.transaction { transaction in
+                                    transaction.disablesAnimations = false
+                                    transaction.animation = nil
+                                }
                             }
                         }
-                    }
+                        
+                    }.opacity(list.isEmpty ? 0 : 1)
+                    .scrollIndicators(.never)
+                    Spacer()
                 }
-                Spacer()
+            }
+            .onChange(of: vm.list) { newValue in
+                    withAnimation {
+                        list = newValue
+                    }
             }
         }
+        .environmentObject(vm)
     }
     func listItemView(_ item:WorkSpaceListItem) -> some View{
-        Button{
-            print("리스트 아이템")
-        }label:{
-            HStack(alignment:.center, spacing:8){
-                Image(item.imageName).resizable().frame(width: 44,height:44).clipShape(RoundedRectangle(cornerRadius: 8))
-                VStack(alignment: .leading){
-                    Text(item.name).font(FontType.bodyBold.font)
-                    Text(item.date).font(FontType.body.font).foregroundStyle(.secondary)
-                }
-                Spacer()
-                if item.isSelected{
-                    Button{
-                        if item.isMyManaging{
-                            isManagerSelected.toggle()
-                        }else{
-                            isUserSelected.toggle()
-                        }
-                    }label: {
-                        Image(systemName: "ellipsis").fontWeight(.medium)
-                    }.tint(.text)
-                        .zIndex(2)
-                }
+        HStack(alignment:.center, spacing:8){
+            let size = CGSize(width: 44, height: 44)
+            Image(uiImage: item.image).resizable().frame(size).clipShape(RoundedRectangle(cornerRadius: 8))
+            VStack(alignment: .leading){
+                Text(item.name).font(FontType.bodyBold.font)
+                Text(item.date).font(FontType.body.font).foregroundStyle(.secondary)
+            }
+            Spacer()
+            if item.isSelected{
+                Button{
+                    if item.isMyManaging{
+                        isManagerSelected.toggle()
+                    }else{
+                        isUserSelected.toggle()
+                    }
+                }label: {
+                    Image(systemName: "ellipsis").fontWeight(.medium)
+                }.tint(.text)
+                    .zIndex(2)
             }
         }
         .padding(.all,8)

@@ -10,10 +10,10 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 
-class OnboardingViewReactor: Reactor {
+final class OnboardingViewReactor: Reactor {
     /// 초기 상태를 정의합니다.
     let initialState :State
-    let provider: ServiceProviderProtocol
+    weak var provider: ServiceProviderProtocol!
     
     enum Action {
         case auth
@@ -41,8 +41,8 @@ class OnboardingViewReactor: Reactor {
         var isAuthPresent = false
     }
     
-    init(){
-        self.provider = ServiceProvider()
+    init(_ provider: ServiceProviderProtocol){
+        self.provider = provider
         self.initialState = State()
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {

@@ -48,11 +48,8 @@ struct ProfileImgView:View{
                     .animToggler()
                     .onAppear(){
                         do{
-                            if let imgData = img.jpegData(compressionQuality: 0.1){
-                                vm.imageData.onNext(imgData)
-                            }else{
-                                fatalError("이미지 가져오기 실패!!")
-                            }
+                            let imgData = try img.imageData(maxMB: 0.9)
+                            vm.imageData.onNext(imgData)
                             print("이미지 가져오기 성공!!")
                         }catch{
                             print(error)

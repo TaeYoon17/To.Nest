@@ -197,21 +197,4 @@ extension SignUpView{
 }
 
 
-fileprivate extension SignUpToastType{
-    var getColor:UIColor{
-        switch self{
-        case .alreadyAvailable,.vailableEmail:
-                .accent
-        case .emailValidataionError,.nickNameCondition,.phoneCondition,.invalidateCheckPassword,.other:
-                .error
-        case .unCheckedValidation:
-                .error
-        case .pwCondition:
-                .error
-        case .others(_):
-                .error
-        case .alreadySignedUp:
-                .error
-        }
-    }
-}
+

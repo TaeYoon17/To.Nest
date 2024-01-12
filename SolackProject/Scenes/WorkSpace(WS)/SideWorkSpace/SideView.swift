@@ -2,7 +2,7 @@
 //  SideView.swift
 //  SolackProject
 //
-//  Created by 김태윤 on 1/8/24.
+//  Created by 김태윤 on 1/12/24.
 //
 
 import UIKit
@@ -10,52 +10,8 @@ import SnapKit
 import SwiftUI
 import RxSwift
 import Combine
-fileprivate class SideVM: ObservableObject{
-    @MainActor @Published var isOpen = false
-    var createWorkSpaceTapped: PassthroughSubject<(),Never> = .init()
-    var closeAction: PassthroughSubject<(),Never> = .init()
-//    @Published var workspaces: [WorkSpace] = []
-    
-    func 
-}
-final class SideVC: UIHostingController<Side>{
-    var isOpen:Bool = false{
-        didSet{ vm.isOpen = isOpen }
-    }
-    fileprivate var vm = SideVM()
-    var subscription = Set<AnyCancellable>()
-    init(){
-        super.init(rootView: Side(vm:self.vm))
-        isOpen = false
-        vm.closeAction.sink { [weak self] _ in
-            self?.view.isHidden = true
-            self?.isOpen = false
-            self?.dismiss(animated: false)
-        }.store(in: &subscription)
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Don't use storyboard")
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .clear
-        vm.createWorkSpaceTapped.sink { [weak self] _ in
-            self?.presentCreateWS()
-        }.store(in: &subscription)
-    }
-    func presentCreateWS(){
-        let vc = WSwriterView<WScreateReactor>()
-        vc.reactor = WScreateReactor(provider: ServiceProvider())
-        let nav = UINavigationController(rootViewController: vc)
-        if let sheet = nav.sheetPresentationController{
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(nav,animated: true)
-    }
-}
 struct Side:View{
-    @ObservedObject fileprivate var vm: SideVM
+    @ObservedObject var vm: SideVM
     @GestureState var expand:CGFloat = 0
     @State var endPo:CGFloat = 0
     @State var nowPo:CGFloat = 0
@@ -75,12 +31,10 @@ struct Side:View{
                         .onChanged({ value in
                             if value.translation.width < 0{
                                 let width = value.translation.width
-                                //                                withAnimation {
                                 nowPo = width
-                                //                                }
                             }
                         })
-                            .updating($expand, body: { val, state, transaction in
+                        .updating($expand, body: { val, state, transaction in
                                 if val.translation.width > 0{
                                     withAnimation(.easeInOut(duration: 0.66)) {
                                         state = min(12,val.translation.width)
@@ -108,7 +62,7 @@ struct Side:View{
                 withAnimation(.easeOut(duration: 0.333)) {
                     isOpen = val
                     if val == false{
-                        print("값 입력")
+                        print("여기서 워크스페이스 사이드바 내려감")
                     }
                 }
             })
@@ -134,11 +88,9 @@ struct Side:View{
                     .padding(.leading,16)
                 VStack(spacing:0){
                     Spacer()
-                    //                    WorkSpaceEmpty {
-                    //                        print("EmptyList")
-                    //                    }
                     WorkSpaceList()
                         .animation(nil)
+                        .environmentObject(vm)
                     Spacer()
                     WorkSpaceBottomView()
                         .frame(height: 84)
@@ -153,42 +105,3 @@ struct Side:View{
     }
 }
 
-
-struct WorkSpaceBottomView:View{
-    @EnvironmentObject fileprivate var vm:SideVM
-    var body: some View{
-        List{
-            Button{
-//                print("wow world")
-                vm.createWorkSpaceTapped.send(())
-            }label:{
-                Label(
-                    title: { Text("워크스페이스 추가").font(FontType.body.font)},
-                    icon: { Image(systemName: "plus") }
-                )
-                
-            }.listRowSeparator(.hidden)
-            Button{
-                print("도움말말말")
-            }label:{
-                Label(
-                    title: { Text("도움말")
-                        .font(FontType.body.font)},
-                    icon: { Image(systemName: "questionmark.circle") }
-                ).listRowSeparator(.hidden)
-            }
-        }.tint(.secondary)
-            .listStyle(.plain)
-            .listSectionSeparator(.hidden)
-            .scrollDisabled(true)
-    }
-}
-struct WorkSpaceListItem:Identifiable{
-    var id = UUID()
-    var isSelected:Bool
-    var isMyManaging:Bool = false
-    var imageName:String
-    var name:String
-    var date:String // 이거 수정해야함!!
-    
-}

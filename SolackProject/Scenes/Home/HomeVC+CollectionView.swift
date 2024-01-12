@@ -8,7 +8,15 @@
 import UIKit
 import SnapKit
 import SwiftUI
-final class HomeVM{}
+final class HomeVM{
+    let provider: ServiceProviderProtocol
+    init(){
+        self.provider = ServiceProvider()
+    }
+    init(_ provider:ServiceProviderProtocol){
+        self.provider = provider
+    }
+}
 
 extension HomeVC:UICollectionViewDelegate{
     func configureCollectionView(){
@@ -17,7 +25,7 @@ extension HomeVC:UICollectionViewDelegate{
         let channelRegi = channelRegistration
         let expandRegi = expandableSectionHeaderRegistration
         let bottomRegi = bottomRegistration
-        dataSource = .init(vm: vm, collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        dataSource = .init(reactor: self.reactor!, collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             let type = (itemIdentifier.itemType,itemIdentifier.sectionType)
             switch type{
             case (.header,_):

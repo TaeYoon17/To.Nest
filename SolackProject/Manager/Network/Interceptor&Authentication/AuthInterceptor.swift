@@ -11,7 +11,7 @@ final class AuthenticatorInterceptor:RequestInterceptor{
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.expiration) var expiration
-    var requiresRefresh: Bool { Date() >= expiration }
+    var requiresRefresh: Bool { Date() > expiration }
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var request = urlRequest
         request.addValue("application/json; charset=UTF-8", forHTTPHeaderField: "Accept")
@@ -19,8 +19,11 @@ final class AuthenticatorInterceptor:RequestInterceptor{
         request.addValue(accessToken, forHTTPHeaderField: "Authorization")
         completion(.success(request))
     }
+    
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        guard requiresRefresh else{
+        print("AuthInterceptor Retry")
+        guard requiresRefresh == true else{
+            print("할 필요 없다!!")
             completion(.doNotRetry)
             return
         }
@@ -44,4 +47,5 @@ final class AuthenticatorInterceptor:RequestInterceptor{
             }
         }
     }
+    
 }

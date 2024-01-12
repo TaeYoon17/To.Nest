@@ -13,7 +13,7 @@ extension HomeVC{
         let directListModel = AnyModelStore<DirectListItem>([])
         let bottomModel = AnyModelStore<BottomItem>([])
         let headerModel = AnyModelStore<HeaderItem>([])
-        init(vm: HomeVM,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<SectionType,Item>.CellProvider){
+        init(reactor: HomeReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<SectionType,Item>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
             initChannel()
             initDirect()

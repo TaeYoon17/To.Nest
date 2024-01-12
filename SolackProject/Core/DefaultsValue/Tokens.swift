@@ -35,12 +35,14 @@ extension UserDefaults{
     var expiration: Date{
         get{
             let dateString = self.string(forKey: "expiration") ?? ""
-            var formatter = DateFormatter()
-            let date = formatter.date(from: dateString)!
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            let date = formatter.date(from: dateString) ?? Date()
             return date
         }
         set{
-            var formatter = DateFormatter()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             let dateStr = formatter.string(from: newValue)
             setValue(dateStr,forKey: "expiration")
         }

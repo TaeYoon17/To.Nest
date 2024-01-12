@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         userAccessConnect()
         if accessToken.isEmpty{
-            let reactor = OnboardingViewReactor()
+            let reactor = OnboardingViewReactor(AppManager.shared.provider)
             let vc = OnboardingView()
             vc.reactor = reactor
             window?.rootViewController = vc
@@ -50,12 +50,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     func userAccessConnect(){
         AppManager.shared.userAccessable.debounce(.nanoseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, isLogIn in
-            guard let view = owner.window?.rootViewController?.view else {return}
+            guard let view = owner.window?.rootViewController?.view else {
+                print("여기서 문제가 발생함!!")
+                return
+            }
             print("userAccessConnect 발생한다")
-            let vc = if isLogIn{
-                TabController()
+            let vc: UIViewController
+            if isLogIn{
+                vc = TabController()
             }else{
-                OnboardingView()
+                let onboardvc = OnboardingView()
+                let reactor = OnboardingViewReactor(AppManager.shared.provider)
+                onboardvc.reactor = reactor
+                vc = onboardvc
             }
             let coverView = UIView()
             coverView.backgroundColor = .gray1

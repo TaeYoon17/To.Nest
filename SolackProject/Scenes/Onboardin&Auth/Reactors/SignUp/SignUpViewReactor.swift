@@ -10,7 +10,7 @@ import ReactorKit
 import RxSwift
 final class SignUpViewReactor: Reactor{
     var initialState: State = State()
-    let provider: ServiceProviderProtocol
+    weak var provider: ServiceProviderProtocol!
     var info = SignUpInfo()
     var validedEmailCache = Set<String>()
     var emailValided = false

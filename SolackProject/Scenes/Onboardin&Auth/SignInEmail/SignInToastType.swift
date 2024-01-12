@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum EmailSignInToastType{
+enum EmailSignInToastType:ToastType{
     case emailValidataionError
     case pwCondition
     case signInFailed

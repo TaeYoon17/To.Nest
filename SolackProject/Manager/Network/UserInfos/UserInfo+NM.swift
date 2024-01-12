@@ -122,19 +122,29 @@ extension NetworkManager{
             if let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
                 if let failType = err.converter(val: errorData.errorCode){
                     continuation.resume(throwing: failType)
+                    return
                 }else if let failType = CommonFailed.converter(val: errorData.errorCode){
                     print(failType)
                     continuation.resume(throwing: failType)
+                    return
                 }else {
                     continuation.resume(throwing: Errors.API.FailFetchToken)
+                    return
                 }
             }
             else if code == 200,let val,let data = try? JSONDecoder().decode(Response.self, from: val){
                 continuation.resume(returning: data)
+                return
             }
         case .failure(let error):
             print("여기로 떨어져 벌임...")
-            continuation.resume(throwing: error)
+            switch error{
+            case .requestRetryFailed(retryError: let autherror, originalError: _):
+                continuation.resume(throwing: autherror)
+            default: continuation.resume(throwing: error)
+            }
+            return
         }
+        continuation.resume(throwing: Errors.API.FailResponseDataDecoding)
     }
 }

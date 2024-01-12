@@ -9,23 +9,41 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-final class HomeVC: BaseVC{
+import ReactorKit
+final class HomeReactor: Reactor{
+    let initialState: State = .init()
+    weak var provider: ServiceProviderProtocol!
+    enum Action{}
+    struct State{}
+    init(_ provider: ServiceProviderProtocol){
+        self.provider = provider
+    }
+    func mutate(action: Action) -> Observable<Action> {
+        
+    }
+    func reduce(state: State, mutation: Action) -> State {
+    }
+}
+final class HomeVC: BaseVC, View{
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     let navBar = NaviBar()
-    let vm = HomeVM()
     var dataSource: HomeDataSource!
     let newMessageBtn = NewMessageBtn()
     var disposeBag = DisposeBag()
-    lazy var sideVC = SideVC()
+    lazy var sideVC = SideVC(self.reactor!.provider)
+    func bind(reactor: HomeReactor) {
+        
+    }
     override var prefersStatusBarHidden: Bool {
         return false
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = .systemBackground
         navBar.workSpaceTap.bind(with: self) { owner, _ in
             // 슬라이드 뷰 구현 with swiftui
-            var sideVC = SideVC()
+            var sideVC = SideVC(self.reactor!.provider)
             sideVC.modalPresentationStyle = .overFullScreen
             sideVC.isOpen = true
             owner.present(sideVC, animated: false)
@@ -64,7 +82,7 @@ final class HomeVC: BaseVC{
         configureCollectionView()
         newMessageBtn.rx.tap.bind(with: self) { owner, _ in
             let vc = WSwriterView<WScreateReactor>()
-            vc.reactor = WScreateReactor(provider: ServiceProvider())
+            vc.reactor = WScreateReactor(owner.reactor!.provider)
             let nav = UINavigationController(rootViewController: vc)
             if let sheet = nav.sheetPresentationController{
                 sheet.detents = [.large()]

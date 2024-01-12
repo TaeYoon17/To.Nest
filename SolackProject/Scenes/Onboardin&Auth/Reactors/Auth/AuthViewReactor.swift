@@ -15,7 +15,7 @@ enum SignInType{
 }
 final class AuthViewReactor: Reactor{
     var initialState: State = State()
-    let provider: ServiceProviderProtocol
+    weak var provider: ServiceProviderProtocol!
     enum Action{
         case cancel
         case appleSignIn

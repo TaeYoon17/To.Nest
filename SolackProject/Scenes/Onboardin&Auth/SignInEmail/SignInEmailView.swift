@@ -144,8 +144,8 @@ extension SignInEmailView{
         scrollView.contentInset = contentInset
     }
 }
-extension SignInEmailView{
-    func toastUp(type: EmailSignInToastType){
+extension SignInEmailView:Toastable{
+    func toastUp(type: ToastType){
         var style = ToastStyle()
         style.messageFont = FontType.body.get()
         style.cornerRadius = 8

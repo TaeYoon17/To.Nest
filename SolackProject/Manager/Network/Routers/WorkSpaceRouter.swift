@@ -16,14 +16,14 @@ extension WorkSpaceRouter{
     }
 }
 enum WorkSpaceRouter:URLRequestConvertible{
-    case create(info:WSInfo),check(CheckType),edit,delete,invite,search,leave,adminChange
+    case create(info:WSInfo),check(CheckType),edit,delete(wsID: String),invite,search,leave,adminChange
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
     var endPoint:String{
         switch self{
         case .adminChange: ""
         case .check(let checkType): ""
         case .create: ""
-        case .delete: ""
+        case .delete(let wsID): "/\(wsID)"
         case .invite: ""
         case .edit: ""
         case .search: ""
@@ -68,7 +68,6 @@ enum WorkSpaceRouter:URLRequestConvertible{
         urlRequest.headers = self.headers
         switch self{
         case .create:
-            print(urlRequest.allHTTPHeaderFields)
             return urlRequest
         default: break
         }

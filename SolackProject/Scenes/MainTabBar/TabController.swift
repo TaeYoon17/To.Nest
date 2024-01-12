@@ -21,6 +21,7 @@ final class TabController: UITabBarController{
 extension TabController{
     func setTabItems(){        
         let vc1 = HomeVC()
+        vc1.reactor = HomeReactor(AppManager.shared.provider)
         vc1.title = "Today"
         let vc2 = ViewController()
         let vc3 = ViewController()

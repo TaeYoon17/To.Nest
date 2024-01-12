@@ -9,9 +9,8 @@ import RxSwift
 import ReactorKit
 class WSwriterReactor:Reactor{
     var initialState = State()
-    var provider: ServiceProviderProtocol
+    weak var provider: ServiceProviderProtocol!
     enum Action{
-        
         case setName(String)
         case setDescription(String)
         case imageData(Data)
@@ -29,7 +28,7 @@ class WSwriterReactor:Reactor{
         var isCreatable: Bool = false
         var isLoading:Bool = false
     }
-    init(provider: ServiceProviderProtocol){
+    init(_ provider: ServiceProviderProtocol){
         self.provider = provider
     }
     func mutate(action: Action) -> Observable<Mutation> {

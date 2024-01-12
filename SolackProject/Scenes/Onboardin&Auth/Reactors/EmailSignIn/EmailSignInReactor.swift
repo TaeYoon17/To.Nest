@@ -15,7 +15,7 @@ enum EmailSignInFieldType{
 final class EmailSignInReactor: Reactor{
     var initialState = State()
     var info = EmailInfo()
-    var provider: ServiceProviderProtocol
+    weak var provider: ServiceProviderProtocol!
     enum Action{
         case setEmail(String)
         case setPassword(String)

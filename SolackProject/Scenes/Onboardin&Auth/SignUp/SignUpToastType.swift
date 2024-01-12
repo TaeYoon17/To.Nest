@@ -6,7 +6,8 @@
 //
 
 import Foundation
-enum SignUpToastType{
+import UIKit
+enum SignUpToastType:ToastType{
     // 이메일 관련
     case emailValidataionError
     case vailableEmail
@@ -43,6 +44,24 @@ enum SignUpToastType{
             return str
         case .alreadySignedUp:
             return "이미 가입된 회원입니다. 로그인을 진행해주세요."
+        }
+    }
+}
+extension SignUpToastType{
+    var getColor:UIColor{
+        switch self{
+        case .alreadyAvailable,.vailableEmail:
+                .accent
+        case .emailValidataionError,.nickNameCondition,.phoneCondition,.invalidateCheckPassword,.other:
+                .error
+        case .unCheckedValidation:
+                .error
+        case .pwCondition:
+                .error
+        case .others(_):
+                .error
+        case .alreadySignedUp:
+                .error
         }
     }
 }

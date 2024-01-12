@@ -12,7 +12,6 @@ import RxSwift
 import RxCocoa
 final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
     var disposeBag: DisposeBag = DisposeBag()
-    
     let scrollView = UIScrollView()
     lazy var stView = {
         let arr = [workSpaceName,workSpaceDescription]

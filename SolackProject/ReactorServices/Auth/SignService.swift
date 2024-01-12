@@ -76,7 +76,7 @@ extension SignService{
         nickname = response.nickname
         phoneNumber = response.phone
         email = response.email
-        expiration = Date(timeIntervalSince1970: NetworkManager.accessExpireSeconds)
+        expiration = Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds)
         userID = response.userID
     }
 }

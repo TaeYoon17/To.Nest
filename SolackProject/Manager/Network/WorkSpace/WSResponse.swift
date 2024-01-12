@@ -9,7 +9,7 @@ import Foundation
 struct WSResponse:Codable{
     var workspaceID:Int
     var name:String
-    var description:String
+    var description:String?
     var thumbnail:String //url
     var ownerID: Int
     var createdAt: String

@@ -8,9 +8,11 @@
 import Foundation
 enum Errors:Error{
     enum API:Error{
+        case FailResponseDataDecoding
         case FailFetchToken
     }
     case compresstionFail
+    case cachingEmpty
 }
 protocol FailedProtocol:Error{
     static func converter(val:String) -> Self?
@@ -28,6 +30,8 @@ enum WorkSpaceFailed:String,FailedProtocol{
     case lackCoin = "E21"
     case bad = "E11"
     case doubled = "E12"
+    case nonExistData = "E13"
+    case nonAuthority = "E14" // 워크스페이스 관리자만이 워크스페이스를 삭제할 수 있습니다!!
     static func converter(val: String) -> WorkSpaceFailed? {
         WorkSpaceFailed(rawValue: val)
     }
