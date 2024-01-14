@@ -11,25 +11,29 @@ enum UserRouter: URLRequestConvertible{
     case signUp(info:SignUpInfo),signIn(type:SignInType,body:SignInBody),validation(email:String),deviceToken
     case signOut,getMy,getUser(id:String)
     case putMy,putMyImage
-    static private let baseURL = URL(string: API.baseURL+"/v1/users")
+    static private let baseURL = URL(string: API.baseURL)
     var endPoint: String{
         switch self{
         case .signUp:
-            "/join"
+            return "/v1/users/join"
         case .signIn(let type,_):
-            "/login\(type.endPoint)"
+            let v = switch type{
+                case .email: "/v2"
+                default: "/v1"
+            }
+            return "\(v)/users/login\(type.endPoint)"
         case .validation:
-            "/validation/email"
+            return "/v1/users/validation/email"
         case .deviceToken:
-            "/deviceToken"
+            return "/v1/users/deviceToken"
         case .signOut:
-            "/logout"
+            return "/v1/users/logout"
         case .getMy,.putMy:
-            "/my"
+            return "/v1/users/my"
         case .getUser(id: let id):
-            "/my/\(id)"
+            return "/v1/users/my/\(id)"
         case .putMyImage:
-            "/my/image"
+            return "/v1/users/my/image"
         }
     }
     var method:HTTPMethod{

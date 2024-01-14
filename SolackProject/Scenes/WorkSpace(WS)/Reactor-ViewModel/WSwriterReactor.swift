@@ -10,23 +10,30 @@ import ReactorKit
 class WSwriterReactor:Reactor{
     var initialState = State()
     weak var provider: ServiceProviderProtocol!
+    
     enum Action{
         case setName(String)
         case setDescription(String)
-        case imageData(Data)
-        case create
+        case setImageData(Data)
+        case confirmAction
     }
     enum Mutation{
         case setName(String)
         case setDescription(String)
         case isCreatable(Bool)
         case isLoading(Bool)
+        case failAlert(WSFailed?)
+        case isClose(Bool)
+        case imageData(Data?)
     }
     struct State{
         var name: String = ""
         var description:String = ""
         var isCreatable: Bool = false
         var isLoading:Bool = false
+        var failAlert: WSFailed? = nil
+        var isClose: Bool = false
+        var imageData:Data? = nil
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -45,25 +52,25 @@ class WSwriterReactor:Reactor{
             state.isCreatable = avail
         case .isLoading(let loading):
             state.isLoading = loading
+        case .failAlert(let alert):
+            state.failAlert = alert
+        case .isClose(let close):
+            state.isClose = close
+        case .imageData(let data):
+            state.imageData = data
         }
         return state
     }
     func transform(mutation: Observable<WSwriterReactor.Mutation>) -> Observable<WSwriterReactor.Mutation> {
-        print("transform 생성!!")
-        let res = provider.wsService.event.flatMap { event -> Observable<WSwriterReactor.Mutation> in
-            switch event{
-            case .create(let response):
-                print("워크 스페이스 만들기 성공!!")
-                return .just(.isLoading(false))
-            case .requireReSign:
-                AppManager.shared.userAccessable.onNext(false)
-                return .just(.isLoading(false))
-            default:
-                return Observable.concat([
-                    .just(.isLoading(false))
-                ])
-            }
-        }
-        return Observable.merge(mutation,res)
+        writerTransform(mutation: mutation)
+    }
+    func transform(state: Observable<State>) -> Observable<State> {
+        writerTransform(state: state)
+    }
+    func writerTransform(state: Observable<State>) -> Observable<State>{
+        fatalError("It must be override!!")
+    }
+    func writerTransform(mutation: Observable<WSwriterReactor.Mutation>) -> Observable<WSwriterReactor.Mutation>{
+        fatalError("It must be override!!")
     }
 }

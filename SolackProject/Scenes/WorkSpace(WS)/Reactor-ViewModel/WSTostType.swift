@@ -11,17 +11,23 @@ typealias WSToastType = WorkSpaceToastType
 enum WorkSpaceToastType: ToastType{
     var contents: String{
         switch self{
-        case .unknown: "알 수 없는 에러입니다."
-        case .emptyData: "존재 하지 않는 워크스페이스 입니다."
-        case .notAuthority: "권한이 없습니다."
+        case .unknown: "알 수 없는 에러입니다"
+        case .emptyData: "존재 하지 않는 워크스페이스 입니다"
+        case .notAuthority: "권한이 없습니다"
+        case .lackCoin: "코인이 부족합니다"
+        case .created: "워크스페이스가 생성되었습니다"
+        case .edit: "워크스페이스가 편집되었습니다"
+        case .delete: "워크스페이스가 삭제되었습니다"
         }
     }
     
     var getColor: UIColor{
         switch self{
-        case .unknown,.emptyData,.notAuthority: UIColor.error
+        case .unknown,.emptyData,.notAuthority,.lackCoin: UIColor.error
+        case .created,.edit,.delete: UIColor.accent
         }
     }
     
-    case unknown,emptyData,notAuthority
+    case unknown,emptyData,notAuthority,lackCoin
+    case created,edit,delete
 }

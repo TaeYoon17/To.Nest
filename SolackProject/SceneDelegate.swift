@@ -14,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var disposeBag = DisposeBag()
-//    @DefaultsState(\.expiration) var expiration
+    @DefaultsState(\.expiration) var expiration
     @DefaultsState(\.accessToken) var accessToken
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {

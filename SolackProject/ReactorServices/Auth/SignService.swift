@@ -34,11 +34,14 @@ final class SignService: SignServiceProtocol{
                 // MARK: -- 여기 수정해야함
 //                profile = response.profileImage
                 defaultsSign(response)
+                AppManager.shared.userAccessable.onNext(true)
                 event.onNext(.successSign)
             }catch let failed where failed is SignFailed{
                 event.onNext(.failedSign(failed as! SignFailed))
             }catch let fail where fail is Errors.API{
                 event.onNext(.failedSign(.signInFailed))
+            }catch{
+                print("error Occured!!")
             }
         }
     }

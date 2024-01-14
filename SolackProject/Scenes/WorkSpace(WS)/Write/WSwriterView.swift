@@ -10,6 +10,7 @@ import SnapKit
 import ReactorKit
 import RxSwift
 import RxCocoa
+
 final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
     var disposeBag: DisposeBag = DisposeBag()
     let scrollView = UIScrollView()
@@ -36,7 +37,6 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
     }
     override func configureView() {
         createBtn.text = "완료"
@@ -85,3 +85,4 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
         }
     }
 }
+

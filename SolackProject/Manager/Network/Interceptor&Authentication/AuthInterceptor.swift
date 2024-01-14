@@ -11,8 +11,13 @@ final class AuthenticatorInterceptor:RequestInterceptor{
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.expiration) var expiration
-    var requiresRefresh: Bool { Date() > expiration }
+    var requiresRefresh: Bool {
+        return if let expiration{
+            Date() > expiration
+        }else{ true }
+    }
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+        
         var request = urlRequest
         request.addValue("application/json; charset=UTF-8", forHTTPHeaderField: "Accept")
         request.addValue(API.key, forHTTPHeaderField: "SesacKey")
@@ -21,16 +26,14 @@ final class AuthenticatorInterceptor:RequestInterceptor{
     }
     
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        print("AuthInterceptor Retry")
-        guard requiresRefresh == true else{
-            print("할 필요 없다!!")
+        guard requiresRefresh else{
             completion(.doNotRetry)
             return
         }
         Task{
             do{
                 let val = try await NM.shared.refresh(session: session)
-                expiration = Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds)
+                expiration = Date(timeIntervalSince1970: NetworkManager.accessExpireSeconds)
                 accessToken = val.accessToken
                 print("리프레시 성공!")
                 completion(.retry)

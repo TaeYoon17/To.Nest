@@ -18,8 +18,8 @@ extension UIImage{
     static func fetchAlbumCache(name:String,size:CGSize? = nil) async throws -> UIImage{
         try await IMCache.shared.fetchByCache(type: .album, name: name,size:size)
     }
-    func appendWebCache(name:String,size:CGSize? = nil)async throws{
-        try await IMCache.shared.appendCache(type: .web, image: self, name: name,size: size)
+    func appendWebCache(name:String,size:CGSize? = nil,isCover:Bool = false)async throws{
+        try await IMCache.shared.appendCache(type: .web, image: self, name: name,size: size,isCover: isCover)
     }
 }
 fileprivate extension ImageManager.Cache{
@@ -33,7 +33,7 @@ fileprivate extension ImageManager.Cache{
             return image
         }else if let rawImage = memoryCache[type]?.object(forKey: name as NSString){
             let downSampledImage = try rawImage.downSample(size: size!)
-            try await appendCache(type: type,image:downSampledImage,name:keyName,size:size)
+            try await appendCache(type: type,image:downSampledImage,name:keyName,size:size,isCover: true)
             return downSampledImage
         }
         throw Errors.cachingEmpty

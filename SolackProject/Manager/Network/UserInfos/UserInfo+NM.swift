@@ -79,7 +79,8 @@ extension NetworkManager{
                     continuation.resume(throwing: Errors.API.FailFetchToken)
                     return
                 }
-                signResponse(res: res, continuation: continuation) 
+                signResponse(res: res, continuation: continuation)
+                return
             }
         }
     }
@@ -106,10 +107,15 @@ extension NetworkManager{
                 }
             }
             else if code == 200,let val,let data = try? JSONDecoder().decode(SignResponse.self, from: val){
+                print("성공성공")
                 continuation.resume(returning: data)
+                return
+            }else{
+                print("값 반환 이상이상")
             }
         case .failure(let error):
             continuation.resume(throwing: error)
+            return
         }
     }
     func generalResponse<Err:FailedProtocol,Response:Decodable>(err: Err.Type, result: Response.Type,res: AFDataResponse<Data?>,continuation: CheckedContinuation<Response,Error>){

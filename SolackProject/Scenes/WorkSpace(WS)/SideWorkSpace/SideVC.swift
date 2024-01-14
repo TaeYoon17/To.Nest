@@ -14,7 +14,13 @@ import Toast
 
 final class SideVC: UIHostingController<Side>{
     var isOpen:Bool = false{
-        didSet{ vm.isOpen = isOpen }
+        didSet{ 
+            Task{@MainActor [weak self] in
+                await MainActor.run {
+                    self?.vm.isOpen = self?.isOpen ?? false
+                }
+            }
+        }
     }
     fileprivate var vm:SideVM
     var subscription = Set<AnyCancellable>()
@@ -40,10 +46,43 @@ final class SideVC: UIHostingController<Side>{
         vm.createWorkSpaceTapped.sink { [weak self] _ in
             self?.presentCreateWS()
         }.store(in: &subscription) 
+        vm.changeWorkSpaceManagerTapped.sink { [weak self] _ in
+            self?.presentManagerChangeWS()
+        }.store(in: &subscription)
+        vm.editWorkSpaceManagerTapped.sink { [weak self] _ in
+            self?.presentEditWS()
+        }.store(in: &subscription)
     }
+    
+}
+//MARK: -- Present 연결
+extension SideVC{
     func presentCreateWS(){
         let vc = WSwriterView<WScreateReactor>()
         vc.reactor = WScreateReactor(vm.provider)
+        let nav = UINavigationController(rootViewController: vc)
+        if let sheet = nav.sheetPresentationController{
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav,animated: true)
+    }
+    func presentManagerChangeWS(){
+        let vc = WSManagerView()
+        vc.reactor = WSManagerReactor(provider: vm.provider)
+        let nav = UINavigationController(rootViewController: vc)
+        if let sheet = nav.sheetPresentationController{
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav,animated: true)
+    }
+    func presentEditWS(){
+        let vc = WSwriterView<WSEditReactor>()
+        let listData = vm.underList[vm.selectedIdx]
+        let info = WSInfo(name: listData.name,description: listData.description ?? "",image: vm.list[vm.selectedIdx].image.jpegData(compressionQuality: 1))
+        print("editWS 정보:",info)
+        vc.reactor = WSEditReactor(provider: vm.provider, wsInfo: info,id:"\(vm.selectedWorkSpaceID)")
         let nav = UINavigationController(rootViewController: vc)
         if let sheet = nav.sheetPresentationController{
             sheet.detents = [.large()]

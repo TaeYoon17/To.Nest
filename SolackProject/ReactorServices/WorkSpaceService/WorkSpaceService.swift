@@ -11,6 +11,7 @@ typealias WSService = WorkSpaceService
 protocol WorkSpaceProtocol{
     var event: PublishSubject<WorkSpaceService.Event> {get}
     func create(_ info:WSInfo)
+    func edit(_ info:WSInfo,id:String)
     func delete(workspaceID: String)
     func checkAllWS()
 }
@@ -18,6 +19,7 @@ final class WorkSpaceService:WorkSpaceProtocol{
     let event = PublishSubject<Event>()
     enum Event{
         case create(WSResponse)
+        case edit(WSResponse)
         case checkAll([WSResponse])
         case delete
         case failed(WSFailed)
@@ -35,7 +37,31 @@ final class WorkSpaceService:WorkSpaceProtocol{
                     AppManager.shared.userAccessable.onNext(false)
                     return
                 }
-                print("걸리기 실패")
+                print("걸리기 실패 \(error)")
+                if let failed = error as? WSFailed{
+                    event.onNext(.failed(failed))
+                    return
+                }
+                event.onNext(.unknownError)
+            }
+        }
+    }
+    func edit(_ info:WSInfo,id:String){
+        Task{
+            do{
+                let res = try await NM.shared.editWS(info,wsID: id)
+                event.onNext(.edit(res)) // 이 일은 SideVM에서 처리하겠지..?
+            }catch{
+                print("edit Error 가져오기 성공")
+                guard authValidCheck(error: error) else{
+                    AppManager.shared.userAccessable.onNext(false)
+                    return
+                }
+                print("걸리기 실패 \(error)")
+                if let failed = error as? WSFailed{
+                    event.onNext(.failed(failed))
+                    return
+                }
                 event.onNext(.unknownError)
             }
         }
@@ -46,22 +72,13 @@ final class WorkSpaceService:WorkSpaceProtocol{
                 let allWS = try await NM.shared.checkAllWS()
                 event.onNext(.checkAll(allWS))
                 print(allWS)
-//                var list = try await counter.run(allWS) { wsResponse in     
-//                    wsResponse.thumbnail
-//                    return WorkSpaceListItem(isSelected: false, imageName: <#T##String#>, name: wsResponse.name, date: wsResponse.createdAt ?? "")
-//                }
-//                if list.count > 0{
-//                    list[0].isSelected = true
-//                }
-//                self.list = list
-//                self.underList = allWS
             }catch{
                 print("워크스페이스 사이드 에러!!")
                 guard authValidCheck(error: error) else{
                     AppManager.shared.userAccessable.onNext(false)
                     return
                 }
-                print("걸리기 실패")
+                print("걸리기 실패",error)
             }
         }
     }
@@ -69,9 +86,10 @@ final class WorkSpaceService:WorkSpaceProtocol{
         Task{
             do{
                 try await NM.shared.deleteWS(workspaceID)
+                checkAllWS()
             }catch{
                 guard authValidCheck(error: error) else {
-                    print("재로그인 필요!!")
+                    AppManager.shared.userAccessable.onNext(false)
                     return
                 }
                 if let ws = error as? WSFailed{
@@ -82,14 +100,5 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
-    func authValidCheck(error: Error)->Bool{
-        print(error)
-        if let auth = error as? AuthFailed{
-            switch auth{
-            case .isValid: return true // 로그인 필요 X
-            default: return false // 재로그인 로직 돌리기
-            }
-        }
-        return true
-    }
+    
 }

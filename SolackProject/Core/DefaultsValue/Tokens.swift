@@ -32,19 +32,22 @@ extension UserDefaults{
             setValue(newValue, forKey: "refreshToken")
         }
     }
-    var expiration: Date{
+    var expiration: Date?{
         get{
             let dateString = self.string(forKey: "expiration") ?? ""
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            let date = formatter.date(from: dateString) ?? Date()
+            
+            let date = formatter.date(from: dateString)
             return date
         }
         set{
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            let dateStr = formatter.string(from: newValue)
-            setValue(dateStr,forKey: "expiration")
+            if let newValue{
+                let dateStr = formatter.string(from: newValue)
+                setValue(dateStr,forKey: "expiration")
+            }
         }
     }
     var userID: Int{

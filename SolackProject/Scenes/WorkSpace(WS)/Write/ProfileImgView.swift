@@ -9,8 +9,10 @@ import UIKit
 import SwiftUI
 import PhotosUI
 import RxSwift
+import Combine
 final class ProfileImgVM:ObservableObject{
     var imageData = PublishSubject<Data>()
+    var defaultImage = PassthroughSubject<Data?,Never>()
 }
 final class ProfileImgVC: UIHostingController<ProfileImgView>{
     let vm = ProfileImgVM()
@@ -26,11 +28,10 @@ final class ProfileImgVC: UIHostingController<ProfileImgView>{
     }
 }
 struct ProfileImgView:View{
-    
     @ObservedObject var vm: ProfileImgVM
     @State var prevImage = false
     @State var pickerPresent: Bool = false
-    let defaultImage:Image? = nil
+    @State var defaultImage:Image? = nil
     let size: CGSize = .init(width: 200, height: 200)
     var body: some View{
         EditImageView(isPresented:$pickerPresent,cropType: .rectangle(size), content: { state in
@@ -38,10 +39,20 @@ struct ProfileImgView:View{
             case .empty:
                 if let defaultImage{
                     defaultImage.resizable().scaledToFill()
+                        .transition(.opacity)
                 }else{
-                    emptyView
+                    emptyView.transition(.opacity)
                 }
-            case .failure(_ ): emptyView
+            case .failure(_ ):
+                Group{
+                    if let defaultImage{
+                        defaultImage.resizable().scaledToFill()
+                    }else{
+                        emptyView
+                    }
+                }.transition(.opacity).onAppear(){
+                    print("여기에 토스트 메시지 던지기")
+                }
             case .loading(_): ProgressView()
             case .success(let img):
                 Image(uiImage: img).resizable(resizingMode: .stretch).scaledToFill()
@@ -55,6 +66,13 @@ struct ProfileImgView:View{
                             print(error)
                         }
                     }
+            }
+        })
+        .onReceive(vm.defaultImage, perform: { value in
+            guard let value else {return}
+            let uiimage = UIImage.fetchBy(data: value,size: .init(width: 60, height: 60))
+            withAnimation {
+                self.defaultImage = Image(uiImage: uiimage)
             }
         })
         .frame(width: 70,height: 70)

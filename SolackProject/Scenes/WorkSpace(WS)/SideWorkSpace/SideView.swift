@@ -15,13 +15,18 @@ struct Side:View{
     @GestureState var expand:CGFloat = 0
     @State var endPo:CGFloat = 0
     @State var nowPo:CGFloat = 0
-    @State var isOpen:Bool = false
+    @MainActor @State var isOpen:Bool = false
+    @State var toastType:ToastType? = nil
+    @State var size: CGRect = .zero
     var body:some View{
         ZStack(alignment:Alignment(horizontal: .leading, vertical: .center)){
-            Color.gray.opacity(isOpen ? 0.85 : 0).ignoresSafeArea()
-                .onTapGesture {
-                    vm.isOpen = false
-                }.zIndex(1)
+            GeometryReader{ proxy in
+                Color.gray.opacity(isOpen ? 0.85 : 0).ignoresSafeArea()
+                    .onTapGesture {
+                        vm.isOpen = false
+                    }.zIndex(1)
+                    .onAppear(){ size = proxy.frame(in: .global) }
+            }
             if isOpen{
                 slider.frame(width: UIScreen.current!.bounds.width * 0.85 + expand)
                     .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .leading)))
@@ -57,8 +62,13 @@ struct Side:View{
                         }
                     }
             }
-        }.statusBar(hidden: true)
-            .onReceive(vm.$isOpen, perform: { val in
+        }
+        .onReceive(vm.$toastType, perform: { value in
+            self.toastType = value
+        })
+        .toast(type: $toastType, alignment: .bottom)
+        .statusBar(hidden: true)
+        .onReceive(vm.$isOpen, perform: { val in
                 withAnimation(.easeOut(duration: 0.333)) {
                     isOpen = val
                     if val == false{
@@ -73,6 +83,7 @@ struct Side:View{
             Color.gray1
                 .clipShape(.rect(topLeadingRadius: 0, bottomLeadingRadius: 0, bottomTrailingRadius: 24, topTrailingRadius: 24, style: .continuous))
                 .ignoresSafeArea()
+            
             VStack{
                 Spacer()
                 Color.white
@@ -88,9 +99,10 @@ struct Side:View{
                     .padding(.leading,16)
                 VStack(spacing:0){
                     Spacer()
-                    WorkSpaceList()
-                        .animation(nil)
-                        .environmentObject(vm)
+                        WorkSpaceList()
+                            .animation(nil)
+                            .environmentObject(vm)
+//                    }
                     Spacer()
                     WorkSpaceBottomView()
                         .frame(height: 84)

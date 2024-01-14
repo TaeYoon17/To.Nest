@@ -13,7 +13,7 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
     @Binding var defaultWorkSpace:Bool
     @State var fullScreenGo = false
     @State var isVisible = false
-    @State var managerEdit = false
+    //    @State var managerEdit = false
     @State var managerExit = false
     @State var managerChangeError = false
     @State var managerDelete = false
@@ -27,11 +27,14 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
         view()
             .background(.white)
             .managerDialog($managerWorkSpace, edit: {// 관리자 액션시트
-                managerEdit = true
+                //                managerEdit = true
+                vm.editWorkSpaceManagerTapped.send(())
             }, delete: {
                 goAnim { managerDelete = true }
             }, change: {
-                goAnim { managerChangeError = true }
+                //                goAnim { managerChangeError = true }
+//                print("이거 탭탭탭")
+                vm.changeWorkSpaceManagerTapped.send(())
             }, exit: { goAnim { managerExit = true }
             }, cancel: {
                 print("나가기")
@@ -46,6 +49,7 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
                 
             },confirmTitle: "삭제",confirm: {
                 print("manager delete 삭제...")
+                vm.deleteWorkSpace()
             })
             .solackAlert($managerChangeError, title: "워크스페이스 관리자 변경 불가", description: "워크스페이스 멤버가 없어 관리자 변경을 할 수 없습니다.\n새로운 멤버를 워크스페이스에 초대해보세요.", cancelTitle: "확인", cancel: {
                 print("wow world!!")
@@ -62,8 +66,6 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
                          confirm: {
                 print("user exit ok")
             })
-        
-        
     }
     private func goAnim(action:()->()){
         var transaction = Transaction()
@@ -83,14 +85,20 @@ struct WorkSpaceList:View{
         WorkSpaceListInner(manager: $isManagerSelected, user: $isUserSelected) {
             VStack(spacing:0){
                 if list.isEmpty{
-                    ProgressView()
+                    WorkSpaceEmpty {
+                        vm.createWorkSpaceTapped.send(())
+                    }
                 }else{
                     ScrollView {
                         LazyVStack(spacing:12){
                             ForEach(vm.list.indices,id:\.self){ idx in
                                 Button{
                                     // 고유 workspaceitemID를 바꾼다.
+                                    vm.tempToastUp()
+                                    vm.list[vm.selectedIdx].isSelected = false
+                                    vm.list[idx].isSelected = true
                                     vm.selectedWorkSpaceID = vm.list[idx].id
+                                    vm.selectedIdx = idx
                                 }label:{
                                     listItemView(vm.list[idx])
                                 }.transaction { transaction in
@@ -101,14 +109,13 @@ struct WorkSpaceList:View{
                         }
                         
                     }.opacity(list.isEmpty ? 0 : 1)
-                    .scrollIndicators(.never)
+                        .scrollIndicators(.never)
                     Spacer()
                 }
             }
             .onChange(of: vm.list) { newValue in
-                    withAnimation {
-                        list = newValue
-                    }
+                print("나타나라...")
+                withAnimation { list = newValue }
             }
         }
         .environmentObject(vm)

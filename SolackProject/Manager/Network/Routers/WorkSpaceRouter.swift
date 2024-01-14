@@ -16,7 +16,7 @@ extension WorkSpaceRouter{
     }
 }
 enum WorkSpaceRouter:URLRequestConvertible{
-    case create(info:WSInfo),check(CheckType),edit,delete(wsID: String),invite,search,leave,adminChange
+    case create(info:WSInfo),check(CheckType),edit(wsID:String,info:WSInfo),delete(wsID: String),invite,search,leave,adminChange
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
     var endPoint:String{
         switch self{
@@ -25,7 +25,7 @@ enum WorkSpaceRouter:URLRequestConvertible{
         case .create: ""
         case .delete(let wsID): "/\(wsID)"
         case .invite: ""
-        case .edit: ""
+        case .edit(let id,_): "/\(id)"
         case .search: ""
         case .leave: ""
         }
@@ -53,7 +53,7 @@ enum WorkSpaceRouter:URLRequestConvertible{
     var headers:HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
-        case .create:
+        case .create,.edit:
             headers["Content-Type"] = "multipart/form-data"
         default: break
         }
@@ -67,7 +67,7 @@ enum WorkSpaceRouter:URLRequestConvertible{
         urlRequest.method = self.method
         urlRequest.headers = self.headers
         switch self{
-        case .create:
+        case .create,.edit:
             return urlRequest
         default: break
         }
@@ -80,7 +80,7 @@ enum WorkSpaceRouter:URLRequestConvertible{
     var multipartFormData: MultipartFormData {
         let multipartFormData = MultipartFormData()
         switch self {
-        case .create(let info):
+        case .create(let info),.edit(wsID: _, info: let info):
             if let image = info.image{
                 print("이미지 존재함!!")
                 multipartFormData.append(image, withName: "image", fileName: "\(info.name ?? "")123.jpg", mimeType: "image/jpeg")
