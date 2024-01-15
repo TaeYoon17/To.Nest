@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum AuthRouter:URLRequestConvertible{
-    case refresh(token:String)
+    case refresh(refreshToken:String,accessToken:String)
     static let baseURL = URL(string: API.baseURL + "/v1/auth")
     var endPoint:String{
         switch self{
@@ -24,8 +24,9 @@ enum AuthRouter:URLRequestConvertible{
     var header: HTTPHeaders{
         var header = HTTPHeaders()
         switch self{
-        case .refresh(token: let token):
-            header["RefreshToken"] = token
+        case .refresh(let refresh,let access):
+            header["Authorization"] = access
+            header["RefreshToken"] = refresh
         }
         return header
     }

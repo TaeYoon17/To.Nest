@@ -10,13 +10,15 @@ import RxKakaoSDKCommon
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 import RxSwift
+import AuthenticationServices
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var disposeBag = DisposeBag()
     @DefaultsState(\.expiration) var expiration
     @DefaultsState(\.accessToken) var accessToken
-
+    @DefaultsState(\.refreshToken) var refreshToken
+    @DefaultsState(\.appleID) var appleID
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -25,6 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         userAccessConnect()
+//        accessByAppleSignIn()
         if accessToken.isEmpty{
             let reactor = OnboardingViewReactor(AppManager.shared.provider)
             let vc = OnboardingView()
@@ -35,13 +38,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         window?.makeKeyAndVisible()
     }
+    func accessByAppleSignIn(){
+        guard let appleID else {return}
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        appleIDProvider.getCredentialState(forUserID: appleID) {[weak self] credintialState, error in
+            guard let self else {return}
+            switch credintialState{
+            case .revoked:
+                print("Revoked")
+            case .authorized:
+                print("Authorized")
+                Task{
+                    await MainActor.run {
+                        print("여기 허가됨...")
+//                        window?.rootViewController = MainViewController()
+//                        self.window = window
+//                        window.makeKeyAndVisible()
+                    }
+                }
+            default: print("NOT FOUND")
+            }
+        }
+    }
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             if (AuthApi.isKakaoTalkLoginUrl(url)) {
                 let val: Bool = AuthController.rx.handleOpenUrl(url: url)
                 if val{
                     print("Success to get kakao Token")
-                    
                 }else{
                     print("Failed to get kakao Token")
                 }

@@ -11,6 +11,7 @@ protocol SignServiceProtocol{
     var event: PublishSubject<SignService.Event> {get}
     func emailSignIn(_ info:EmailInfo)
     func kakaoSignIn()
+    func appleSignIn(_ info: AppleInfo)
     func signUp(_ info:SignUpInfo)
 }
 final class SignService: SignServiceProtocol{
@@ -32,8 +33,24 @@ final class SignService: SignServiceProtocol{
             do{
                 let response = try await NM.shared.signIn(type: .email, body: info)
                 // MARK: -- 여기 수정해야함
-//                profile = response.profileImage
+                //                profile = response.profileImage
                 defaultsSign(response)
+                AppManager.shared.userAccessable.onNext(true)
+                event.onNext(.successSign)
+            }catch let failed where failed is SignFailed{
+                event.onNext(.failedSign(failed as! SignFailed))
+            }catch let fail where fail is Errors.API{
+                event.onNext(.failedSign(.signInFailed))
+            }catch{
+                print("error Occured!!")
+            }
+        }
+    }
+    func appleSignIn(_ info: AppleInfo){
+        Task{
+            do{
+                let resposne = try await NM.shared.signIn(type: .apple, body: info)
+                defaultsSign(resposne)
                 AppManager.shared.userAccessable.onNext(true)
                 event.onNext(.successSign)
             }catch let failed where failed is SignFailed{

@@ -54,6 +54,9 @@
 		637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C12B50C739008AAD4A /* ScreenSize.swift */; };
 		637488C52B50C739008AAD4A /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C22B50C739008AAD4A /* UserDefaults+State.swift */; };
 		637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C32B50C739008AAD4A /* AnyModelStore.swift */; };
+		63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F402B54C41F00F54F9A /* AuthenticationManager.swift */; };
+		63775F432B54C43A00F54F9A /* OnboardingView+ASDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */; };
+		63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */; };
 		637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */; };
 		637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15792B4CD72500B68963 /* TransparentBackground.swift */; };
 		637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */; };
@@ -196,6 +199,10 @@
 		637488C12B50C739008AAD4A /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
 		637488C22B50C739008AAD4A /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		637488C32B50C739008AAD4A /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
+		63775F3E2B54C12800F54F9A /* SolackProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SolackProject.entitlements; sourceTree = "<group>"; };
+		63775F402B54C41F00F54F9A /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingView+ASDelegate.swift"; sourceTree = "<group>"; };
+		63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationManager+JWTDecode.swift"; sourceTree = "<group>"; };
 		637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolackAlert+UIKit.swift"; sourceTree = "<group>"; };
 		637B15792B4CD72500B68963 /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceEmptyView.swift; sourceTree = "<group>"; };
@@ -319,6 +326,7 @@
 		631A60A82B44ECEE005509C2 /* SolackProject */ = {
 			isa = PBXGroup;
 			children = (
+				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
 				631A60E62B44EE0B005509C2 /* ReactorServices */,
 				631A60D92B44EE01005509C2 /* Core */,
@@ -548,6 +556,15 @@
 			path = SolackProject/Helpers/Extensions;
 			sourceTree = SOURCE_ROOT;
 		};
+		63775F3F2B54C40400F54F9A /* AuthenticationManager */ = {
+			isa = PBXGroup;
+			children = (
+				63775F402B54C41F00F54F9A /* AuthenticationManager.swift */,
+				63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */,
+			);
+			path = AuthenticationManager;
+			sourceTree = "<group>";
+		};
 		637B15762B4CD5C800B68963 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -685,11 +702,13 @@
 		639DEAF92B452E3B00108979 /* Onboardin&Auth */ = {
 			isa = PBXGroup;
 			children = (
+				63775F3F2B54C40400F54F9A /* AuthenticationManager */,
 				638FCD282B4800010053D1BB /* UIComponents */,
 				6324D6E92B46EF5100AA1AC0 /* Reactors */,
 				633584672B4560F900B83555 /* SignInEmail */,
 				639DEAFC2B4532D900108979 /* SignUp */,
 				631A60EF2B44EE15005509C2 /* OnboardingView.swift */,
+				63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */,
 				631A60F82B452058005509C2 /* AuthPresentView.swift */,
 			);
 			path = "Onboardin&Auth";
@@ -969,6 +988,7 @@
 				637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */,
 				63F0AED32B4B0775000A597B /* HomeVC+CellRegistration.swift in Sources */,
 				631A60F12B44EE15005509C2 /* OnboardingView.swift in Sources */,
+				63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */,
 				639B8A752B491C1A0024B4DD /* SignUpFieldType.swift in Sources */,
 				632A2D612B4DAD1800E21DE8 /* WSwriterReactor.swift in Sources */,
 				636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */,
@@ -982,6 +1002,7 @@
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
 				63F0AECB2B4AD886000A597B /* ChannelListItemView.swift in Sources */,
 				63F7C4AA2B4F7CE8003D8447 /* ErrorCode.swift in Sources */,
+				63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */,
 				63F7C4B22B4F929F003D8447 /* BaseAuthenticator.swift in Sources */,
 				63F7C4A62B4F772E003D8447 /* WSInfo.swift in Sources */,
 				63F0AEC42B4AB920000A597B /* HomeVC+CollectionView.swift in Sources */,
@@ -1022,6 +1043,7 @@
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
 				636213012B4E93ED0093D089 /* EditImageView.swift in Sources */,
+				63775F432B54C43A00F54F9A /* OnboardingView+ASDelegate.swift in Sources */,
 				63F0AED72B4B093A000A597B /* BaseView.swift in Sources */,
 				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,
 				633584692B45610C00B83555 /* SignInEmailView.swift in Sources */,
@@ -1177,6 +1199,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SolackProject/SolackProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3W9F68ZTUJ;
@@ -1212,6 +1235,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SolackProject/SolackProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3W9F68ZTUJ;

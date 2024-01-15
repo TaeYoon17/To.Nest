@@ -18,5 +18,4 @@ struct KakaoInfo{
 struct AppleInfo{
     var idToken: String
     var nickName:String
-    
 }
