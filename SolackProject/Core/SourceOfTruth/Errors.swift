@@ -36,6 +36,15 @@ enum WorkSpaceFailed:String,FailedProtocol{
         WorkSpaceFailed(rawValue: val)
     }
 }
+typealias CHFailed = ChannelFailed
+enum ChannelFailed: String,FailedProtocol{
+    
+    
+    case wow = "E99"
+    static func converter(val: String) -> ChannelFailed? {
+        ChannelFailed(rawValue: val)
+    }
+}
 enum AuthFailed: String,FailedProtocol{
     case isValid = "E04"
     case unknownAccount = "E03"

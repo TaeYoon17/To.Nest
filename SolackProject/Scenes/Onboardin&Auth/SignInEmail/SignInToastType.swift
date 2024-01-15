@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 enum EmailSignInToastType:ToastType{
     case emailValidataionError
     case pwCondition
@@ -29,6 +30,12 @@ enum EmailSignInToastType:ToastType{
             }
             _ = str.popLast()
             return str
+        }
+    }
+    var getColor:UIColor{
+        switch self{
+        case .emailValidataionError,.other,.others,.pwCondition,.signInFailed:
+                .error
         }
     }
 }

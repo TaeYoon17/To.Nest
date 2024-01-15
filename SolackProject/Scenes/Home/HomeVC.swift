@@ -22,7 +22,7 @@ final class HomeVC: BaseVC, View{
             guard let present else {return}
             switch present{
             case .create:
-                let vc = CHWriterView()
+                let vc = CHWriterView(reactor.provider)
                 let nav = UINavigationController(rootViewController: vc)
                 nav.fullSheetSetting()
                 owner.present(nav, animated: true)
@@ -79,8 +79,7 @@ final class HomeVC: BaseVC, View{
         collectionView.backgroundColor = .gray1
         configureCollectionView()
         newMessageBtn.rx.tap.bind(with: self) { owner, _ in
-            let vc = WSwriterView<WScreateReactor>()
-            vc.reactor = WScreateReactor(owner.reactor!.provider)
+            let vc = WSwriterView<WScreateReactor>(WSwriterView.getCreateConfig,reactor: WScreateReactor(owner.reactor!.provider))
             let nav = UINavigationController(rootViewController: vc)
             if let sheet = nav.sheetPresentationController{
                 sheet.detents = [.large()]

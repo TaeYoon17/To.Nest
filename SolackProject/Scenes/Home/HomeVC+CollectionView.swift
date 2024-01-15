@@ -37,6 +37,8 @@ extension HomeVC:UICollectionViewDelegate{
                 return collectionView.dequeueConfiguredReusableCell(using: channelRegi, for: indexPath, item: itemIdentifier)
             case (.list,.direct):
                 return collectionView.dequeueConfiguredReusableCell(using: directRegi, for: indexPath, item: itemIdentifier)
+            case (.list, .team):
+                return collectionView.dequeueConfiguredReusableCell(using: directRegi, for: indexPath, item: itemIdentifier)
             }
         })
     }
@@ -60,8 +62,15 @@ extension HomeVC:UICollectionViewDelegate{
             alert.addAction(.init(title: "취소", style: .cancel))
             self.present(alert,animated: true)
         case (.bottom,.direct): break
+        case (.bottom, .team):
+            let vc = CHInviteView()
+            let nav = UINavigationController(rootViewController: vc)
+            nav.fullSheetSetting()
+            self.present(nav, animated: true)
         case (.list,.channel):break
         case (.list,.direct):break
+        case (.list, .team): break
+        
         }
     }
 

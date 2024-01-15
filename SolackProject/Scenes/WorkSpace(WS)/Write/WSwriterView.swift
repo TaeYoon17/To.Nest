@@ -10,10 +10,22 @@ import SnapKit
 import ReactorKit
 import RxSwift
 import RxCocoa
-
-final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
+extension WSwriterView{
+    static var getCreateConfig: WriterConfigureation{
+        WriterConfigureation(buttonText: "완료", mainField: .init(field: "워크스페이스 이름", placeholder: "워크스페이스 이름을 입력하세요 (필수)", accessoryText: "완료"), descriptionField: .init(field: "워크스페이스 설명", placeholder: "워크스페이스를 설명하세요 (옵션)"), navigationTitle: "완료")
+    }
+}
+final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View,WritableView{
     var disposeBag: DisposeBag = DisposeBag()
     let scrollView = UIScrollView()
+    init(_ config: WriterConfigureation,reactor: Reactor){
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+        apply(config: config)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("Don't use storyboard")
+    }
     lazy var stView = {
         let arr = [workSpaceName,workSpaceDescription]
         let st = UIStackView(arrangedSubviews: arr)
@@ -83,6 +95,14 @@ final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View{
             make.bottom.equalToSuperview().inset(45)
             make.height.equalTo(44)
         }
+    }
+    func apply(config:WriterConfigureation){
+        var writer = config
+        self.createBtn.text = writer.buttonText
+        self.workSpaceName.apply(writer.mainField)
+        self.workSpaceDescription.apply(writer.descriptionField)
+        self.navigationItem.title = config.navigationTitle
+//        InputFieldView.Configuration(field: "워크스페이스 이름", placeholder: "워크스페이스 이름을 입력하세요 (필수)",keyType: .default,accessoryText: "저장")
     }
 }
 
