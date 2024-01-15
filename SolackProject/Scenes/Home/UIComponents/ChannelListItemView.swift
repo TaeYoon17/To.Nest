@@ -11,6 +11,7 @@ struct ChannelListItemView: View{
     var isRecent:Bool
     let name:String
     let count:Int
+    var showCount:Bool = true
     var body: some View{
         if isRecent{
             recent
@@ -24,13 +25,14 @@ struct ChannelListItemView: View{
                 HStack{
                     Text(name)
                     Spacer()
-                    Text("\(count)")
-                        .foregroundStyle(.white)
-                        .padding(.vertical,2)
-                        .padding(.horizontal,4)
-                        .background(.accent)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
+                    if showCount{
+                        Text("\(count)")
+                            .foregroundStyle(.white)
+                            .padding(.vertical,2)
+                            .padding(.horizontal,4)
+                            .background(.accent)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
                 }.font(FontType.bodyBold.font)
             },
             icon: {

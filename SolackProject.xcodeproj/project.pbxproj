@@ -38,6 +38,11 @@
 		632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632A2D622B4DAD7400E21DE8 /* WScreateReactor.swift */; };
 		632D8EB32B4D290200A99293 /* WSwriterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D8EB22B4D290200A99293 /* WSwriterView.swift */; };
 		633584692B45610C00B83555 /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633584682B45610C00B83555 /* SignInEmailView.swift */; };
+		63358D662B53FB93005C5BD4 /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D652B53FB93005C5BD4 /* HomeReactor.swift */; };
+		63358D6A2B53FD89005C5BD4 /* CHWriterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D692B53FD89005C5BD4 /* CHWriterView.swift */; };
+		63358D6C2B53FE0A005C5BD4 /* CHExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D6B2B53FE0A005C5BD4 /* CHExploreView.swift */; };
+		63358D6F2B540213005C5BD4 /* CHExploreView+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D6E2B540213005C5BD4 /* CHExploreView+CollectionView.swift */; };
+		63358D712B540256005C5BD4 /* CHExploreView+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D702B540256005C5BD4 /* CHExploreView+DS.swift */; };
 		634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */; };
 		636213012B4E93ED0093D089 /* EditImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213002B4E93ED0093D089 /* EditImageView.swift */; };
 		636213032B4E94F90093D089 /* CropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213022B4E94F90093D089 /* CropView.swift */; };
@@ -179,7 +184,13 @@
 		632A2D602B4DAD1800E21DE8 /* WSwriterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSwriterReactor.swift; sourceTree = "<group>"; };
 		632A2D622B4DAD7400E21DE8 /* WScreateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WScreateReactor.swift; sourceTree = "<group>"; };
 		632D8EB22B4D290200A99293 /* WSwriterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSwriterView.swift; sourceTree = "<group>"; };
+		6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SolackProject.entitlements; sourceTree = "<group>"; };
 		633584682B45610C00B83555 /* SignInEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
+		63358D652B53FB93005C5BD4 /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
+		63358D692B53FD89005C5BD4 /* CHWriterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHWriterView.swift; sourceTree = "<group>"; };
+		63358D6B2B53FE0A005C5BD4 /* CHExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHExploreView.swift; sourceTree = "<group>"; };
+		63358D6E2B540213005C5BD4 /* CHExploreView+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHExploreView+CollectionView.swift"; sourceTree = "<group>"; };
+		63358D702B540256005C5BD4 /* CHExploreView+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHExploreView+DS.swift"; sourceTree = "<group>"; };
 		634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImgView.swift; sourceTree = "<group>"; };
 		636213002B4E93ED0093D089 /* EditImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditImageView.swift; sourceTree = "<group>"; };
 		636213022B4E94F90093D089 /* CropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropView.swift; sourceTree = "<group>"; };
@@ -319,6 +330,7 @@
 		631A60A82B44ECEE005509C2 /* SolackProject */ = {
 			isa = PBXGroup;
 			children = (
+				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
 				631A60E62B44EE0B005509C2 /* ReactorServices */,
 				631A60D92B44EE01005509C2 /* Core */,
@@ -423,6 +435,7 @@
 		631A60ED2B44EE15005509C2 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				63358D672B53FD58005C5BD4 /* Channel(CH) */,
 				632D8EB12B4D28F700A99293 /* WorkSpace(WS) */,
 				63FA65402B49AF8400C744C8 /* MainTabBar */,
 				63FA653D2B49ADA200C744C8 /* Home */,
@@ -464,7 +477,7 @@
 			children = (
 				63E38EE62B516DC600BD6C93 /* Reactor-ViewModel */,
 				639AFDDF2B52CA0700FA8280 /* WSManagerChange */,
-				637B157B2B4CE86600B68963 /* SideWorkSpace */,
+				637B157B2B4CE86600B68963 /* WSSide */,
 				632A2D5F2B4DACFC00E21DE8 /* Write */,
 			);
 			path = "WorkSpace(WS)";
@@ -477,6 +490,33 @@
 				636C13862B4986BB006D9962 /* SignInToastType.swift */,
 			);
 			path = SignInEmail;
+			sourceTree = "<group>";
+		};
+		63358D672B53FD58005C5BD4 /* Channel(CH) */ = {
+			isa = PBXGroup;
+			children = (
+				63358D6D2B5401A7005C5BD4 /* Explore */,
+				63358D682B53FD7D005C5BD4 /* Write */,
+			);
+			path = "Channel(CH)";
+			sourceTree = "<group>";
+		};
+		63358D682B53FD7D005C5BD4 /* Write */ = {
+			isa = PBXGroup;
+			children = (
+				63358D692B53FD89005C5BD4 /* CHWriterView.swift */,
+			);
+			path = Write;
+			sourceTree = "<group>";
+		};
+		63358D6D2B5401A7005C5BD4 /* Explore */ = {
+			isa = PBXGroup;
+			children = (
+				63358D6B2B53FE0A005C5BD4 /* CHExploreView.swift */,
+				63358D6E2B540213005C5BD4 /* CHExploreView+CollectionView.swift */,
+				63358D702B540256005C5BD4 /* CHExploreView+DS.swift */,
+			);
+			path = Explore;
 			sourceTree = "<group>";
 		};
 		636213042B4E95EE0093D089 /* ImageManager */ = {
@@ -557,7 +597,7 @@
 			path = SwiftUI;
 			sourceTree = "<group>";
 		};
-		637B157B2B4CE86600B68963 /* SideWorkSpace */ = {
+		637B157B2B4CE86600B68963 /* WSSide */ = {
 			isa = PBXGroup;
 			children = (
 				63DFDF842B4D00A900F47AB5 /* UIComponents */,
@@ -568,7 +608,7 @@
 				637B157E2B4CF20600B68963 /* WorkSpaceListView.swift */,
 				639A4AEB2B52B045005360F6 /* WorkSpaceAlert.swift */,
 			);
-			path = SideWorkSpace;
+			path = WSSide;
 			sourceTree = "<group>";
 		};
 		6384A9BD2B47125600AA2F1B /* Network */ = {
@@ -750,6 +790,7 @@
 		63E38EE72B516E2100BD6C93 /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
+				63358D652B53FB93005C5BD4 /* HomeReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -921,6 +962,7 @@
 				637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */,
 				63E38EDB2B511FAA00BD6C93 /* ImageRouter.swift in Sources */,
 				63F0AECF2B4B001B000A597B /* HomeVC+CollectionStructures.swift in Sources */,
+				63358D712B540256005C5BD4 /* CHExploreView+DS.swift in Sources */,
 				632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */,
 				636213062B4E95F60093D089 /* ImageManager.swift in Sources */,
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
@@ -979,11 +1021,13 @@
 				63F0AED52B4B0889000A597B /* NaviBar.swift in Sources */,
 				63E38ED32B510A4600BD6C93 /* TaskCounter.swift in Sources */,
 				63F7C4BC2B4FDC5A003D8447 /* WSwriter+Binding.swift in Sources */,
+				63358D6A2B53FD89005C5BD4 /* CHWriterView.swift in Sources */,
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
 				63F0AECB2B4AD886000A597B /* ChannelListItemView.swift in Sources */,
 				63F7C4AA2B4F7CE8003D8447 /* ErrorCode.swift in Sources */,
 				63F7C4B22B4F929F003D8447 /* BaseAuthenticator.swift in Sources */,
 				63F7C4A62B4F772E003D8447 /* WSInfo.swift in Sources */,
+				63358D6C2B53FE0A005C5BD4 /* CHExploreView.swift in Sources */,
 				63F0AEC42B4AB920000A597B /* HomeVC+CollectionView.swift in Sources */,
 				631A60AA2B44ECEE005509C2 /* AppDelegate.swift in Sources */,
 				63F0AECD2B4AE21A000A597B /* AppendListBottom.swift in Sources */,
@@ -999,6 +1043,7 @@
 				63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */,
 				63E38EDF2B515D0200BD6C93 /* SideView.swift in Sources */,
 				631A60FF2B452976005509C2 /* SecretKey.swift in Sources */,
+				63358D6F2B540213005C5BD4 /* CHExploreView+CollectionView.swift in Sources */,
 				631A60AC2B44ECEE005509C2 /* SceneDelegate.swift in Sources */,
 				631A60D72B44EDF5005509C2 /* ButtonConfiguration.swift in Sources */,
 				63F0AEC62B4ABA1E000A597B /* HomeVC+DS.swift in Sources */,
@@ -1022,6 +1067,7 @@
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
 				636213012B4E93ED0093D089 /* EditImageView.swift in Sources */,
+				63358D662B53FB93005C5BD4 /* HomeReactor.swift in Sources */,
 				63F0AED72B4B093A000A597B /* BaseView.swift in Sources */,
 				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,
 				633584692B45610C00B83555 /* SignInEmailView.swift in Sources */,
@@ -1177,6 +1223,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SolackProject/SolackProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3W9F68ZTUJ;
@@ -1212,6 +1259,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SolackProject/SolackProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3W9F68ZTUJ;

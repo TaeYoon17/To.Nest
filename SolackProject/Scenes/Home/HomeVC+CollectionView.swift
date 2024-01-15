@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import SwiftUI
+import RxSwift
 final class HomeVM{
     let provider: ServiceProviderProtocol
     init(){
@@ -42,7 +43,26 @@ extension HomeVC:UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {return}
+        let type = (item.itemType,item.sectionType)
+        switch type{
+        case (.header,_): break
+        case (.bottom,.channel):
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            alert.addAction(.init(title: "채널 생성", style: .default, handler: { [weak self] _ in
+                guard let self, let reactor else {return}
+                Observable.just(Reactor.Action.setPresent(.create)).bind(to: reactor.action).disposed(by: disposeBag)
+            }))
+            alert.addAction(.init(title: "채널 탐색", style: .default, handler: { [weak self] _ in
+                guard let self, let reactor else {return}
+                Observable.just(Reactor.Action.setPresent(.explore)).bind(to: reactor.action).disposed(by: disposeBag)
+            }))
+            alert.addAction(.init(title: "취소", style: .cancel))
+            self.present(alert,animated: true)
+        case (.bottom,.direct): break
+        case (.list,.channel):break
+        case (.list,.direct):break
+        }
     }
 
 }

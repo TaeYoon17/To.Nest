@@ -4,26 +4,12 @@
 //
 //  Created by 김태윤 on 1/7/24.
 //
-
 import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
-final class HomeReactor: Reactor{
-    let initialState: State = .init()
-    weak var provider: ServiceProviderProtocol!
-    enum Action{}
-    struct State{}
-    init(_ provider: ServiceProviderProtocol){
-        self.provider = provider
-    }
-    func mutate(action: Action) -> Observable<Action> {
-        
-    }
-    func reduce(state: State, mutation: Action) -> State {
-    }
-}
+
 final class HomeVC: BaseVC, View{
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     let navBar = NaviBar()
@@ -32,11 +18,23 @@ final class HomeVC: BaseVC, View{
     var disposeBag = DisposeBag()
     lazy var sideVC = SideVC(self.reactor!.provider)
     func bind(reactor: HomeReactor) {
-        
+        reactor.state.map{$0.channelDialog}.distinctUntilChanged().bind(with: self) { owner, present in
+            guard let present else {return}
+            switch present{
+            case .create:
+                let vc = CHWriterView()
+                let nav = UINavigationController(rootViewController: vc)
+                nav.fullSheetSetting()
+                owner.present(nav, animated: true)
+            case .explore:
+                let vc = CHExploreView()
+                let nav = UINavigationController(rootViewController: vc)
+                nav.modalPresentationStyle = .fullScreen
+                owner.present(nav, animated: true)
+            }
+        }.disposed(by: disposeBag)
     }
-    override var prefersStatusBarHidden: Bool {
-        return false
-    }
+    override var prefersStatusBarHidden: Bool { false }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -93,3 +91,4 @@ final class HomeVC: BaseVC, View{
     }
     
 }
+
