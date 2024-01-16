@@ -79,7 +79,7 @@ final class HomeVC: BaseVC, View{
         collectionView.backgroundColor = .gray1
         configureCollectionView()
         newMessageBtn.rx.tap.bind(with: self) { owner, _ in
-            let vc = WSwriterView<WScreateReactor>(WSwriterView.getCreateConfig,reactor: WScreateReactor(owner.reactor!.provider))
+            let vc = WSwriterView<WScreateReactor>(.create,reactor: WScreateReactor(owner.reactor!.provider))
             let nav = UINavigationController(rootViewController: vc)
             if let sheet = nav.sheetPresentationController{
                 sheet.detents = [.large()]

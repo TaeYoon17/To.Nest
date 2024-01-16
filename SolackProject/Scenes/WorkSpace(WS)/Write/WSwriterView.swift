@@ -11,17 +11,26 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 extension WSwriterView{
-    static var getCreateConfig: WriterConfigureation{
-        WriterConfigureation(buttonText: "완료", mainField: .init(field: "워크스페이스 이름", placeholder: "워크스페이스 이름을 입력하세요 (필수)", accessoryText: "완료"), descriptionField: .init(field: "워크스페이스 설명", placeholder: "워크스페이스를 설명하세요 (옵션)"), navigationTitle: "완료")
+    enum ViewType{
+        case create
+        case edit
+        var config:WriterConfigureation{
+            switch self{
+            case .create:
+                WriterConfigureation(buttonText: "완료", mainField: .init(field: "워크스페이스 이름", placeholder: "워크스페이스 이름을 입력하세요 (필수)", accessoryText: "완료"), descriptionField: .init(field: "워크스페이스 설명", placeholder: "워크스페이스를 설명하세요 (옵션)"), navigationTitle: "완료")
+            case .edit:
+                WriterConfigureation(buttonText: "완료", mainField: .init(field: "워크스페이스 이름", placeholder: "워크스페이스 이름을 입력하세요 (필수)", accessoryText: "완료"), descriptionField: .init(field: "워크스페이스 설명", placeholder: "워크스페이스를 설명하세요 (옵션)"), navigationTitle: "완료")
+            }
+        }
     }
 }
 final class WSwriterView<Reactor: WSwriterReactor>:BaseVC,View,WritableView{
     var disposeBag: DisposeBag = DisposeBag()
     let scrollView = UIScrollView()
-    init(_ config: WriterConfigureation,reactor: Reactor){
+    init(_ viewType: ViewType,reactor: Reactor){
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
-        apply(config: config)
+        apply(config: viewType.config)
     }
     required init?(coder: NSCoder) {
         fatalError("Don't use storyboard")

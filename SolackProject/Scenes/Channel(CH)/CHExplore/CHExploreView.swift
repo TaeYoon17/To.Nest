@@ -20,7 +20,6 @@ final class CHExploreView: BaseVC{
         self.view.addSubview(collectionView)
     }
     override func configureNavigation() {
-        
         self.navigationItem.title = "채널 탐색"
         self.navigationItem.leftBarButtonItem = .init(image: UIImage(systemName: "xmark"))
         self.navigationItem.leftBarButtonItem?.tintColor = .text

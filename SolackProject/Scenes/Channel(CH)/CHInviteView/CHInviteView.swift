@@ -31,6 +31,7 @@ class CHInviteView: BaseVC,Toastable{
             owner.dismiss(animated: true)
         }.disposed(by: disposeBag)
         self.navigationItem.leftBarButtonItem?.tintColor = .text
+        self.navigationController?.isModalInPresentation = true
     }
     override func configureConstraints() {
         scrollView.snp.makeConstraints { make in

@@ -58,7 +58,7 @@ final class SideVC: UIHostingController<Side>{
 //MARK: -- Present 연결
 extension SideVC{
     func presentCreateWS(){
-        let vc = WSwriterView<WScreateReactor>(WSwriterView.getCreateConfig,reactor: WScreateReactor(vm.provider))
+        let vc = WSwriterView<WScreateReactor>(.create,reactor: WScreateReactor(vm.provider))
         let nav = UINavigationController(rootViewController: vc)
         if let sheet = nav.sheetPresentationController{
             sheet.detents = [.large()]
@@ -80,7 +80,7 @@ extension SideVC{
         
         let listData = vm.underList[vm.selectedIdx]
         let info = WSInfo(name: listData.name,description: listData.description ?? "",image: vm.list[vm.selectedIdx].image.jpegData(compressionQuality: 1))
-        let vc = WSwriterView<WSEditReactor>(WSwriterView.getCreateConfig,reactor: WSEditReactor(provider: vm.provider, wsInfo: info,id:"\(vm.selectedWorkSpaceID)"))
+        let vc = WSwriterView<WSEditReactor>(.edit,reactor: WSEditReactor(provider: vm.provider, wsInfo: info,id:"\(vm.selectedWorkSpaceID)"))
         let nav = UINavigationController(rootViewController: vc)
         if let sheet = nav.sheetPresentationController{
             sheet.detents = [.large()]
