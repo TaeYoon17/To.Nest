@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 struct WorkSpaceBottomView:View{
-    @EnvironmentObject fileprivate var vm:SideVM
+    @EnvironmentObject fileprivate var vm:WSMainVM
     var body: some View{
         List{
             Button{

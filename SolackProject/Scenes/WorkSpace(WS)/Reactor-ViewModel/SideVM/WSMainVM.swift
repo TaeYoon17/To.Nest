@@ -10,19 +10,19 @@ import Combine
 import RxSwift
 import UIKit
 
-final class SideVM: ObservableObject{
+final class WSMainVM: ObservableObject{
     // View - ViewController 간 통신
-    @Published var isOpen = false
     var createWorkSpaceTapped: PassthroughSubject<(),Never> = .init()
     var changeWorkSpaceManagerTapped:PassthroughSubject<(),Never> = .init()
     var editWorkSpaceManagerTapped: PassthroughSubject<(),Never> = .init()
     var closeAction: PassthroughSubject<(),Never> = .init()
     
     // View 데이터
-    @MainActor @Published var list:[WorkSpaceListItem] = []
+     @Published var list:[WorkSpaceListItem] = []
     @Published var selectedWorkSpaceID = 0
     @Published var selectedIdx = 0
     @Published var toastType: WSToastType? = nil
+    @Published var isReceivedWorkSpaceList:Bool = false
     @DefaultsState(\.userID) var userID
     var counter = TaskCounter()
     var underList:[WSResponse] = []
@@ -38,7 +38,7 @@ final class SideVM: ObservableObject{
 }
 
 //MARK: -- 워크스페이스 API 통신 로직
-extension SideVM{
+extension WSMainVM{
     func getList(){
         provider.wsService.checkAllWS()
     }

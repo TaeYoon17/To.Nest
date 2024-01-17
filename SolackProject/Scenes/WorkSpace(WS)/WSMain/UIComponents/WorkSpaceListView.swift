@@ -8,7 +8,7 @@
 import SwiftUI
 fileprivate struct WorkSpaceListInner<T: View>:View{
     let view:()->T
-    @EnvironmentObject var vm: SideVM
+    @EnvironmentObject var vm: WSMainVM
     @Binding var managerWorkSpace:Bool
     @Binding var defaultWorkSpace:Bool
     @State var fullScreenGo = false
@@ -77,7 +77,7 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
 }
 
 struct WorkSpaceList:View{
-    @EnvironmentObject var vm: SideVM
+    @EnvironmentObject var vm: WSMainVM
     @State fileprivate var isUserSelected:Bool = false
     @State fileprivate var isManagerSelected:Bool = false
     @State private var list:[WorkSpaceListItem] = []

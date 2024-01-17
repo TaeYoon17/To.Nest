@@ -9,13 +9,12 @@ import Foundation
 import Combine
 import RxSwift
 import UIKit
-extension SideVM{
+extension WSMainVM{
     func binding(){
         provider.wsService.event.bind(with: self) { owner, event in
             switch event{
             case .create(let res):
                 Task{ await owner.createResponse(res) }
-//                owner.toastLogicMaker(type: .created)
                 owner.toastType = .created
             case .edit(let res):
                 Task{ 
@@ -25,6 +24,7 @@ extension SideVM{
                 }
             case .checkAll(let value):
                 // 바꿔주는 로직이 필요하다.
+                
                 owner.wsResponses(value)
             case .delete:
                 Task{
@@ -36,13 +36,10 @@ extension SideVM{
                 case .nonExistData:
                     owner.toastType = .emptyData
                 case .nonAuthority:
-//                    owner.toastLogicMaker(type: .notAuthority)
                     owner.toastType = .notAuthority
                 case .lackCoin:
-//                    owner.toastLogicMaker(type: .lackCoin)
                     owner.toastType = .lackCoin
                 default:
-//                    owner.toastLogicMaker(type: .unknown)
                     owner.toastType = .unknown
                 }
             case .unknownError:
@@ -52,7 +49,7 @@ extension SideVM{
         }.disposed(by: disposeBag)
     }
 }
-extension SideVM{
+extension WSMainVM{
     fileprivate func createResponse(_ value: WSResponse) async {
         let isFirstItem = await self.list.isEmpty
         do{
@@ -77,6 +74,7 @@ extension SideVM{
             var tempItem = try await makeWSItem(value,coverCache: true)
             tempItem.isSelected = true
             let item = tempItem
+            
             Task{@MainActor in
                 self.list[self.selectedIdx] = item
                 self.underList[self.selectedIdx] = value
@@ -95,17 +93,18 @@ extension SideVM{
                     guard let self else{ throw Errors.cachingEmpty }
                     return try await makeWSItem(response)
                 }
-                Task{@MainActor in
+                DispatchQueue.main.async{
                     self.list = listItem
                     self.underList = value
                     if !self.list.isEmpty{
-                        if self.selectedIdx >= 0 { self.list[selectedIdx].isSelected = false }
+                        if self.selectedIdx >= 0 { self.list[self.selectedIdx].isSelected = false }
                         self.list[0].isSelected = true
                         self.selectedWorkSpaceID  = self.list[0].id
                         self.selectedIdx = 0
                     }else{
                         self.selectedIdx = -1
                     }
+                    self.isReceivedWorkSpaceList = true
                 }
             }catch{
                 print(error)
@@ -129,7 +128,7 @@ extension SideVM{
                                        date: res.createdAt)
     }
 }
-extension SideVM{
+extension WSMainVM{
     func tempToastUp(){
         toastType = .created
     }
