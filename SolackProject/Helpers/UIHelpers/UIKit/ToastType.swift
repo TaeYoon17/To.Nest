@@ -41,7 +41,9 @@ extension Toastable{
         let toast = try! navigationController!.view.toastViewForMessage(type.contents, title: nil, image: nil, style: style)
         let radiusHeight = toast.frame.height / 2
         self.toastHeight = toast.frame.height
-        let center:CGPoint = .init(x: UIScreen.current!.bounds.midX, y: toastY)
-        navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: center,completion: nil)
+        Task{@MainActor in
+            let center:CGPoint = .init(x: UIScreen.current!.bounds.midX, y: toastY)
+            navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: center,completion: nil)
+        }
     }
 }

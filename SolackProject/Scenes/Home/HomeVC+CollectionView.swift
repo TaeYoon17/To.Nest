@@ -67,7 +67,9 @@ extension HomeVC:UICollectionViewDelegate{
             let nav = UINavigationController(rootViewController: vc)
             nav.fullSheetSetting()
             self.present(nav, animated: true)
-        case (.list,.channel):break
+        case (.list,.channel):
+            let vc = CHChatView()
+            self.navigationController?.pushViewController(vc, animated: true)
         case (.list,.direct):break
         case (.list, .team): break
         

@@ -27,7 +27,7 @@ fileprivate extension IM{
     }
     func coreDownSample(resource:CGImageSource,size:CGSize? = nil) -> UIImage{
         let scale = UIScreen.main.scale
-        let screenSize = UIScreen.current!.bounds.size
+        let screenSize = UIScreen.main.bounds
         let maxPixel = if let size{
              max(size.width, size.height) * scale
         }else{

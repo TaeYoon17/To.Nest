@@ -44,6 +44,7 @@
 		63358D6F2B540213005C5BD4 /* CHExploreView+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D6E2B540213005C5BD4 /* CHExploreView+CollectionView.swift */; };
 		63358D712B540256005C5BD4 /* CHExploreView+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63358D702B540256005C5BD4 /* CHExploreView+DS.swift */; };
 		634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */; };
+		634F023C2B5A6BA900505B65 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634F023B2B5A6BA900505B65 /* ChatCell.swift */; };
 		636028052B555B5E00AF8731 /* WriterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636028042B555B5E00AF8731 /* WriterView.swift */; };
 		636028082B555D8200AF8731 /* WriterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636028072B555D8200AF8731 /* WriterReactor.swift */; };
 		6360280A2B555DB200AF8731 /* CHToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636028092B555DB200AF8731 /* CHToastType.swift */; };
@@ -59,10 +60,15 @@
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636CFBB42B510743003F02ED /* SideVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636CFBB32B510743003F02ED /* SideVM.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
+		6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAF92B594C260010968C /* CHSettingView.swift */; };
+		6373AAFC2B5952400010968C /* UINavigationSwipable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAFB2B5952400010968C /* UINavigationSwipable.swift */; };
 		6373EDDE2B4B8B3F00D24353 /* SideVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373EDDD2B4B8B3F00D24353 /* SideVC.swift */; };
 		637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C12B50C739008AAD4A /* ScreenSize.swift */; };
 		637488C52B50C739008AAD4A /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C22B50C739008AAD4A /* UserDefaults+State.swift */; };
 		637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C32B50C739008AAD4A /* AnyModelStore.swift */; };
+		6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */; };
+		6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */; };
+		6376BAF62B5A8B30000FBBF8 /* CHChatView+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */; };
 		637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */; };
 		637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15792B4CD72500B68963 /* TransparentBackground.swift */; };
 		637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */; };
@@ -199,6 +205,7 @@
 		63358D6E2B540213005C5BD4 /* CHExploreView+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHExploreView+CollectionView.swift"; sourceTree = "<group>"; };
 		63358D702B540256005C5BD4 /* CHExploreView+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHExploreView+DS.swift"; sourceTree = "<group>"; };
 		634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImgView.swift; sourceTree = "<group>"; };
+		634F023B2B5A6BA900505B65 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		636028042B555B5E00AF8731 /* WriterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterView.swift; sourceTree = "<group>"; };
 		636028072B555D8200AF8731 /* WriterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterReactor.swift; sourceTree = "<group>"; };
 		636028092B555DB200AF8731 /* CHToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHToastType.swift; sourceTree = "<group>"; };
@@ -214,10 +221,15 @@
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636CFBB32B510743003F02ED /* SideVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideVM.swift; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
+		6373AAF92B594C260010968C /* CHSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHSettingView.swift; sourceTree = "<group>"; };
+		6373AAFB2B5952400010968C /* UINavigationSwipable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationSwipable.swift; sourceTree = "<group>"; };
 		6373EDDD2B4B8B3F00D24353 /* SideVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideVC.swift; sourceTree = "<group>"; };
 		637488C12B50C739008AAD4A /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
 		637488C22B50C739008AAD4A /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		637488C32B50C739008AAD4A /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
+		6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatCollectionView.swift; sourceTree = "<group>"; };
+		6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatViewRegistration.swift; sourceTree = "<group>"; };
+		6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHChatView+DS.swift"; sourceTree = "<group>"; };
 		637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolackAlert+UIKit.swift"; sourceTree = "<group>"; };
 		637B15792B4CD72500B68963 /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceEmptyView.swift; sourceTree = "<group>"; };
@@ -612,6 +624,7 @@
 		637488C72B50C73D008AAD4A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6373AAFB2B5952400010968C /* UINavigationSwipable.swift */,
 			);
 			name = Extensions;
 			path = SolackProject/Helpers/Extensions;
@@ -786,6 +799,10 @@
 			isa = PBXGroup;
 			children = (
 				63C346F62B55754C00293991 /* CHChatView.swift */,
+				634F023B2B5A6BA900505B65 /* ChatCell.swift */,
+				6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */,
+				6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */,
+				6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */,
 			);
 			path = CHChat;
 			sourceTree = "<group>";
@@ -793,6 +810,7 @@
 		63C346F82B55756D00293991 /* CHSetting */ = {
 			isa = PBXGroup;
 			children = (
+				6373AAF92B594C260010968C /* CHSettingView.swift */,
 			);
 			path = CHSetting;
 			sourceTree = "<group>";
@@ -1021,6 +1039,7 @@
 			files = (
 				636213142B4EA0DD0093D089 /* CropImageModifier.swift in Sources */,
 				637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */,
+				6376BAF62B5A8B30000FBBF8 /* CHChatView+DS.swift in Sources */,
 				63E38EDB2B511FAA00BD6C93 /* ImageRouter.swift in Sources */,
 				63F0AECF2B4B001B000A597B /* HomeVC+CollectionStructures.swift in Sources */,
 				63C346F72B55754C00293991 /* CHChatView.swift in Sources */,
@@ -1030,6 +1049,7 @@
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
 				637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */,
 				636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */,
+				634F023C2B5A6BA900505B65 /* ChatCell.swift in Sources */,
 				639B8A702B491BA40024B4DD /* AuthReactor.swift in Sources */,
 				637488C52B50C739008AAD4A /* UserDefaults+State.swift in Sources */,
 				631A60E12B44EE02005509C2 /* AppConstraints.swift in Sources */,
@@ -1073,6 +1093,7 @@
 				6384A9CA2B47125600AA2F1B /* UserRouter.swift in Sources */,
 				639AFDE12B52CA1A00FA8280 /* WSManagerView.swift in Sources */,
 				636028052B555B5E00AF8731 /* WriterView.swift in Sources */,
+				6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */,
 				6360280C2B55605100AF8731 /* CHWriterReactor.swift in Sources */,
 				637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */,
 				63F0AED32B4B0775000A597B /* HomeVC+CellRegistration.swift in Sources */,
@@ -1104,7 +1125,9 @@
 				63F7C4AC2B4F7E64003D8447 /* WS+NM.swift in Sources */,
 				63E38EE32B5167E500BD6C93 /* WSTostType.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
+				6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */,
 				636213032B4E94F90093D089 /* CropView.swift in Sources */,
+				6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */,
 				639A4AEC2B52B045005360F6 /* WorkSpaceAlert.swift in Sources */,
 				639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */,
 				63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */,
@@ -1114,6 +1137,7 @@
 				631A60AC2B44ECEE005509C2 /* SceneDelegate.swift in Sources */,
 				631A60D72B44EDF5005509C2 /* ButtonConfiguration.swift in Sources */,
 				63F0AEC62B4ABA1E000A597B /* HomeVC+DS.swift in Sources */,
+				6373AAFC2B5952400010968C /* UINavigationSwipable.swift in Sources */,
 				632D8EB32B4D290200A99293 /* WSwriterView.swift in Sources */,
 				639CCA3B2B499F39005B35DF /* SignService.swift in Sources */,
 				63F7C4A12B4EEA4B003D8447 /* WorkSpaceService.swift in Sources */,

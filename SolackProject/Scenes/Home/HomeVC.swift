@@ -37,7 +37,6 @@ final class HomeVC: BaseVC, View{
     override var prefersStatusBarHidden: Bool { false }
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .systemBackground
         navBar.workSpaceTap.bind(with: self) { owner, _ in
             // 슬라이드 뷰 구현 with swiftui
@@ -73,6 +72,21 @@ final class HomeVC: BaseVC, View{
             make.height.width.equalTo(54)
         }
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        if self.tabBarController!.tabBar.isHidden{
+            self.tabBarController?.tabBar.layer.opacity = 0
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.tabBarController?.tabBar.isHidden = false
+        UIView.animate(withDuration: 0.3) {
+            self.tabBarController?.tabBar.layer.opacity = 1
+        }
     }
     override func configureView() {
         navBar.title = "iOS Developers"
