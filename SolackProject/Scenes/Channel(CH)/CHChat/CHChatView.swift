@@ -22,6 +22,12 @@ final class CHChatView: BaseVC{
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = true
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print("bounds",collectionView.bounds)
     }
     override func configureNavigation() {
         let label = UILabel()
@@ -54,7 +60,7 @@ final class CHChatView: BaseVC{
     }
     override func configureConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     override func configureView() {

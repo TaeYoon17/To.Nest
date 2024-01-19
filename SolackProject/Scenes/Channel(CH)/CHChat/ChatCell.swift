@@ -51,6 +51,9 @@ struct ChatCell:View{
                     }
             }.frame(width: dateWidth)
         }
+        .transaction{ transaction in
+            transaction.animation = nil
+        }
     }
 }
 struct ContainerImage:View{
