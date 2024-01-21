@@ -13,11 +13,16 @@ protocol WorkSpaceProtocol{
     func create(_ info:WSInfo)
     func edit(_ info:WSInfo,id:String)
     func delete(workspaceID: String)
-    func checkAllWS()
+    func checkAllWS(isCover:Bool)
+    func initHome()
+    func setHomeWS(wsID:Int)
 }
 final class WorkSpaceService:WorkSpaceProtocol{
+    @DefaultsState(\.mainWS) var mainWS
+    private var prevResponse:[WSResponse]? = nil
     let event = PublishSubject<Event>()
     enum Event{
+        case homeWS(WSDetailResponse?)
         case create(WSResponse)
         case edit(WSResponse)
         case checkAll([WSResponse])
@@ -66,12 +71,16 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
-    func checkAllWS(){
+    
+    func checkAllWS(isCover: Bool = false){
+        if let prevResponse, isCover == false{
+            event.onNext(.checkAll(prevResponse))
+            return
+        }
         Task{
             do{
                 let allWS = try await NM.shared.checkAllWS()
                 event.onNext(.checkAll(allWS))
-                print(allWS)
             }catch{
                 print("워크스페이스 사이드 에러!!")
                 guard authValidCheck(error: error) else{

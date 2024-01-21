@@ -26,8 +26,6 @@ final class CHChatView: BaseVC{
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        print("bounds",collectionView.bounds)
     }
     override func configureNavigation() {
         let label = UILabel()

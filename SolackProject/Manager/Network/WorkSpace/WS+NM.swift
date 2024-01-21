@@ -59,6 +59,20 @@ extension NM{
                 }
         }
     }
+    func checkWS(wsID:Int) async throws -> WSDetailResponse {
+        let router = WSRouter.check(.my(id: "\(wsID)"))
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(router,interceptor: self.authInterceptor)
+                .validate(customValidation)
+                .response{ [weak self] res in
+                    guard let self else{
+                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        return
+                    }
+                    generalResponse(err: WSFailed.self, result: WSDetailResponse.self, res: res, continuation: continuation)
+                }
+        }
+    }
     
     func deleteWS(_ wsID: String) async throws -> Bool{
         let router = WSRouter.delete(wsID: wsID)

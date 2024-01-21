@@ -45,13 +45,14 @@ final class HomeVC: BaseVC, View{
             sideVC.isOpen = true
             owner.present(sideVC, animated: false)
         }.disposed(by: disposeBag)
+        let vc = WSEmptyView()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false)
     }
     override func configureLayout() {
         view.addSubview(navBar)
         view.addSubview(collectionView)
         view.addSubview(newMessageBtn)
-//        addChild(sideVC)
-//        view.addSubview(sideVC.view)
     }
     override func configureNavigation() {
         self.navigationItem.largeTitleDisplayMode = .never
