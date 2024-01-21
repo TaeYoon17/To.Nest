@@ -41,9 +41,11 @@ final class HomeReactor: Reactor{
                 Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
             ])
         case .setMainWS(wsID: let wsID):
-            <#code#>
+            provider.wsService.setHomeWS(wsID: Int(wsID)!)
+            return Observable.concat([])
         case .initMainWS:
-            provider.wsService.
+            provider.wsService.initHome()
+            return Observable.concat([])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

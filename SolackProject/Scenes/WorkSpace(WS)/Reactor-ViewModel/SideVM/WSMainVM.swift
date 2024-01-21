@@ -40,7 +40,7 @@ final class WSMainVM: ObservableObject{
 //MARK: -- 워크스페이스 API 통신 로직
 extension WSMainVM{
     func getList(){
-        provider.wsService.checkAllWS()
+        provider.wsService.checkAllWS(isCover: true)
     }
     func deleteWorkSpace(){
         provider.wsService.delete(workspaceID:"\(selectedWorkSpaceID)")

@@ -92,21 +92,6 @@ final class HomeVC: BaseVC, View{
             self.tabBarController?.tabBar.layer.opacity = 1
         }
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        if self.tabBarController!.tabBar.isHidden{
-            self.tabBarController?.tabBar.layer.opacity = 0
-        }
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.tabBarController?.tabBar.isHidden = false
-        UIView.animate(withDuration: 0.3) {
-            self.tabBarController?.tabBar.layer.opacity = 1
-        }
-    }
     override func configureView() {
         navBar.title = "iOS Developers"
         collectionView.backgroundColor = .gray1
