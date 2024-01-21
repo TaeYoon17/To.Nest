@@ -20,6 +20,7 @@ final class TabController: UITabBarController{
 }
 extension TabController{
     func setTabItems(){        
+//        let vc1 = HomeHosting()
         let vc1 = HomeVC()
         vc1.reactor = HomeReactor(AppManager.shared.provider)
         vc1.title = "Today"
@@ -39,6 +40,8 @@ extension TabController{
             nav.navigationBar.prefersLargeTitles = true
             return nav
         }
+        
+        
         setViewControllers(naviControllers, animated: false)
     }
 }

@@ -8,15 +8,12 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Combine
 import ReactorKit
 
 final class HomeVC: BaseVC, View{
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    let navBar = NaviBar()
-    var dataSource: HomeDataSource!
-    let newMessageBtn = NewMessageBtn()
     var disposeBag = DisposeBag()
-    lazy var sideVC = SideVC(self.reactor!.provider)
+    var subscription = Set<AnyCancellable>()
     func bind(reactor: HomeReactor) {
         reactor.state.map{$0.channelDialog}.distinctUntilChanged().bind(with: self) { owner, present in
             guard let present else {return}
@@ -34,16 +31,23 @@ final class HomeVC: BaseVC, View{
             }
         }.disposed(by: disposeBag)
     }
+    
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    let navBar = NaviBar()
+    var dataSource: HomeDataSource!
+    let newMessageBtn = NewMessageBtn()
+    var sliderVM = SliderVM()
+    lazy var sliderVC = WSSliderVC(reactor!.provider, sliderVM: sliderVM)
+    
     override var prefersStatusBarHidden: Bool { false }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navBar.workSpaceTap.bind(with: self) { owner, _ in
             // 슬라이드 뷰 구현 with swiftui
-            var sideVC = SideVC(self.reactor!.provider)
-            sideVC.modalPresentationStyle = .overFullScreen
-            sideVC.isOpen = true
-            owner.present(sideVC, animated: false)
+        }.disposed(by: disposeBag)
+        sliderVM.sliderPresent.bind(with: self) { owner, _ in
+            owner.present(owner.sliderVC, animated: false)
         }.disposed(by: disposeBag)
         let vc = WSEmptyView()
         vc.modalPresentationStyle = .fullScreen
@@ -72,7 +76,21 @@ final class HomeVC: BaseVC, View{
             make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
             make.height.width.equalTo(54)
         }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        if self.tabBarController!.tabBar.isHidden{
+            self.tabBarController?.tabBar.layer.opacity = 0
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+        self.tabBarController?.tabBar.isHidden = false
+        UIView.animate(withDuration: 0.3) {
+            self.tabBarController?.tabBar.layer.opacity = 1
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -102,6 +120,9 @@ final class HomeVC: BaseVC, View{
             }
             owner.present(nav,animated: true)
         }.disposed(by: disposeBag)
+        let edgeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(Self.edgeSwipe(_:)))
+        edgeGesture.edges = .left
+        self.view.addGestureRecognizer(edgeGesture)
     }
     
 }

@@ -30,7 +30,7 @@ final class WScreateReactor: WSwriterReactor{
         case .setImageData(let data):
             self.wsInfo.image = data
             print("이미지 받아오기!!")
-            return Observable.concat([])
+            return Observable.concat([.just(.imageData(data))])
         }
     }
     override func writerTransform(state: Observable<WSwriterReactor.State>) -> Observable<WSwriterReactor.State> {
