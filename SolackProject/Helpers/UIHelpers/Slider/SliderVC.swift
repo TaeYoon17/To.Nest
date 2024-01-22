@@ -117,9 +117,11 @@ extension WSSliderVC{
         present(nav,animated: true)
     }
     func presentEditWS(){
-        let listData = viewVM.underList[viewVM.selectedIdx]
-        let info = WSInfo(name: listData.name,description: listData.description ?? "",image: viewVM.list[viewVM.selectedIdx].image.jpegData(compressionQuality: 1))
-        let vc = WSwriterView<WSEditReactor>(.edit,reactor: WSEditReactor(provider: viewVM.provider, wsInfo: info,id:"\(viewVM.selectedWorkSpaceID)"))
+        let listData = viewVM.list[viewVM.selectedIdx]
+        let profileData = listData.image.jpegData(compressionQuality: 1)!
+        let info = WSInfo(name: listData.name,description: listData.description ?? "",image: profileData)
+        let vc = WSwriterView<WSEditReactor>(.edit,reactor: WSEditReactor(provider: viewVM.provider,wsInfo: info))
+        vc.profileVC.vm.defaultImage.send(profileData)
         let nav = UINavigationController(rootViewController: vc)
         if let sheet = nav.sheetPresentationController{
             sheet.detents = [.large()]

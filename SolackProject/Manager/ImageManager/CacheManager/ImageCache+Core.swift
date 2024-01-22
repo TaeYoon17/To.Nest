@@ -9,6 +9,12 @@ import Foundation
 import UIKit
 
 extension UIImage{
+    static func fetchWebCache(name:String,type: SizeType) async throws -> UIImage{
+        try await fetchWebCache(name: name, size: type.size)
+    }
+    static func fetchFileCache(name:String,type: SizeType) async throws -> UIImage{
+        try await fetchFileCache(name:name,size:type.size)
+    }
     static func fetchWebCache(name:String,size:CGSize? = nil) async throws -> UIImage{
         try await IMCache.shared.fetchByCache(type: .web, name: name,size: size)
     }
@@ -17,6 +23,9 @@ extension UIImage{
     }
     static func fetchAlbumCache(name:String,size:CGSize? = nil) async throws -> UIImage{
         try await IMCache.shared.fetchByCache(type: .album, name: name,size:size)
+    }
+    func appendWebCache(name:String,type:SizeType,isCover:Bool = false)async throws{
+        try await appendWebCache(name: name,size: type.size,isCover: isCover)
     }
     func appendWebCache(name:String,size:CGSize? = nil,isCover:Bool = false)async throws{
         try await IMCache.shared.appendCache(type: .web, image: self, name: name,size: size,isCover: isCover)

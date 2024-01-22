@@ -26,6 +26,7 @@ final class WSEmptyView:BaseVC{
     let navBar = NaviBar()
     let createBtn = AuthBtn()
     override func configureLayout() {
+        
         [titleLabel,descriptionLabel,imageView,createBtn,navBar].forEach { view.addSubview($0) }
     }
     override func configureConstraints() {

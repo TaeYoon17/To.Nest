@@ -16,6 +16,11 @@ final class NaviBar: BaseView{
             workSpaceLabel.attributedText = NSAttributedString(attr)
         }
     }
+    @MainActor var wsImage:UIImage = UIImage(resource: .wsThumbnail){
+        didSet{
+            updateWSImage()
+        }
+    }
     var workSpace:UIButton = .init()
     var workSpaceLabel:UILabel = .init()
     var profile:UIButton = .init()
@@ -51,12 +56,18 @@ final class NaviBar: BaseView{
         }
     }
     override func configureView() {
-        workSpace.config.backgroundImage(.arKit, mode: .scaleAspectFill).cornerRadius(8).apply()
-        profile.config.backgroundImage(.metal, mode: .scaleAspectFill).cornerRadius(8).apply()
+        updateWSImage()
+        profile.config.backgroundImage(.arKit, mode: .scaleAspectFill).cornerRadius(8).apply()
+        
         let attr = title.attr(type: FontType.title1)
         workSpaceLabel.attributedText = NSAttributedString(attr)
         workSpaceLabel.textColor = .text
         workSpaceLabel.lineBreakMode = .byTruncatingTail
         workSpaceLabel.numberOfLines = 1
+    }
+    func updateWSImage(){
+        Task{@MainActor in
+            workSpace.config.backgroundColor(.accent).backgroundImage(wsImage, mode: .scaleAspectFit).cornerRadius(8).apply()
+        }
     }
 }

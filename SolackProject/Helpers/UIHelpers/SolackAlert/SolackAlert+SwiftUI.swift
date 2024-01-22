@@ -59,8 +59,10 @@ struct SolackAlert: View{
                 isVisible = true
             }
         }
-        .background(TransparentBackground(isVisible: $fullScreenGo))
+        .background(.clear)
+        .background(TransparentBackground(isVisible: $isVisible))
         .opacity(isVisible ? 1 : 0)
+        
     }
 }
 fileprivate extension SolackAlert{

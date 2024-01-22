@@ -10,7 +10,7 @@ import Alamofire
 
 enum ImageRouter:URLRequestConvertible{
     case get(urlStr: String)
-    static private let baseURL = URL(string: API.baseURL)
+    static private let baseURL = URL(string: API.baseURL + "/v1")
     var endPoint:String{
         switch self{
         case .get(urlStr: let urlStr): urlStr

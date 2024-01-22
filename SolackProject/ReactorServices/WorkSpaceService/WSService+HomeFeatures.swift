@@ -20,7 +20,7 @@ extension WSService{
                     event.onNext(.homeWS(nil))
                 }
             }catch{
-                print("워크스페이스 사이드 에러!!")
+                print("홈 초기 설정 실패!!")
                 guard authValidCheck(error: error) else{
                     AppManager.shared.userAccessable.onNext(false)
                     return
@@ -29,10 +29,15 @@ extension WSService{
             }
         }
     }
-    func setHomeWS(wsID: Int) {
+    func setHomeWS(wsID: Int?) {
+        guard let wsID else{
+            event.onNext(.homeWS(nil))
+            return
+        }
         Task{
             let newHomeWS = try await NM.shared.checkWS(wsID:wsID)
             mainWS = newHomeWS.ownerID
+            event.onNext(.homeWS(newHomeWS))
         }
     }
 }

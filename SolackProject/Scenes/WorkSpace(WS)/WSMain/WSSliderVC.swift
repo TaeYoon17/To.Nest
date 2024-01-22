@@ -12,6 +12,9 @@ final class WSSliderVC:SliderVC<WSMainVM>{
         let vm = WSMainVM(provider)
         vm.getList()
         super.init(viewVM: vm, sliderVM: sliderVM)
+        vm.closeAction.sink { [weak self] _ in
+            sliderVM.endedSlider.onNext(false)
+        }.store(in: &subscription)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

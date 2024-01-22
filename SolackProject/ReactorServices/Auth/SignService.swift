@@ -32,7 +32,6 @@ final class SignService: SignServiceProtocol{
             do{
                 let response = try await NM.shared.signIn(type: .email, body: info)
                 // MARK: -- 여기 수정해야함
-//                profile = response.profileImage
                 defaultsSign(response)
                 AppManager.shared.userAccessable.onNext(true)
                 event.onNext(.successSign)

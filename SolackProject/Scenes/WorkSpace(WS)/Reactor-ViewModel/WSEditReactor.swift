@@ -10,11 +10,10 @@ import ReactorKit
 import RxSwift
 final class WSEditReactor: WSwriterReactor{
     var wsInfo = WSInfo()
-    private var id:String
+    @DefaultsState(\.mainWS) var mainWS
     var isImageUploaded = false
-    init(provider:ServiceProviderProtocol,wsInfo: WorkSpaceInfo,id:String) {
+    init(provider:ServiceProviderProtocol,wsInfo: WorkSpaceInfo) {
         self.wsInfo = wsInfo
-        self.id = id
         super.init(provider)
         self.initialState = .init(name: wsInfo.name,
                                   description: wsInfo.description,
@@ -38,7 +37,7 @@ final class WSEditReactor: WSwriterReactor{
             return Observable.concat([.just(.setName(str)) ])
         case .confirmAction:
             print(wsInfo)
-            provider.wsService.edit(wsInfo, id: id)
+            provider.wsService.edit(wsInfo, id: "\(mainWS)")
             return Observable.concat([.just(.isLoading(true))])
         case .setImageData(let data):
             self.wsInfo.image = data

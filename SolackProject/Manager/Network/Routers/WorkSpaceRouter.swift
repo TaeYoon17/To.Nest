@@ -21,7 +21,11 @@ enum WorkSpaceRouter:URLRequestConvertible{
     var endPoint:String{
         switch self{
         case .adminChange: ""
-        case .check(let checkType): ""
+        case .check(let checkType):
+            switch checkType{
+            case .my(id: let myID): "/\(myID)"
+            default:""
+            }
         case .create: ""
         case .delete(let wsID): "/\(wsID)"
         case .invite: ""
@@ -33,7 +37,7 @@ enum WorkSpaceRouter:URLRequestConvertible{
     var method:HTTPMethod{
         switch self{
         case .create,.invite: .post
-        case .check(_),.search,.leave: .get
+        case .check,.search,.leave: .get
         case .edit,.adminChange: .put
         case .delete: .delete
         }

@@ -57,10 +57,8 @@ final class OnboardingView:BaseVC,View{
     }
     private let titleImage = UIImageView()
     private let imageView = UIImageView()
-//    private var startBtn = UIButton()
     private var startBtn = AuthBtn()
     var disposeBag = DisposeBag()
-    //    let onbardingViewReactor = OnboardingViewReactor()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .gray1

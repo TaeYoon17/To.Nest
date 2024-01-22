@@ -24,11 +24,17 @@ final class HomeReactor: Reactor{
     }
     enum Mutation{
         case channelDialog(HomePresent?)
-        case isEmptyWS(Bool)
+        case mainWS(WSDetailResponse?)
+        case isMasking(Bool)
+        case wsTitle(String)
+        case wsLogo(String)
     }
     struct State{
         var channelDialog:HomePresent? = nil
-        var isEmptyWS: Bool? = nil
+        var mainWS: WSDetailResponse? = nil
+        var isMasking: Bool? = nil
+        var wsTitle:String = ""
+        var wsLogo: String = ""
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -53,16 +59,41 @@ final class HomeReactor: Reactor{
         switch mutation{
         case .channelDialog(let present):
             state.channelDialog = present
-        case .isEmptyWS(let isEmpty):
-            state.isEmptyWS = isEmpty
+        case .mainWS(let mainWS):
+            state.mainWS = mainWS
+        case .isMasking(let isMasking):
+            state.isMasking = isMasking
+        case .wsLogo(let logo):
+            state.wsLogo = logo
+        case .wsTitle(let title):
+            state.wsTitle = title
         }
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let res = provider.wsService.event.flatMap { event -> Observable<Mutation> in
+        let res = provider.wsService.event.flatMap {[weak self] event -> Observable<Mutation> in
+            guard let self else{return Observable.concat([])}
             switch event{
-            case .checkAll(let response):
-                return Observable.concat([.just(.isEmptyWS(response.isEmpty))])
+            case .homeWS(let response):
+                if let response{
+                    return Observable.concat([.just(.isMasking(false)),
+                                              .just(.wsTitle(response.name)),
+                                              .just(.wsLogo(response.thumbnail))
+                                              ])
+                }else{
+                    return Observable.concat([.just(.isMasking(true))])
+                }
+            case .create(let response): // 새로 만든 것
+                // 현재 마스크가 되어있음... 워크스페이스가 없음...
+                if let isMask = currentState.isMasking, isMask == true{
+                    return Observable.concat([
+                        .just(.isMasking(false)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                        .just(.wsTitle(response.name)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                        .just(.wsLogo(response.thumbnail)).delay(.microseconds(100), scheduler: MainScheduler.instance)
+                    ])
+                }else{ // 메인에 이미 워크스페이스가 존재했음
+                    return Observable.concat([])
+                }
             default: return Observable.concat([])
             }
         }

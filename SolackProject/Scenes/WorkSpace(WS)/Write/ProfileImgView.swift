@@ -12,7 +12,7 @@ import RxSwift
 import Combine
 final class ProfileImgVM:ObservableObject{
     var imageData = PublishSubject<Data>()
-    var defaultImage = PassthroughSubject<Data?,Never>()
+    var defaultImage = CurrentValueSubject<Data?,Never>(nil)
 }
 final class ProfileImgVC: UIHostingController<ProfileImgView>{
     let vm = ProfileImgVM()

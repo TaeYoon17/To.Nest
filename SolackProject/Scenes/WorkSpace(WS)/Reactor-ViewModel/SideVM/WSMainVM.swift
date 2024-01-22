@@ -11,6 +11,7 @@ import RxSwift
 import UIKit
 
 final class WSMainVM: ObservableObject{
+    @DefaultsState(\.mainWS) var mainWS
     // View - ViewController 간 통신
     var createWorkSpaceTapped: PassthroughSubject<(),Never> = .init()
     var changeWorkSpaceManagerTapped:PassthroughSubject<(),Never> = .init()
@@ -18,14 +19,13 @@ final class WSMainVM: ObservableObject{
     var closeAction: PassthroughSubject<(),Never> = .init()
     
     // View 데이터
-     @Published var list:[WorkSpaceListItem] = []
+    @Published var list:[WorkSpaceListItem] = []
     @Published var selectedWorkSpaceID = 0
     @Published var selectedIdx = 0
     @Published var toastType: WSToastType? = nil
     @Published var isReceivedWorkSpaceList:Bool = false
     @DefaultsState(\.userID) var userID
     var counter = TaskCounter()
-    var underList:[WSResponse] = []
     var provider: ServiceProviderProtocol
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
@@ -34,15 +34,26 @@ final class WSMainVM: ObservableObject{
         self.provider = provider
         binding()
     }
-    
+    @MainActor func updateMainWS(idx: Int){
+        self.tempToastUp()
+        self.list[selectedIdx].isSelected = false
+        selectedIdx = idx
+        self.list[selectedIdx].isSelected = true
+        // 메인 화면 워크스페이스도 바꾼다.
+        provider.wsService.setHomeWS(wsID: list[idx].id)
+        self.mainWS = list[idx].id
+        print(self.mainWS)
+        // 사이드바 dismiss처리도 해야한다.
+        closeAction.send(())
+    }
 }
 
 //MARK: -- 워크스페이스 API 통신 로직
 extension WSMainVM{
     func getList(){
-        provider.wsService.checkAllWS(isCover: true)
+        provider.wsService.checkAllWS()
     }
-    func deleteWorkSpace(){
-        provider.wsService.delete(workspaceID:"\(selectedWorkSpaceID)")
+    @MainActor func deleteWorkSpace(){
+        provider.wsService.delete(workspaceID:"\(self.mainWS)")
     }
 }

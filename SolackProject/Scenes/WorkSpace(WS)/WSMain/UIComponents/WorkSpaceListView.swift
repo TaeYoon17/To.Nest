@@ -27,13 +27,11 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
         view()
             .background(.white)
             .managerDialog($managerWorkSpace, edit: {// 관리자 액션시트
-                //                managerEdit = true
                 vm.editWorkSpaceManagerTapped.send(())
             }, delete: {
                 goAnim { managerDelete = true }
             }, change: {
                 //                goAnim { managerChangeError = true }
-//                print("이거 탭탭탭")
                 vm.changeWorkSpaceManagerTapped.send(())
             }, exit: { goAnim { managerExit = true }
             }, cancel: {
@@ -60,7 +58,6 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
             .solackAlert($userExit, title: "워크스페이스 나가기", description: "정말 워크스페이스를 나가시겠습니까?",
                          cancelTitle: "취소",
                          cancel: {
-                
             },
                          confirmTitle:"나가기",
                          confirm: {
@@ -85,20 +82,14 @@ struct WorkSpaceList:View{
         WorkSpaceListInner(manager: $isManagerSelected, user: $isUserSelected) {
             VStack(spacing:0){
                 if list.isEmpty{
-                    WorkSpaceEmpty {
-                        vm.createWorkSpaceTapped.send(())
-                    }
+                    WorkSpaceEmpty { vm.createWorkSpaceTapped.send(()) }
                 }else{
                     ScrollView {
                         LazyVStack(spacing:12){
                             ForEach(vm.list.indices,id:\.self){ idx in
                                 Button{
                                     // 고유 workspaceitemID를 바꾼다.
-                                    vm.tempToastUp()
-                                    vm.list[vm.selectedIdx].isSelected = false
-                                    vm.list[idx].isSelected = true
-                                    vm.selectedWorkSpaceID = vm.list[idx].id
-                                    vm.selectedIdx = idx
+                                    vm.updateMainWS(idx: idx)
                                 }label:{
                                     listItemView(vm.list[idx])
                                 }.transaction { transaction in
@@ -108,13 +99,11 @@ struct WorkSpaceList:View{
                             }
                         }
                         
-                    }.opacity(list.isEmpty ? 0 : 1)
-                        .scrollIndicators(.never)
+                    }.opacity(list.isEmpty ? 0 : 1).scrollIndicators(.never)
                     Spacer()
                 }
             }
             .onChange(of: vm.list) { newValue in
-                print("나타나라...")
                 withAnimation { list = newValue }
             }
         }

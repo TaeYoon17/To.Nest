@@ -17,16 +17,26 @@ extension WSMainVM{
                 Task{ await owner.createResponse(res) }
                 owner.toastType = .created
             case .edit(let res):
-                Task{ 
+                Task{
                     await owner.editResponse(res)
                     try await Task.sleep(for: .seconds(0.5))
                     await MainActor.run { owner.toastType = .edit}
                 }
             case .checkAll(let value):
-                // 바꿔주는 로직이 필요하다.
-                
                 owner.wsResponses(value)
             case .delete:
+                self.list.remove(at:owner.selectedIdx)
+                Task{@MainActor in
+                    if let firstItem = owner.list.first{
+                        owner.selectedIdx = 0
+                        owner.list[owner.selectedIdx].isSelected = true
+                        owner.mainWS = owner.list[owner.selectedIdx].id
+                        owner.provider.wsService.setHomeWS(wsID:owner.mainWS)
+                    }else{
+                        owner.selectedIdx = -1
+                        owner.provider.wsService.setHomeWS(wsID: nil)
+                    }
+                }
                 Task{
                     try await Task.sleep(for: .seconds(0.5))
                     await MainActor.run { owner.toastType = .edit}
@@ -54,7 +64,10 @@ extension WSMainVM{
         let isFirstItem = await self.list.isEmpty
         do{
             var tempItem = try await makeWSItem(value)
-            if isFirstItem{ tempItem.isSelected = true }
+            if isFirstItem{ 
+                tempItem.isSelected = true
+                self.mainWS = tempItem.id
+            }
             let item = tempItem
             await MainActor.run {
                 if isFirstItem{
@@ -62,7 +75,6 @@ extension WSMainVM{
                     selectedWorkSpaceID = item.id
                 }
                 list.append(item)
-                underList.append(value)
             }
         }catch{
             print(error)
@@ -74,10 +86,8 @@ extension WSMainVM{
             var tempItem = try await makeWSItem(value,coverCache: true)
             tempItem.isSelected = true
             let item = tempItem
-            
             Task{@MainActor in
                 self.list[self.selectedIdx] = item
-                self.underList[self.selectedIdx] = value
                 self.selectedWorkSpaceID = item.id
             }
         }catch{
@@ -95,15 +105,7 @@ extension WSMainVM{
                 }
                 DispatchQueue.main.async{
                     self.list = listItem
-                    self.underList = value
-                    if !self.list.isEmpty{
-                        if self.selectedIdx >= 0 { self.list[self.selectedIdx].isSelected = false }
-                        self.list[0].isSelected = true
-                        self.selectedWorkSpaceID  = self.list[0].id
-                        self.selectedIdx = 0
-                    }else{
-                        self.selectedIdx = -1
-                    }
+                    self.selectedIdx = self.list.firstIndex(where: {$0.isSelected}) ?? -1
                     self.isReceivedWorkSpaceList = true
                 }
             }catch{
@@ -114,17 +116,20 @@ extension WSMainVM{
     func makeWSItem(_ res:WSResponse,coverCache:Bool = false) async throws -> WorkSpaceListItem{
         let myImage:UIImage
         do{
-            myImage = try await UIImage.fetchWebCache(name: res.thumbnail,size:.init(width: 44, height: 44))
+            myImage = try await UIImage.fetchWebCache(name: res.thumbnail,type:.small)
         }catch{
-            let image = examineImage.randomElement()!
+            let image = if let data = await NM.shared.getThumbnail(res.thumbnail){
+                UIImage.fetchBy(data: data,type:.small)
+            }else{examineImage.randomElement()!}
             try await image.appendWebCache(name: res.thumbnail,isCover: coverCache)
-            myImage = try image.downSample(size: .init(width: 44, height: 44))
+            myImage = try image.downSample(type:.small)
         }
         return await WorkSpaceListItem(id:res.workspaceID,
-                                       isSelected: list.isEmpty,
-                                       isMyManaging:res.ownerID == userID,
+                                       isSelected: res.workspaceID == mainWS,
+                                       isMyManaging: res.ownerID == userID,
                                        image: myImage,
                                        name: res.name,
+                                       description: res.description,
                                        date: res.createdAt)
     }
 }
@@ -140,5 +145,6 @@ struct WorkSpaceListItem:Identifiable,Equatable{
     var isMyManaging:Bool = false
     var image:UIImage
     var name:String
+    var description:String?
     var date:String // 이거 수정해야함!!
 }

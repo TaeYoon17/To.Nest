@@ -62,7 +62,6 @@
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
 		6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAF92B594C260010968C /* CHSettingView.swift */; };
 		6373AAFC2B5952400010968C /* UINavigationSwipable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAFB2B5952400010968C /* UINavigationSwipable.swift */; };
-		6373EDDE2B4B8B3F00D24353 /* SideVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373EDDD2B4B8B3F00D24353 /* SideVC.swift */; };
 		637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C12B50C739008AAD4A /* ScreenSize.swift */; };
 		637488C52B50C739008AAD4A /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C22B50C739008AAD4A /* UserDefaults+State.swift */; };
 		637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C32B50C739008AAD4A /* AnyModelStore.swift */; };
@@ -93,6 +92,7 @@
 		638FCD272B47FB700053D1BB /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 638FCD262B47FB700053D1BB /* Toast */; };
 		638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638FCD292B48000E0053D1BB /* InputFieldView.swift */; };
 		638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */; };
+		639A211E2B5EB6D5006EEAF0 /* WSEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A211D2B5EB6D5006EEAF0 /* WSEmpty.swift */; };
 		639A4AEC2B52B045005360F6 /* WorkSpaceAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A4AEB2B52B045005360F6 /* WorkSpaceAlert.swift */; };
 		639A4AEF2B52C798005360F6 /* SolackAlert+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A4AEE2B52C798005360F6 /* SolackAlert+SwiftUI.swift */; };
 		639A4AF12B52C7D4005360F6 /* SolackAlertComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A4AF02B52C7D4005360F6 /* SolackAlertComponents.swift */; };
@@ -234,7 +234,6 @@
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
 		6373AAF92B594C260010968C /* CHSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHSettingView.swift; sourceTree = "<group>"; };
 		6373AAFB2B5952400010968C /* UINavigationSwipable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationSwipable.swift; sourceTree = "<group>"; };
-		6373EDDD2B4B8B3F00D24353 /* SideVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideVC.swift; sourceTree = "<group>"; };
 		637488C12B50C739008AAD4A /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
 		637488C22B50C739008AAD4A /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		637488C32B50C739008AAD4A /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
@@ -263,6 +262,7 @@
 		6389CEB42B5D8398002A70A9 /* WSService+HomeFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WSService+HomeFeatures.swift"; sourceTree = "<group>"; };
 		638FCD292B48000E0053D1BB /* InputFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldView.swift; sourceTree = "<group>"; };
 		638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckFieldView.swift; sourceTree = "<group>"; };
+		639A211D2B5EB6D5006EEAF0 /* WSEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEmpty.swift; sourceTree = "<group>"; };
 		639A4AEB2B52B045005360F6 /* WorkSpaceAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceAlert.swift; sourceTree = "<group>"; };
 		639A4AEE2B52C798005360F6 /* SolackAlert+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolackAlert+SwiftUI.swift"; sourceTree = "<group>"; };
 		639A4AF02B52C7D4005360F6 /* SolackAlertComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolackAlertComponents.swift; sourceTree = "<group>"; };
@@ -531,6 +531,7 @@
 				637B157B2B4CE86600B68963 /* WSMain */,
 				632A2D5F2B4DACFC00E21DE8 /* Write */,
 				6389CEA72B5D6102002A70A9 /* WSEmptyView.swift */,
+				639A211D2B5EB6D5006EEAF0 /* WSEmpty.swift */,
 			);
 			path = "WorkSpace(WS)";
 			sourceTree = "<group>";
@@ -1127,6 +1128,7 @@
 				631A60E22B44EE02005509C2 /* AppFont.swift in Sources */,
 				63E38ED82B51127100BD6C93 /* ImageCache+Core.swift in Sources */,
 				6384A9C82B47125600AA2F1B /* SingUpInfo.swift in Sources */,
+				639A211E2B5EB6D5006EEAF0 /* WSEmpty.swift in Sources */,
 				63DFDF882B4D00DC00F47AB5 /* UserDialog.swift in Sources */,
 				63E38EE52B516B2F00BD6C93 /* WSMainVM+WSServiceBinding.swift in Sources */,
 				639DEB002B4534CB00108979 /* SignUpViewReactor.swift in Sources */,
