@@ -12,7 +12,7 @@ extension HomeVC{
         case direct
         case team
     }
-    enum ItemType{
+    enum ItemType:String{
         case header
         case list
         case bottom
@@ -49,13 +49,13 @@ extension HomeVC{
         var unreadExist: Bool
     }
     struct BottomItem:Identifiable,Itemable{
-        var id = UUID().uuidString+"Bottom"
+        var id :String{ sectionType.rawValue+itemType.rawValue }
         let itemType: HomeVC.ItemType = .bottom // 혹시 모를 해싱 고유값 중첩 문제
         var sectionType: HomeVC.SectionType
         var name:String
     }
     struct HeaderItem:Identifiable,Itemable{
-        var id:String{ sectionType.rawValue }
+        var id:String{ sectionType.rawValue + itemType.rawValue}
         var itemType: HomeVC.ItemType = .header
         var sectionType: HomeVC.SectionType
         var name:String

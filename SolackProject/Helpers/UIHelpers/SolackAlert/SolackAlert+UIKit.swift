@@ -17,7 +17,9 @@ final class SolackAlertVC: BaseVC{
     let confirmTitle:String?
     let confirm:(()->())?
     fileprivate var buttonVC: SolackAlertButtonVC!
-    init(title:String,description:String,infos:[String] = [],cancelTitle:String,cancel:@escaping ()->(),confirmTitle:String? = nil,confirm:(()->())? = nil){
+    init(title:String,description:String,infos:[String] = [],
+         cancelTitle:String,cancel:@escaping ()->(),
+         confirmTitle:String? = nil,confirm:(()->())? = nil){
         self.alertTitle = title
         self.alertDescription = description
         self.cancel = cancel
@@ -26,6 +28,7 @@ final class SolackAlertVC: BaseVC{
         self.confirmTitle = confirmTitle
         self.confirm = confirm
         super.init(nibName: nil, bundle: nil)
+        self.modalPresentationStyle = .overFullScreen
     }
     required init?(coder: NSCoder) {
         fatalError("Don't use storyboard")
@@ -35,23 +38,36 @@ final class SolackAlertVC: BaseVC{
         UIView.animate(withDuration: 0.33) {[weak self] in
             self?.view.backgroundColor = .gray.withAlphaComponent(0.33)
         }
-        buttonVC = .init(title: "코인이 없어요", description: "어쩔 티비", cancelTitle: "오키", cancel: {[weak self] in
-            self?.cancel()
-            UIView.animate(withDuration: 0.33) {
-                self?.buttonVC.view.backgroundColor = .clear
-            }completion: { _ in
-                self?.dismiss(animated: false)
-            }
-        })
+        buttonVC = if let confirmTitle = confirmTitle{
+            .init(title: alertTitle, description: self.alertDescription, cancelTitle: self.cancelTitle, cancel: {[weak self] in
+                self?.cancel()
+                UIView.animate(withDuration: 0.33) {
+                    self?.buttonVC.view.backgroundColor = .clear
+                    self?.dismiss(animated: false)
+                }
+            },confirmTitle:confirmTitle,confirm:{[weak self] in
+                self?.confirm?()
+                UIView.animate(withDuration: 0.33) {
+                    self?.buttonVC.view.backgroundColor = .clear
+                    self?.dismiss(animated: false)
+                }
+            })
+        }else{
+            .init(title: self.alertTitle, description: self.description, cancelTitle: self.cancelTitle, cancel: {[weak self] in
+                self?.cancel()
+                UIView.animate(withDuration: 0.33) {
+                    self?.buttonVC.view.backgroundColor = .clear
+                    self?.dismiss(animated: false)
+                }completion: { _ in
+                }
+            })
+        }
         addChild(buttonVC)
         view.addSubview(buttonVC.view)
         buttonVC.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
-//    deinit{
-//        print("SolackAlertVC Deinit!!")
-//    }
 }
 //MARK: -- SwiftUIView Wrapper
 fileprivate final class SolackAlertButtonVC: UIHostingController<SolackAlertView>{

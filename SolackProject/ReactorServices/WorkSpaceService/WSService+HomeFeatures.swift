@@ -36,7 +36,7 @@ extension WSService{
         }
         Task{
             let newHomeWS = try await NM.shared.checkWS(wsID:wsID)
-            mainWS = newHomeWS.ownerID
+            mainWS = newHomeWS.workspaceID
             event.onNext(.homeWS(newHomeWS))
         }
     }

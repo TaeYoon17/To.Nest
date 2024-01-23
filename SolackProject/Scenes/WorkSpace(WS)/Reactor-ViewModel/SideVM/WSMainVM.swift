@@ -42,7 +42,6 @@ final class WSMainVM: ObservableObject{
         // 메인 화면 워크스페이스도 바꾼다.
         provider.wsService.setHomeWS(wsID: list[idx].id)
         self.mainWS = list[idx].id
-        print(self.mainWS)
         // 사이드바 dismiss처리도 해야한다.
         closeAction.send(())
     }

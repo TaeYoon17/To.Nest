@@ -26,22 +26,24 @@ extension HomeVC{
             reactor.state.map{$0.channelList}
                 .bind(with: self, onNext: { (owner:HomeVC.HomeDataSource, response:[CHResponse]?) in
                     guard let response else {return}
-                    guard let headerItem = owner.headerModel.fetchByID(SectionType.channel.rawValue) else {return}
+                    guard let headerItem = owner.headerModel.fetchByID(SectionType.channel.rawValue + ItemType.header.rawValue) else {return}
+                    guard let bottomItem = owner.bottomModel.fetchByID(SectionType.channel.rawValue + ItemType.bottom.rawValue) else {return}
                     let channelHeader = Item(headerItem)
-                    print("channelHeader \(channelHeader) / \(headerItem)")
-                    let channelBottom = BottomItem(sectionType: .channel, name: "채널 추가하기")
-                    owner.bottomModel.insertModel(item: channelBottom)
-                    let chListItems: [ChannelListItem] = response.map{.init(name: $0.name, messageCount: 1, isRecent: true)
-                    }
+                    let channelBottom = Item(bottomItem)
+                    let chListItems: [ChannelListItem] = response.map{.init(name: $0.name, messageCount: 1, isRecent: true)}
                     chListItems.forEach({owner.channelListModel.insertModel(item: $0)})
                     var items = chListItems.map{Item($0)}
                     var snapshot = owner.snapshot(for: .channel)
                     snapshot.deleteAll()
-                    items.append(Item(channelBottom))
+                    items.append(channelBottom)
                     snapshot.append([channelHeader])
                     snapshot.append(items, to: channelHeader)
                     snapshot.expand([channelHeader])
-                    owner.apply(snapshot,to:channelHeader.sectionType)
+                    Task{@MainActor in
+                        await MainActor.run {
+                            owner.apply(snapshot,to:channelHeader.sectionType)
+                        }
+                    }
                 }).disposed(by: disposeBag)
         }
         func fetchDirect(item:Item) -> DirectListItem{
@@ -89,7 +91,6 @@ extension HomeVC{
             snapshot.append(items,to: top)
             snapshot.expand([top])
             apply(snapshot,to:top.sectionType)
-            print("Applied")
         }
     }
 }

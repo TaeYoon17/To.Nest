@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 final class CHChatView: BaseVC{
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     var dataSource: DataSource!
     lazy var naviTitleView = {
         let view = UIView(frame: .zero)

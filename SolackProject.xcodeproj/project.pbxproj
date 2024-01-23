@@ -68,10 +68,10 @@
 		6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */; };
 		6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */; };
 		6376BAF62B5A8B30000FBBF8 /* CHChatView+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */; };
-		6377E6512B5AD07000238583 /* ScrollViewDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377E6502B5AD07000238583 /* ScrollViewDown.swift */; };
 		63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F402B54C41F00F54F9A /* AuthenticationManager.swift */; };
 		63775F432B54C43A00F54F9A /* OnboardingView+ASDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */; };
 		63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */; };
+		6377E6512B5AD07000238583 /* ScrollViewDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377E6502B5AD07000238583 /* ScrollViewDown.swift */; };
 		637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */; };
 		637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15792B4CD72500B68963 /* TransparentBackground.swift */; };
 		637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */; };
@@ -92,6 +92,7 @@
 		6389CEB12B5D7DB1002A70A9 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389CEB02B5D7DB1002A70A9 /* UserResponse.swift */; };
 		6389CEB32B5D830D002A70A9 /* WorkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389CEB22B5D830D002A70A9 /* WorkSpace.swift */; };
 		6389CEB52B5D8398002A70A9 /* WSService+HomeFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6389CEB42B5D8398002A70A9 /* WSService+HomeFeatures.swift */; };
+		638C8FBF2B600CD3005A5F82 /* HomeReactor+TransformMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638C8FBE2B600CD3005A5F82 /* HomeReactor+TransformMutation.swift */; };
 		638FCD272B47FB700053D1BB /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 638FCD262B47FB700053D1BB /* Toast */; };
 		638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638FCD292B48000E0053D1BB /* InputFieldView.swift */; };
 		638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */; };
@@ -156,6 +157,7 @@
 		63F0AED32B4B0775000A597B /* HomeVC+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AED22B4B0775000A597B /* HomeVC+CellRegistration.swift */; };
 		63F0AED52B4B0889000A597B /* NaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AED42B4B0889000A597B /* NaviBar.swift */; };
 		63F0AED72B4B093A000A597B /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AED62B4B093A000A597B /* BaseView.swift */; };
+		63F0B1A52B5FEC7B008C8C98 /* CHExploreVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0B1A42B5FEC7B008C8C98 /* CHExploreVM.swift */; };
 		63F265F82B53AFAE007D865C /* WSEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F265F72B53AFAE007D865C /* WSEditReactor.swift */; };
 		63F265FA2B53BA76007D865C /* WSService+AvailCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F265F92B53BA76007D865C /* WSService+AvailCheck.swift */; };
 		63F265FC2B53F1EF007D865C /* WSManagerReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F265FB2B53F1EF007D865C /* WSManagerReactor.swift */; };
@@ -248,11 +250,11 @@
 		6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatCollectionView.swift; sourceTree = "<group>"; };
 		6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatViewRegistration.swift; sourceTree = "<group>"; };
 		6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHChatView+DS.swift"; sourceTree = "<group>"; };
-		6377E6502B5AD07000238583 /* ScrollViewDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDown.swift; sourceTree = "<group>"; };
 		63775F3E2B54C12800F54F9A /* SolackProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SolackProject.entitlements; sourceTree = "<group>"; };
 		63775F402B54C41F00F54F9A /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingView+ASDelegate.swift"; sourceTree = "<group>"; };
 		63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationManager+JWTDecode.swift"; sourceTree = "<group>"; };
+		6377E6502B5AD07000238583 /* ScrollViewDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDown.swift; sourceTree = "<group>"; };
 		637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolackAlert+UIKit.swift"; sourceTree = "<group>"; };
 		637B15792B4CD72500B68963 /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceEmptyView.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		6389CEB02B5D7DB1002A70A9 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		6389CEB22B5D830D002A70A9 /* WorkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpace.swift; sourceTree = "<group>"; };
 		6389CEB42B5D8398002A70A9 /* WSService+HomeFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WSService+HomeFeatures.swift"; sourceTree = "<group>"; };
+		638C8FBE2B600CD3005A5F82 /* HomeReactor+TransformMutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeReactor+TransformMutation.swift"; sourceTree = "<group>"; };
 		638FCD292B48000E0053D1BB /* InputFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldView.swift; sourceTree = "<group>"; };
 		638FCD2B2B48002C0053D1BB /* CheckFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckFieldView.swift; sourceTree = "<group>"; };
 		639A211D2B5EB6D5006EEAF0 /* WSEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEmpty.swift; sourceTree = "<group>"; };
@@ -328,6 +331,7 @@
 		63F0AED22B4B0775000A597B /* HomeVC+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+CellRegistration.swift"; sourceTree = "<group>"; };
 		63F0AED42B4B0889000A597B /* NaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviBar.swift; sourceTree = "<group>"; };
 		63F0AED62B4B093A000A597B /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		63F0B1A42B5FEC7B008C8C98 /* CHExploreVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHExploreVM.swift; sourceTree = "<group>"; };
 		63F265F72B53AFAE007D865C /* WSEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEditReactor.swift; sourceTree = "<group>"; };
 		63F265F92B53BA76007D865C /* WSService+AvailCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WSService+AvailCheck.swift"; sourceTree = "<group>"; };
 		63F265FB2B53F1EF007D865C /* WSManagerReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSManagerReactor.swift; sourceTree = "<group>"; };
@@ -459,7 +463,7 @@
 		631A60D82B44EDFA005509C2 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				639CA1B92B5F7E1B00C21006 /* Schemes */,
+				639CA1BA2B5F7E4D00C21006 /* Schemes */,
 				6384A9BD2B47125600AA2F1B /* Network */,
 				636213042B4E95EE0093D089 /* ImageManager */,
 			);
@@ -569,7 +573,7 @@
 		63358D672B53FD58005C5BD4 /* Channel(CH) */ = {
 			isa = PBXGroup;
 			children = (
-				636028062B555D4100AF8731 /* Reactor */,
+				636028062B555D4100AF8731 /* Reactor+ViewModel */,
 				63C346F82B55756D00293991 /* CHSetting */,
 				63C346F22B55737E00293991 /* CHInviteView */,
 				63358D6D2B5401A7005C5BD4 /* CHExplore */,
@@ -597,14 +601,15 @@
 			path = CHExplore;
 			sourceTree = "<group>";
 		};
-		636028062B555D4100AF8731 /* Reactor */ = {
+		636028062B555D4100AF8731 /* Reactor+ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				636028072B555D8200AF8731 /* WriterReactor.swift */,
 				6360280B2B55605100AF8731 /* CHWriterReactor.swift */,
 				639CA1C42B5F984100C21006 /* CHCreateReactor.swift */,
+				63F0B1A42B5FEC7B008C8C98 /* CHExploreVM.swift */,
 			);
-			path = Reactor;
+			path = "Reactor+ViewModel";
 			sourceTree = "<group>";
 		};
 		636213042B4E95EE0093D089 /* ImageManager */ = {
@@ -708,7 +713,6 @@
 		6384A9BD2B47125600AA2F1B /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				639CA1BA2B5F7E4D00C21006 /* Schemes */,
 				6384A9BE2B47125600AA2F1B /* Interceptor&Authentication */,
 				63E38ED92B511F2B00BD6C93 /* Routers */,
 				639CA1B82B5F7E0200C21006 /* NetworkManager */,
@@ -827,13 +831,6 @@
 			path = NetworkManager;
 			sourceTree = "<group>";
 		};
-		639CA1B92B5F7E1B00C21006 /* Schemes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Schemes;
-			sourceTree = "<group>";
-		};
 		639CA1BA2B5F7E4D00C21006 /* Schemes */ = {
 			isa = PBXGroup;
 			children = (
@@ -842,7 +839,8 @@
 				63F7C4A22B4EEB69003D8447 /* WorkSpace */,
 				6384A9C12B47125600AA2F1B /* UserInfos */,
 			);
-			path = Schemes;
+			name = Schemes;
+			path = Network/Schemes;
 			sourceTree = "<group>";
 		};
 		639CA1BB2B5F7E6A00C21006 /* CommonSchemes */ = {
@@ -999,6 +997,7 @@
 			isa = PBXGroup;
 			children = (
 				63358D652B53FB93005C5BD4 /* HomeReactor.swift */,
+				638C8FBE2B600CD3005A5F82 /* HomeReactor+TransformMutation.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -1222,6 +1221,7 @@
 				63F7C4BA2B4FD931003D8447 /* AuthInterceptor.swift in Sources */,
 				63E4AFCC2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift in Sources */,
 				6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */,
+				638C8FBF2B600CD3005A5F82 /* HomeReactor+TransformMutation.swift in Sources */,
 				637B157F2B4CF20600B68963 /* WorkSpaceListView.swift in Sources */,
 				63E38ED62B510C3400BD6C93 /* ImageCache.swift in Sources */,
 				6384A9CA2B47125600AA2F1B /* UserRouter.swift in Sources */,
@@ -1261,6 +1261,7 @@
 				631A60AA2B44ECEE005509C2 /* AppDelegate.swift in Sources */,
 				63F0AECD2B4AE21A000A597B /* AppendListBottom.swift in Sources */,
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
+				63F0B1A52B5FEC7B008C8C98 /* CHExploreVM.swift in Sources */,
 				6389CEAD2B5D7D3C002A70A9 /* CHResponse.swift in Sources */,
 				637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */,
 				63F265FA2B53BA76007D865C /* WSService+AvailCheck.swift in Sources */,

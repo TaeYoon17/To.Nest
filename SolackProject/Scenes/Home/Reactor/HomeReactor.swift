@@ -5,14 +5,14 @@
 //  Created by 김태윤 on 1/14/24.
 //
 
-import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
-enum HomePresent{
+enum HomePresent:Equatable{
     case create
     case explore
+    case chatting(chID:Int)
 }
 final class HomeReactor: Reactor{
     let initialState: State = .init()
@@ -72,43 +72,8 @@ final class HomeReactor: Reactor{
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let wsService = provider.wsService.event.flatMap {[weak self] event -> Observable<Mutation> in
-            guard let self else{return Observable.concat([])}
-            switch event{
-            case .homeWS(let response):
-                if let response{
-                    return Observable.concat([.just(.isMasking(false)),
-                                              .just(.wsTitle(response.name)),
-                                              .just(.wsLogo(response.thumbnail)),
-                                              .just(.setChannelList(response.channels))
-                                              ])
-                }else{
-                    return Observable.concat([.just(.isMasking(true))])
-                }
-            case .create(let response): // 새로 만든 것
-                // 현재 마스크가 되어있음... 워크스페이스가 없음...
-                if let isMask = currentState.isMasking, isMask == true{
-                    return Observable.concat([
-                        .just(.isMasking(false)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                        .just(.wsTitle(response.name)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                        .just(.wsLogo(response.thumbnail)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                        .just(.setChannelList([]))
-                    ])
-                }else{ // 메인에 이미 워크스페이스가 존재했음
-                    return Observable.concat([])
-                }
-            default: return Observable.concat([])
-            }
-        }
-        let chService = provider.chService.event.flatMap {[weak self] event -> Observable<Mutation> in
-            guard let self else {return Observable.concat([])}
-            switch event{
-            case .create(let chInfo):
-                provider.wsService.setHomeWS(wsID: mainWS)
-                return Observable.concat([])
-            default: return Observable.concat([])
-            }
-        }
+        let wsService = wsMutationTransform
+        let chService = chMutationTransform
         return Observable.merge(mutation,wsService,chService)
     }
 }

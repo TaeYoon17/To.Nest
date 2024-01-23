@@ -41,7 +41,7 @@ final class HomeVC: BaseVC, View{
                     }
                 }
             }.disposed(by: disposeBag)
-        reactor.state.map{$0.channelDialog}.distinctUntilChanged().bind(with: self) { owner, present in
+        reactor.state.map{$0.channelDialog}.distinctUntilChanged().subscribe(on: MainScheduler.instance).bind(with: self) { owner, present in
             guard let present else {return}
             switch present{
             case .create:
@@ -51,9 +51,13 @@ final class HomeVC: BaseVC, View{
                 owner.present(nav, animated: true)
             case .explore:
                 let vc = CHExploreView()
+                vc.vm = CHExploreVM(provider: reactor.provider,myChannels: reactor.currentState.channelList)
                 let nav = UINavigationController(rootViewController: vc)
                 nav.modalPresentationStyle = .fullScreen
                 owner.present(nav, animated: true)
+            case .chatting(chID: let chID):
+                let vc = CHChatView()
+                self.navigationController?.pushViewController(vc, animated: true)
             }
         }.disposed(by: disposeBag)
         reactor.state.map{$0.isMasking}.distinctUntilChanged()
@@ -84,7 +88,7 @@ final class HomeVC: BaseVC, View{
             owner.present(nav, animated: true)
         }.disposed(by: disposeBag)
     }
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     let navBar = NaviBar()
     var dataSource: HomeDataSource!
     let newMessageBtn = NewMessageBtn()

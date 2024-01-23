@@ -67,7 +67,7 @@ final class InputFieldView: UIStackView,AuthFieldAble{
         fatalError("Don't use storyboard")
     }
     func binding(){
-        self.validFailed.bind(with: self) { owner, value in
+        self.validFailed.delay(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, value in
             owner.label.textColor = !value ? .text : .error
         }.disposed(by: disposeBag)
     }

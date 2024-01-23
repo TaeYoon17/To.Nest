@@ -10,6 +10,7 @@ import Alamofire
 typealias CHRouter = ChannelRouter
 extension CHRouter{
     enum CheckType{
+        case all
         case allMy
         case my(chName:String)
         case members(chName:String)
@@ -26,8 +27,9 @@ enum ChannelRouter:URLRequestConvertible{
         case .create(let wsID,_): "/\(wsID)/channels"
         case .check(wsID: let wsID, let type):
             switch type{
-            case .allMy: "/\(wsID)/channels/"
+            case .allMy: "/\(wsID)/channels/my"
             case .my(let name),.members(let name): "/\(wsID)/channels/my/\(name)"
+            case .all: "/\(wsID)/channels/my"
             }
         case .unreads(wsID: let wsID, chName: let chName): "/\(wsID)/channels/\(chName)/chats"
         case .edit(wsID: let wsID, chName: let name,_),.delete(wsID: let wsID, chName: let name): "/\(wsID)/channels/\(name)"
@@ -56,7 +58,8 @@ enum ChannelRouter:URLRequestConvertible{
     var headers:HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
-//            headers["Content-Type"] = "multipart/form-data"
+        case .create:
+            headers["Content-Type"] = "application/json"
         default: break
         }
         return headers
@@ -68,11 +71,6 @@ enum ChannelRouter:URLRequestConvertible{
         var urlRequest = URLRequest(url: url)
         urlRequest.method = self.method
         urlRequest.headers = self.headers
-//        switch self{
-//        case .create:
-//            return urlRequest
-//        default: break
-//        }
         switch self.method{
         case .get: break
         default: urlRequest.httpBody = try? JSONEncoding.default.encode(urlRequest, with: params).httpBody
@@ -81,16 +79,6 @@ enum ChannelRouter:URLRequestConvertible{
     }
     var multipartFormData: MultipartFormData {
         let multipartFormData = MultipartFormData()
-//        switch self {
-//        case .create(let info),.edit(wsID: _, info: let info):
-//            if let image = info.image{
-//                print("이미지 존재함!!")
-//                multipartFormData.append(image, withName: "image", fileName: "\(info.name ?? "")123.jpg", mimeType: "image/jpeg")
-//            }
-//            multipartFormData.append(Data(info.name.utf8), withName: "name")
-//            multipartFormData.append(Data(info.description.utf8), withName: "description")
-//        default: ()
-//        }
         return multipartFormData
     }
 }
