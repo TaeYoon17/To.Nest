@@ -45,7 +45,7 @@ final class HomeVC: BaseVC, View{
             guard let present else {return}
             switch present{
             case .create:
-                let vc = CHWriterView(reactor.provider)
+                let vc = CHWriterView(reactor.provider,type: .create)
                 let nav = UINavigationController(rootViewController: vc)
                 nav.fullSheetSetting()
                 owner.present(nav, animated: true)

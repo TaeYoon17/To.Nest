@@ -7,7 +7,7 @@
 
 import Foundation
 extension HomeVC{
-    enum SectionType{
+    enum SectionType:String{
         case channel
         case direct
         case team
@@ -55,7 +55,7 @@ extension HomeVC{
         var name:String
     }
     struct HeaderItem:Identifiable,Itemable{
-        var id = UUID().uuidString+"Header" // 혹시 모를 해싱 고유값 중첩 문제
+        var id:String{ sectionType.rawValue }
         var itemType: HomeVC.ItemType = .header
         var sectionType: HomeVC.SectionType
         var name:String

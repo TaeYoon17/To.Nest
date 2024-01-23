@@ -17,6 +17,7 @@ enum HomePresent{
 final class HomeReactor: Reactor{
     let initialState: State = .init()
     weak var provider: ServiceProviderProtocol!
+    @DefaultsState(\.mainWS) var mainWS
     enum Action{
         case setPresent(HomePresent?)
         case setMainWS(wsID:String)
@@ -24,15 +25,15 @@ final class HomeReactor: Reactor{
     }
     enum Mutation{
         case channelDialog(HomePresent?)
-        case mainWS(WSDetailResponse?)
+        case setChannelList([CHResponse]?)
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
     }
     struct State{
         var channelDialog:HomePresent? = nil
-        var mainWS: WSDetailResponse? = nil
         var isMasking: Bool? = nil
+        var channelList:[CHResponse]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
     }
@@ -59,8 +60,8 @@ final class HomeReactor: Reactor{
         switch mutation{
         case .channelDialog(let present):
             state.channelDialog = present
-        case .mainWS(let mainWS):
-            state.mainWS = mainWS
+        case .setChannelList(let list):
+            state.channelList = list
         case .isMasking(let isMasking):
             state.isMasking = isMasking
         case .wsLogo(let logo):
@@ -71,14 +72,15 @@ final class HomeReactor: Reactor{
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let res = provider.wsService.event.flatMap {[weak self] event -> Observable<Mutation> in
+        let wsService = provider.wsService.event.flatMap {[weak self] event -> Observable<Mutation> in
             guard let self else{return Observable.concat([])}
             switch event{
             case .homeWS(let response):
                 if let response{
                     return Observable.concat([.just(.isMasking(false)),
                                               .just(.wsTitle(response.name)),
-                                              .just(.wsLogo(response.thumbnail))
+                                              .just(.wsLogo(response.thumbnail)),
+                                              .just(.setChannelList(response.channels))
                                               ])
                 }else{
                     return Observable.concat([.just(.isMasking(true))])
@@ -89,7 +91,8 @@ final class HomeReactor: Reactor{
                     return Observable.concat([
                         .just(.isMasking(false)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                         .just(.wsTitle(response.name)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                        .just(.wsLogo(response.thumbnail)).delay(.microseconds(100), scheduler: MainScheduler.instance)
+                        .just(.wsLogo(response.thumbnail)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                        .just(.setChannelList([]))
                     ])
                 }else{ // 메인에 이미 워크스페이스가 존재했음
                     return Observable.concat([])
@@ -97,6 +100,15 @@ final class HomeReactor: Reactor{
             default: return Observable.concat([])
             }
         }
-        return Observable.merge(mutation,res)
+        let chService = provider.chService.event.flatMap {[weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            switch event{
+            case .create(let chInfo):
+                provider.wsService.setHomeWS(wsID: mainWS)
+                return Observable.concat([])
+            default: return Observable.concat([])
+            }
+        }
+        return Observable.merge(mutation,wsService,chService)
     }
 }

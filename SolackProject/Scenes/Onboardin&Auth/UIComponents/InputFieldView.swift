@@ -15,6 +15,8 @@ extension InputFieldView{
         var placeholder:String
         var keyType:UIKeyboardType = .default
         var accessoryText:String? = nil
+        var autocapitalizationType :UITextAutocapitalizationType = .none
+        var isSecureField: Bool = false
     }
 }
 
@@ -33,7 +35,6 @@ final class InputFieldView: UIStackView,AuthFieldAble{
     init(field:String,placeholder:String,keyType:UIKeyboardType = .default,accessoryText:String? = nil){
         super.init(frame: .zero)
         self.inputText =  self.tf.rx.text.orEmpty
-        
         self.tf.keyboardType = keyType
         [label,tf].forEach { addArrangedSubview($0) }
         self.axis = .vertical
@@ -96,6 +97,8 @@ final class InputFieldView: UIStackView,AuthFieldAble{
         label.text = config.field
         tf.placeholder = config.placeholder
         tf.keyboardType = config.keyType
+        tf.isSecureTextEntry = config.isSecureField
+        tf.autocapitalizationType = config.autocapitalizationType
     }
 }
 

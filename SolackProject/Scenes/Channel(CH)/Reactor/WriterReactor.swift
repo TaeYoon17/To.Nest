@@ -11,7 +11,7 @@ import ReactorKit
 class WriterReactor<Failed:FailedProtocol,Toast:ToastType>:Reactor{
     var initialState = State()
     weak var provider: ServiceProviderProtocol!
-    
+    var disposeBag = DisposeBag()
     enum Action{
         case setName(String)
         case setDescription(String)
@@ -39,8 +39,12 @@ class WriterReactor<Failed:FailedProtocol,Toast:ToastType>:Reactor{
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
+        
     }
     func mutate(action: Action) -> Observable<Mutation> {
+        writerMutate(action: action)
+    }
+    func writerMutate(action: Action) -> Observable<Mutation>{
         fatalError("It must be override!!")
     }
     func reduce(state: State, mutation: Mutation) -> State {

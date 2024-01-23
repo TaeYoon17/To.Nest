@@ -38,9 +38,11 @@ enum WorkSpaceFailed:String,FailedProtocol{
 }
 typealias CHFailed = ChannelFailed
 enum ChannelFailed: String,FailedProtocol{
-    
-    
-    case wow = "E99"
+    case bad = "E11"
+    case doubled = "E12"
+    case nonExistData = "E13"
+    case nonAuthority = "E14" // 채널 관리자만이 채널을 수정할 수 있습니다.
+    case deny = "E15" // 요청 거절이용...
     static func converter(val: String) -> ChannelFailed? {
         ChannelFailed(rawValue: val)
     }

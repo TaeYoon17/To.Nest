@@ -11,10 +11,12 @@ protocol ServiceProviderProtocol: AnyObject{
     var authService: AuthServiceProtocol { get }
     var signService: SignServiceProtocol { get }
     var wsService: WorkSpaceProtocol { get }
+    var chService: ChannelProtocol { get }
 }
 final class ServiceProvider: ServiceProviderProtocol{
     lazy var authService: AuthServiceProtocol = AuthService()
     lazy var signService: SignServiceProtocol = SignService()
     lazy var wsService: WorkSpaceProtocol = WSService()
+    lazy var chService: ChannelProtocol = CHService()
 }
 

@@ -19,4 +19,5 @@ struct WriterConfigureation{
     lazy var mainField:InputFieldView.Configuration = .init(field: "", placeholder: "", keyType: .default, accessoryText: buttonText)
     lazy var descriptionField:InputFieldView.Configuration = .init(field: "", placeholder: "", keyType: .default, accessoryText: buttonText)
     var navigationTitle:String = ""
+    var isAvaileScrollClose:Bool = false
 }
