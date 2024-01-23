@@ -35,7 +35,7 @@ struct SolackAlert: View{
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }.frame(maxWidth: .infinity)
-                    if let confirm{
+                    if confirm != nil{
                         double
                     }else{
                         single

@@ -33,6 +33,7 @@ extension WSMainVM{
                         owner.mainWS = owner.list[owner.selectedIdx].id
                         owner.provider.wsService.setHomeWS(wsID:owner.mainWS)
                     }else{
+                        self.mainWS = -1
                         owner.selectedIdx = -1
                         owner.provider.wsService.setHomeWS(wsID: nil)
                     }
