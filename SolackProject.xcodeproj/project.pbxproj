@@ -69,6 +69,9 @@
 		6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */; };
 		6376BAF62B5A8B30000FBBF8 /* CHChatView+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */; };
 		6377E6512B5AD07000238583 /* ScrollViewDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377E6502B5AD07000238583 /* ScrollViewDown.swift */; };
+		63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F402B54C41F00F54F9A /* AuthenticationManager.swift */; };
+		63775F432B54C43A00F54F9A /* OnboardingView+ASDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */; };
+		63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */; };
 		637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */; };
 		637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15792B4CD72500B68963 /* TransparentBackground.swift */; };
 		637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */; };
@@ -246,6 +249,10 @@
 		6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatViewRegistration.swift; sourceTree = "<group>"; };
 		6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHChatView+DS.swift"; sourceTree = "<group>"; };
 		6377E6502B5AD07000238583 /* ScrollViewDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewDown.swift; sourceTree = "<group>"; };
+		63775F3E2B54C12800F54F9A /* SolackProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SolackProject.entitlements; sourceTree = "<group>"; };
+		63775F402B54C41F00F54F9A /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingView+ASDelegate.swift"; sourceTree = "<group>"; };
+		63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthenticationManager+JWTDecode.swift"; sourceTree = "<group>"; };
 		637B15772B4CD62700B68963 /* SolackAlert+UIKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolackAlert+UIKit.swift"; sourceTree = "<group>"; };
 		637B15792B4CD72500B68963 /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceEmptyView.swift; sourceTree = "<group>"; };
@@ -389,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
+				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
 				631A60E62B44EE0B005509C2 /* ReactorServices */,
 				631A60D92B44EE01005509C2 /* Core */,
@@ -669,6 +677,15 @@
 			path = SolackProject/Helpers/Extensions;
 			sourceTree = SOURCE_ROOT;
 		};
+		63775F3F2B54C40400F54F9A /* AuthenticationManager */ = {
+			isa = PBXGroup;
+			children = (
+				63775F402B54C41F00F54F9A /* AuthenticationManager.swift */,
+				63775F442B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift */,
+			);
+			path = AuthenticationManager;
+			sourceTree = "<group>";
+		};
 		637B15762B4CD5C800B68963 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -864,11 +881,13 @@
 		639DEAF92B452E3B00108979 /* Onboardin&Auth */ = {
 			isa = PBXGroup;
 			children = (
+				63775F3F2B54C40400F54F9A /* AuthenticationManager */,
 				638FCD282B4800010053D1BB /* UIComponents */,
 				6324D6E92B46EF5100AA1AC0 /* Reactors */,
 				633584672B4560F900B83555 /* SignInEmail */,
 				639DEAFC2B4532D900108979 /* SignUp */,
 				631A60EF2B44EE15005509C2 /* OnboardingView.swift */,
+				63775F422B54C43A00F54F9A /* OnboardingView+ASDelegate.swift */,
 				631A60F82B452058005509C2 /* AuthPresentView.swift */,
 			);
 			path = "Onboardin&Auth";
@@ -1216,6 +1235,7 @@
 				639E0CA22B5843F30076A4D8 /* WSSliderVC.swift in Sources */,
 				63C346FD2B55882700293991 /* WriterConfiguration.swift in Sources */,
 				631A60F12B44EE15005509C2 /* OnboardingView.swift in Sources */,
+				63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */,
 				639B8A752B491C1A0024B4DD /* SignUpFieldType.swift in Sources */,
 				6389CEA82B5D6102002A70A9 /* WSEmptyView.swift in Sources */,
 				632A2D612B4DAD1800E21DE8 /* WSwriterReactor.swift in Sources */,
@@ -1233,6 +1253,7 @@
 				63F0AECB2B4AD886000A597B /* ChannelListItemView.swift in Sources */,
 				639CA1C02B5F86D500C21006 /* Channel+NM.swift in Sources */,
 				63F7C4AA2B4F7CE8003D8447 /* ErrorCode.swift in Sources */,
+				63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */,
 				63F7C4B22B4F929F003D8447 /* BaseAuthenticator.swift in Sources */,
 				63F7C4A62B4F772E003D8447 /* WSInfo.swift in Sources */,
 				63358D6C2B53FE0A005C5BD4 /* CHExploreView.swift in Sources */,
@@ -1286,6 +1307,7 @@
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
 				636213012B4E93ED0093D089 /* EditImageView.swift in Sources */,
 				63358D662B53FB93005C5BD4 /* HomeReactor.swift in Sources */,
+				63775F432B54C43A00F54F9A /* OnboardingView+ASDelegate.swift in Sources */,
 				63F0AED72B4B093A000A597B /* BaseView.swift in Sources */,
 				639CFE672B5808A40030729E /* SliderVC.swift in Sources */,
 				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,

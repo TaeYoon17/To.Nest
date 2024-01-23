@@ -13,7 +13,7 @@ struct RefreshResponse:Codable{
 
 extension NetworkManager{
     func refresh(session: Session) async throws -> RefreshResponse{
-        let router = AuthRouter.refresh(token: refreshToken)
+        let router = AuthRouter.refresh(refreshToken: refreshToken, accessToken: accessToken)
         return try await withCheckedThrowingContinuation {[weak self ] continuation in
             guard let self else{
                 continuation.resume(throwing: Errors.API.FailFetchToken)

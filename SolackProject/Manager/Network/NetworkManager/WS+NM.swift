@@ -31,7 +31,6 @@ extension NM{
         let router = WSRouter.edit(wsID: wsID, info: info)
         return try await withCheckedThrowingContinuation { continutaion in
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: self.authInterceptor)
-                .validate(customValidation)
                 .uploadProgress { progress in
                     print("\(progress)")
                 }

@@ -4,7 +4,7 @@
 //
 //  Created by 김태윤 on 1/2/24.
 //
-
+ 
 import UIKit
 import SnapKit
 import ReactorKit
@@ -25,8 +25,8 @@ final class OnboardingView:BaseVC,View{
             guard a, let signInType = b else {return}
             switch signInType{
             case .apple:
-                let vc = SignInEmailView()
-                owner.present(vc,animated: true)
+                print("asdfasdf")
+                owner.appleLoginButtonClicked()
             case .email:
                 let vc = SignInEmailView()
                 let nav = UINavigationController(rootViewController: vc)

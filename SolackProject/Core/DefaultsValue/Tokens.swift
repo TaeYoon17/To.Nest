@@ -54,4 +54,8 @@ extension UserDefaults{
         get{ integer(forKey: "userNumber") }
         set{ setValue(newValue,forKey: "userNumber") }
     }
+    var appleID: String?{
+        get{ string(forKey: "appleID")}
+        set{ setValue(newValue,forKey: "appleID") }
+    }
 }

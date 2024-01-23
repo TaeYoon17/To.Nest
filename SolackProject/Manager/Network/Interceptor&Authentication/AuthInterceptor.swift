@@ -12,9 +12,7 @@ final class AuthenticatorInterceptor:RequestInterceptor{
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.expiration) var expiration
     var requiresRefresh: Bool {
-        return if let expiration{
-            Date() > expiration
-        }else{ true }
+        return if let expiration{ Date() > expiration }else{ true }
     }
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         
@@ -26,6 +24,7 @@ final class AuthenticatorInterceptor:RequestInterceptor{
     }
     
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+        print("들어와~~")
         guard requiresRefresh else{
             completion(.doNotRetry)
             return
