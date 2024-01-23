@@ -46,6 +46,7 @@ final class CHCreateReactor: CHWriterReactor{
                 ])
                 default: Observable.concat([])
                 }
+            default: Observable.concat([])
             }
         }
         return Observable.merge(mutation,res)
