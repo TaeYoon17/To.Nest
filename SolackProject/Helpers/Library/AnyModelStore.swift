@@ -26,6 +26,11 @@ class AnyModelStore<Model: Identifiable>: ModelStoreAble {
     func insertModel(item: Model){
         models[item.id] = item
     }
+    func insertModel(items:[Model]){
+        items.forEach { item in
+            insertModel(item: item)
+        }
+    }
     func removeModel(_ id:Model.ID){
         models.removeValue(forKey: id)
     }

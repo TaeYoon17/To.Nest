@@ -22,7 +22,7 @@ extension HomeVC{
         var sectionType:SectionType
         var itemType: ItemType
         
-        init(_ itemAble:any Itemable){
+        init<T:CollectionItemable>(_ itemAble:T)where T.ItemType == ItemType, T.SectionType == SectionType{
             self.id = itemAble.id
             self.itemType = itemAble.itemType
             self.sectionType = itemAble.sectionType
@@ -31,7 +31,7 @@ extension HomeVC{
             hasher.combine(id)
         }
     }
-    struct ChannelListItem:Identifiable,Itemable{
+    struct ChannelListItem:Identifiable,CollectionItemable{
         let itemType: ItemType = .list
         let sectionType: SectionType = .channel
         var id:String{name}
@@ -39,7 +39,7 @@ extension HomeVC{
         var messageCount:Int
         var isRecent: Bool
     }
-    struct DirectListItem: Identifiable,Itemable{
+    struct DirectListItem: Identifiable,CollectionItemable{
         let itemType:ItemType = .list
         let sectionType: HomeVC.SectionType = .direct
         var id:String{ name }
@@ -48,24 +48,16 @@ extension HomeVC{
         var messageCount:Int
         var unreadExist: Bool
     }
-    struct BottomItem:Identifiable,Itemable{
+    struct BottomItem:Identifiable,Hashable,CollectionItemable{
         var id :String{ sectionType.rawValue+itemType.rawValue }
         let itemType: HomeVC.ItemType = .bottom // 혹시 모를 해싱 고유값 중첩 문제
         var sectionType: HomeVC.SectionType
         var name:String
     }
-    struct HeaderItem:Identifiable,Itemable{
+    struct HeaderItem:Identifiable,Hashable,CollectionItemable{
         var id:String{ sectionType.rawValue + itemType.rawValue}
         var itemType: HomeVC.ItemType = .header
         var sectionType: HomeVC.SectionType
         var name:String
     }
-}
-protocol Itemable:Identifiable,Hashable{
-    var id:String { get }
-    var itemType:HomeVC.ItemType { get }
-    var sectionType:HomeVC.SectionType{get}
-}
-extension Itemable{
-    
 }

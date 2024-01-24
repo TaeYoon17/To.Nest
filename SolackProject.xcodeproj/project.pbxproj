@@ -34,6 +34,13 @@
 		631E339A2B45553B0053DBD7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 631E33992B45553B0053DBD7 /* RxCocoa */; };
 		631E339E2B45553B0053DBD7 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 631E339D2B45553B0053DBD7 /* RxRelay */; };
 		631E33A22B45553B0053DBD7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 631E33A12B45553B0053DBD7 /* RxSwift */; };
+		6323E1B22B60F63100D91E46 /* CollectionItemable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1B12B60F63100D91E46 /* CollectionItemable.swift */; };
+		6323E1C22B60F70100D91E46 /* CHSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1BD2B60F70100D91E46 /* CHSettingView.swift */; };
+		6323E1C32B60F70100D91E46 /* CHSetting+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1BE2B60F70100D91E46 /* CHSetting+DS.swift */; };
+		6323E1C42B60F70100D91E46 /* CHSettingViewRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1BF2B60F70100D91E46 /* CHSettingViewRegistration.swift */; };
+		6323E1C52B60F70100D91E46 /* CHSetting+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */; };
+		6323E1C62B60F70100D91E46 /* CHSettingCollectionStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */; };
+		6323E1C82B60F73400D91E46 /* CHSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */; };
 		632A2D612B4DAD1800E21DE8 /* WSwriterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632A2D602B4DAD1800E21DE8 /* WSwriterReactor.swift */; };
 		632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632A2D622B4DAD7400E21DE8 /* WScreateReactor.swift */; };
 		632D8EB32B4D290200A99293 /* WSwriterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D8EB22B4D290200A99293 /* WSwriterView.swift */; };
@@ -215,6 +222,13 @@
 		631A60FA2B4528A5005509C2 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		631A60FC2B452953005509C2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		631A60FE2B452976005509C2 /* SecretKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretKey.swift; sourceTree = "<group>"; };
+		6323E1B12B60F63100D91E46 /* CollectionItemable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionItemable.swift; path = SolackProject/Helpers/UIHelpers/UIKit/CollectionItemable.swift; sourceTree = SOURCE_ROOT; };
+		6323E1BD2B60F70100D91E46 /* CHSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingView.swift; sourceTree = "<group>"; };
+		6323E1BE2B60F70100D91E46 /* CHSetting+DS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CHSetting+DS.swift"; sourceTree = "<group>"; };
+		6323E1BF2B60F70100D91E46 /* CHSettingViewRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingViewRegistration.swift; sourceTree = "<group>"; };
+		6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CHSetting+CollectionView.swift"; sourceTree = "<group>"; };
+		6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingCollectionStructures.swift; sourceTree = "<group>"; };
+		6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingReactor.swift; sourceTree = "<group>"; };
 		632A2D602B4DAD1800E21DE8 /* WSwriterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSwriterReactor.swift; sourceTree = "<group>"; };
 		632A2D622B4DAD7400E21DE8 /* WScreateReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WScreateReactor.swift; sourceTree = "<group>"; };
 		632D8EB22B4D290200A99293 /* WSwriterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSwriterView.swift; sourceTree = "<group>"; };
@@ -453,6 +467,7 @@
 				631A60D42B44EDF5005509C2 /* BaseVC.swift */,
 				631A60D52B44EDF5005509C2 /* ButtonConfiguration.swift */,
 				63F0AED62B4B093A000A597B /* BaseView.swift */,
+				6323E1B12B60F63100D91E46 /* CollectionItemable.swift */,
 				63F7C4BD2B4FE72F003D8447 /* UINavigationController.swift */,
 				63E38EE02B515FE800BD6C93 /* ToastType.swift */,
 				6377E6502B5AD07000238583 /* ScrollViewDown.swift */,
@@ -607,6 +622,7 @@
 				636028072B555D8200AF8731 /* WriterReactor.swift */,
 				6360280B2B55605100AF8731 /* CHWriterReactor.swift */,
 				639CA1C42B5F984100C21006 /* CHCreateReactor.swift */,
+				6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */,
 				63F0B1A42B5FEC7B008C8C98 /* CHExploreVM.swift */,
 			);
 			path = "Reactor+ViewModel";
@@ -933,6 +949,11 @@
 		63C346F82B55756D00293991 /* CHSetting */ = {
 			isa = PBXGroup;
 			children = (
+				6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */,
+				6323E1BE2B60F70100D91E46 /* CHSetting+DS.swift */,
+				6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */,
+				6323E1BD2B60F70100D91E46 /* CHSettingView.swift */,
+				6323E1BF2B60F70100D91E46 /* CHSettingViewRegistration.swift */,
 				6373AAF92B594C260010968C /* CHSettingView.swift */,
 			);
 			path = CHSetting;
@@ -1201,6 +1222,7 @@
 				63E38EE12B515FE800BD6C93 /* ToastType.swift in Sources */,
 				63F7C4AE2B4F8A04003D8447 /* ImageManager+Compression.swift in Sources */,
 				6368352A2B47A56C00E38683 /* AppManager.swift in Sources */,
+				6323E1C42B60F70100D91E46 /* CHSettingViewRegistration.swift in Sources */,
 				636213122B4E9FE70093D089 /* CropImageManager.swift in Sources */,
 				63F265FC2B53F1EF007D865C /* WSManagerReactor.swift in Sources */,
 				6360280A2B555DB200AF8731 /* CHToastType.swift in Sources */,
@@ -1209,6 +1231,7 @@
 				639CA1B72B5F7DD500C21006 /* CHInfo.swift in Sources */,
 				63F7C4B82B4FB49B003D8447 /* Auth+NM.swift in Sources */,
 				631A60E22B44EE02005509C2 /* AppFont.swift in Sources */,
+				6323E1C62B60F70100D91E46 /* CHSettingCollectionStructures.swift in Sources */,
 				63E38ED82B51127100BD6C93 /* ImageCache+Core.swift in Sources */,
 				6384A9C82B47125600AA2F1B /* SingUpInfo.swift in Sources */,
 				639A211E2B5EB6D5006EEAF0 /* WSEmpty.swift in Sources */,
@@ -1229,6 +1252,7 @@
 				636028052B555B5E00AF8731 /* WriterView.swift in Sources */,
 				6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */,
 				6360280C2B55605100AF8731 /* CHWriterReactor.swift in Sources */,
+				6323E1C82B60F73400D91E46 /* CHSettingReactor.swift in Sources */,
 				6377E6512B5AD07000238583 /* ScrollViewDown.swift in Sources */,
 				637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */,
 				63F0AED32B4B0775000A597B /* HomeVC+CellRegistration.swift in Sources */,
@@ -1242,6 +1266,7 @@
 				636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */,
 				63E4AFD22B49668C00E0B6A1 /* User.swift in Sources */,
 				63F7C4A42B4EEBC8003D8447 /* WorkSpaceRouter.swift in Sources */,
+				6323E1C52B60F70100D91E46 /* CHSetting+CollectionView.swift in Sources */,
 				6384A9D12B47134200AA2F1B /* Errors.swift in Sources */,
 				631A60F02B44EE15005509C2 /* OnboardingReactor.swift in Sources */,
 				639CA1C52B5F984100C21006 /* CHCreateReactor.swift in Sources */,
@@ -1267,6 +1292,7 @@
 				63F265FA2B53BA76007D865C /* WSService+AvailCheck.swift in Sources */,
 				63F7C4AC2B4F7E64003D8447 /* WS+NM.swift in Sources */,
 				63E38EE32B5167E500BD6C93 /* WSTostType.swift in Sources */,
+				6323E1C22B60F70100D91E46 /* CHSettingView.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
 				6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */,
 				636213032B4E94F90093D089 /* CropView.swift in Sources */,
@@ -1293,8 +1319,10 @@
 				63F7C4B02B4F9298003D8447 /* AuthCredentail.swift in Sources */,
 				63F0AEC92B4ABC05000A597B /* NewMessageBtn.swift in Sources */,
 				63E38EDD2B514B5600BD6C93 /* WorkSpaceBottomView.swift in Sources */,
+				6323E1B22B60F63100D91E46 /* CollectionItemable.swift in Sources */,
 				6384A9CE2B47133200AA2F1B /* Tokens.swift in Sources */,
 				63C346F42B55738C00293991 /* CHInviteView.swift in Sources */,
+				6323E1C32B60F70100D91E46 /* CHSetting+DS.swift in Sources */,
 				6389CEAA2B5D7B4D002A70A9 /* WSDetailResponse.swift in Sources */,
 				636213082B4E96220093D089 /* ImageManager+Fetch.swift in Sources */,
 				639AFDE52B52D37D00FA8280 /* WSManagerView+DS.swift in Sources */,

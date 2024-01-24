@@ -50,6 +50,8 @@ final class CHChatView: BaseVC{
         }.disposed(by: disposeBag)
         self.navigationItem.rightBarButtonItem!.rx.tap.bind(with: self) { owner, _ in
             let vc = CHSettingView()
+            //MARK: -- 서비스 Provider 추후에 수정
+            vc.reactor = CHSettingReactor(AppManager.shared.provider)
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }

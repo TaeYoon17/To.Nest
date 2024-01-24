@@ -9,26 +9,23 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-
-final class CHSettingView: BaseVC{
+import ReactorKit
+final class CHSettingView: BaseVC, View{
     var disposeBag = DisposeBag()
+    func bind(reactor: CHSettingReactor) {
+        
+    }
+    @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    var dataSource:DataSource!
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .gray1
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
+        view.backgroundColor = .gray2
     }
     override func configureView() {
-        
+        configureCollectionView()
     }
     override func configureLayout() {
-        
+        view.addSubview(collectionView)
     }
     override func configureNavigation() {
         self.navigationItem.leftBarButtonItem = .getBackBtn
@@ -42,6 +39,10 @@ final class CHSettingView: BaseVC{
         }.disposed(by: disposeBag)
     }
     override func configureConstraints() {
-        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.horizontalEdges.equalToSuperview()
+        }
     }
+
 }
