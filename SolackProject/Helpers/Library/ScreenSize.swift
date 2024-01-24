@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 extension UIWindow {
-    static var current: UIWindow? = {
+    @MainActor static var current: UIWindow? = {
         for scene in UIApplication.shared.connectedScenes {
             guard let windowScene = scene as? UIWindowScene else { continue }
             for window in windowScene.windows {
@@ -21,7 +21,7 @@ extension UIWindow {
 
 
 extension UIScreen {
-    static var current: UIScreen? = {
+    @MainActor static var current: UIScreen? = {
         UIWindow.current?.screen
     }()
 }

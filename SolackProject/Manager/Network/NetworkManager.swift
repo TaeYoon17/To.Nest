@@ -34,16 +34,26 @@ final class NetworkManager{
         }
         return .failure(error)
     }
-//    func getThumbnail(_ urlStr: String) -> Data{
-//        let router = ImageRouter.get(urlStr: urlStr)
-//        AF.request(router,interceptor: baseInterceptor).responseString { res in
-//            switch res.result{
-//            case .success(let str):
-//                print("썸네일 가져오기 성고")
-//            case .failure(let error):
-//                print("썸네일 문제!!")
-//            }
-//        }
-//    }
+    func getThumbnail(_ urlStr: String) async -> Data?{
+        let router = ImageRouter.get(urlStr: urlStr)
+        print(urlStr)
+        return await withCheckedContinuation { continuation in
+            AF.request(router,interceptor: authInterceptor)
+                .validate(customValidation)
+                .response { res in
+                    switch res.result{
+                    case .success(let data):
+                        if let data, let errorCode = try? JSONDecoder().decode(ErrorCode.self, from: data){
+                            continuation.resume(returning: nil)
+                            return
+                        }
+                        continuation.resume(returning: data)
+                        return
+                    case .failure(let error):
+                        continuation.resume(returning: nil)
+                    }
+                }
+        }
+    }
 }
 

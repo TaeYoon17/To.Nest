@@ -17,6 +17,7 @@ extension HomeVC{
             super.init(collectionView: collectionView, cellProvider: cellProvider)
             initChannel()
             initDirect()
+            initTeamOne()
         }
         func fetchDirect(item:Item) -> DirectListItem{
             directListModel.fetchByID(item.id)
@@ -55,6 +56,14 @@ extension HomeVC{
             let directHeader = HeaderItem(sectionType: .direct, name: "다이렉트 메시지")
             headerModel.insertModel(item: directHeader)
             initSnapshot(list: directLists.map{Item($0)}, bottom: Item(directBottom), top: Item(directHeader))
+        }
+        func initTeamOne(){
+            let teamBottom = BottomItem(sectionType: .team, name: "팀원 추가")
+            bottomModel.insertModel(item: teamBottom)
+            var snapshot = snapshot()
+            snapshot.appendSections([.team])
+            snapshot.appendItems([Item(teamBottom)])
+            apply(snapshot,animatingDifferences: true)
         }
         @MainActor func initSnapshot(list:[Item],bottom:Item,top:Item){
             var snapshot = NSDiffableDataSourceSectionSnapshot<Item>()

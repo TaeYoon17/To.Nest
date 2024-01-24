@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 import Toast
-final class SignInEmailView: BaseVC,View{
+final class SignInEmailView: BaseVC,View,Toastable{
     var disposeBag = DisposeBag()
     typealias A = EmailSignInReactor.Action
     func bind(reactor: EmailSignInReactor) {
@@ -86,7 +86,7 @@ final class SignInEmailView: BaseVC,View{
         self.navigationController?.navigationBar.backgroundColor = .white
         self.navigationItem.leftBarButtonItem!.rx.tap.bind(with: self) { owner, _ in
             owner.dismiss(animated: true)
-        }
+        }.disposed(by: disposeBag)
     }
     override func configureConstraints() {
         scrollView.snp.makeConstraints { make in
@@ -103,7 +103,15 @@ final class SignInEmailView: BaseVC,View{
             make.height.equalTo(44)
         }
     }
-
+    //MARK: -- 토스트 구성
+    var toastHeight: CGFloat = 0
+    var toastY: CGFloat {
+        return if let isShowKeyboard{
+            isShowKeyboard - 70 - toastHeight / 2
+        }else{
+            signInBtn.frame.minY - 16 - toastHeight / 2
+        }
+    }
 }
 
 extension SignInEmailView{
@@ -142,32 +150,5 @@ extension SignInEmailView{
         let contentInset:UIEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
         scrollView.scrollIndicatorInsets = contentInset
         scrollView.contentInset = contentInset
-    }
-}
-extension SignInEmailView:Toastable{
-    func toastUp(type: ToastType){
-        var style = ToastStyle()
-        style.messageFont = FontType.body.get()
-        style.cornerRadius = 8
-        style.messageColor = .white
-        style.verticalPadding = 9
-        style.horizontalPadding = 16
-        style.backgroundColor = type.getColor
-        let toast = try! navigationController!.view.toastViewForMessage(type.contents, title: nil, image: nil, style: style)
-        let radiusHeight = toast.frame.height / 2
-        let minY = if let isShowKeyboard{
-            isShowKeyboard - 70 - radiusHeight
-        }else{
-            signInBtn.frame.minY - 16 - radiusHeight
-        }
-        navigationController?.view.showToast(toast, duration: ToastManager.shared.duration,point: .init(x: signInBtn.frame.midX, y: minY),completion: nil)
-    }
-}
-extension EmailSignInToastType{
-    var getColor:UIColor{
-        switch self{
-        case .emailValidataionError,.other,.others,.pwCondition,.signInFailed:
-                .error
-        }
     }
 }

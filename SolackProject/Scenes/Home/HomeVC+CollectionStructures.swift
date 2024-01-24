@@ -10,6 +10,7 @@ extension HomeVC{
     enum SectionType{
         case channel
         case direct
+        case team
     }
     enum ItemType{
         case header

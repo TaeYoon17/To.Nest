@@ -13,14 +13,18 @@ struct TransparentBackground: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
         DispatchQueue.main.async {
-            if isVisible{
+            UIView.animate(withDuration: 0.2) {
                 view.superview?.superview?.backgroundColor = .gray.withAlphaComponent(0.666)
-            }else{
-                view.superview?.superview?.backgroundColor = .clear
             }
         }
         return view
     }    
-    func updateUIView(_ uiView: UIView, context: Context) {}
+    func updateUIView(_ uiView: UIView, context: Context) {
+        if isVisible{
+            uiView.superview?.superview?.backgroundColor = .gray.withAlphaComponent(0.666)
+        }else{
+            uiView.superview?.superview?.backgroundColor = .clear
+        }
+    }
 }
 

@@ -35,7 +35,7 @@ struct SolackAlert: View{
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }.frame(maxWidth: .infinity)
-                    if let confirm{
+                    if confirm != nil{
                         double
                     }else{
                         single
@@ -59,8 +59,10 @@ struct SolackAlert: View{
                 isVisible = true
             }
         }
-        .background(TransparentBackground(isVisible: $fullScreenGo))
+        .background(.clear)
+        .background(TransparentBackground(isVisible: $isVisible))
         .opacity(isVisible ? 1 : 0)
+        
     }
 }
 fileprivate extension SolackAlert{

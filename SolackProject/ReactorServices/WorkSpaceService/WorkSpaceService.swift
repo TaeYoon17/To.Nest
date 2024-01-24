@@ -14,10 +14,14 @@ protocol WorkSpaceProtocol{
     func edit(_ info:WSInfo,id:String)
     func delete(workspaceID: String)
     func checkAllWS()
+    func initHome()
+    func setHomeWS(wsID:Int?)
 }
 final class WorkSpaceService:WorkSpaceProtocol{
+    @DefaultsState(\.mainWS) var mainWS
     let event = PublishSubject<Event>()
     enum Event{
+        case homeWS(WSDetailResponse?)
         case create(WSResponse)
         case edit(WSResponse)
         case checkAll([WSResponse])
@@ -51,6 +55,7 @@ final class WorkSpaceService:WorkSpaceProtocol{
             do{
                 let res = try await NM.shared.editWS(info,wsID: id)
                 event.onNext(.edit(res)) // 이 일은 SideVM에서 처리하겠지..?
+                self.setHomeWS(wsID: res.workspaceID)
             }catch{
                 print("edit Error 가져오기 성공")
                 guard authValidCheck(error: error) else{
@@ -66,12 +71,12 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
+    
     func checkAllWS(){
         Task{
             do{
                 let allWS = try await NM.shared.checkAllWS()
                 event.onNext(.checkAll(allWS))
-                print(allWS)
             }catch{
                 print("워크스페이스 사이드 에러!!")
                 guard authValidCheck(error: error) else{
@@ -82,11 +87,13 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
+    
+    //MARK: -- Delete WorkSpace
     func delete(workspaceID: String){
         Task{
             do{
-                try await NM.shared.deleteWS(workspaceID)
-                checkAllWS()
+                let res = try await NM.shared.deleteWS(workspaceID)
+                event.onNext(.delete)
             }catch{
                 guard authValidCheck(error: error) else {
                     AppManager.shared.userAccessable.onNext(false)

@@ -9,6 +9,15 @@ import SnapKit
 import RxCocoa
 import RxSwift
 import UIKit
+extension InputFieldView{
+    struct Configuration{
+        var field:String
+        var placeholder:String
+        var keyType:UIKeyboardType = .default
+        var accessoryText:String? = nil
+    }
+}
+
 final class InputFieldView: UIStackView,AuthFieldAble{
     var inputText: ControlProperty<String>!
     lazy var accAction: ControlEvent<Void>! = btn.rx.tap
@@ -79,6 +88,14 @@ final class InputFieldView: UIStackView,AuthFieldAble{
             }.disposed(by: disposeBag)
             
         }
+    }
+    func apply(_ config:Configuration){
+        if let text = config.accessoryText{
+            self.btn.text = text
+        }
+        label.text = config.field
+        tf.placeholder = config.placeholder
+        tf.keyboardType = config.keyType
     }
 }
 

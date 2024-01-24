@@ -9,24 +9,35 @@ import Foundation
 import Combine
 import RxSwift
 import UIKit
-extension SideVM{
+extension WSMainVM{
     func binding(){
         provider.wsService.event.bind(with: self) { owner, event in
             switch event{
             case .create(let res):
                 Task{ await owner.createResponse(res) }
-//                owner.toastLogicMaker(type: .created)
                 owner.toastType = .created
             case .edit(let res):
-                Task{ 
+                Task{
                     await owner.editResponse(res)
                     try await Task.sleep(for: .seconds(0.5))
                     await MainActor.run { owner.toastType = .edit}
                 }
             case .checkAll(let value):
-                // 바꿔주는 로직이 필요하다.
                 owner.wsResponses(value)
             case .delete:
+                self.list.remove(at:owner.selectedIdx)
+                Task{@MainActor in
+                    if let firstItem = owner.list.first{
+                        owner.selectedIdx = 0
+                        owner.list[owner.selectedIdx].isSelected = true
+                        owner.mainWS = owner.list[owner.selectedIdx].id
+                        owner.provider.wsService.setHomeWS(wsID:owner.mainWS)
+                    }else{
+                        self.mainWS = -1
+                        owner.selectedIdx = -1
+                        owner.provider.wsService.setHomeWS(wsID: nil)
+                    }
+                }
                 Task{
                     try await Task.sleep(for: .seconds(0.5))
                     await MainActor.run { owner.toastType = .edit}
@@ -36,13 +47,10 @@ extension SideVM{
                 case .nonExistData:
                     owner.toastType = .emptyData
                 case .nonAuthority:
-//                    owner.toastLogicMaker(type: .notAuthority)
                     owner.toastType = .notAuthority
                 case .lackCoin:
-//                    owner.toastLogicMaker(type: .lackCoin)
                     owner.toastType = .lackCoin
                 default:
-//                    owner.toastLogicMaker(type: .unknown)
                     owner.toastType = .unknown
                 }
             case .unknownError:
@@ -52,12 +60,15 @@ extension SideVM{
         }.disposed(by: disposeBag)
     }
 }
-extension SideVM{
+extension WSMainVM{
     fileprivate func createResponse(_ value: WSResponse) async {
         let isFirstItem = await self.list.isEmpty
         do{
             var tempItem = try await makeWSItem(value)
-            if isFirstItem{ tempItem.isSelected = true }
+            if isFirstItem{ 
+                tempItem.isSelected = true
+                self.mainWS = tempItem.id
+            }
             let item = tempItem
             await MainActor.run {
                 if isFirstItem{
@@ -65,7 +76,6 @@ extension SideVM{
                     selectedWorkSpaceID = item.id
                 }
                 list.append(item)
-                underList.append(value)
             }
         }catch{
             print(error)
@@ -79,7 +89,6 @@ extension SideVM{
             let item = tempItem
             Task{@MainActor in
                 self.list[self.selectedIdx] = item
-                self.underList[self.selectedIdx] = value
                 self.selectedWorkSpaceID = item.id
             }
         }catch{
@@ -95,17 +104,10 @@ extension SideVM{
                     guard let self else{ throw Errors.cachingEmpty }
                     return try await makeWSItem(response)
                 }
-                Task{@MainActor in
+                DispatchQueue.main.async{
                     self.list = listItem
-                    self.underList = value
-                    if !self.list.isEmpty{
-                        if self.selectedIdx >= 0 { self.list[selectedIdx].isSelected = false }
-                        self.list[0].isSelected = true
-                        self.selectedWorkSpaceID  = self.list[0].id
-                        self.selectedIdx = 0
-                    }else{
-                        self.selectedIdx = -1
-                    }
+                    self.selectedIdx = self.list.firstIndex(where: {$0.isSelected}) ?? -1
+                    self.isReceivedWorkSpaceList = true
                 }
             }catch{
                 print(error)
@@ -115,21 +117,24 @@ extension SideVM{
     func makeWSItem(_ res:WSResponse,coverCache:Bool = false) async throws -> WorkSpaceListItem{
         let myImage:UIImage
         do{
-            myImage = try await UIImage.fetchWebCache(name: res.thumbnail,size:.init(width: 44, height: 44))
+            myImage = try await UIImage.fetchWebCache(name: res.thumbnail,type:.small)
         }catch{
-            let image = examineImage.randomElement()!
+            let image = if let data = await NM.shared.getThumbnail(res.thumbnail){
+                UIImage.fetchBy(data: data,type:.small)
+            }else{examineImage.randomElement()!}
             try await image.appendWebCache(name: res.thumbnail,isCover: coverCache)
-            myImage = try image.downSample(size: .init(width: 44, height: 44))
+            myImage = try image.downSample(type:.small)
         }
         return await WorkSpaceListItem(id:res.workspaceID,
-                                       isSelected: list.isEmpty,
-                                       isMyManaging:res.ownerID == userID,
+                                       isSelected: res.workspaceID == mainWS,
+                                       isMyManaging: res.ownerID == userID,
                                        image: myImage,
                                        name: res.name,
+                                       description: res.description,
                                        date: res.createdAt)
     }
 }
-extension SideVM{
+extension WSMainVM{
     func tempToastUp(){
         toastType = .created
     }
@@ -141,5 +146,6 @@ struct WorkSpaceListItem:Identifiable,Equatable{
     var isMyManaging:Bool = false
     var image:UIImage
     var name:String
+    var description:String?
     var date:String // 이거 수정해야함!!
 }

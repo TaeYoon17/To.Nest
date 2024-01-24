@@ -8,6 +8,23 @@
 import Foundation
 import UIKit
 extension UIImage{
+    enum SizeType{
+        case small
+        case medium
+        case large
+        var size:CGSize{
+            switch self{
+            case .large: .init(width: 128,height:128)
+            case .small: .init(width: 44,height:44)
+            case .medium: .init(width: 66,height:66)
+            }
+        }
+    }
+}
+extension UIImage{
+    static func fetchBy(data:Data,type:SizeType) -> UIImage{
+        IM.shared.fetchBy(data: data,size:type.size)
+    }
     static func fetchBy(data: Data,size: CGSize? = nil) -> UIImage{
         IM.shared.fetchBy(data: data, size: size)
     }
@@ -18,6 +35,9 @@ extension UIImage{
         }
         return IM.shared.fetchBy(data: data,size: size)
     }
+    func downSample(type:SizeType) throws -> UIImage{
+        try downSample(size: type.size)
+    }
 }
 fileprivate extension IM{
     func fetchBy(data: Data,size: CGSize? = nil) -> UIImage{
@@ -27,7 +47,7 @@ fileprivate extension IM{
     }
     func coreDownSample(resource:CGImageSource,size:CGSize? = nil) -> UIImage{
         let scale = UIScreen.main.scale
-        let screenSize = UIScreen.current!.bounds.size
+        let screenSize = UIScreen.main.bounds
         let maxPixel = if let size{
              max(size.width, size.height) * scale
         }else{
