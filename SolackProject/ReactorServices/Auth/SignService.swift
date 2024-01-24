@@ -15,6 +15,7 @@ protocol SignServiceProtocol{
     func signUp(_ info:SignUpInfo)
 }
 final class SignService: SignServiceProtocol{
+    @DefaultsState(\.deviceToken) var deviceToken
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.nickname) var nickname
@@ -49,6 +50,7 @@ final class SignService: SignServiceProtocol{
     func appleSignIn(_ info: AppleInfo){
         Task{
             do{
+                
                 let resposne = try await NM.shared.signIn(type: .apple, body: info)
                 defaultsSign(resposne)
                 AppManager.shared.userAccessable.onNext(true)

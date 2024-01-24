@@ -37,4 +37,7 @@ final class AuthService: AuthServiceProtocol{
         event.onNext(.updateAccessToken(token))
         return .just(token)
     }
+    func updateDeviceToken(){
+        
+    }
 }
