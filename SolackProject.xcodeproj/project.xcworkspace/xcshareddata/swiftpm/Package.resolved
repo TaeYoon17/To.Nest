@@ -46,6 +46,24 @@
       }
     },
     {
+      "identity" : "realm-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-core.git",
+      "state" : {
+        "revision" : "a5e87a39cffdcc591f3203c11cfca68100d0b9a6",
+        "version" : "13.26.0"
+      }
+    },
+    {
+      "identity" : "realm-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-swift.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0b1f9ee7a9b7e8395b1b0f5ee70044198e48f3f2"
+      }
+    },
+    {
       "identity" : "rxalamofire",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RxSwiftCommunity/RxAlamofire.git",
