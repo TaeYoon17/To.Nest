@@ -192,6 +192,14 @@
 		63F7C4BC2B4FDC5A003D8447 /* WSwriter+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7C4BB2B4FDC59003D8447 /* WSwriter+Binding.swift */; };
 		63F7C4BE2B4FE72F003D8447 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7C4BD2B4FE72F003D8447 /* UINavigationController.swift */; };
 		63FA653F2B49ADBB00C744C8 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FA653E2B49ADBB00C744C8 /* TabController.swift */; };
+		63FF410B2B621620004CD7EA /* TableRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF410A2B621620004CD7EA /* TableRepository.swift */; };
+		63FF410D2B621637004CD7EA /* DBMErrorPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF410C2B621637004CD7EA /* DBMErrorPolicy.swift */; };
+		63FF41112B621744004CD7EA /* ChannelChatTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF41102B621744004CD7EA /* ChannelChatTable.swift */; };
+		63FF41132B6217CE004CD7EA /* UserInfoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF41122B6217CE004CD7EA /* UserInfoTable.swift */; };
+		63FF41152B6220CF004CD7EA /* ChannelTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF41142B6220CF004CD7EA /* ChannelTable.swift */; };
+		63FF41172B62212A004CD7EA /* ChannelChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF41162B62212A004CD7EA /* ChannelChatRepository.swift */; };
+		63FF41192B622172004CD7EA /* ChannelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF41182B622172004CD7EA /* ChannelRepository.swift */; };
+		63FF411B2B622419004CD7EA /* TempActorPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF411A2B622419004CD7EA /* TempActorPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -381,6 +389,14 @@
 		63F7C4BB2B4FDC59003D8447 /* WSwriter+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WSwriter+Binding.swift"; sourceTree = "<group>"; };
 		63F7C4BD2B4FE72F003D8447 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		63FA653E2B49ADBB00C744C8 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
+		63FF410A2B621620004CD7EA /* TableRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableRepository.swift; sourceTree = "<group>"; };
+		63FF410C2B621637004CD7EA /* DBMErrorPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBMErrorPolicy.swift; sourceTree = "<group>"; };
+		63FF41102B621744004CD7EA /* ChannelChatTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelChatTable.swift; sourceTree = "<group>"; };
+		63FF41122B6217CE004CD7EA /* UserInfoTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoTable.swift; sourceTree = "<group>"; };
+		63FF41142B6220CF004CD7EA /* ChannelTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTable.swift; sourceTree = "<group>"; };
+		63FF41162B62212A004CD7EA /* ChannelChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelChatRepository.swift; sourceTree = "<group>"; };
+		63FF41182B622172004CD7EA /* ChannelRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelRepository.swift; sourceTree = "<group>"; };
+		63FF411A2B622419004CD7EA /* TempActorPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempActorPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -466,10 +482,10 @@
 				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
 				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
-				631A60E62B44EE0B005509C2 /* ReactorServices */,
-				631A60D92B44EE01005509C2 /* Core */,
+				631A60E62B44EE0B005509C2 /* Services */,
 				631A60D82B44EDFA005509C2 /* Manager */,
 				631A60D02B44EDF5005509C2 /* Helpers */,
+				631A60D92B44EE01005509C2 /* Core */,
 				631A60A92B44ECEE005509C2 /* AppDelegate.swift */,
 				631A60AB2B44ECEE005509C2 /* SceneDelegate.swift */,
 				631A60AD2B44ECEE005509C2 /* ViewController.swift */,
@@ -528,6 +544,7 @@
 		631A60D82B44EDFA005509C2 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				63FF41082B6215C2004CD7EA /* DBM(DataBaseManager) */,
 				6312A24D2B617FC500593117 /* RCM(ReferenceCountManager) */,
 				639CA1BA2B5F7E4D00C21006 /* Schemes */,
 				6384A9BD2B47125600AA2F1B /* Network */,
@@ -561,7 +578,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		631A60E62B44EE0B005509C2 /* ReactorServices */ = {
+		631A60E62B44EE0B005509C2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				639CA1C32B5F891200C21006 /* ToastService */,
@@ -571,7 +588,7 @@
 				631A60E72B44EE0B005509C2 /* BaseService.swift */,
 				631A60E82B44EE0B005509C2 /* BasicProvider.swift */,
 			);
-			path = ReactorServices;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		631A60ED2B44EE15005509C2 /* Scenes */ = {
@@ -1138,6 +1155,45 @@
 			path = MainTabBar;
 			sourceTree = "<group>";
 		};
+		63FF41082B6215C2004CD7EA /* DBM(DataBaseManager) */ = {
+			isa = PBXGroup;
+			children = (
+				63FF410F2B6216CD004CD7EA /* Tables */,
+				63FF41092B621613004CD7EA /* DBMCores */,
+				63FF410E2B6216BF004CD7EA /* Repositories */,
+			);
+			path = "DBM(DataBaseManager)";
+			sourceTree = "<group>";
+		};
+		63FF41092B621613004CD7EA /* DBMCores */ = {
+			isa = PBXGroup;
+			children = (
+				63FF410A2B621620004CD7EA /* TableRepository.swift */,
+				63FF410C2B621637004CD7EA /* DBMErrorPolicy.swift */,
+			);
+			path = DBMCores;
+			sourceTree = "<group>";
+		};
+		63FF410E2B6216BF004CD7EA /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				63FF41162B62212A004CD7EA /* ChannelChatRepository.swift */,
+				63FF41182B622172004CD7EA /* ChannelRepository.swift */,
+				63FF411A2B622419004CD7EA /* TempActorPlayer.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		63FF410F2B6216CD004CD7EA /* Tables */ = {
+			isa = PBXGroup;
+			children = (
+				63FF41102B621744004CD7EA /* ChannelChatTable.swift */,
+				63FF41122B6217CE004CD7EA /* UserInfoTable.swift */,
+				63FF41142B6220CF004CD7EA /* ChannelTable.swift */,
+			);
+			path = Tables;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1253,6 +1309,7 @@
 				632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */,
 				636213062B4E95F60093D089 /* ImageManager.swift in Sources */,
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
+				63FF41192B622172004CD7EA /* ChannelRepository.swift in Sources */,
 				637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */,
 				636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */,
 				634F023C2B5A6BA900505B65 /* ChatCell.swift in Sources */,
@@ -1308,10 +1365,12 @@
 				639AFDE12B52CA1A00FA8280 /* WSManagerView.swift in Sources */,
 				636028052B555B5E00AF8731 /* WriterView.swift in Sources */,
 				6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */,
+				63FF41112B621744004CD7EA /* ChannelChatTable.swift in Sources */,
 				6360280C2B55605100AF8731 /* CHWriterReactor.swift in Sources */,
 				6323E1C82B60F73400D91E46 /* CHSettingReactor.swift in Sources */,
 				6377E6512B5AD07000238583 /* ScrollViewDown.swift in Sources */,
 				637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */,
+				63FF410B2B621620004CD7EA /* TableRepository.swift in Sources */,
 				63F0AED32B4B0775000A597B /* HomeVC+CellRegistration.swift in Sources */,
 				639E0CA22B5843F30076A4D8 /* WSSliderVC.swift in Sources */,
 				63C346FD2B55882700293991 /* WriterConfiguration.swift in Sources */,
@@ -1321,12 +1380,14 @@
 				6389CEA82B5D6102002A70A9 /* WSEmptyView.swift in Sources */,
 				632A2D612B4DAD1800E21DE8 /* WSwriterReactor.swift in Sources */,
 				636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */,
+				63FF41132B6217CE004CD7EA /* UserInfoTable.swift in Sources */,
 				63E4AFD22B49668C00E0B6A1 /* User.swift in Sources */,
 				63F7C4A42B4EEBC8003D8447 /* WorkSpaceRouter.swift in Sources */,
 				6323E1C52B60F70100D91E46 /* CHSetting+CollectionView.swift in Sources */,
 				6384A9D12B47134200AA2F1B /* Errors.swift in Sources */,
 				631A60F02B44EE15005509C2 /* OnboardingReactor.swift in Sources */,
 				639CA1C52B5F984100C21006 /* CHCreateReactor.swift in Sources */,
+				63FF41172B62212A004CD7EA /* ChannelChatRepository.swift in Sources */,
 				63F0AED52B4B0889000A597B /* NaviBar.swift in Sources */,
 				63E38ED32B510A4600BD6C93 /* TaskCounter.swift in Sources */,
 				63F7C4BC2B4FDC5A003D8447 /* WSwriter+Binding.swift in Sources */,
@@ -1347,6 +1408,7 @@
 				6389CEAD2B5D7D3C002A70A9 /* CHResponse.swift in Sources */,
 				637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */,
 				63F265FA2B53BA76007D865C /* WSService+AvailCheck.swift in Sources */,
+				63FF41152B6220CF004CD7EA /* ChannelTable.swift in Sources */,
 				63F7C4AC2B4F7E64003D8447 /* WS+NM.swift in Sources */,
 				63E38EE32B5167E500BD6C93 /* WSTostType.swift in Sources */,
 				6323E1C22B60F70100D91E46 /* CHSettingView.swift in Sources */,
@@ -1402,6 +1464,8 @@
 				639CFE672B5808A40030729E /* SliderVC.swift in Sources */,
 				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,
 				633584692B45610C00B83555 /* SignInEmailView.swift in Sources */,
+				63FF411B2B622419004CD7EA /* TempActorPlayer.swift in Sources */,
+				63FF410D2B621637004CD7EA /* DBMErrorPolicy.swift in Sources */,
 				6389CEB12B5D7DB1002A70A9 /* UserResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
