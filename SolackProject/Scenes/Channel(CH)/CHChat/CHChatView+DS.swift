@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import RxSwift
-class CHChatReactor{}
 struct ChatItem:Hashable{
     var id = UUID()
     let images:[String]
@@ -33,11 +32,6 @@ extension CHChatView{
             var snapshot = NSDiffableDataSourceSnapshot<String,ChatItem>()
             snapshot.appendSections(["Hello"])
             var arr:[ChatItem] = []
-            for i in (0..<5){
-                let images = Array(self.imageNames.prefix(Int.random(in: 0..<6)))
-                print(images)
-                arr.append( ChatItem(images: images) )
-            }
             snapshot.appendItems(arr, toSection: "Hello")
             apply(snapshot,animatingDifferences: true)
         }

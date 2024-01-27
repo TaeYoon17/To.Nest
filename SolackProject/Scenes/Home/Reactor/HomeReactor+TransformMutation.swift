@@ -55,8 +55,8 @@ extension HomeReactor{
         let transition = provider.chService.transition.flatMap {[weak self] transition -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
             switch transition{
-            case .goChatting: return Observable.concat([
-                .just(.channelDialog(.chatting(chID: 123))).delay(.milliseconds(100), scheduler: MainScheduler.asyncInstance),
+            case .goChatting(let chID,let chName): return Observable.concat([
+                .just(.channelDialog(.chatting(chID: chID, chName: chName))).delay(.milliseconds(100), scheduler: MainScheduler.asyncInstance),
                 .just(.channelDialog(nil))
             ])
             }

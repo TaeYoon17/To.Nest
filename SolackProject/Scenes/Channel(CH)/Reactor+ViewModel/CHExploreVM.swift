@@ -16,7 +16,7 @@ final class CHExploreVM{
     let allChannels: BehaviorSubject<[CHResponse]> = .init(value: [])
     let myChannels: BehaviorSubject<[CHResponse]> = .init(value: [])
     let alerts: PublishSubject<CHExploreAlert> = .init()
-    let moveChatting: PublishSubject<Int> = .init()
+    let moveChatting: PublishSubject<(chID:Int,chName:String)> = .init()
     init(provider: ServiceProviderProtocol!,myChannels:[CHResponse]?) {
         self.provider = provider
         provider.chService.checkAll()
@@ -32,7 +32,7 @@ final class CHExploreVM{
             }
         }.disposed(by: disposeBag)
         moveChatting.bind(with: self) { owner, ch in
-            owner.provider.chService.transition.onNext(.goChatting)
+            owner.provider.chService.transition.onNext(.goChatting(chID: ch.chID, chName: ch.chName))
         }.disposed(by: disposeBag)
     }
 }

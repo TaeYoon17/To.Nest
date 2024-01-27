@@ -68,7 +68,10 @@ extension HomeVC:UICollectionViewDelegate{
             nav.fullSheetSetting()
             self.present(nav, animated: true)
         case (.list,.channel):
+            let chatItem = dataSource.fetchChannel(item: item)
+            let chatReactor = CHChatReactor(reactor!.provider, id: chatItem.channelID, title: chatItem.name)
             let vc = CHChatView()
+            vc.reactor = chatReactor
             self.navigationController?.pushViewController(vc, animated: true)
         case (.list,.direct):break
         case (.list, .team): break

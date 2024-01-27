@@ -12,7 +12,7 @@ import ReactorKit
 enum HomePresent:Equatable{
     case create
     case explore
-    case chatting(chID:Int)
+    case chatting(chID:Int,chName:String)
 }
 final class HomeReactor: Reactor{
     let initialState: State = .init()

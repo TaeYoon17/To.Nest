@@ -14,5 +14,17 @@ final class ChannelChatTable: Object,Identifiable{
     @Persisted(originProperty: "chatList") var parentSet: LinkingObjects<CHTable>
     @Persisted var content: String
     @Persisted var imagePathes: List<String>
-    @Persisted var userInfo: UserInfoTable
+    @Persisted var createdAt: Date
+    @Persisted var userInfo: UserInfoTable?
+    convenience init(chatID: Int, chID: Int, parentSet: LinkingObjects<CHTable>, content: String, imagePathes: [String], createdAt: Date, userInfo: UserInfoTable? = nil) {
+        self.init()
+        self.chatID = chatID
+        self.chID = chID
+        self.parentSet = parentSet
+        self.content = content
+        self.imagePathes = .init()
+        imagePathes.forEach { self.imagePathes.append($0)}
+        self.createdAt = createdAt
+        self.userInfo = userInfo
+    }
 }

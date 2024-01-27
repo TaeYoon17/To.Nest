@@ -34,7 +34,8 @@ extension HomeVC{
     struct ChannelListItem:Identifiable,CollectionItemable{
         let itemType: ItemType = .list
         let sectionType: SectionType = .channel
-        var id:String{name}
+        var id:String{"\(channelID)"}
+        var channelID:Int
         var name :String
         var messageCount:Int
         var isRecent: Bool

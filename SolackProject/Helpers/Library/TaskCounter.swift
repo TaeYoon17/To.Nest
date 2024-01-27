@@ -10,6 +10,7 @@ import Combine
 
 actor TaskCounter{
     @Published private(set) var count = 0
+    var progressRatio: PassthroughSubject<Float,Never> = .init()
     private(set) var maxCount: Int
     private var completed = PassthroughSubject<Bool,Never>()
     private var subscription = Set<AnyCancellable>()
@@ -21,6 +22,7 @@ actor TaskCounter{
     }
     private func increment(){
         count += 1
+        progressRatio.send(Float(count) / Float(maxCount))
         if maxCount == count{
             count = 0
             completed.send(true)

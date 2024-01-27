@@ -20,20 +20,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.appleID) var appleID
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
-        print(accessToken)
         window = UIWindow(windowScene: scene)
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.white
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        AppManager.shared.initNavigationAppearances()
+        Task{
+            do{
+                let repository = try await TableRepository()
+                await repository.checkPath()
+            }catch{
+                fatalError("리포지토리 생성 오류 \(error)")
+            }
+        }
         RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         userAccessConnect()
-//        accessByAppleSignIn()
         if accessToken.isEmpty{
             let reactor = OnboardingViewReactor(AppManager.shared.provider)
             let vc = OnboardingView()

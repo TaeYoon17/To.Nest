@@ -9,10 +9,10 @@ import Foundation
 import RealmSwift
 // Realm DB 시스템에서 CRUD를 도와주는 Repository... RCMTable과 직접 소통할 수 있다.
 typealias RCMRepository = ReferenceRepository
-@MainActor class ReferenceRepository<T>where T: RCMTable{
+@BackgroundActor class ReferenceRepository<T>where T: RCMTable{
     var realm: Realm!
     private(set) var tasks: Results<T>!
-    @MainActor var getTasks:Results<T>{ realm.objects(T.self) }
+    var getTasks:Results<T>{ realm.objects(T.self) }
     func getAllTable()->[RCMTable]{
         return getTasks.map { $0 }
     }
@@ -24,34 +24,37 @@ typealias RCMRepository = ReferenceRepository
         case jpg
     }
     
-    func insert(item: any RCMTableConvertable){
+    func insert(item: any RCMTableConvertable)async{
         if let table = realm.object(ofType: T.self, forPrimaryKey: item.name){
-            try! realm.write({ table.count = item.count })
+            try! await realm.asyncWrite({ table.count = item.count })
         }else{
             let newTable = T.init(fileName: item.name)
             do{
-                try realm.write{ realm.add(newTable) }
+                try await realm.asyncWrite{ realm.add(newTable) }
                 tasks = realm.objects(T.self)
-                try realm.write({ newTable.count = item.count})
+                try await realm.asyncWrite({ newTable.count = item.count})
             }catch{
                 print("생성 문제")
             }
         }
     }
     
-    func clearTable(type: ClearType = .emptyBT,format: FormatType){
+    func clearTable(type: ClearType = .emptyBT,format: FormatType) async{
         let allTables = self.getTasks
         switch type{
         case .all:
-            try! realm.write{
+            try! await realm.asyncWrite{
                 realm.delete(allTables)
             }
         case .emptyBT:
             let emptyTables = allTables.where { $0.count <= 0 }
             emptyTables.forEach { tables in
-                FileManager.removeFromDocument(fileName: tables.name, type: .jpg)
+                switch format{
+                case .jpg:
+                    FileManager.removeFromDocument(fileName: tables.name, type: .jpg)
+                }
             }
-            try! realm.write{
+            try! await realm.asyncWrite{
                 realm.delete(emptyTables)
             }
         }

@@ -26,7 +26,7 @@ final class ChannelService:ChannelProtocol{
         case failed(ChannelFailed)
     }
     enum Transition{
-        case goChatting
+        case goChatting(chID:Int,chName:String)
     }
     func create(_ info: CHInfo){
         Task{

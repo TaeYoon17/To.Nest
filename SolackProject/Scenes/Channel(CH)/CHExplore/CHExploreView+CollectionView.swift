@@ -20,7 +20,7 @@ extension CHExploreView:UICollectionViewDelegate{
         collectionView.deselectItem(at: indexPath, animated: true)
         guard let nowChannel = dataSource.itemIdentifier(for: indexPath) else {return}
         if dataSource.isMyChannel(item: nowChannel){
-            vm.moveChatting.onNext(nowChannel.channelID)
+            vm.moveChatting.onNext((nowChannel.channelID,nowChannel.name))
         }else{
             vm.alerts.onNext(.join(chID: nowChannel.id, chName: nowChannel.name))
         }

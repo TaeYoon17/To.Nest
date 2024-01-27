@@ -30,7 +30,7 @@ extension HomeVC{
                     guard let bottomItem = owner.bottomModel.fetchByID(SectionType.channel.rawValue + ItemType.bottom.rawValue) else {return}
                     let channelHeader = Item(headerItem)
                     let channelBottom = Item(bottomItem)
-                    let chListItems: [ChannelListItem] = response.map{.init(name: $0.name, messageCount: 1, isRecent: true)}
+                    let chListItems: [ChannelListItem] = response.map{.init(channelID: $0.channelID, name: $0.name, messageCount: 1, isRecent: true)}
                     chListItems.forEach({owner.channelListModel.insertModel(item: $0)})
                     var items = chListItems.map{Item($0)}
                     var snapshot = owner.snapshot(for: .channel)

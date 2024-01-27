@@ -55,8 +55,9 @@ final class HomeVC: BaseVC, View{
                 let nav = UINavigationController(rootViewController: vc)
                 nav.modalPresentationStyle = .fullScreen
                 owner.present(nav, animated: true)
-            case .chatting(chID: let chID):
+            case .chatting(chID: let chID,chName: let name):
                 let vc = CHChatView()
+                vc.reactor = CHChatReactor(reactor.provider, id: chID, title: name)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }.disposed(by: disposeBag)

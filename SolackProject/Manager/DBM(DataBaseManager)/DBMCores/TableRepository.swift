@@ -8,12 +8,12 @@
 import Foundation
 import RealmSwift
 
-@MainActor class TableRepository<T> where T: Object{
+@BackgroundActor class TableRepository<T> where T: Object{
     var realm: Realm!
     private(set) var tasks: Results<T>!
-    @MainActor var getTasks:Results<T>{ realm.objects(T.self) }
-    init?() {
-        realm = try! Realm()
+    var getTasks:Results<T>{ realm.objects(T.self) }
+    init() async throws {
+        realm = try await Realm(actor: BackgroundActor.shared)
     }
     func checkPath(){
         print(Realm.Configuration.defaultConfiguration.fileURL ?? "경로 없음")
@@ -27,9 +27,10 @@ import RealmSwift
         }
     }
     
-    @discardableResult func create(item: T)-> Self?{
+    @discardableResult
+    func create(item: T) async -> Self?{
         do{
-            try realm.write{ realm.add(item) }
+            try await realm.asyncWrite{ realm.add(item) }
             tasks = realm.objects(T.self)
         }catch{
             print("생성 문제")
@@ -37,17 +38,17 @@ import RealmSwift
         }
         return self
     }
-    func createWithUpdate(item: T){
+    func createWithUpdate(item: T) async {
         do{
-            try realm.write{ realm.add(item,update: .modified) }
+            try await realm.asyncWrite{ realm.add(item,update: .modified) }
             tasks = realm.objects(T.self)
         }catch{
             print("생성 문제")
         }
     }
-    @discardableResult func delete(item: T)-> Self?{
+    @discardableResult func delete(item: T) async -> Self?{
         do{
-            try realm.write{
+            try await realm.asyncWrite{
                 realm.delete(item)
                 print("삭제 완료")
             }
@@ -62,10 +63,10 @@ import RealmSwift
         tasks = tasks.sorted(by: by)
         return self
     }
-    @discardableResult func update<U:_HasPersistedType>(item: T,by: WritableKeyPath<T,U>,data: U) -> Self?{
+    @discardableResult func update<U:_HasPersistedType>(item: T,by: WritableKeyPath<T,U>,data: U) async -> Self?{
         var item = item
         do{
-            try realm.write{ item[keyPath: by] = data }
+            try await realm.asyncWrite{ item[keyPath: by] = data }
         }catch{
             print("값 문제")
             return nil
@@ -78,13 +79,92 @@ import RealmSwift
     func getTableBy<U: ObjectId>(tableID: U) -> T?{
         return realm?.object(ofType: T.self, forPrimaryKey: tableID)
     }
-    func deleteTableBy<U: ObjectId>(tableID: U?) throws{
+    func deleteTableBy<U: ObjectId>(tableID: U?) async throws{
         guard let tableID else { throw RepositoryError.TableNotFound }
         guard let obj = realm?.object(ofType: T.self, forPrimaryKey: tableID) else{
             throw RepositoryError.TableNotFound
         }
-        delete(item: obj)
+        await delete(item: obj)
         print("Repository 데이터 삭제 완료")
     }
     
+}
+actor TableRepo<T> where T: Object{
+    var realm: Realm!
+    private(set) var tasks: Results<T>!
+    init() async throws {
+        realm = try await Realm(actor: self)
+    }
+    func checkPath(){
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "경로 없음")
+    }
+    func checkSchemaVersion(){
+        do {
+            let version = try schemaVersionAtURL(realm.configuration.fileURL!)
+            print("Schema version: \(version)")
+        }catch{
+            print(error)
+        }
+    }
+    @discardableResult func create(item: T) async -> Self?{
+        do{
+            try await realm.asyncWrite {
+                realm.add(item)
+            }
+            tasks = realm.objects(T.self)
+        }catch{
+            print("생성 문제")
+            return nil
+        }
+        return self
+    }
+    func createWithUpdate(item: T) async {
+        do{
+            try await realm.asyncWrite{ realm.add(item,update: .modified) }
+            tasks = realm.objects(T.self)
+        }catch{
+            print("생성 문제")
+        }
+    }
+    @discardableResult func delete(item: T) async -> Self?{
+        do{
+            try await realm.asyncWrite{
+                realm.delete(item)
+                print("삭제 완료")
+            }
+            tasks = realm.objects(T.self)
+        }catch{
+            print("삭제 안됨")
+            return nil
+        }
+        return self
+    }
+    @discardableResult func filter<U:_HasPersistedType>(by: KeyPath<T,U>) -> Self? where U.PersistedType:SortableType{
+        tasks = tasks.sorted(by: by)
+        return self
+    }
+    @discardableResult func update<U:_HasPersistedType>(item: T,by: WritableKeyPath<T,U>,data: U) async -> Self?{
+        var item = item
+        do{
+            try await realm.asyncWrite{ item[keyPath: by] = data }
+        }catch{
+            print("값 문제")
+            return nil
+        }
+        return self
+    }
+    func objectByPrimaryKey<U: ObjectId>(primaryKey: U) -> T? {
+        return realm?.object(ofType: T.self, forPrimaryKey: primaryKey)
+    }
+    func getTableBy<U: ObjectId>(tableID: U) -> T?{
+        return realm?.object(ofType: T.self, forPrimaryKey: tableID)
+    }
+    func deleteTableBy<U: ObjectId>(tableID: U?) async throws{
+        guard let tableID else { throw RepositoryError.TableNotFound }
+        guard let obj = realm?.object(ofType: T.self, forPrimaryKey: tableID) else{
+            throw RepositoryError.TableNotFound
+        }
+        await delete(item: obj)
+        print("Repository 데이터 삭제 완료")
+    }
 }

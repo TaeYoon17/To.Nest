@@ -8,6 +8,6 @@
 import Foundation
 import RealmSwift
 typealias CHChatRepository = ChannelChatRepository
-@MainActor final class ChannelChatRepository: TableRepository<CHChatTable>{
+@BackgroundActor final class ChannelChatRepository: TableRepository<CHTable>{
     
 }

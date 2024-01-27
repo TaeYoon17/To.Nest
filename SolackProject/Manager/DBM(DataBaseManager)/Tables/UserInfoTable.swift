@@ -16,4 +16,10 @@ final class UserInfoTable:Object,Identifiable{
     @Persisted var email: String
     @Persisted var nickName:String
     @Persisted var profileImage:String
+    convenience init(email:String,nickName:String,profileImage:String) {
+        self.init()
+        self.email = email
+        self.nickName = nickName
+        self.profileImage = profileImage
+    }
 }

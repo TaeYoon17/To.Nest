@@ -14,3 +14,12 @@ final class AppManager{
     let provider = ServiceProvider()
     let userAccessable = PublishSubject<Bool>()
 }
+extension AppManager{
+    func initNavigationAppearances(){
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.white
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+}
