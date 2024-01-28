@@ -12,14 +12,17 @@ import RealmSwift
 // 그냥 유저 아이디만 받아서 메모리 캐시를 사용하는게 더 나을 수도..?
 final class UserInfoTable:Object,Identifiable{
     @Persisted(primaryKey: true) var userID: Int
-    @Persisted(originProperty: "userInfo") var parentSet: LinkingObjects<CHChatTable>
     @Persisted var email: String
     @Persisted var nickName:String
-    @Persisted var profileImage:String
-    convenience init(email:String,nickName:String,profileImage:String) {
+    @Persisted var profileImage:String?
+    convenience init(userID:Int,email:String,nickName:String,profileImage:String?) {
         self.init()
+        self.userID = userID
         self.email = email
         self.nickName = nickName
         self.profileImage = profileImage
+    }
+    convenience init(userResponse info:UserResponse) {
+        self.init(userID: info.userID, email: info.email, nickName: info.nickname, profileImage: info.profileImage)
     }
 }

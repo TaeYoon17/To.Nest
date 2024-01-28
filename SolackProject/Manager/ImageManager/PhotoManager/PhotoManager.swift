@@ -17,7 +17,6 @@ extension ImageManager{
     final class PhotoManager{
         static let shared = PhotoManager()
         private weak var viewController: UIViewController?
-        var loadCompletion:(()->())?
         private let cachingManager = PHCachingImageManager()
         var subscription = Set<AnyCancellable>()
         var disposeBag = DisposeBag()
@@ -25,9 +24,8 @@ extension ImageManager{
         var counter = TaskCounter()
         let fileResults: PublishSubject<(UIViewController,news:[FileData],remains:[String])> = .init()
         var prevIdentifiers:[String]? = nil
-        func presentPicker(vc: UIViewController,multipleSelection: Bool = false,prevIdentifiers:[String]? = nil,loadCompletion: (()->())? = nil) {
+        func presentPicker(vc: UIViewController,multipleSelection: Bool = false,prevIdentifiers:[String]? = nil) {
             self.viewController = vc
-            self.loadCompletion = loadCompletion
             let filter = PHPickerFilter.images
             var configuration = PHPickerConfiguration(photoLibrary: .shared())
             configuration.filter = filter
@@ -86,9 +84,7 @@ extension ImageManager{
 extension PM:PHPickerViewControllerDelegate{
     // 델리게이트 구현 사항
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        viewController?.dismiss(animated: true,completion: {[weak self] in
-            self?.loadCompletion?()
-        })
+        viewController?.dismiss(animated: true)
         Task{
             do{
                 try await downloadToDocument(results: results)

@@ -75,18 +75,13 @@ extension ChatFields.ChatTextField{
 
 //MARK: -- 레이아웃과 셀
 fileprivate extension ChatFields.ChatTextField.ImageViewer{
-    
     static var layout: UICollectionViewCompositionalLayout{
         let size = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
         let item  = NSCollectionLayoutItem(layoutSize: size)
-        
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitems: [item,item,item,item,item])
         group.interItemSpacing = .flexible(0)
-        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        
-
         let layout = UICollectionViewCompositionalLayout(section: section)
         var config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
@@ -94,7 +89,8 @@ fileprivate extension ChatFields.ChatTextField.ImageViewer{
         return layout
     }
     var registration: UICollectionView.CellRegistration<UICollectionViewCell,Item>{
-        UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+        UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
+            guard let self else {return}
             cell.contentConfiguration = UIHostingConfiguration(content: {
                 ZStack(alignment: .bottomLeading){
                     Image(uiImage:itemIdentifier.image)
@@ -103,7 +99,7 @@ fileprivate extension ChatFields.ChatTextField.ImageViewer{
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .overlay(alignment: .topTrailing) {
                             Button{
-                                print("닫기 버튼 탭탭탭")
+                                self.deleteItemID.onNext(itemIdentifier.imageID)
                             }label: {
                                 Image(systemName: "xmark.circle")
                                     .resizable()

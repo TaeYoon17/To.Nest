@@ -12,7 +12,6 @@ import KakaoSDKAuth
 import RxSwift
 import AuthenticationServices
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
     var disposeBag = DisposeBag()
     @DefaultsState(\.expiration) var expiration
@@ -23,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         AppManager.shared.initNavigationAppearances()
+        print("-------accessToken-------")
+        print(accessToken)
         Task{
             do{
                 let repository = try await TableRepository()

@@ -17,22 +17,26 @@ extension CHChatView{
         return layout
     }
     var chatCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,ChatItem>{
-        UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
+        UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             cell.backgroundColor = .blue
-            Task{
+            Task{[weak self] in
+                guard let self else{
+                    fatalError("메모리 SELF 오류!!")
+                }
                 var image:[Image] = []
                 for  imageName in itemIdentifier.images {
                     do{
-                        let uiimage = try await UIImage.fetchWebCache(name: imageName, size: .init(width: 120, height: 80))
+                        let uiimage = try await UIImage.fetchFileCache(name: imageName, size: dataSource.thumbnailSize)
                         image.append(Image(uiImage: uiimage))
                     }catch{
-                        let uiimage = try UIImage(named: imageName)!.downSample(size: .init(width: 120, height: 80))
+                        let uiimage = UIImage.fetchBy(fileName: imageName, ofSize: dataSource.thumbnailSize)
                         image.append(Image(uiImage: uiimage))
                     }
                 }
                 await MainActor.run {
                     cell.contentConfiguration = UIHostingConfiguration(content: {
-                        ChatCell(realImage: image)
+//                        ChatCell(realImage: image)
+                        ChatCell(message: itemIdentifier.content ?? "",realImage:image)
                     })
                     cell.layoutIfNeeded()
                 }

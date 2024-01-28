@@ -18,3 +18,7 @@ struct UserResponse:Codable{
         case profileImage
     }
 }
+extension UserResponse: Equatable{
+    
+}
+    

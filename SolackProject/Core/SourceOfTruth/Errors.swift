@@ -68,3 +68,10 @@ enum CommonFailed: String, FailedProtocol{
         CommonFailed(rawValue: val)
     }
 }
+enum MessageFailed: String, FailedProtocol{
+    case badRequest = "E11"
+    case nonExistData = "E13"
+    static func converter(val: String) -> MessageFailed? {
+        MessageFailed(rawValue: val)
+    }
+}

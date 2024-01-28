@@ -86,7 +86,6 @@ enum WorkSpaceRouter:URLRequestConvertible{
         switch self {
         case .create(let info),.edit(wsID: _, info: let info):
             if let image = info.image{
-                print("이미지 존재함!!")
                 multipartFormData.append(image, withName: "image", fileName: "\(info.name ?? "")123.jpg", mimeType: "image/jpeg")
             }
             multipartFormData.append(Data(info.name.utf8), withName: "name")

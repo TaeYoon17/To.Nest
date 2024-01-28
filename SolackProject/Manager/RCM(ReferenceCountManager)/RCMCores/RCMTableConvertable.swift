@@ -12,7 +12,7 @@ typealias RCMTableConvertable = ReferenceCountTableConvertable
 // 래퍼런스 카운트 매니저 [DB Repository]에서 이 프로토콜을 준수한 인스턴스를 이용할 수 있음
 protocol ReferenceCountTableConvertable:Identifiable{
     var id:String {get}
-    var name: String {get set}
+    var name: String {get}
     var count: Int {get set}
     init(name:String,count:Int)
 }

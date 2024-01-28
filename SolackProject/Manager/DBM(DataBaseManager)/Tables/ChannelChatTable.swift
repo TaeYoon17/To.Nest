@@ -10,21 +10,30 @@ import RealmSwift
 typealias CHChatTable = ChannelChatTable
 final class ChannelChatTable: Object,Identifiable{
     @Persisted(primaryKey: true) var chatID: Int
-    @Persisted var chID: Int
     @Persisted(originProperty: "chatList") var parentSet: LinkingObjects<CHTable>
-    @Persisted var content: String
-    @Persisted var imagePathes: List<String>
+    @Persisted var chID: Int
+    @Persisted var content: String?
+    @Persisted var imagePathes: List<String> = .init()
     @Persisted var createdAt: Date
-    @Persisted var userInfo: UserInfoTable?
-    convenience init(chatID: Int, chID: Int, parentSet: LinkingObjects<CHTable>, content: String, imagePathes: [String], createdAt: Date, userInfo: UserInfoTable? = nil) {
+    @Persisted var userID: Int
+    convenience init(chatID: Int, chID: Int, content: String?, imagePathes: [String], createdAt: Date, userID:Int) {
         self.init()
         self.chatID = chatID
         self.chID = chID
         self.parentSet = parentSet
         self.content = content
-        self.imagePathes = .init()
         imagePathes.forEach { self.imagePathes.append($0)}
         self.createdAt = createdAt
-        self.userInfo = userInfo
+        self.userID = userID
+    }
+}
+extension ChannelChatTable{
+    convenience init(response info:ChatResponse) {
+        self.init(chatID: info.chatID,
+                  chID: info.channelID,
+                  content: info.content,
+                  imagePathes: info.files,
+                  createdAt: info.createdAt.convertToDate(),
+                  userID: info.user.userID)
     }
 }

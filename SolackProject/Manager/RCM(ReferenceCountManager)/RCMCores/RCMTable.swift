@@ -7,9 +7,13 @@
 
 import Foundation
 import RealmSwift
+protocol RCMTableAble: Object,Identifiable,RCMTableConvertable{
+    var name:String { get set}
+    var count: Int {get set}
+}
 typealias RCMTable = ReferenceCountManagerTable
 // 실제 Realm에 담길 래퍼런스 카운트 테이블 구조
-class ReferenceCountManagerTable: Object,Identifiable,RCMTableConvertable{
+final class ReferenceCountManagerTable: Object,RCMTableAble{
     @Persisted(primaryKey: true) var name: String
     @Persisted var count: Int = 0
      

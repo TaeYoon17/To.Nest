@@ -13,14 +13,16 @@ struct ImageItem: RCMTableConvertable{
 }
 typealias IRCM = ImageRCM
 final class ImageRCM: RCMAble{
+    
     typealias Item = ImageItem
     typealias Table = RCMTable
     
-    @BackgroundActor var repository = ReferenceRepository<RCMTable>()
+    @BackgroundActor var repository: ReferenceRepository<RCMTable>!
     static let shared = ImageRCM()
     var instance: [Item.ID : ImageItem] = [:]
     private init(){
-        Task{
+        Task{@BackgroundActor in
+            self.repository = try await ReferenceRepository<RCMTable>()
             await resetInstance()
         }
     }

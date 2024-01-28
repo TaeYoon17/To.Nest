@@ -9,11 +9,11 @@ import Foundation
 import RealmSwift
 // Realm DB 시스템에서 CRUD를 도와주는 Repository... RCMTable과 직접 소통할 수 있다.
 typealias RCMRepository = ReferenceRepository
-@BackgroundActor class ReferenceRepository<T>where T: RCMTable{
+@BackgroundActor class ReferenceRepository<T> where T: RCMTableAble{
     var realm: Realm!
     private(set) var tasks: Results<T>!
     var getTasks:Results<T>{ realm.objects(T.self) }
-    func getAllTable()->[RCMTable]{
+    func getAllTable()->[T]{
         return getTasks.map { $0 }
     }
     enum ClearType{
@@ -23,12 +23,14 @@ typealias RCMRepository = ReferenceRepository
     enum FormatType{
         case jpg
     }
-    
+    init() async throws {
+        realm = try await Realm(actor: BackgroundActor.shared)
+    }
     func insert(item: any RCMTableConvertable)async{
         if let table = realm.object(ofType: T.self, forPrimaryKey: item.name){
             try! await realm.asyncWrite({ table.count = item.count })
         }else{
-            let newTable = T.init(fileName: item.name)
+            let newTable = T.init(name: item.name, count: item.count)
             do{
                 try await realm.asyncWrite{ realm.add(newTable) }
                 tasks = realm.objects(T.self)

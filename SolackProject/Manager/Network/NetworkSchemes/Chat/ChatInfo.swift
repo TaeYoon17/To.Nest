@@ -9,7 +9,7 @@ import Foundation
 struct FileData:Equatable{
     let file: Data
     let type: FileType
-    let name: String
+    var name: String
     static func ==(lhs: FileData, rhs: FileData) -> Bool {
         return lhs.name == rhs.name && lhs.type == rhs.type
     }

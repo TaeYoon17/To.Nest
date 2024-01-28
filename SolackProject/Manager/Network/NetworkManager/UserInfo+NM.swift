@@ -40,7 +40,7 @@ extension NetworkManager{
             AF.request(UserRouter.validation(email: email),interceptor: self.baseInterceptor).response { res in
                 switch res.result{
                 case .success(let val):
-                    print("이메일 중복 검사 성공!!")
+                    
                     guard let code = res.response?.statusCode else{
                         observer.onError(Errors.API.FailFetchToken)
                         break

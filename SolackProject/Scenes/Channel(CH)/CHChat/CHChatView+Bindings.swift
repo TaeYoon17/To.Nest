@@ -11,9 +11,9 @@ import RxCocoa
 import ReactorKit
 import Combine
 extension CHChatView{
+    typealias Action = CHChatReactor.Action
     func naviBarBinding(reactor: CHChatReactor){
         Observable.combineLatest(reactor.state.map{$0.memberCount}, reactor.state.map{$0.title})
-//            .distinctUntilChanged({$0.0 == $1.0 && $0.1 == $1.1})
             .bind(with: self) { owner, args in
             var (number, title) = args
             owner.updateTitleLabel(title: title, number: number)
@@ -21,12 +21,21 @@ extension CHChatView{
         chatField.text.map{CHChatReactor.Action.setChatText($0)}.bind(to: reactor.action).disposed(by: disposeBag)
     }
     func textFieldBinding(reactor: CHChatReactor){
+        
+        // 채팅 전송 버튼 탭
+        chatField.send.map{Action.actionSendChat}.bind(to: reactor.action).disposed(by: disposeBag)
+        // 이미지 항목 하나 삭제
+        chatField.deleteImageItem.map{Action.setDeleteImage($0)}.bind(to: reactor.action).disposed(by: disposeBag)
+        
+        // 메시지 전송 가능
+        reactor.state.map{$0.isActiveSend}.bind(to: chatField.isActiveSend).disposed(by: disposeBag)
         //MARK: -- 이미지 추가
-        // 이미지 추가 버튼 클릭
-        chatField.addImages.map{CHChatReactor.Action.addImages}.bind(to: reactor.action).disposed(by: disposeBag)
+        // 앨범 이미지 추가 버튼 클릭
+        chatField.addImages.map{Action.addImages}.bind(to: reactor.action).disposed(by: disposeBag)
         chatField.addImages.bind(with: self) { owner, _ in
             owner.dismissMyKeyboard()
         }.disposed(by: disposeBag)
+        
         // 뷰모델(리엑터)에서 이전에 사용한 앨범 이미지 정보를 가져와 앨범 present 띄우기
         reactor.state.map{$0.prevIdentifiers}.distinctUntilChanged()
             .subscribe(on: MainScheduler.asyncInstance).bind(with: self) { owner, ids in
@@ -59,8 +68,12 @@ extension CHChatView{
                 }}
             .subscribe(on: MainScheduler.asyncInstance)
             .bind(with: self, onNext: { owner, items in
-                owner.chatField.hiddenImageView = items.isEmpty
-                owner.chatField.imageFiles.onNext(items)
+                Task{
+                    await MainActor.run {
+                        owner.chatField.hiddenImageView = items.isEmpty
+                        owner.chatField.imageFiles.onNext(items)
+                    }
+                }
             }).disposed(by: disposeBag)
         Task{
             await PM.shared.counter.progressRatio.sink{[weak self] ratio in

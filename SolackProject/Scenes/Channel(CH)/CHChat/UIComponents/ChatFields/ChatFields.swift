@@ -11,10 +11,12 @@ import RxSwift
 import RxCocoa
 final class ChatFields:UIView{
     typealias ImageViewerItem = ChatFields.ChatTextField.ImageViewer.Item
+    let isActiveSend:BehaviorSubject<Bool> = .init(value: false)
     let text:PublishSubject<String> = .init()
-    var imageFiles: PublishSubject<[ImageViewerItem]>!
     var send: ControlEvent<Void>!
     var addImages: ControlEvent<Void>!
+    weak var imageFiles: PublishSubject<[ImageViewerItem]>!
+    weak var deleteImageItem: PublishSubject<String>!
     let placeholder:String
     var hiddenImageView:Bool = false{
         didSet{
@@ -43,6 +45,35 @@ final class ChatFields:UIView{
     init(placeholder:String){
         self.placeholder = placeholder
         super.init(frame: .zero)
+        configureView()
+        chatField.placeholder = placeholder
+        chatField.textPassthrough.bind(to: text).disposed(by: disposeBag)
+        self.send = sendBtn.rx.tap
+        self.addImages = addItemBtn.rx.tap
+        self.imageFiles = chatField.imageFiles
+        self.deleteImageItem = chatField.imageVierwer.deleteItemID
+        self.send.bind(with: self) { owner, _ in
+            if owner.chatField.textField.textColor == .text{
+                owner.chatField.textField.text = ""
+            }
+        }.disposed(by: disposeBag)
+        self.isActiveSend.distinctUntilChanged()
+            .bind(with: self) { owner, value in
+                Task{@MainActor in
+                    if value{
+                        owner.sendBtn.configuration?.image = .sendActive
+                        owner.sendBtn.isUserInteractionEnabled = true
+                    }else{
+                        owner.sendBtn.configuration?.image = .send
+                        owner.sendBtn.isUserInteractionEnabled = false
+                    }
+                }
+        }.disposed(by: disposeBag)
+    }
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    func configureView(){
         addSubview(addItemBtn)
         addSubview(chatField)
         addSubview(sendBtn)
@@ -64,17 +95,6 @@ final class ChatFields:UIView{
         backgroundColor = .gray1
         self.layer.cornerRadius = 8
         self.layer.cornerCurve = .circular
-        chatField.placeholder = placeholder
-        chatField.textPassthrough.bind(to: text).disposed(by: disposeBag)
-        self.send = sendBtn.rx.tap
-        self.addImages = addItemBtn.rx.tap
-        self.send.bind(with: self) { owner, _ in
-            owner.chatField.textField.text = ""
-        }.disposed(by: disposeBag)
-        self.imageFiles = chatField.imageFiles
-    }
-    required init?(coder: NSCoder) {
-        fatalError()
     }
 }
 extension ChatFields{
@@ -82,7 +102,7 @@ extension ChatFields{
         typealias ImageViewerItem = ChatFields.ChatTextField.ImageViewer.Item
         var hiddenImageView:Bool = false{
             didSet{
-                Task{ @MainActor in 
+                Task{ @MainActor in
                     self.imageVierwer.isHidden = hiddenImageView
                 }
             }

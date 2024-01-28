@@ -6,14 +6,18 @@
 //
 
 import Foundation
-struct ChatResponse:Codable{
+struct ChatResponse:Codable,Equatable{
+    static func == (lhs: ChatResponse, rhs: ChatResponse) -> Bool {
+        lhs.chatID == rhs.chatID
+    }
+    
     var channelID:Int
     var channelName:String
     var chatID: Int
     var content:String?
     var createdAt:String
     var files:[String]
-    var user:[UserResponse]
+    var user:UserResponse
     enum CodingKeys: String, CodingKey{
         case channelID = "channel_id"
         case channelName

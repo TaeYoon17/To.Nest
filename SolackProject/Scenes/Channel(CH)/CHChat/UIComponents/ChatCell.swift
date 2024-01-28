@@ -12,7 +12,7 @@ struct ChatUser{
     let thumbnail:String
 }
 struct ChatCell:View{
-    let message:String = "컨퍼런스 사진 공유드려요!"
+    let message:String
     let date:String = "08:16 오전"
     let chatUser = ChatUser(nickName: "옹골찬 고래밥", thumbnail: "heart")
     //    var images:[String] = ["ARKit","macOS" ]
@@ -116,6 +116,6 @@ struct ContainerImage:View{
 }
 #Preview {
     List{
-        ChatCell()
+        ChatCell(message: "Hello world!!")
     }.listStyle(.plain)
 }

@@ -76,7 +76,7 @@ import RealmSwift
     func objectByPrimaryKey<U: ObjectId>(primaryKey: U) -> T? {
         return realm?.object(ofType: T.self, forPrimaryKey: primaryKey)
     }
-    func getTableBy<U: ObjectId>(tableID: U) -> T?{
+    func getTableBy<U>(tableID: U) -> T?{
         return realm?.object(ofType: T.self, forPrimaryKey: tableID)
     }
     func deleteTableBy<U: ObjectId>(tableID: U?) async throws{

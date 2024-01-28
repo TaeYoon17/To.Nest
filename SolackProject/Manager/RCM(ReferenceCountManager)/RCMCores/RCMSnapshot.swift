@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 // 래퍼런스 카운트 매니저에 변경 사항을 적용하기 위한 스냅샷... 다른 매니저라도 공통된 스냅샷 로직을 갖는다...
-struct RCMSnapshot<RCM:RCMAble,Item:RCMTableConvertable,Table:RCMTable> where RCM.Item == Item, RCM.Table == Table,Item.ID == String
+struct RCMSnapshot<RCM:RCMAble,Item:RCMTableConvertable,Table:RCMTableAble> where RCM.Item == Item, RCM.Table == Table,Item.ID == String
 {
     var instance: [Item.ID : Item] = [:]
     init(irc: RCM){

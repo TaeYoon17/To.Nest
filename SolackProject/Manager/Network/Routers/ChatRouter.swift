@@ -42,6 +42,7 @@ enum ChatRouter:URLRequestConvertible{
         switch self{
         case .create:
             headers["Content-Type"] = "multipart/form-data"
+            headers["accept"] = "application/json"
         case .check:
             headers["Content-Type"] = "application/json"
         }
@@ -59,7 +60,6 @@ enum ChatRouter:URLRequestConvertible{
         case .check:
             if let queryItem = params.urlQueryItems{
                 urlRequest.url?.append(queryItems: queryItem)
-                print("ChatRouter 쿼리 아이템 추가")
             }
             return urlRequest
         }
@@ -69,7 +69,9 @@ enum ChatRouter:URLRequestConvertible{
         switch self {
         case .create(wsID: let wsID, chName: let chName, info: let info):
             for file in info.files{
-                multipartFormData.append(file.file, withName: "file",fileName: "\(file.name).\(file.type.rawValue)",mimeType: file.type.mimeType)
+                let fileName = "\(file.name).\(file.type.rawValue)"
+                print(fileName, fileName,file.type.mimeType)
+                multipartFormData.append(file.file, withName: "files",fileName: fileName,mimeType: file.type.mimeType)
             }
             multipartFormData.append(Data(info.content.utf8), withName: "content")
         default: ()
