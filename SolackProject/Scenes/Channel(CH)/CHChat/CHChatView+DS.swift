@@ -14,7 +14,7 @@ extension CHChatView{
         var bottomFinished: PublishSubject<()> = .init()
         var disposeBag = DisposeBag()
         var chatModel = AnyModelStore<ChatItem>([])
-        let thumbnailSize:CGSize = .init(width: 120, height: 80)
+//        let thumbnailSize:CGSize = .init(width: 120, height: 80)
         init(reactor:CHChatReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, ChatItem>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
             initDataSource()
@@ -25,9 +25,9 @@ extension CHChatView{
                         // 이미 모델에 저장된 것은 추가하지 않음
                         guard !owner.chatModel.isExist(id: response.chatID) else {continue}
                         for imageName in response.files{
-                            guard !UIImage.isExistFileCache(name: imageName,size: owner.thumbnailSize) else { continue }
-                            let image = UIImage.fetchBy(fileName: imageName,ofSize: owner.thumbnailSize)
-                            try await image.appendFileCache(name: imageName,size: owner.thumbnailSize,isCover:false)
+                            guard !UIImage.isExistFileCache(name: imageName,type: .messageThumbnail) else { continue }
+                            let image = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
+                            try await image.appendFileCache(name: imageName,type: .messageThumbnail,isCover:false)
                         }
                         let item = ChatItem(chatID: response.chatID, content: response.content, images: response.files, createdAt: response.createdAt.convertToDate())
                         items.append(item)

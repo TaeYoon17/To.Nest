@@ -27,4 +27,11 @@ struct ChatResponse:Codable,Equatable{
         case files
         case user
     }
+    
+    
+}
+extension ChatResponse{
+    mutating func convertWebPathToFilePath(){
+        self.files = self.files.map{$0.webFileToDocFile()}
+    }
 }

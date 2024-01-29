@@ -12,11 +12,13 @@ extension UIImage{
         case small
         case medium
         case large
+        case messageThumbnail
         var size:CGSize{
             switch self{
             case .large: .init(width: 128,height:128)
             case .small: .init(width: 44,height:44)
             case .medium: .init(width: 66,height:66)
+            case .messageThumbnail: .init(width: 120, height: 80)
             }
         }
     }

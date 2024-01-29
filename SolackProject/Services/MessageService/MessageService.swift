@@ -7,17 +7,19 @@
 
 import Foundation
 import RxSwift
+import UIKit
 typealias MSGService = MessageService
 protocol MessageProtocol{
     var event:PublishSubject<MSGService.Event> {get}
     func create(chID:Int,chName:String,chat: ChatInfo)
     func create(dm: ChatInfo)
+    func getChannelDatas(chID:Int,chName:String)
 }
 final class MessageService:MessageProtocol{
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()
-    @BackgroundActor var channelRepostory: ChannelRepository!
+    @BackgroundActor var channelRepostory: ChannelRepository?
     @BackgroundActor var chChatrepository: ChannelChatRepository!
     @BackgroundActor var userRepository: UserInfoRepository!
     @BackgroundActor var imageReferenceCountManager: ImageRCM!
@@ -34,6 +36,7 @@ final class MessageService:MessageProtocol{
     }
     enum Event{
         case create(response:ChatResponse)
+        case check(response:[ChatResponse])
     }
     
     
@@ -45,116 +48,55 @@ final class MessageService:MessageProtocol{
 extension MessageService{
     func create(chID:Int,chName:String,chat: ChatInfo){
         Task{
-            var ircSnapshot = await imageReferenceCountManager.snapshot
             do{
+                var ircSnapshot = await imageReferenceCountManager.snapshot
                 var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS,chName: chName,info: chat)
-                res.files = res.files.map{$0.webFileToDocFile()}
-                // 파일 데이터 저장하기
-                for (fileName, file) in zip(res.files,chat.files){
-                    if !FileManager.checkExistDocument(fileName: fileName, type: file.type){
-                        try file.file.saveToDocument(fileName: fileName)
-                    }
+                for (fileName, file) in zip(res.files,chat.files){// 파일 데이터 저장하기
+                    if !FileManager.checkExistDocument(fileName: fileName){ try file.file.saveToDocument(fileName: fileName) }
                     await ircSnapshot.plusCount(id: fileName)
                 }
                 let result = res
                 event.onNext(.create(response: result))
-                try await self.userSave(channelID: chID, userResponse: result.user)
-                Task {@BackgroundActor [weak self] in
-                    let chatTable = CHChatTable(response: result)
-                    await _ = self?.chChatrepository.create(item: chatTable)
-                    await self?.channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
-                }
+                let chatTable = CHChatTable(response: result)
+                await chChatrepository.create(item: chatTable)
+                await channelRepostory?.appendChat(channelID: chID, chatTables: [chatTable])
+                try await appendUserReferenceCounts(channelID: chID, createUsers: [result.user])
+                try await updateUserInformationToDataBase(channelID: chID, userResponses: [result.user])
             }catch{
                 print(error)
             }
-            await imageReferenceCountManager.apply(ircSnapshot)
             await imageReferenceCountManager.saveRepository()
+            await userReferenceCountManager.saveRepository()
         }
     }
-    
-    private func userSave(channelID:Int,userResponse:UserResponse) async throws {
-        var ircSnapshot = await imageReferenceCountManager.snapshot
-        var userrcSnapshot = await userReferenceCountManager.snapshot
-        var response = userResponse
-        let urlPath = response.profileImage
-        let filePath = response.profileImage?.webFileToDocFile()
-        response.profileImage = filePath
-        defer{
-            print("Defer가 일어난다")
-            let (i,u) = (ircSnapshot,userrcSnapshot)
-            Task{@BackgroundActor in
-                imageReferenceCountManager.apply(i)
-                userReferenceCountManager.apply(u)
-                await imageReferenceCountManager.saveRepository()
-                await userReferenceCountManager.saveRepository()
-            }
-        }
-        if let userTable = await userRepository.getTableBy(tableID: userResponse.userID){ // 기존에 있던 유저, 업데이트 해야할 수 있음
-            guard userTable.response != response else {
-                await userrcSnapshot.plusCount(channelID: channelID, userID: userResponse.userID)
-                return
-            }
-            guard userTable.profileImage != response.profileImage else {
-                await userRepository.update(table: userTable, response: response)
-                await userrcSnapshot.plusCount(channelID: channelID, userID: userResponse.userID)
-                return
-            }
-            if let prevImageID = userTable.profileImage{ // 이전 이미지 없애기
-                FileManager.removeFromDocument(fileName: prevImageID)
-                await ircSnapshot.minusCount(id: prevImageID)
-            }
-            if let urlPath,let filePath,let profileImageData = await NM.shared.getThumbnail(urlPath){ // 프로필 이미지가 변경됨
-                try profileImageData.saveToDocument(fileName: filePath)
-                await ircSnapshot.plusCount(id: filePath)
-            }
-            await userRepository.update(table: userTable, response: response)
-            await userrcSnapshot.plusCount(channelID: channelID, userID: userResponse.userID)
-            return
-        }else{
-            // 기존에 없던 유저 반환 값, 새로 만들어야함
-            if let urlPath,let filePath,let profileImageData = await NM.shared.getThumbnail(urlPath){ // 프로필 이미지가 추가
-                try profileImageData.saveToDocument(fileName: filePath)
-                await ircSnapshot.plusCount(id: filePath)
-            }
-            let userTable:UserInfoTable = UserInfoTable(userResponse: response)
-            _ = await userRepository.create(item: userTable)
-            await userrcSnapshot.plusCount(channelID: channelID, userID: userResponse.userID)
-            return
-        }
-//        let (i,u) = (ircSnapshot,userrcSnapshot)
-//        Task{@BackgroundActor in
-//            imageReferenceCountManager.apply(i)
-//            userReferenceCountManager.apply(u)
-//            await imageReferenceCountManager.saveRepository()
-//            await userReferenceCountManager.saveRepository()
-//        }
-    }
-    
-    func getChannelDatas(chID:Int,chName:String,date:Date? = nil){
+    func getChannelDatas(chID:Int,chName:String ){
         Task{
-            var ircSnapshot = await imageReferenceCountManager.snapshot
             do{
-                var res:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS, chName: chName, date: date)
+                let lastCheckDate = await self.channelRepostory?.getTableBy(tableID: chID)?.lastCheckDate
+                let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS, chName: chName, date: lastCheckDate)
+                await channelRepostory?.updateChannelCheckDate(channelID: chID)
+                let createResponses =  await responses.asyncFilter {// 이미 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
+                    await !self.chChatrepository.isExistTable(chatID: $0.chatID)
+                }
+                // 0. 새로운 채팅 내역 저장
+                try await appendChatResponseToDataBase(channelID:chID,createResponses: createResponses)
+                // 1. 새로운 채팅 내역의 유저 참조 계수 업데이트 혹은 새로 생성
+                try await appendUserReferenceCounts(channelID: chID, createUsers: createResponses.map(\.user))
+                // 2. 유저 프로필 업데이트 진행 -- 모든 response의 유저 중 한 개씩만 존재하면 된다.
+                let allUsers = responses.map(\.user).makeSet()
+                try await updateUserInformationToDataBase(channelID: chID, userResponses: allUsers)
             }catch{
-                
+                print(error)
             }
+            await imageReferenceCountManager.saveRepository()
+            await userReferenceCountManager.saveRepository()
         }
     }
+    
 }
-extension Data{
-    func saveToDocument(fileName:String) throws{
-        //1. 도큐먼트 경로 찾기
-        guard let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        let fileURL = documentDir.appendingPathComponent(fileName)
-        try self.write(to: fileURL)
-    }
-}
+
 extension UserInfoTable{
-    var response:UserResponse{
+    var getResponse:UserResponse{
         UserResponse(userID: self.userID, email: self.email, nickname: self.nickName, profileImage: self.profileImage)
     }
 }
-//var userID: Int
-//var email: String
-//var nickname: String
-//var profileImage: String?

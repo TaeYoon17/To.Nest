@@ -48,6 +48,10 @@ extension HomeReactor{
                 provider.wsService.setHomeWS(wsID: mainWS)
                 return Observable.concat([])
             case .allMy(let responses):
+                _ = self.provider.msgService
+                responses.forEach { res in
+                    self.provider.msgService.getChannelDatas(chID: res.channelID, chName: res.name)
+                }
                 return Observable.concat([.just(.setChannelList(responses))])
             default: return Observable.concat([])
             }

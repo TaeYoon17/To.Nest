@@ -12,12 +12,12 @@ final class ChannelTable:Object,Identifiable{
     @Persisted(primaryKey: true) var channelID: Int
     @Persisted var wsID: Int
     @Persisted var chatList: List<ChannelChatTable> = .init()
-    @Persisted var lastChatDate:Date
+    @Persisted var lastReadDate:Date?
+    @Persisted var lastCheckDate:Date?
     convenience init(channelID:Int,wsID:Int,date:Date? = nil) {
         self.init()
         self.channelID = channelID
         self.wsID = wsID
-        self.lastChatDate = date ?? Date()
     }
 }
 extension ChannelTable{

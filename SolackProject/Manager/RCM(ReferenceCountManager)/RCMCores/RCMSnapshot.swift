@@ -17,6 +17,11 @@ struct RCMSnapshot<RCM:RCMAble,Item:RCMTableConvertable,Table:RCMTableAble> wher
     func existItem(id: Item.ID) -> Bool{
         instance[id] != nil
     }
+    mutating func plusCount(ids: [Item.ID]) async {
+        for id in ids{
+            await self.plusCount(id: id)
+        }
+    }
     mutating func plusCount(id: Item.ID) async {
         if instance[id] == nil{
             instance[id] = Item(name: id, count: 1)

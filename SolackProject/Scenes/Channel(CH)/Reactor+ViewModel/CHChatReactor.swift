@@ -29,7 +29,7 @@ final class CHChatReactor:Reactor{
         case prevIdentifiers([String]?)
         case setSendFiles([FileData])
         case setTitle(String)
-        case appendChatResponse(ChatResponse)
+        case appendChatResponse([ChatResponse])
     }
     struct State{
         var isActiveSend = false
@@ -93,7 +93,7 @@ final class CHChatReactor:Reactor{
         case .setTitle(let title):
             state.title = title
         case .appendChatResponse(let response):
-            state.chatList.append(response)
+            state.chatList.append(contentsOf: response)
         }
         return state
     }
@@ -101,7 +101,10 @@ final class CHChatReactor:Reactor{
         let msgMutation = provider.msgService.event.flatMap { event -> Observable<Mutation> in
             switch event{
             case .create(response: let response):
-                return .just(.appendChatResponse(response))
+                return .just(.appendChatResponse([response]))
+            case .check(response: let responses):
+                return .just(.appendChatResponse(responses))
+//                return .just(.appendChatResponse(response))
             }
         }
         return Observable.merge([mutation,msgMutation])

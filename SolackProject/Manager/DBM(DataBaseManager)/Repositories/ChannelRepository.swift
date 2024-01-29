@@ -14,7 +14,13 @@ typealias CHRepository = ChannelRepository
         try await super.init()
         self.channelChatRepository = try await ChannelChatRepository()
     }
-    
+    func updateChannelCheckDate(channelID:Int) async{
+        if let table = self.getTableBy(tableID: channelID){
+            try! await self.realm.asyncWrite({
+                table.lastReadDate = Date()
+            })
+        }
+    }
     // 채널 테이블에 채팅 테이블 추가하기
     func appendChat(channelID:Int,chatTables:[CHChatTable]) async {
         guard let table = self.getTableBy(tableID: channelID) else {fatalError("Can't find channel table")}

@@ -26,10 +26,10 @@ extension CHChatView{
                 var image:[Image] = []
                 for  imageName in itemIdentifier.images {
                     do{
-                        let uiimage = try await UIImage.fetchFileCache(name: imageName, size: dataSource.thumbnailSize)
+                        let uiimage = try await UIImage.fetchFileCache(name: imageName,type: .messageThumbnail)
                         image.append(Image(uiImage: uiimage))
                     }catch{
-                        let uiimage = UIImage.fetchBy(fileName: imageName, ofSize: dataSource.thumbnailSize)
+                        let uiimage = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
                         image.append(Image(uiImage: uiimage))
                     }
                 }

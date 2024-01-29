@@ -19,7 +19,9 @@ typealias UIRepository = UserInfoRepository
             table.profileImage = response.profileImage
         })
     }
-    
+    func getTableBy(userID:Int) -> UserInfoTable?{
+        return self.getTableBy(tableID: userID)
+    }
     func deleteUserIDs(_ ids: [Int]) async {
         var snapshot = imageRC.snapshot
         for id in ids{

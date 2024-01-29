@@ -9,6 +9,9 @@ import Foundation
 import RealmSwift
 typealias CHChatRepository = ChannelChatRepository
 @BackgroundActor final class ChannelChatRepository: TableRepository<CHChatTable>{
+    func isExistTable(chatID: Int)-> Bool{
+        self.getTableBy(tableID: chatID) != nil
+    }
     func deleteAllChatList(tables:[CHChatTable]){
         Task{@BackgroundActor in
             try await realm.asyncWrite {

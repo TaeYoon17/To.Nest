@@ -18,7 +18,9 @@ struct UserResponse:Codable{
         case profileImage
     }
 }
-extension UserResponse: Equatable{
-    
+extension UserResponse: Equatable,Hashable{
+    mutating func convertWebPathToFilePath(){
+        self.profileImage = self.profileImage?.webFileToDocFile()
+    }
 }
     
