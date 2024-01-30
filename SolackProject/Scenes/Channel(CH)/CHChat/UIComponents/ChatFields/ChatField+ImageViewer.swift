@@ -41,6 +41,8 @@ extension ChatFields.ChatTextField{
                     }
                 }
             }.disposed(by: disposeBag)
+            self.backgroundColor = .gray1
+            self.collectionView.backgroundColor = .gray1
         }
         required init(coder: NSCoder) { fatalError("Don't use storyboard") }
         @MainActor private func applyDataSource(items:[Item]){
@@ -51,12 +53,6 @@ extension ChatFields.ChatTextField{
             snapshot.deleteItems(deleteItems)
             snapshot.appendItems(newItems, toSection: "a")
             dataSource.apply(snapshot,animatingDifferences: true)
-        }
-        func appendItem(){
-            
-        }
-        func deleteItem(){
-            
         }
         struct Item:Hashable,Identifiable,Equatable{
             var id:String{imageID}
@@ -91,6 +87,7 @@ fileprivate extension ChatFields.ChatTextField.ImageViewer{
     var registration: UICollectionView.CellRegistration<UICollectionViewCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             guard let self else {return}
+            cell.backgroundColor = .clear
             cell.contentConfiguration = UIHostingConfiguration(content: {
                 ZStack(alignment: .bottomLeading){
                     Image(uiImage:itemIdentifier.image)

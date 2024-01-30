@@ -20,6 +20,9 @@ extension CHChatView{
         }.disposed(by: disposeBag)
         chatField.text.map{CHChatReactor.Action.setChatText($0)}.bind(to: reactor.action).disposed(by: disposeBag)
     }
+    func chatListBinding(reactor:CHChatReactor){
+        
+    }
     func textFieldBinding(reactor: CHChatReactor){
         
         // 채팅 전송 버튼 탭

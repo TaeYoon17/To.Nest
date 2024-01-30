@@ -32,10 +32,10 @@ extension MessageService{
         await createUsers.asyncForEach { await userSnapshot.plusCount(channelID: channelID, userID: $0.userID) }
         await self.userReferenceCountManager.apply(userSnapshot)
     }
-    func updateUserInformationToDataBase(channelID:Int,userResponses: any Collection<UserResponse>) async throws{
+    @BackgroundActor func updateUserInformationToDataBase(channelID:Int,userResponses: any Collection<UserResponse>) async throws{
         try await userResponses.asyncForEach { response in
             var response = response
-            if let table:UserInfoTable = await self.userRepository.getTableBy(userID: response.userID){
+            if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
                 if table.getResponse == response {return}
                 response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
                 await self.userRepository.update(table: table, response: response)

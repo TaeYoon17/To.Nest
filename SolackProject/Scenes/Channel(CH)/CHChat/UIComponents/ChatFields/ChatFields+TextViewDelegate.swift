@@ -26,6 +26,11 @@ extension ChatFields.ChatTextField{
         let estimatedSize = self.textField.sizeThatFits(size)
         if nowHeight == estimatedSize.height { return }
         let isMaxHeight = estimatedSize.height >= textHeight * 3 + 4
+        let height = min(estimatedSize.height,textHeight * 3 + 4)
+        if height != prevHeight{
+            self.needsUpdateCollectionViewLayout.onNext(())
+            prevHeight = height
+        }
         guard isMaxHeight != self.textField.isScrollEnabled else { return }
         self.textField.isScrollEnabled = isMaxHeight
         self.textField.reloadInputViews()

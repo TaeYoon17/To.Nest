@@ -19,6 +19,6 @@ final class ServiceProvider: ServiceProviderProtocol{
     lazy var signService: SignServiceProtocol = SignService()
     lazy var wsService: WorkSpaceProtocol = WSService()
     lazy var chService: ChannelProtocol = CHService()
-    lazy var msgService: MessageProtocol = MSGService()
+    var msgService: MessageProtocol = MSGService()
 }
 

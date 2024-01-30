@@ -48,7 +48,9 @@ final class CHChatReactor:Reactor{
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
-        case .initChat: return Observable.concat([ .just(.setTitle(title)) ])
+        case .initChat:
+        provider.msgService.fetchChannelDB(channelID: channelID)
+        return Observable.concat([ .just(.setTitle(title)) ])
         case .setChatText(let text):
             chatMessage.content = text
             return Observable.concat([.just(.setChatText(text))])

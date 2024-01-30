@@ -12,11 +12,13 @@ import RxCocoa
 final class ChatFields:UIView{
     typealias ImageViewerItem = ChatFields.ChatTextField.ImageViewer.Item
     let isActiveSend:BehaviorSubject<Bool> = .init(value: false)
+    
     let text:PublishSubject<String> = .init()
     var send: ControlEvent<Void>!
     var addImages: ControlEvent<Void>!
     weak var imageFiles: PublishSubject<[ImageViewerItem]>!
     weak var deleteImageItem: PublishSubject<String>!
+    weak var needsUpdateCollectionViewLayout:PublishSubject<()>!
     let placeholder:String
     var hiddenImageView:Bool = false{
         didSet{
@@ -52,6 +54,7 @@ final class ChatFields:UIView{
         self.addImages = addItemBtn.rx.tap
         self.imageFiles = chatField.imageFiles
         self.deleteImageItem = chatField.imageVierwer.deleteItemID
+        self.needsUpdateCollectionViewLayout = chatField.needsUpdateCollectionViewLayout
         self.send.bind(with: self) { owner, _ in
             if owner.chatField.textField.textColor == .text{
                 owner.chatField.textField.text = ""
@@ -102,20 +105,25 @@ extension ChatFields{
         typealias ImageViewerItem = ChatFields.ChatTextField.ImageViewer.Item
         var hiddenImageView:Bool = false{
             didSet{
+                needsUpdateCollectionViewLayout.onNext(())
                 Task{ @MainActor in
                     self.imageVierwer.isHidden = hiddenImageView
+                    
                 }
             }
         }
         var disposeBag = DisposeBag()
         let textPassthrough = PublishSubject<String>()
         var imageFiles: PublishSubject<[ImageViewerItem]>!
+        var needsUpdateCollectionViewLayout = PublishSubject<()>()
+        
         var placeholder = ""{
             didSet{
                 textField.text = placeholder
                 textField.textColor = .secondary
             }
         }
+        var prevHeight:CGFloat = 0
         let textHeight:CGFloat = {
             let label = UILabel()
             label.text = "asd"

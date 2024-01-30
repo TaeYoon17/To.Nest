@@ -13,36 +13,26 @@ extension CHChatView{
         var listConfig = UICollectionLayoutListConfiguration(appearance: .plain)
         listConfig.backgroundColor = .white
         listConfig.showsSeparators = false
-        var layout = UICollectionViewCompositionalLayout.list(using: listConfig)
+        let layout = UICollectionViewCompositionalLayout.list(using: listConfig)
         return layout
     }
-    var chatCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,ChatItem>{
+    
+    var chatCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,ChatItem.ID>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
-            cell.backgroundColor = .blue
-            Task{[weak self] in
-                guard let self else{
-                    fatalError("메모리 SELF 오류!!")
-                }
-                var image:[Image] = []
-                for  imageName in itemIdentifier.images {
-                    do{
-                        let uiimage = try await UIImage.fetchFileCache(name: imageName,type: .messageThumbnail)
-                        image.append(Image(uiImage: uiimage))
-                    }catch{
-                        let uiimage = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
-                        image.append(Image(uiImage: uiimage))
-                    }
-                }
-                await MainActor.run {
-                    cell.contentConfiguration = UIHostingConfiguration(content: {
-//                        ChatCell(realImage: image)
-                        ChatCell(message: itemIdentifier.content ?? "",realImage:image)
-                    })
-                    cell.layoutIfNeeded()
-                }
+            guard let self else{ fatalError("메모리 SELF 오류!!") }
+            guard let item = dataSource.chatModel.fetchByID(itemIdentifier) else {return}
+            cell.backgroundColor = .clear
+            cell.selectedBackgroundView = .none
+            if let itemAssets = dataSource.chatAssetModel.object(forKey: "\(item.chatID)" as NSString){
+                cell.contentConfiguration = UIHostingConfiguration(content: {
+                    ChatCell(chatItem: item,images: itemAssets)
+                })
+            }else{
+                let itemAsset = self.dataSource.appendChatAssetModel(item: item)
+                cell.contentConfiguration = UIHostingConfiguration(content: {
+                    ChatCell(chatItem: item,images: itemAsset)
+                })
             }
-            
         }
     }
-    
 }

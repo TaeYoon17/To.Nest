@@ -19,11 +19,16 @@ final class CHChatView: BaseVC,View{
         textFieldBinding(reactor: reactor)
         reactor.action.onNext(.initChat)
     }
+    deinit{
+        print("채널 뷰가 사라짐!!")
+        
+    }
     @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     var dataSource: DataSource!
     @MainActor let titleLabel = UILabel()
     let chatField = ChatFields(placeholder: "메시지를 입력하세요")
     var isShowKeyboard:CGFloat? = nil
+    var showKeyboard:Bool = false
     var originHeight:CGFloat = 0
     var progressView = CHProgressView()
     @MainActor func updateTitleLabel(title:String,number:Int){
@@ -62,13 +67,13 @@ final class CHChatView: BaseVC,View{
         view.addSubview(progressView)
     }
     override func configureConstraints() {
-        collectionView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(chatField.snp.top).inset(8)
-        }
         chatField.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16)
             make.bottom.equalToSuperview().inset(30)
+        }
+        collectionView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(chatField.snp.top).inset(-4)
         }
         progressView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -85,10 +90,20 @@ final class CHChatView: BaseVC,View{
         collectionView.endEditing(true)
         view.endEditing(true)
     }
+    var prevHeight:CGFloat = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         progressView.isHidden = true
+        chatField.needsUpdateCollectionViewLayout.bind(with: self) { owner, _ in
+            Task{@MainActor in
+                owner.chatField.layoutIfNeeded()
+                try await Task.sleep(for: .seconds(0.1))
+                let height = owner.chatField.bounds.height - owner.prevHeight
+                owner.collectionView.scrollAppend(yAxis: height, animated: false)
+                owner.prevHeight = owner.chatField.bounds.height
+            }
+        }.disposed(by: disposeBag)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -117,20 +132,46 @@ extension CHChatView{
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     @objc func handleKeyboardShow(notification: Notification) {
-        
+        guard showKeyboard == false else {return}
         if let userInfo = notification.userInfo {
             if let keyboardFrameValue = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue) {
                 let keyboardFrame = keyboardFrameValue.cgRectValue
                 self.isShowKeyboard = keyboardFrame.size.height - 20
-                self.view.frame.origin.y = -isShowKeyboard!
+                self.chatField.snp.remakeConstraints { make in
+                    make.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(16)
+                    make.bottom.equalToSuperview().inset(keyboardFrame.size.height + 12)
+                }
+                self.chatField.layoutIfNeeded()
+                self.collectionView.snp.remakeConstraints { make in
+                    make.top.horizontalEdges.equalToSuperview()
+                    make.bottom.equalTo(self.chatField.snp.top).inset(-4)
+                }
+                self.collectionView.layoutIfNeeded()
+                Task{@MainActor in
+                    try await Task.sleep(for: .seconds(0.1))
+                    self.collectionView.scrollAppend(yAxis: keyboardFrame.size.height,animated: true)
+                }
             }
         }
+        showKeyboard.toggle()
     }
     @objc func handleKeyboardHide(notification: Notification){
-        self.view.frame.origin.y = 0
-        self.isShowKeyboard = nil
+        guard showKeyboard == true else {return}
         let contentInset:UIEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = contentInset
         collectionView.contentInset = contentInset
+        UIView.animate(withDuration: 0.2) {
+            self.chatField.snp.remakeConstraints { make in
+                make.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(16)
+                make.bottom.equalToSuperview().inset(30)
+            }
+            self.collectionView.snp.remakeConstraints { make in
+                make.top.horizontalEdges.equalToSuperview()
+                make.bottom.equalTo(self.chatField.snp.top).inset(-4)
+            }
+            self.chatField.layoutIfNeeded()
+            self.collectionView.layoutIfNeeded()
+        }
+        showKeyboard.toggle()
     }
 }

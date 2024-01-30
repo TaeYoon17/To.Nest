@@ -17,6 +17,13 @@ typealias CHRepository = ChannelRepository
     func updateChannelCheckDate(channelID:Int) async{
         if let table = self.getTableBy(tableID: channelID){
             try! await self.realm.asyncWrite({
+                table.lastCheckDate = Date()
+            })
+        }
+    }
+    func updateChannelReadDate(channelID:Int) async{
+        if let table = self.getTableBy(tableID: channelID){
+            try! await self.realm.asyncWrite({
                 table.lastReadDate = Date()
             })
         }

@@ -31,7 +31,7 @@ enum ChatRouter:URLRequestConvertible{
         switch self{
         case .check(wsID: _, chName: _, cursorDate: let date):
             if let date{
-                parameters["cursor_date"] = date.toString()
+                parameters["cursor_date"] = date.convertToString()
             }
         default: break
         }

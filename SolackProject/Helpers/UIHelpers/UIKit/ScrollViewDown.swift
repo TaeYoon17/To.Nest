@@ -20,4 +20,14 @@ extension UICollectionView{
             setContentOffset(bottomOffset, animated: false)
         }
     }
+    @MainActor func scrollAppend(yAxis:CGFloat,animated:Bool = false){
+            let offset = CGFloat(floor(self.contentOffset.y + yAxis))
+            let num = contentSize.height - self.bounds.size.height
+            if self.contentOffset.y == num && yAxis < 0 { return }
+            self.setContentOffset(CGPoint(x: self.contentOffset.x, y: min(max(0,offset),num)), animated: animated)
+        }
+    @MainActor func scroll(yOffset:CGFloat){
+        let num = contentSize.height - self.bounds.size.height
+        self.setContentOffset(CGPoint(x: self.contentOffset.x, y: min(max(0,yOffset),num)), animated: false)
+    }
 }

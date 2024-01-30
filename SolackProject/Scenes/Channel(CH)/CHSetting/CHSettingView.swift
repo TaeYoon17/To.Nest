@@ -13,7 +13,6 @@ import ReactorKit
 final class CHSettingView: BaseVC, View{
     var disposeBag = DisposeBag()
     func bind(reactor: CHSettingReactor) {
-        
     }
     @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     var dataSource:DataSource!
