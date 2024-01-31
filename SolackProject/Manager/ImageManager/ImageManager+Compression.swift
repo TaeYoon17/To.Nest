@@ -10,11 +10,12 @@ import UIKit
 extension ImageManager{
     fileprivate func compression(_ img:UIImage,maxMB: CGFloat = 3) throws -> Data{
         guard let data = img.jpegData(compressionQuality: 1) else { throw Errors.compresstionFail }
-        var quality: CGFloat = (1000000.0 * maxMB) / CGFloat(data.count)
-        var val = max(0,min(0.95,quality))
-        var image =  img.jpegData(compressionQuality: val)
+        let quality: CGFloat = (1000000.0 * maxMB) / CGFloat(data.count)
+        let val = max(0,min(0.95,quality))
+        let image =  img.jpegData(compressionQuality: val)
         guard var image else { throw Errors.compresstionFail }
-        var (l,r):(CGFloat,CGFloat) = (0,1)
+        guard image.count > Int(1000000.0 * maxMB) else { return image }
+        var (l,r):(CGFloat,CGFloat) = (0.01,1)
         var res:CGFloat = 0.5
         while l <= r{
             var mid = (l + r ) / 2

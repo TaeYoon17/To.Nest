@@ -9,6 +9,136 @@ import Foundation
 import Combine
 import RxSwift
 import RxCombine
+import ReactorKit
+//enum SocialType:String{
+//    case kakao = "kakao"
+//    case apple = "apple"
+//}
+final class MyProfileReactor:Reactor,ObservableObject{
+    @MainActor @DefaultsState(\.myInfo) var myInfo
+    @DefaultsState(\.myProfile) var myProfile
+    @MainActor @Published var st: State = .init()
+    @MainActor @Published var info:MyInfo = MyInfo(userID: 0, email: "", nickname: "", profileImage: "", phone: "", vendor: "", createdAt: "")
+    @MainActor var goHome = PassthroughSubject<(),Never>()
+    var initialState: State = State()
+    weak var provider: ServiceProviderProtocol!
+    var subscription = Set<AnyCancellable>()
+    var disposeBag = DisposeBag()
+    init(_ provider: ServiceProviderProtocol){
+        self.provider = provider
+        self.state.bind(with: self) { owner, state in
+            Task{@MainActor in
+                owner.st = state
+            }
+        }.disposed(by: disposeBag)
+        action.onNext(.initVM)
+    }
+    enum Action{
+        case setNicName(String)
+        case setPhone(String)
+        case setImage(Data?)
+        case initVM
+        case applyNicknameUpdate
+        case applyPhoneUpdate
+    }
+    enum Mutation{
+        case setImage(Data?)
+        case setNickName(String)
+        case setPhone(String)
+        case setEmail(String)
+        case setVendor(String?)
+        case isCompletedChanged(Bool)
+        case isNickNameConvertable(Bool)
+        case isPhoneConvertable(Bool)
+        case profileToast(MyProfileToastType?)
+    }
+    struct State{
+        var image: Data? = nil
+        var nickname:String = ""
+        var phone:String = ""
+        var email:String = ""
+        var isCompletedChanged: Bool = false
+        var isNickNameConvertable: Bool = false
+        var isPhoneConvertable: Bool = false
+        var mySocial:String = ""
+        var toast: ToastType? = nil
+    }
+    @MainActor func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case .initVM:
+            guard let myInfo else {return  Observable.concat([])}
+            self.info = myInfo
+            print(self.info.vendor)
+            return Observable.concat([
+                .just(.setNickName(myInfo.nickname)),
+                .just(.setPhone(myInfo.phone ?? "")),
+                .just(.setEmail(myInfo.email)),
+                .just(.setImage(myProfile)),
+                .just(.setVendor(self.info.vendor))
+            ])
+        case .setImage(let data):
+            provider.profileService.updateImage(imageData: data)
+            return .just(.setImage(data))
+        case .applyNicknameUpdate:
+            provider.profileService.updateNickname(name: currentState.nickname)
+            return Observable.concat([])
+        case .applyPhoneUpdate:
+            provider.profileService.updatePhone(phone: currentState.phone)
+            return Observable.concat([])
+        case .setNicName(let name): // 닉네임 변경하기
+            let nameText = name.convertToNickName()
+            return Observable.concat([
+                .just(.setNickName(nameText)),
+                .just(.isNickNameConvertable(!(nameText.isEmpty || nameText == myInfo?.nickname)))
+            ])
+        case .setPhone(let phone): // 폰 번호 변경하기
+            let phoneText = phone.convertToPhoneNumber()
+            return Observable.concat([
+                .just(.setPhone(phoneText)),
+                .just(.isPhoneConvertable(!(phoneText.isEmpty || phoneText == myInfo?.phone)))
+            ])
+        }
+    }
+    func reduce(state: State, mutation: Mutation) -> State {
+        var state = state
+        switch mutation{
+        case .setImage(let image):
+            state.image = image
+        case .setNickName(let nickname): state.nickname = nickname
+        case .setPhone(let phone): state.phone = phone
+        case .setEmail(let email): state.email = email
+        case .isNickNameConvertable(let isAvail): state.isNickNameConvertable = isAvail
+        case .isPhoneConvertable(let isAvail): state.isPhoneConvertable = isAvail
+        case .isCompletedChanged(let completed): state.isCompletedChanged = completed
+        case .profileToast(let toast): state.toast = toast
+        case .setVendor(let vendor): state.mySocial = vendor ?? ""
+        }
+        return state
+    }
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let profileTransform = self.provider.profileService.event
+            .flatMap { event -> Observable<Mutation> in
+            switch event{
+            case .myInfo(let info):
+                Task{@MainActor in self.info = info }
+                return Observable.concat([
+                    .just(.setNickName(info.nickname)),
+                    .just(.setPhone(info.phone ?? "")),
+                    .just(.setEmail(info.email)),
+                    .just(.isCompletedChanged(true)).delay(.microseconds(200), scheduler: MainScheduler.instance),
+                    .just(.isCompletedChanged(false)).delay(.microseconds(200), scheduler: MainScheduler.instance)
+                ])
+            case .toast(let toast):
+                return Observable.concat([ .just(.profileToast(toast)) ])
+            case .updatedImage:
+                return Observable.concat([ .just(.setImage(self.myProfile))])
+            }
+        }
+        return Observable.merge(mutation,profileTransform)
+    }
+}
+
+
 final class MyProfileVM: ObservableObject{
     var provider:ServiceProviderProtocol!
     @MainActor var goHome = PassthroughSubject<(),Never>()

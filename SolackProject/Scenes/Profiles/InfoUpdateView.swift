@@ -25,7 +25,7 @@ extension InfoUpdateView{
     }
 }
 struct InfoUpdateView: View{
-    @EnvironmentObject var vm: MyProfileVM
+    @EnvironmentObject var vm: MyProfileReactor
     @Environment(\.dismiss) var dismiss
     let placeholder: String
     let title:String
@@ -50,12 +50,12 @@ struct InfoUpdateView: View{
         // MARK: -- Action 영역
         .onChange(of: text, perform: { newValue in
             switch myType {
-            case .nickname: self.vm.action.send(.setNicName(newValue))
-            case .phone: self.vm.action.send(.setPhone(newValue))
+            case .nickname: self.vm.action.onNext(.setNicName(newValue))
+            case .phone: self.vm.action.onNext(.setPhone(newValue))
             }
         })
         // MARK: -- Receive 영역
-        .onReceive(vm.$state, perform: { perform in
+        .onReceive(vm.$st, perform: { perform in
             switch myType {
             case .nickname:
                 self.isComfirmable =  perform.isNickNameConvertable
@@ -66,7 +66,7 @@ struct InfoUpdateView: View{
             }
             self.toastType = perform.toast
         })
-        .onChange(of: vm.state.isCompletedChanged) { newValue in
+        .onChange(of: vm.st.isCompletedChanged) { newValue in
             if newValue == true{
                 dismiss()
             }
@@ -87,8 +87,8 @@ extension InfoUpdateView{
             }
             Button(action: {
                 switch myType {
-                case .nickname: vm.action.send(.applyNicknameUpdate)
-                case .phone: vm.action.send(.applyPhoneUpdate)
+                case .nickname: vm.action.onNext(.applyNicknameUpdate)
+                case .phone: vm.action.onNext(.applyPhoneUpdate)
                 }
             }, label: {
                 HStack{

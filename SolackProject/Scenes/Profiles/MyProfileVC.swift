@@ -14,19 +14,18 @@ final class MyProfileVC: UIHostingController<MyProfileView>{
     var subscription = Set<AnyCancellable>()
     var disposeBag = DisposeBag()
     init(provider: ServiceProviderProtocol){
-        let vm = MyProfileVM(provider)
+        let vm = MyProfileReactor(provider)
         let imgVM = ProfileImgVM()
         super.init(rootView: MyProfileView(vm: vm,imgVM: imgVM))
         vm.goHome.sink { [weak self] in
             self?.navigationController?.popViewController(animated: true)
         }.store(in: &subscription)
         imgVM.imageData.bind(with: self) { owner, data in
-            vm.action.send(.setImage(data))
+            vm.action.onNext(.setImage(data))
         }.disposed(by: disposeBag)
-        vm.$state.map{$0.image}.sink {[weak self] data in
-            print("데이터 전송 \(data?.count)")
-            imgVM.defaultImage.send(data)
-        }.store(in: &subscription)
+        vm.state.map{$0.image}.bind(with: self) { owner, data in
+            Task{@MainActor in imgVM.defaultImage.send(data) }
+        }.disposed(by: disposeBag)
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("Don't use storyboard")
@@ -50,17 +49,22 @@ extension MyProfileView{
         case nickname
         case call
     }
+    enum VendorType:String{
+        case kakao
+        case apple
+    }
 }
 struct MyProfileView:View{
-    @ObservedObject var vm: MyProfileVM
+    @ObservedObject var vm: MyProfileReactor
     @ObservedObject var imgVM :ProfileImgVM
     @DefaultsState(\.myInfo) var myInfo
+    @State var vendor: VendorType? = nil
     var body: some View{
         NavigationStack {
             List{
                 HStack{
                     Spacer()
-                    ProfileImgView(vm: imgVM, prevImage: true)
+                    MyProfileEditImageView(vm: imgVM, prevImage: true)
                     Spacer()
                 }
                 .listRowSpacing(0)
@@ -89,8 +93,14 @@ struct MyProfileView:View{
                         Text("연결된 소셜 계정").font(FontType.bodyBold.font).foregroundStyle(.text)
                         Spacer()
                         HStack{
-                            Image(.appleSocial)
-                            Image(.kakaoSocial)
+                            switch vendor {
+                            case .kakao:
+                                Image(.kakaoSocial)
+                            case .apple:
+                                Image(.appleSocial)
+                            case nil:
+                                EmptyView()
+                            }
                         }
                     }
                     defaultListItemView(title: "로그아웃")
@@ -108,6 +118,9 @@ struct MyProfileView:View{
             .defaultNaviBack(title: "내 정보 수정", action: {
                 vm.goHome.send(())
             })
+            .onReceive(vm.$st, perform: { output in
+                self.vendor = VendorType(rawValue: output.mySocial)
+            })
         }
     }
     func defaultListItemView(title:String,description:String? = nil)-> some View{
@@ -123,9 +136,9 @@ struct MyProfileView:View{
         }
     }
 }
-#Preview {
-    MyProfileView(vm: MyProfileVM(ServiceProvider()), imgVM: ProfileImgVM())
-}
+//#Preview {
+//    MyProfileView(vm: MyProfileVM(ServiceProvider()), imgVM: ProfileImgVM())
+//}
 struct NaviModifier: ViewModifier{
     let backAction:()->()
     let title:String
