@@ -17,8 +17,6 @@ protocol MessageProtocol{
     func getChannelDatas(chID:Int,chName:String)
 }
 final class MessageService:MessageProtocol{
-    
-    
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()

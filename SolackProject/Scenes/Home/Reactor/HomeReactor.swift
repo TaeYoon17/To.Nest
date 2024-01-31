@@ -29,6 +29,7 @@ final class HomeReactor: Reactor{
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
+        case isProfileUpdated(Bool)
     }
     struct State{
         var channelDialog:HomePresent? = nil
@@ -36,6 +37,7 @@ final class HomeReactor: Reactor{
         var channelList:[CHResponse]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
+        var isProfileUpdated:Bool = false
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -68,12 +70,24 @@ final class HomeReactor: Reactor{
             state.wsLogo = logo
         case .wsTitle(let title):
             state.wsTitle = title
+        case .isProfileUpdated(let update):
+            state.isProfileUpdated = update
         }
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let wsService = wsMutationTransform
         let chService = chMutationTransform
-        return Observable.merge(mutation,wsService,chService)
+        let profileService = provider.profileService.event.flatMap { event -> Observable<Mutation> in
+            switch event{
+            case .updatedImage:
+                return Observable.concat([
+                    .just(Mutation.isProfileUpdated(true)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                   .just(Mutation.isProfileUpdated(false))
+              ])
+            default: return Observable.concat([])
+            }
+        }
+        return Observable.merge(mutation,wsService,chService,profileService)
     }
 }

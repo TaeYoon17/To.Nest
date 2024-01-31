@@ -59,10 +59,11 @@ struct ProfileImgView:View{
                     .animToggler()
                     .onAppear(){
                         do{
-                            let imgData = try img.imageData(maxMB: 0.9)
-                            vm.imageData.onNext(imgData)
+                            let imgData = try img.imageData(maxMB: 0.95)
                             print("이미지 가져오기 성공!!")
+                            vm.imageData.onNext(imgData)
                         }catch{
+                            print("ProfileImageView 오류")
                             print(error)
                         }
                     }

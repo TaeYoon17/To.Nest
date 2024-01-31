@@ -88,6 +88,8 @@
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636CFBB42B510743003F02ED /* WSMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636CFBB32B510743003F02ED /* WSMainVM.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
+		637318432B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */; };
+		637318452B6A1DA90001B4A9 /* MyProfileToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */; };
 		6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAF92B594C260010968C /* CHSettingView.swift */; };
 		6373AAFC2B5952400010968C /* UINavigationSwipable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAFB2B5952400010968C /* UINavigationSwipable.swift */; };
 		637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C12B50C739008AAD4A /* ScreenSize.swift */; };
@@ -153,6 +155,7 @@
 		63A148A82B45564F005CF155 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148A72B45564F005CF155 /* RxBlocking */; };
 		63A148AC2B45564F005CF155 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AB2B45564F005CF155 /* RxCocoa */; };
 		63A148B02B45564F005CF155 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AF2B45564F005CF155 /* RxRelay */; };
+		63A597FB2B6A4AFD00C4646D /* RxCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 63A597FA2B6A4AFD00C4646D /* RxCombine */; };
 		63ADEA092B4648B2000A0CB4 /* RxKakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 63ADEA082B4648B2000A0CB4 /* RxKakaoSDK */; };
 		63ADEA0B2B4648B2000A0CB4 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 63ADEA0A2B4648B2000A0CB4 /* RxKakaoSDKAuth */; };
 		63ADEA0D2B4648B2000A0CB4 /* RxKakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 63ADEA0C2B4648B2000A0CB4 /* RxKakaoSDKCommon */; };
@@ -180,6 +183,12 @@
 		63E793DF2B6785CD00ACA963 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E793DE2B6785CD00ACA963 /* ArrayExtensions.swift */; };
 		63E793E12B67861200ACA963 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E793E02B67861200ACA963 /* DataExtensions.swift */; };
 		63E793E32B67863B00ACA963 /* MessageService+DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E793E22B67863B00ACA963 /* MessageService+DB.swift */; };
+		63E974C52B690B19004BCA00 /* MyProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974C42B690B19004BCA00 /* MyProfileVC.swift */; };
+		63E974C82B691E24004BCA00 /* MyProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974C72B691E24004BCA00 /* MyProfileVM.swift */; };
+		63E974CA2B693397004BCA00 /* InfoUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974C92B693397004BCA00 /* InfoUpdateView.swift */; };
+		63E974CD2B6957AE004BCA00 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974CC2B6957AE004BCA00 /* ProfileService.swift */; };
+		63E974CF2B696101004BCA00 /* ProfileService+DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974CE2B696101004BCA00 /* ProfileService+DB.swift */; };
+		63E974D12B6962FF004BCA00 /* MyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974D02B6962FF004BCA00 /* MyInfo.swift */; };
 		63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AEC12B4AB8C8000A597B /* HomeVC.swift */; };
 		63F0AEC42B4AB920000A597B /* HomeVC+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AEC32B4AB920000A597B /* HomeVC+CollectionView.swift */; };
 		63F0AEC62B4ABA1E000A597B /* HomeVC+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AEC52B4ABA1E000A597B /* HomeVC+DS.swift */; };
@@ -320,6 +329,8 @@
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636CFBB32B510743003F02ED /* WSMainVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSMainVM.swift; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
+		637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyProfileVM+TextValidation.swift"; sourceTree = "<group>"; };
+		637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileToastType.swift; sourceTree = "<group>"; };
 		6373AAF92B594C260010968C /* CHSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHSettingView.swift; sourceTree = "<group>"; };
 		6373AAFB2B5952400010968C /* UINavigationSwipable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationSwipable.swift; sourceTree = "<group>"; };
 		637488C12B50C739008AAD4A /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
@@ -404,6 +415,12 @@
 		63E793DE2B6785CD00ACA963 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		63E793E02B67861200ACA963 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		63E793E22B67863B00ACA963 /* MessageService+DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageService+DB.swift"; sourceTree = "<group>"; };
+		63E974C42B690B19004BCA00 /* MyProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileVC.swift; sourceTree = "<group>"; };
+		63E974C72B691E24004BCA00 /* MyProfileVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileVM.swift; sourceTree = "<group>"; };
+		63E974C92B693397004BCA00 /* InfoUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoUpdateView.swift; sourceTree = "<group>"; };
+		63E974CC2B6957AE004BCA00 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
+		63E974CE2B696101004BCA00 /* ProfileService+DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileService+DB.swift"; sourceTree = "<group>"; };
+		63E974D02B6962FF004BCA00 /* MyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfo.swift; sourceTree = "<group>"; };
 		63F0AEC12B4AB8C8000A597B /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		63F0AEC32B4AB920000A597B /* HomeVC+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+CollectionView.swift"; sourceTree = "<group>"; };
 		63F0AEC52B4ABA1E000A597B /* HomeVC+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+DS.swift"; sourceTree = "<group>"; };
@@ -474,6 +491,7 @@
 				63ADEA0B2B4648B2000A0CB4 /* RxKakaoSDKAuth in Frameworks */,
 				631A60CA2B44ED11005509C2 /* SnapKit in Frameworks */,
 				63A148AC2B45564F005CF155 /* RxCocoa in Frameworks */,
+				63A597FB2B6A4AFD00C4646D /* RxCombine in Frameworks */,
 				63ADEA092B4648B2000A0CB4 /* RxKakaoSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -676,6 +694,7 @@
 		631A60E62B44EE0B005509C2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				63E974CB2B6957A3004BCA00 /* ProfileService */,
 				63FA692A2B64FE250045B851 /* MessageService */,
 				639CA1C32B5F891200C21006 /* ToastService */,
 				639CA1BC2B5F85D200C21006 /* ChannelService */,
@@ -690,6 +709,7 @@
 		631A60ED2B44EE15005509C2 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				63E974C32B690B04004BCA00 /* Profiles */,
 				63358D672B53FD58005C5BD4 /* Channel(CH) */,
 				632D8EB12B4D28F700A99293 /* WorkSpace(WS) */,
 				63FA65402B49AF8400C744C8 /* MainTabBar */,
@@ -924,6 +944,7 @@
 				6384A9C52B47125600AA2F1B /* SingInInfo.swift */,
 				63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */,
 				6389CEB02B5D7DB1002A70A9 /* UserResponse.swift */,
+				63E974D02B6962FF004BCA00 /* MyInfo.swift */,
 			);
 			path = UserInfos;
 			sourceTree = "<group>";
@@ -1204,6 +1225,35 @@
 			path = EmailSignIn;
 			sourceTree = "<group>";
 		};
+		63E974C32B690B04004BCA00 /* Profiles */ = {
+			isa = PBXGroup;
+			children = (
+				63E974C62B691E15004BCA00 /* Reactor+ViewModel */,
+				63E974C42B690B19004BCA00 /* MyProfileVC.swift */,
+				63E974C92B693397004BCA00 /* InfoUpdateView.swift */,
+				637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */,
+			);
+			path = Profiles;
+			sourceTree = "<group>";
+		};
+		63E974C62B691E15004BCA00 /* Reactor+ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				63E974C72B691E24004BCA00 /* MyProfileVM.swift */,
+				637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */,
+			);
+			path = "Reactor+ViewModel";
+			sourceTree = "<group>";
+		};
+		63E974CB2B6957A3004BCA00 /* ProfileService */ = {
+			isa = PBXGroup;
+			children = (
+				63E974CC2B6957AE004BCA00 /* ProfileService.swift */,
+				63E974CE2B696101004BCA00 /* ProfileService+DB.swift */,
+			);
+			path = ProfileService;
+			sourceTree = "<group>";
+		};
 		63F0AEC72B4ABBFB000A597B /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -1373,6 +1423,7 @@
 				638FCD262B47FB700053D1BB /* Toast */,
 				6312A2492B61714900593117 /* Realm */,
 				6312A24B2B61714900593117 /* RealmSwift */,
+				63A597FA2B6A4AFD00C4646D /* RxCombine */,
 			);
 			productName = SolackProject;
 			productReference = 631A60A62B44ECEE005509C2 /* SolackProject.app */;
@@ -1410,6 +1461,7 @@
 				63ADEA072B4648B2000A0CB4 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				6312A2482B61714900593117 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */,
 			);
 			productRefGroup = 631A60A72B44ECEE005509C2 /* Products */;
 			projectDirPath = "";
@@ -1451,9 +1503,11 @@
 				63358D712B540256005C5BD4 /* CHExploreView+DS.swift in Sources */,
 				632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */,
 				636213062B4E95F60093D089 /* ImageManager.swift in Sources */,
+				63E974D12B6962FF004BCA00 /* MyInfo.swift in Sources */,
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
 				63FF41192B622172004CD7EA /* ChannelRepository.swift in Sources */,
 				637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */,
+				63E974CF2B696101004BCA00 /* ProfileService+DB.swift in Sources */,
 				636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */,
 				634F023C2B5A6BA900505B65 /* ChatCell.swift in Sources */,
 				639B8A702B491BA40024B4DD /* AuthReactor.swift in Sources */,
@@ -1463,6 +1517,7 @@
 				634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */,
 				6389CEB32B5D830D002A70A9 /* WorkSpace.swift in Sources */,
 				63F7C4B62B4FB2D3003D8447 /* AuthRouter.swift in Sources */,
+				637318432B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift in Sources */,
 				636CFBB42B510743003F02ED /* WSMainVM.swift in Sources */,
 				63E4AFD52B497FC300E0B6A1 /* EmailSignInReactor.swift in Sources */,
 				63F7C4BE2B4FE72F003D8447 /* UINavigationController.swift in Sources */,
@@ -1528,6 +1583,7 @@
 				63C346FD2B55882700293991 /* WriterConfiguration.swift in Sources */,
 				631A60F12B44EE15005509C2 /* OnboardingView.swift in Sources */,
 				63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */,
+				63E974CD2B6957AE004BCA00 /* ProfileService.swift in Sources */,
 				639B8A752B491C1A0024B4DD /* SignUpFieldType.swift in Sources */,
 				6389CEA82B5D6102002A70A9 /* WSEmptyView.swift in Sources */,
 				632A2D612B4DAD1800E21DE8 /* WSwriterReactor.swift in Sources */,
@@ -1549,6 +1605,7 @@
 				63E793DF2B6785CD00ACA963 /* ArrayExtensions.swift in Sources */,
 				63358D6A2B53FD89005C5BD4 /* CHWriterView.swift in Sources */,
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
+				63E974C52B690B19004BCA00 /* MyProfileVC.swift in Sources */,
 				63F0AECB2B4AD886000A597B /* ChannelListItemView.swift in Sources */,
 				639CA1C02B5F86D500C21006 /* Channel+NM.swift in Sources */,
 				63F7C4AA2B4F7CE8003D8447 /* ErrorCode.swift in Sources */,
@@ -1572,6 +1629,7 @@
 				6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */,
 				636213032B4E94F90093D089 /* CropView.swift in Sources */,
 				6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */,
+				63E974C82B691E24004BCA00 /* MyProfileVM.swift in Sources */,
 				639A4AEC2B52B045005360F6 /* WorkSpaceAlert.swift in Sources */,
 				639B8A732B491C030024B4DD /* SignUpToastType.swift in Sources */,
 				639E0C9E2B5832FA0076A4D8 /* Slider.swift in Sources */,
@@ -1618,6 +1676,7 @@
 				63DFDF862B4D00B600F47AB5 /* ManagerDialog.swift in Sources */,
 				631A60F92B452058005509C2 /* AuthPresentView.swift in Sources */,
 				6312A25D2B618DB700593117 /* RCMSnapshot.swift in Sources */,
+				637318452B6A1DA90001B4A9 /* MyProfileToastType.swift in Sources */,
 				63FF41222B62820F004CD7EA /* FileType.swift in Sources */,
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,
@@ -1632,6 +1691,7 @@
 				639CFE672B5808A40030729E /* SliderVC.swift in Sources */,
 				638FCD2A2B48000E0053D1BB /* InputFieldView.swift in Sources */,
 				633584692B45610C00B83555 /* SignInEmailView.swift in Sources */,
+				63E974CA2B693397004BCA00 /* InfoUpdateView.swift in Sources */,
 				630763FB2B63C381000747F8 /* PhotoManager+ConvertPhotos.swift in Sources */,
 				63FF411B2B622419004CD7EA /* TempActorPlayer.swift in Sources */,
 				63FF410D2B621637004CD7EA /* DBMErrorPolicy.swift in Sources */,
@@ -1926,6 +1986,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/RxCombine.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
 		63ADEA072B4648B2000A0CB4 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
@@ -2001,6 +2069,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 631E33942B45553B0053DBD7 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxRelay;
+		};
+		63A597FA2B6A4AFD00C4646D /* RxCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */;
+			productName = RxCombine;
 		};
 		63ADEA082B4648B2000A0CB4 /* RxKakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;

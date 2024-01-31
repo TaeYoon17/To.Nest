@@ -10,7 +10,7 @@ import Alamofire
 enum UserRouter: URLRequestConvertible{
     case signUp(info:SignUpInfo),signIn(type:SignInType,body:SignInBody),validation(email:String),deviceToken
     case signOut,getMy,getUser(id:String)
-    case putMy,putMyImage
+    case putMy(nickName:String?,phone:String?),putMyImage(image:Data?)
     static private let baseURL = URL(string: API.baseURL)
     var endPoint: String{
         switch self{
@@ -51,8 +51,15 @@ enum UserRouter: URLRequestConvertible{
             params["email"] = email
             return params
         case .signIn(_,let body): return body.getParameter()
-        case .putMy,.putMyImage:
+        case .putMy(nickName: let nickName, phone: let phone):
+            var params = Parameters()
+            if let nickName{ params["nickname"] = nickName }
+            if let phone{ params["phone"] = phone }
+            print("params:",params)
+            return params
+        case .putMyImage:
             return Parameters()
+            
         case .signOut,.getMy,.getUser: return Parameters()
         case .deviceToken:
             @DefaultsState(\.deviceToken) var deviceToken
@@ -61,7 +68,18 @@ enum UserRouter: URLRequestConvertible{
             return params
         }
     }
-    
+    var headers: HTTPHeaders{
+        var headers = HTTPHeaders()
+        switch self{
+        case .putMy:
+            headers["Content-Type"] = "application/json"
+        case .putMyImage:
+            headers["Content-Type"] = "multipart/form-data"
+        default:
+            break
+        }
+        return headers
+    }
     func asURLRequest() throws -> URLRequest {
         guard var url = Self.baseURL?.appendingPathComponent(endPoint) else {
             print("hello world")
@@ -69,15 +87,25 @@ enum UserRouter: URLRequestConvertible{
         }
         var urlRequest = URLRequest(url: url)
         urlRequest.method = self.method
+        urlRequest.headers = self.headers
         switch self{
-        case .signOut,.getMy,.getUser: break
+        case .signOut,.getMy,.getUser,.putMyImage: break
         default:
             urlRequest.httpBody = try? JSONEncoding.default.encode(urlRequest, with: parameters).httpBody
         }
         return urlRequest
     }
-    
-    
+    var multipartFormData: MultipartFormData {
+        let multipartFormData = MultipartFormData()
+        switch self {
+        case .putMyImage(image: let data):
+            if let data{
+                multipartFormData.append(data, withName: "image", fileName: "123.jpg", mimeType: "image/jpeg")
+            }
+        default: ()
+        }
+        return multipartFormData
+    }
 }
 protocol SignInBody{
     func getParameter()->Parameters

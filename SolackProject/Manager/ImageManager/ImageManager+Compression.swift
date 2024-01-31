@@ -14,15 +14,20 @@ extension ImageManager{
         var val = max(0,min(0.95,quality))
         var image =  img.jpegData(compressionQuality: val)
         guard var image else { throw Errors.compresstionFail }
-        while image.count > Int(maxMB) * 1000000{
-            let quality = (1000000.0 * maxMB) * val / CGFloat(image.count)
-            val = max(0,min(0.9,quality))
-            guard let tempImage = img.jpegData(compressionQuality: val) else {
-                throw Errors.compresstionFail
+        var (l,r):(CGFloat,CGFloat) = (0,1)
+        var res:CGFloat = 0.5
+        while l <= r{
+            var mid = (l + r ) / 2
+            guard let data = img.jpegData(compressionQuality: mid) else { fatalError("왜 문제야?")}
+            if data.count < Int(1000000.0 * maxMB){
+                res = l
+                l = mid + 0.01
+            }else{
+                r = mid - 0.01
             }
-            image = tempImage
         }
-        return image
+        guard let data = img.jpegData(compressionQuality: res) else {fatalError("출력 문제")}
+        return data
     }
 }
 extension UIImage{

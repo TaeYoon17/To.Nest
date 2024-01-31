@@ -13,12 +13,15 @@ protocol ServiceProviderProtocol: AnyObject{
     var wsService: WorkSpaceProtocol { get }
     var chService: ChannelProtocol { get }
     var msgService: MessageProtocol { get }
+    var profileService: ProfileProtocol { get }
 }
 final class ServiceProvider: ServiceProviderProtocol{
     lazy var authService: AuthServiceProtocol = AuthService()
     lazy var signService: SignServiceProtocol = SignService()
+    lazy var profileService: ProfileProtocol = ProfileService()
     lazy var wsService: WorkSpaceProtocol = WSService()
     lazy var chService: ChannelProtocol = CHService()
     var msgService: MessageProtocol = MSGService()
+    
 }
 
