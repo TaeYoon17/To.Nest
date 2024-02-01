@@ -11,10 +11,12 @@ import UIKit
 typealias MSGService = MessageService
 protocol MessageProtocol{
     var event:PublishSubject<MSGService.Event> {get}
-    func fetchChannelDB(channelID:Int)
+    func fetchChannelDB(channelID:Int,channelName:String)
     func create(chID:Int,chName:String,chat: ChatInfo)
     func create(dm: ChatInfo)
     func getChannelDatas(chID:Int,chName:String)
+    func openSocket(channelID: Int)
+    func closeSocket(channelID: Int)
 }
 final class MessageService:MessageProtocol{
     
@@ -40,6 +42,7 @@ final class MessageService:MessageProtocol{
     enum Event{
         case create(response:ChatResponse)
         case check(response:[ChatResponse])
+        case socketReceive(response:ChatResponse)
     }
     func create(dm: ChatInfo) {
         

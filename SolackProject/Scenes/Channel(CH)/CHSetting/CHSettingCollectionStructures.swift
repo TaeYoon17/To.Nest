@@ -11,6 +11,14 @@ extension CHSettingView{
         case info
         case member
         case editing
+        static func getByNumber(_ value:Int) -> Self?{
+            switch value{
+            case 0:return .info
+            case 1:return .member
+            case 2:return .editing
+            default: return nil
+            }
+        }
     }
     enum ItemType:String{
         case header
@@ -38,10 +46,12 @@ extension CHSettingView{
         var description:String = "안녕하세요 새싹 여러분? 심심하셨죠? 이 채널은 나머지 모든 것을 위한 채널이에요. 팀원들이 농담하거나 순간적인 아이디어를 공유하는 곳이죠! 마음껏 즐기세요!"
     }
     struct MemberListItem:CollectionItemable,Identifiable{
-        var id: String{UUID().uuidString } // 유저 고유 번호를 ID로 채택할 필요 있음
+        var id: String{"\(userResponse.userID)" } // 유저 고유 번호를 ID로 채택할 필요 있음
         var sectionType:SectionType = .member
         var itemType: ItemType = .listItem
-        var name:String
+//        var name:String
+//        var userThumbnail:String?
+        var userResponse:UserResponse
         // 유저 썸네일을 받아올 필요 있음
     }
     struct MemberListHeader: CollectionItemable{
@@ -57,4 +67,3 @@ extension CHSettingView{
         var editingType:CHEditingType
     }
 }
-

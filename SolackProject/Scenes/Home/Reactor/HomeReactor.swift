@@ -29,11 +29,13 @@ final class HomeReactor: Reactor{
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
+        case setUnreads([UnreadsResponse]?)
     }
     struct State{
         var channelDialog:HomePresent? = nil
         var isMasking: Bool? = nil
         var channelList:[CHResponse]? = nil
+        var unreads:[UnreadsResponse]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
     }
@@ -43,6 +45,16 @@ final class HomeReactor: Reactor{
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .setPresent(let present):
+            switch present{
+                case .chatting(chID: let id, chName: let name):
+                let unreads = UnreadsResponse(channelID: id, name: name, count: 0)
+                return Observable.concat([
+                    .just(.setUnreads([unreads])),
+                    Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                    Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
+                ])
+                default:break
+            }
             return Observable.concat([
                 Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
                 Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
@@ -68,6 +80,8 @@ final class HomeReactor: Reactor{
             state.wsLogo = logo
         case .wsTitle(let title):
             state.wsTitle = title
+        case .setUnreads(let responses):
+            state.unreads = responses
         }
         return state
     }

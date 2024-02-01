@@ -34,7 +34,7 @@ extension HomeVC{
             guard let self else {return}
             let channel = dataSource.fetchChannel(item: itemIdentifier)
             cell.contentConfiguration = UIHostingConfiguration {
-                ChannelListItemView(isRecent: channel.isRecent, name: channel.name, count: channel.messageCount)
+                ChannelListItemView(isRecent: channel.isRecent, name: channel.name, count: channel.messageCount,showCount: channel.isRecent)
             }
             cell.indentationLevel = 0
         }

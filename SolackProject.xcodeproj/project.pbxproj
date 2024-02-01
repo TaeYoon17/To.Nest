@@ -84,6 +84,9 @@
 		6362130A2B4E96360093D089 /* ImageManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213092B4E96360093D089 /* ImageManagerError.swift */; };
 		636213122B4E9FE70093D089 /* CropImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213112B4E9FE70093D089 /* CropImageManager.swift */; };
 		636213142B4EA0DD0093D089 /* CropImageModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636213132B4EA0DD0093D089 /* CropImageModifier.swift */; };
+		6364BC712B6B782C00C311CE /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364BC702B6B782C00C311CE /* SocketManager.swift */; };
+		6364BC742B6BAB8800C311CE /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 6364BC732B6BAB8800C311CE /* SocketIO */; };
+		6364BC762B6BBE9000C311CE /* ChannelService+DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364BC752B6BBE9000C311CE /* ChannelService+DB.swift */; };
 		6368352A2B47A56C00E38683 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636835292B47A56C00E38683 /* AppManager.swift */; };
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636CFBB42B510743003F02ED /* WSMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636CFBB32B510743003F02ED /* WSMainVM.swift */; };
@@ -316,6 +319,8 @@
 		636213092B4E96360093D089 /* ImageManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManagerError.swift; sourceTree = "<group>"; };
 		636213112B4E9FE70093D089 /* CropImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageManager.swift; sourceTree = "<group>"; };
 		636213132B4EA0DD0093D089 /* CropImageModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageModifier.swift; sourceTree = "<group>"; };
+		6364BC702B6B782C00C311CE /* SocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
+		6364BC752B6BBE9000C311CE /* ChannelService+DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelService+DB.swift"; sourceTree = "<group>"; };
 		636835292B47A56C00E38683 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636CFBB32B510743003F02ED /* WSMainVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSMainVM.swift; sourceTree = "<group>"; };
@@ -458,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				638FCD272B47FB700053D1BB /* Toast in Frameworks */,
+				6364BC742B6BAB8800C311CE /* SocketIO in Frameworks */,
 				6384A9B82B47122500AA2F1B /* Alamofire in Frameworks */,
 				63ADEA152B4648B2000A0CB4 /* RxKakaoSDKUser in Frameworks */,
 				63ADEA0D2B4648B2000A0CB4 /* RxKakaoSDKCommon in Frameworks */,
@@ -834,6 +840,14 @@
 			path = Cores;
 			sourceTree = "<group>";
 		};
+		6364BC6F2B6B782200C311CE /* SocketManager */ = {
+			isa = PBXGroup;
+			children = (
+				6364BC702B6B782C00C311CE /* SocketManager.swift */,
+			);
+			path = SocketManager;
+			sourceTree = "<group>";
+		};
 		636CFBB22B510736003F02ED /* SideVM */ = {
 			isa = PBXGroup;
 			children = (
@@ -896,6 +910,7 @@
 		6384A9BD2B47125600AA2F1B /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				6364BC6F2B6B782200C311CE /* SocketManager */,
 				63E38ED92B511F2B00BD6C93 /* Routers */,
 				639CA1BA2B5F7E4D00C21006 /* NetworkSchemes */,
 				6384A9BE2B47125600AA2F1B /* Interceptor&Authentication */,
@@ -1039,6 +1054,7 @@
 			isa = PBXGroup;
 			children = (
 				639CA1BD2B5F85E300C21006 /* ChannelService.swift */,
+				6364BC752B6BBE9000C311CE /* ChannelService+DB.swift */,
 			);
 			path = ChannelService;
 			sourceTree = "<group>";
@@ -1373,6 +1389,7 @@
 				638FCD262B47FB700053D1BB /* Toast */,
 				6312A2492B61714900593117 /* Realm */,
 				6312A24B2B61714900593117 /* RealmSwift */,
+				6364BC732B6BAB8800C311CE /* SocketIO */,
 			);
 			productName = SolackProject;
 			productReference = 631A60A62B44ECEE005509C2 /* SolackProject.app */;
@@ -1410,6 +1427,7 @@
 				63ADEA072B4648B2000A0CB4 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				6312A2482B61714900593117 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				6364BC722B6BAB8800C311CE /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
 			);
 			productRefGroup = 631A60A72B44ECEE005509C2 /* Products */;
 			projectDirPath = "";
@@ -1471,6 +1489,7 @@
 				6312A2502B6181F400593117 /* RCMCounter.swift in Sources */,
 				6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */,
 				630763F42B639509000747F8 /* ChatField+ImageViewer.swift in Sources */,
+				6364BC712B6B782C00C311CE /* SocketManager.swift in Sources */,
 				631A60FB2B4528A5005509C2 /* SignUpView.swift in Sources */,
 				6395162A2B67D151004317AE /* DateExtension.swift in Sources */,
 				637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */,
@@ -1608,6 +1627,7 @@
 				6323E1C32B60F70100D91E46 /* CHSetting+DS.swift in Sources */,
 				6312A2542B61824A00593117 /* RCMTableConvertable.swift in Sources */,
 				6389CEAA2B5D7B4D002A70A9 /* WSDetailResponse.swift in Sources */,
+				6364BC762B6BBE9000C311CE /* ChannelService+DB.swift in Sources */,
 				636213082B4E96220093D089 /* ImageManager+Fetch.swift in Sources */,
 				63FF41252B6285E5004CD7EA /* ChatInfo.swift in Sources */,
 				639AFDE52B52D37D00FA8280 /* WSManagerView+DS.swift in Sources */,
@@ -1918,6 +1938,14 @@
 				minimumVersion = 5.8.1;
 			};
 		};
+		6364BC722B6BAB8800C311CE /* XCRemoteSwiftPackageReference "socket.io-client-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
@@ -1981,6 +2009,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6324D6EA2B46F15F00AA1AC0 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		6364BC732B6BAB8800C311CE /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6364BC722B6BAB8800C311CE /* XCRemoteSwiftPackageReference "socket.io-client-swift" */;
+			productName = SocketIO;
 		};
 		638FCD262B47FB700053D1BB /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;

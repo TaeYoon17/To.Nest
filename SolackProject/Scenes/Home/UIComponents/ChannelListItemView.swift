@@ -10,8 +10,8 @@ import SwiftUI
 struct ChannelListItemView: View{
     var isRecent:Bool
     let name:String
-    let count:Int
-    var showCount:Bool = true
+    @State var count:Int = 0
+    @State var showCount:Bool = true
     var body: some View{
         if isRecent{
             recent
@@ -25,7 +25,7 @@ struct ChannelListItemView: View{
                 HStack{
                     Text(name)
                     Spacer()
-                    if showCount{
+                    if count > 0{
                         Text("\(count)")
                             .foregroundStyle(.white)
                             .padding(.vertical,2)
@@ -46,13 +46,15 @@ struct ChannelListItemView: View{
                 HStack{
                     Text(name)
                     Spacer()
-                    Text("\(count)")
-                        .font(FontType.bodyBold.font)
-                        .foregroundStyle(.white)
-                        .padding(.vertical,2)
-                        .padding(.horizontal,4)
-                        .background(.accent)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    if count > 0{
+                        Text("\(count)")
+                            .font(FontType.bodyBold.font)
+                            .foregroundStyle(.white)
+                            .padding(.vertical,2)
+                            .padding(.horizontal,4)
+                            .background(.accent)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
                 }.font(FontType.body.font)
             },
             icon: {

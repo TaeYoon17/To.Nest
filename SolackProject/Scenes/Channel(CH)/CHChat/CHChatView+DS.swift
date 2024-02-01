@@ -20,27 +20,54 @@ extension CHChatView{
         }
         init(reactor:CHChatReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, ChatItem.ID>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
-            initDataSource()
-            reactor.state.map{$0.chatList}.distinctUntilChanged().bind(with: self) { owner, responses in
+            initDataSource()  
+            reactor.state.map{$0.sendChat}.bind(with: self) { owner, type in
+                guard let type else {return}
                 Task{
-                    var items: [ChatItem.ID] = []
-                    for response in responses{
-                        // 이미 모델에 저장된 것은 추가하지 않음
-                        guard !owner.chatModel.isExist(id: response.chatID) else {continue}
-                        let item:CHChatView.ChatItem = ChatItem(chatResponse: response)
-                        items.append(item.chatID)
-                        owner.appendChatAssetModel(item: item)
-                        owner.chatModel.insertModel(item: item)
+                    switch type{
+                    case .create(let response):
+                        await owner.appendModels(responses: [response])
+                        Task{@MainActor in
+                            if collectionView.isScrollable{
+                                let lastIdx = owner.snapshot(for: "Hello").items.count
+                                let lastIndexPath = IndexPath(item: lastIdx - 1, section: 0)
+                                collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: false)
+                            }
+                            UIView.animate(withDuration: 0.2) {
+                                collectionView.layer.opacity = 1
+                            }
+                        }
+                    case .dbResponse(let responses):
+                        await owner.appendModels(responses: responses)
+                        Task{@MainActor in
+                            if collectionView.isScrollable{
+                                let lastIdx = owner.snapshot(for: "Hello").items.count
+                                let lastIndexPath = IndexPath(item: lastIdx - 1, section: 0)
+                                collectionView.scrollToItem(at: lastIndexPath, at: .bottom, animated: false)
+                            }
+                            UIView.animate(withDuration: 0.2) {
+                                collectionView.layer.opacity = 1
+                            }
+                        }
+                    case .socketResponse(let responses):
+                        await owner.appendModels(responses: [responses])
                     }
-                    owner.appendDataSource(items: items)
                 }
             }.disposed(by: disposeBag)
-            Task{
-
-//                try await Task.sleep(for: .seconds(0.1))
-                collectionView.scrollToBottom()
-//                bottomFinished.onNext(())
+            collectionView.layer.opacity = 0
+            
+        }
+        private func appendModels(responses:[ChatResponse]) async {
+            var items: [ChatItem.ID] = []
+            for response in responses{
+                // 이미 모델에 저장된 것은 추가하지 않음
+                guard !chatModel.isExist(id: response.chatID) else {continue}
+                let item:CHChatView.ChatItem = ChatItem(chatResponse: response)
+                items.append(item.chatID)
+                appendChatAssetModel(item: item)
+                chatModel.insertModel(item: item)
             }
+            await appendDataSource(items: items)
         }
         @MainActor func initDataSource(){
             var snapshot = NSDiffableDataSourceSnapshot<String,ChatItem.ID>()
@@ -49,10 +76,10 @@ extension CHChatView{
             snapshot.appendItems(arr, toSection: "Hello")
             apply(snapshot,animatingDifferences: true)
         }
-        @MainActor func appendDataSource(items:[ChatItem.ID]){
+        @MainActor func appendDataSource(items:[ChatItem.ID]) async{
             var snapshot = snapshot()
             snapshot.appendItems(items, toSection: "Hello")
-            apply(snapshot,animatingDifferences: false)
+            await apply(snapshot,animatingDifferences: false)
         }
         
         @discardableResult func appendChatAssetModel(item: CHChatView.ChatItem) -> ChatAssets{

@@ -13,12 +13,13 @@ extension CHRouter{
         case all
         case allMy
         case my(chName:String)
+        case specific(chName:String)
         case members(chName:String)
     }
 }
 enum ChannelRouter:URLRequestConvertible{
     case create(wsID: Int,info:CHInfo)
-    case check(wsID:Int,CheckType),leave(wsID: Int,chName: String),unreads(wsID:Int,chName:String)
+    case check(wsID:Int,CheckType),leave(wsID: Int,chName: String),unreads(wsID:Int,chName:String,lastDate:Date?)
     case edit(wsID: Int,chName:String,info:CHInfo),changeAdmin(wsID:Int,chName:String,userID:String)
     case delete(wsID: Int,chName: String)
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
@@ -28,10 +29,12 @@ enum ChannelRouter:URLRequestConvertible{
         case .check(wsID: let wsID, let type):
             switch type{
             case .allMy: "/\(wsID)/channels/my"
-            case .my(let name),.members(let name): "/\(wsID)/channels/my/\(name)"
+            case .my(let name): "/\(wsID)/channels/my/\(name)"
+            case .members(chName: let name): "/\(wsID)/channels/\(name)/members"
             case .all: "/\(wsID)/channels/my"
+            case .specific(chName: let name): "/\(wsID)/channels/\(name)"
             }
-        case .unreads(wsID: let wsID, chName: let chName): "/\(wsID)/channels/\(chName)/chats"
+        case .unreads(wsID: let wsID, chName: let chName,_): "/\(wsID)/channels/\(chName)/unreads"
         case .edit(wsID: let wsID, chName: let name,_),.delete(wsID: let wsID, chName: let name): "/\(wsID)/channels/\(name)"
         case .leave(wsID: let wsID, chName: let chName): "/\(wsID)/channels/\(chName)/leave"
         case .changeAdmin(wsID: let wsID, chName: let chName, userID: let userID): "/\(wsID)/channels/\(chName)/change/admin/\(userID)"
@@ -51,6 +54,12 @@ enum ChannelRouter:URLRequestConvertible{
         case .create(_,let info):
             parameters["name"] = info.name
             parameters["description"] = info.description
+        case .unreads(wsID: _, chName: _, lastDate: let date):
+            if let date{
+                parameters["after"] = date.convertToString()
+            }else{
+                parameters["after"] = ""
+            }
         default: break
         }
         return parameters
@@ -60,6 +69,8 @@ enum ChannelRouter:URLRequestConvertible{
         switch self{
         case .create:
             headers["Content-Type"] = "application/json"
+        case .unreads:
+            headers["Content-Type"] = "application/json"
         default: break
         }
         return headers
@@ -68,9 +79,17 @@ enum ChannelRouter:URLRequestConvertible{
         guard var url = Self.baseURL?.appendingPathComponent(endPoint) else {
             return URLRequest(url: URL(string: "www.naver.com")!)
         }
+        switch self{
+        case .unreads:
+            if let queryItem = params.urlQueryItems{
+                url.append(queryItems: queryItem)
+            }
+        default: break
+        }
         var urlRequest = URLRequest(url: url)
         urlRequest.method = self.method
         urlRequest.headers = self.headers
+        
         switch self.method{
         case .get: break
         default: urlRequest.httpBody = try? JSONEncoding.default.encode(urlRequest, with: params).httpBody

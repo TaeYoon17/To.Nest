@@ -30,4 +30,7 @@ extension UICollectionView{
         let num = contentSize.height - self.bounds.size.height
         self.setContentOffset(CGPoint(x: self.contentOffset.x, y: min(max(0,yOffset),num)), animated: false)
     }
+    var isScrollable:Bool{
+        self.bounds.height < self.contentSize.height
+    }
 }

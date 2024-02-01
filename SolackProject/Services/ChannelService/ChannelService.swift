@@ -15,6 +15,7 @@ protocol ChannelProtocol{
     func create(_ info:CHInfo)
     func checkAllMy()
     func checkAll()
+    func check(title:String)
 }
 final class ChannelService:ChannelProtocol{
     @DefaultsState(\.mainWS) var mainWS
@@ -26,6 +27,9 @@ final class ChannelService:ChannelProtocol{
         case allMy([CHResponse])
         case all([CHResponse])
         case failed(ChannelFailed)
+        case unreads([UnreadsResponse])
+        case check(CHResponse)
+        case channelUsers(id:Int,[UserResponse])
     }
     enum Transition{
         case goChatting(chID:Int,chName:String)
@@ -38,7 +42,8 @@ final class ChannelService:ChannelProtocol{
     func create(_ info: CHInfo){
         Task{
             do{
-                let result = try await NM.shared.createCH(wsID: mainWS, info)
+                let result:CHResponse = try await NM.shared.createCH(wsID: mainWS, info)
+                await appendMyChannel(channelInfo: result)
                 event.onNext(.create(result))
             }catch{
                 guard authValidCheck(error: error) else {
@@ -51,13 +56,24 @@ final class ChannelService:ChannelProtocol{
             }
         }
     }
+    func check(title:String){
+        Task{
+            do{
+                let response = try await NM.shared.checkCH(wsID: mainWS,channelName: title)
+                event.onNext(.check(response))
+                let users = try await NM.shared.checkCHUsers(wsID: mainWS, channelName: title)
+                let channelID = response.channelID
+                event.onNext(.channelUsers(id: channelID, users))
+            }catch{
+                print(error)
+            }
+        }
+    }
     func checkAll(){
         Task{
             do{
                 let results:[CHResponse] = try await NM.shared.checkAllCH(wsID: mainWS)
                 event.onNext(.all(results))
-
-                
             }catch{
                 guard authValidCheck(error: error) else {
                     AppManager.shared.userAccessable.onNext(false)
@@ -74,20 +90,43 @@ final class ChannelService:ChannelProtocol{
             do{
                 print("checkAllMy mainWS \(mainWS)")
                 let results = try await NM.shared.checkAllMyCH(wsID: mainWS)
-                event.onNext(.allMy(results))
+                self.event.onNext(.allMy(results))
                 // 해당 워크스페이스 아이디를 갖으면서
                 // 기존에 없었던 테이블 생성... or 기존에 있었지만 받아온 채널아이디가 없는 테이블 삭제
-                print("현재 존재하는 채널들 \(results)")
                 Task{@BackgroundActor in
-                    for v in results{
+                    let exiseted = repository.getTasks.where { $0.wsID == self.mainWS}
+                    
+                    let checkUnreads = Array(exiseted.map{ ($0.lastReadDate,$0.channelName) })
+                    print("여기도 가라 \(checkUnreads)")
+                    
+                    Task.detached {
+                        var unreadsResponses: [UnreadsResponse] = []
+                        for checks in checkUnreads{
+                            do{
+                                let unreads = try await self.updateChannelUnreads(channelName: checks.1,lastDate: checks.0)
+                                unreadsResponses.append(unreads)
+                            }catch{
+                                print(error)
+                                print("여기 에러")
+                            }
+                        }
+                        let responses = unreadsResponses
+                        await MainActor.run {
+                            self.event.onNext(.unreads(responses))
+                        }
+                    }
+                    
+                    for v in results{ // 채널 response
                         // 기존에 존재하지 않아서 새로 추가해야하는 채널
                         if nil == repository.getTableBy(tableID: v.channelID){
                             await repository.create(item: ChannelTable(channelInfo: v))
                         }
-                        let existedChannels = repository.getTasks.where { $0.wsID == mainWS}.map{$0.channelID}
-                        let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
-                        repository.removeChannelTables(ids: Array(removeChannelIDs))
                     }
+                    
+                    let existedChannels = exiseted.map{$0.channelID}
+                    let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
+                    repository.removeChannelTables(ids: Array(removeChannelIDs))
+                    
                 }
             }catch{
                 print("checkAllMy() 여기 에러")
@@ -100,6 +139,9 @@ final class ChannelService:ChannelProtocol{
                 }
             }
         }
+    }
+    func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsResponse{
+        try await NM.shared.checkUnreads(wsID: mainWS, channelName: channelName, date: lastDate)
     }
     func authValidCheck(error: Error)->Bool{
         print(error)

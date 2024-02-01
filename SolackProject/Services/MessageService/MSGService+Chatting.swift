@@ -7,7 +7,23 @@
 
 import Foundation
 //MARK: -- Chat관련 서비스
-extension MessageService{
+extension MessageService:SocketReceivable{
+    func openSocket(channelID: Int){
+        do{
+            try SocketManagerr.shared.openChatSocket(channelID: channelID,delegate: self)
+            Task{@BackgroundActor in
+                await channelRepostory?.updateChannelReadDate(channelID: channelID)
+            }
+        }catch{
+            print(error)
+        }
+    }
+    func closeSocket(channelID: Int){
+        Task{@BackgroundActor in
+            await channelRepostory?.updateChannelReadDate(channelID: channelID)
+        }
+        SocketManagerr.shared.closeChatSocket(channelID: channelID)
+    }
     func create(chID:Int,chName:String,chat: ChatInfo){
         Task{
             do{
@@ -36,17 +52,7 @@ extension MessageService{
             do{
                 let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
                 let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS, chName: chName, date: lastCheckDate)
-                await channelRepostory?.updateChannelCheckDate(channelID: chID)
-                let createResponses =  await responses.asyncFilter {// 이미 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
-                    !self.chChatrepository.isExistTable(chatID: $0.chatID)
-                }
-                // 0. 새로운 채팅 내역 저장
-                try await appendChatResponseToDataBase(channelID:chID,createResponses: createResponses)
-                // 1. 새로운 채팅 내역의 유저 참조 계수 업데이트 혹은 새로 생성
-                try await appendUserReferenceCounts(channelID: chID, createUsers: createResponses.map(\.user))
-                // 2. 유저 프로필 업데이트 진행 -- 모든 response의 유저 중 한 개씩만 존재하면 된다.
-                let allUsers = responses.map(\.user).makeSet()
-                try await updateUserInformationToDataBase(channelID: chID, userResponses: allUsers)
+                try await getResponses(responses: responses, channelID: chID)
             }catch{
                 print(error)
             }
@@ -54,8 +60,42 @@ extension MessageService{
             await userReferenceCountManager.saveRepository()
         }
     }
-    func fetchChannelDB(channelID:Int){
+    func receivedSocketData(result: Result<Data,Error>,channelID: Int) {
+        do{
+            switch result{
+            case .success(let data):
+                let responseData = try JSONDecoder().decode(ChatResponse.self, from: data)
+                Task{@BackgroundActor in // database에 저장하기 위함
+                    do{
+                        try await getResponses(responses: [responseData], channelID: channelID)
+                    }catch{
+                        print(error)
+                    }
+                    await imageReferenceCountManager.saveRepository()
+                    await userReferenceCountManager.saveRepository()
+                }
+            case .failure(let error): throw error
+            }
+        }catch{
+            print(error)
+        }
+    }
+    @BackgroundActor private func getResponses(responses:[ChatResponse],channelID chID: Int) async throws{
+        await channelRepostory?.updateChannelCheckDate(channelID: chID)
+        let createResponses =  await responses.asyncFilter {// 이미 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
+            !self.chChatrepository.isExistTable(chatID: $0.chatID)
+        }
+        // 0. 새로운 채팅 내역 저장
+        try await appendChatResponseToDataBase(channelID:chID,createResponses: createResponses)
+        // 1. 새로운 채팅 내역의 유저 참조 계수 업데이트 혹은 새로 생성
+        try await appendUserReferenceCounts(channelID: chID, createUsers: createResponses.map(\.user))
+        // 2. 유저 프로필 업데이트 진행 -- 모든 response의 유저 중 한 개씩만 존재하면 된다.
+        let allUsers = responses.map(\.user).makeSet()
+        try await updateUserInformationToDataBase(channelID: chID, userResponses: allUsers)
+    }
+    func fetchChannelDB(channelID:Int,channelName:String){
         Task{@BackgroundActor in
+            self.getChannelDatas(chID: channelID, chName: channelName)
             guard let chatTablesLists = channelRepostory.getTableBy(tableID: channelID)?.chatList else{
                 fatalError("존재하지 않는 채팅")
             }
@@ -66,7 +106,6 @@ extension MessageService{
                 let chatResponse = chatTable.getResponse(userResponse: userResponse)
                 chResponses.append(chatResponse)
             }
-            print(chResponses)
             self.event.onNext(.check(response: chResponses))
         }
     }

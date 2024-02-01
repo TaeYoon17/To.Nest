@@ -70,7 +70,7 @@ extension ChatCell{
             if let content = chatItem.content, !content.isEmpty{
                 Text(content)
                     .font(FontType.body.font)
-                    .padding(.all,8)
+                    .padding(.all,12)
                     .overlay(content: {
                         RoundedRectangle(cornerRadius: 12).strokeBorder()
                 })
@@ -84,14 +84,15 @@ extension ChatCell{
     }
     var dates: some View{
         Rectangle().fill(.clear).overlay(alignment:.bottomTrailing) {
-            Text(date)
+            Text(chatItem.createdAt)
                 .foregroundStyle(.secondary)
                 .font(FontType.caption.font)
+                .multilineTextAlignment(chatItem.profileID == userID ? .trailing : .leading)
                 .onAppear(){
                     let label = UILabel()
                     label.font = FontType.caption.get()
-                    label.text = date
-                    self.dateWidth = label.intrinsicContentSize.width + 8
+                    label.text = "1/28 03:50"
+                    self.dateWidth = label.intrinsicContentSize.width + 4
                 }
         }
         .frame(width: dateWidth)

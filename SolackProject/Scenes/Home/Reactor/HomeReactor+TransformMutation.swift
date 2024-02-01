@@ -53,6 +53,11 @@ extension HomeReactor{
                     self.provider.msgService.getChannelDatas(chID: res.channelID, chName: res.name)
                 }
                 return Observable.concat([.just(.setChannelList(responses))])
+            case .unreads(let unreads):
+                return Observable.concat([
+                    .just(.setUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.setUnreads(nil))
+                ])
             default: return Observable.concat([])
             }
         }

@@ -21,7 +21,6 @@ final class CHChatView: BaseVC,View{
     }
     deinit{
         print("채널 뷰가 사라짐!!")
-        
     }
     @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     var dataSource: DataSource!
@@ -57,7 +56,9 @@ final class CHChatView: BaseVC,View{
         self.navigationItem.rightBarButtonItem!.rx.tap.bind(with: self) { owner, _ in
             let vc = CHSettingView()
             //MARK: -- 서비스 Provider 추후에 수정
-            vc.reactor = CHSettingReactor(AppManager.shared.provider)
+            vc.reactor = CHSettingReactor(owner.reactor!.provider,
+                                          channelTitle: owner.reactor!.title,
+                                          channelID: owner.reactor!.channelID)
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
@@ -99,9 +100,13 @@ final class CHChatView: BaseVC,View{
             Task{@MainActor in
                 owner.chatField.layoutIfNeeded()
                 try await Task.sleep(for: .seconds(0.1))
-                let height = owner.chatField.bounds.height - owner.prevHeight
-                owner.collectionView.scrollAppend(yAxis: height, animated: false)
-                owner.prevHeight = owner.chatField.bounds.height
+                await MainActor.run {
+                    if owner.collectionView.isScrollable{
+                        let height = owner.chatField.bounds.height - owner.prevHeight
+                        owner.collectionView.scrollAppend(yAxis: height, animated: false)
+                        owner.prevHeight = owner.chatField.bounds.height
+                    }
+                }
             }
         }.disposed(by: disposeBag)
     }
@@ -110,6 +115,7 @@ final class CHChatView: BaseVC,View{
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = true
     }
+    
 }
 extension UIBarButtonItem{
     static var getBackBtn: UIBarButtonItem{
@@ -148,8 +154,10 @@ extension CHChatView{
                 }
                 self.collectionView.layoutIfNeeded()
                 Task{@MainActor in
-                    try await Task.sleep(for: .seconds(0.1))
-                    self.collectionView.scrollAppend(yAxis: keyboardFrame.size.height,animated: true)
+                    if self.collectionView.isScrollable{
+                        try await Task.sleep(for: .seconds(0.1))
+                        self.collectionView.scrollAppend(yAxis: keyboardFrame.size.height,animated: true)
+                    }
                 }
             }
         }

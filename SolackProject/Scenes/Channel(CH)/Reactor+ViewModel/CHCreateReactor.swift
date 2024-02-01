@@ -35,18 +35,20 @@ final class CHCreateReactor: CHWriterReactor{
     // transform에 아무 값도 안넘기면 변하가 일어나지 않는다
     
     override func writerTransformtransform(mutation: Mut) -> Mut {
-        let res = provider.chService.event.flatMap { event -> Mut in
+        let res = provider.chService.event.flatMap {[weak self] event -> Mut in
             switch event{
             case .create(_):
-                Observable.concat([.just(.isClose(true))])
+                print("여기 받음")
+                return Observable.concat([.just(.isClose(true))])
             case .failed(let failed):
                 switch failed{
-                case .doubled: Observable.concat([
+                case .doubled:
+                    return Observable.concat([
                     .just(.toastType(.double)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance)
                 ])
-                default: Observable.concat([])
+                default: return Observable.concat([])
                 }
-            default: Observable.concat([])
+            default:return Observable.concat([])
             }
         }
         return Observable.merge(mutation,res)

@@ -63,6 +63,13 @@ class WriterView<Fail:FailedProtocol,Toast:ToastType,T: WriterReactor<Fail,Toast
 //            owner.toastUp(type: type)
             owner.toastUp(type: type)
         }.disposed(by: disposeBag)
+        reactor.state.map{$0.isClose}.subscribe(on: MainScheduler.instance).bind(with: self) { owner, isClose in
+            if isClose{
+                Task{@MainActor in
+                    owner.dismiss(animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
     }
     func fieldErrorBinding(_ reactor: GenericWriterReactor){
         reactor.state.map{$0.erroredName}.bind(to: emailField.validFailed).disposed(by: disposeBag)

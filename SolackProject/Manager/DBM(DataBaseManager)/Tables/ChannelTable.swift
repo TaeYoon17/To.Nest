@@ -12,16 +12,18 @@ final class ChannelTable:Object,Identifiable{
     @Persisted(primaryKey: true) var channelID: Int
     @Persisted var wsID: Int
     @Persisted var chatList: List<ChannelChatTable> = .init()
+    @Persisted var channelName:String
     @Persisted var lastReadDate:Date?
     @Persisted var lastCheckDate:Date?
-    convenience init(channelID:Int,wsID:Int,date:Date? = nil) {
+    convenience init(channelID:Int,channelName:String,wsID:Int,date:Date? = nil) {
         self.init()
         self.channelID = channelID
+        self.channelName = channelName
         self.wsID = wsID
     }
 }
 extension ChannelTable{
     convenience init(channelInfo info:CHResponse) {
-        self.init(channelID: info.channelID, wsID: info.workspaceID)
+        self.init(channelID: info.channelID, channelName: info.name, wsID: info.workspaceID)
     }
 }

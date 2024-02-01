@@ -8,13 +8,23 @@
 import Foundation
 import ReactorKit
 import RxSwift
+extension CHChatReactor{
+    enum SendChatType{
+        case create( ChatResponse)
+        case socketResponse(ChatResponse)
+        case dbResponse([ChatResponse])
+    }
+}
+
 final class CHChatReactor:Reactor{
     @DefaultsState(\.mainWS) var mainWS
-    let title:String
+    weak var provider : ServiceProviderProtocol!
+    var title:String
     let channelID:Int
     var initialState: State
-    var provider : ServiceProviderProtocol!
+    
     var chatMessage = ChatInfo(content: "", files: [])
+    var chatList:[ChatResponse] = []
     enum Action{
         case initChat
         case actionSendChat // 채팅 전송 버튼 탭
@@ -29,7 +39,7 @@ final class CHChatReactor:Reactor{
         case prevIdentifiers([String]?)
         case setSendFiles([FileData])
         case setTitle(String)
-        case appendChatResponse([ChatResponse])
+        case appendChat(SendChatType?)
     }
     struct State{
         var isActiveSend = false
@@ -38,7 +48,7 @@ final class CHChatReactor:Reactor{
         var chatText:String = ""
         var prevIdentifiers:[String]? = nil
         var sendFiles:[FileData] = []
-        var chatList:[ChatResponse] = []
+        var sendChat:SendChatType? = nil
     }
     init(_ provider: ServiceProviderProtocol,id:Int,title:String){
         self.provider = provider
@@ -46,10 +56,13 @@ final class CHChatReactor:Reactor{
         self.channelID = id
         self.title = title
     }
+    deinit{
+        provider.msgService.closeSocket(channelID: channelID)
+    }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .initChat:
-        provider.msgService.fetchChannelDB(channelID: channelID)
+        provider.msgService.fetchChannelDB(channelID: channelID,channelName: title)
         return Observable.concat([ .just(.setTitle(title)) ])
         case .setChatText(let text):
             chatMessage.content = text
@@ -94,19 +107,31 @@ final class CHChatReactor:Reactor{
             state.sendFiles = fileData
         case .setTitle(let title):
             state.title = title
-        case .appendChatResponse(let response):
-            state.chatList.append(contentsOf: response)
+        case .appendChat(let response):
+            state.sendChat = response
         }
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let msgMutation = provider.msgService.event.flatMap { event -> Observable<Mutation> in
+        let msgMutation = provider.msgService.event.flatMap {[weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
             switch event{
             case .create(response: let response):
-                return .just(.appendChatResponse([response]))
+                return Observable.concat([
+                    .just(.appendChat(.create(response))).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.appendChat(nil))
+                ])
             case .check(response: let responses):
-                return .just(.appendChatResponse(responses))
-//                return .just(.appendChatResponse(response))
+//                self.provider.msgService.openSocket(channelID: self.channelID)
+                return Observable.concat([
+                    .just(.appendChat(.dbResponse(responses))).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.appendChat(nil))
+                ])
+            case .socketReceive(response: let response):
+                return Observable.concat([
+                    .just(.appendChat(.socketResponse(response))).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.appendChat(nil))
+                ])
             }
         }
         return Observable.merge([mutation,msgMutation])
