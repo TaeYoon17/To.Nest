@@ -24,6 +24,7 @@ extension CHChatView{
             reactor.state.map{$0.sendChat}.bind(with: self) { owner, type in
                 guard let type else {return}
                 Task{
+                    print("sendChat received")
                     switch type{
                     case .create(let response):
                         await owner.appendModels(responses: [response])
@@ -38,6 +39,7 @@ extension CHChatView{
                             }
                         }
                     case .dbResponse(let responses):
+                        print(responses)
                         await owner.appendModels(responses: responses)
                         Task{@MainActor in
                             if collectionView.isScrollable{

@@ -9,12 +9,11 @@ import UIKit
 import SnapKit
 import RxSwift
 extension CHChatView:UICollectionViewDelegate,UICollectionViewDataSourcePrefetching{
-    func configureCollectionView(){
-//        collectionView.alpha = 0
+    func configureCollectionView(reactor: CHChatReactor){
         collectionView.delegate = self
-                collectionView.prefetchDataSource = self
+        collectionView.prefetchDataSource = self
         let cellRegi = chatCellRegistration
-        dataSource = .init(reactor: reactor!, collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        dataSource = .init(reactor: reactor, collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             collectionView.dequeueConfiguredReusableCell(using: cellRegi, for: indexPath, item: itemIdentifier)
         })
     }

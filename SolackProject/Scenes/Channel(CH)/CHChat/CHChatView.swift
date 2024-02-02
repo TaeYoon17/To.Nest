@@ -15,6 +15,7 @@ final class CHChatView: BaseVC,View{
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
     func bind(reactor: CHChatReactor) {
+        configureCollectionView(reactor: reactor)
         naviBarBinding(reactor: reactor)
         textFieldBinding(reactor: reactor)
         reactor.action.onNext(.initChat)
@@ -24,13 +25,14 @@ final class CHChatView: BaseVC,View{
     }
     @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     var dataSource: DataSource!
-    @MainActor let titleLabel = UILabel()
+    @MainActor let titleLabel = UILabel(frame: .init(x: 0, y: 0, width: 300, height: 300))
     let chatField = ChatFields(placeholder: "메시지를 입력하세요")
     var isShowKeyboard:CGFloat? = nil
     var showKeyboard:Bool = false
     var originHeight:CGFloat = 0
     var progressView = CHProgressView()
     @MainActor func updateTitleLabel(title:String,number:Int){
+        
         let fullText = if number <= 0{ "#\(title)" } else { "#\(title) \(number)" }
         let attributedString = NSMutableAttributedString(string: fullText,attributes: [
             NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17),
@@ -40,12 +42,18 @@ final class CHChatView: BaseVC,View{
             let range = (fullText as NSString).range(of: " \(number)")
             attributedString.addAttribute(.foregroundColor, value: UIColor.secondary, range: range)
         }
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.titleLabel.attributedText = attributedString
+            
         }
     }
     override func configureNavigation() {
-        self.navigationItem.titleView = titleLabel
+        Task{@MainActor in
+//            self.navigationItem.title = reactor!.title
+            self.navigationItem.titleView = titleLabel
+            titleLabel.textAlignment = .center
+            updateTitleLabel(title: reactor!.title, number: reactor!.currentState.memberCount)
+        }
         self.navigationItem.leftBarButtonItem = .getBackBtn
         self.navigationItem.rightBarButtonItem = .init(image: .init(systemName: "list.bullet",withConfiguration: UIImage.SymbolConfiguration(font: .boldSystemFont(ofSize: 17))))
         self.navigationItem.leftBarButtonItem?.tintColor = .text
@@ -81,7 +89,7 @@ final class CHChatView: BaseVC,View{
         }
     }
     override func configureView() {
-        configureCollectionView()
+        
         view.endEditing(true)
         collectionView.endEditing(true)
         collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))

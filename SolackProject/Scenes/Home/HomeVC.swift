@@ -41,26 +41,29 @@ final class HomeVC: BaseVC, View{
                     }
                 }
             }.disposed(by: disposeBag)
-        reactor.state.map{$0.channelDialog}.distinctUntilChanged().subscribe(on: MainScheduler.instance).bind(with: self) { owner, present in
-            guard let present else {return}
-            switch present{
-            case .create:
-                let vc = CHWriterView(reactor.provider,type: .create)
-                let nav = UINavigationController(rootViewController: vc)
-                nav.fullSheetSetting()
-                owner.present(nav, animated: true)
-            case .explore:
-                let vc = CHExploreView()
-                vc.vm = CHExploreVM(provider: reactor.provider,myChannels: reactor.currentState.channelList)
-                let nav = UINavigationController(rootViewController: vc)
-                nav.modalPresentationStyle = .fullScreen
-                owner.present(nav, animated: true)
-            case .chatting(chID: let chID,chName: let name):
-                let vc = CHChatView()
-                vc.reactor = CHChatReactor(reactor.provider, id: chID, title: name)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        }.disposed(by: disposeBag)
+        reactor.state.map{$0.channelDialog}.distinctUntilChanged().subscribe(on: MainScheduler.instance)
+            .bind(onNext: { [weak self] presentType in
+                guard let self, let presentType else {return}
+                switch presentType{
+                case .create:
+                    let vc = CHWriterView(reactor.provider,type: .create)
+                    let nav = UINavigationController(rootViewController: vc)
+                    nav.fullSheetSetting()
+                    present(nav, animated: true)
+                case .explore:
+                    let vc = CHExploreView()
+                    vc.vm = CHExploreVM(provider: reactor.provider,myChannels: reactor.currentState.channelList)
+                    let nav = UINavigationController(rootViewController: vc)
+                    nav.modalPresentationStyle = .fullScreen
+                    present(nav, animated: true)
+                case .chatting(chID: let chID,chName: let name):
+                    print("채팅 뷰 이동 \(chID) \(name)")
+                    let chatReactor = CHChatReactor(reactor.provider, id: chID, title: name)
+                    let vc = CHChatView()
+                    vc.reactor = chatReactor
+                    navigationController?.pushViewController(vc, animated: true)
+                }
+            }).disposed(by: disposeBag)
         reactor.state.map{$0.isMasking}.distinctUntilChanged()
             .delay(.microseconds(2000), scheduler: MainScheduler.asyncInstance)
             .bind(with: self) { owner, value in

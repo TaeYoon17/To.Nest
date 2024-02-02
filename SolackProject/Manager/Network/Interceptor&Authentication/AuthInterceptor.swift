@@ -24,7 +24,6 @@ final class AuthenticatorInterceptor:RequestInterceptor{
     }
     
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        print("들어와~~")
         guard requiresRefresh else{
             completion(.doNotRetry)
             return

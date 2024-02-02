@@ -63,6 +63,7 @@ final class CHChatReactor:Reactor{
         switch action{
         case .initChat:
         provider.msgService.fetchChannelDB(channelID: channelID,channelName: title)
+        provider.chService.checkUser(channelID: channelID, title: title)
         return Observable.concat([ .just(.setTitle(title)) ])
         case .setChatText(let text):
             chatMessage.content = text
@@ -117,6 +118,7 @@ final class CHChatReactor:Reactor{
             guard let self else {return Observable.concat([])}
             switch event{
             case .create(response: let response):
+                print("db통신")
                 return Observable.concat([
                     .just(.appendChat(.create(response))).delay(.microseconds(100), scheduler: MainScheduler.instance),
                     .just(.appendChat(nil))

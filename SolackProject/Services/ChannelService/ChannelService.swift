@@ -14,6 +14,7 @@ protocol ChannelProtocol{
     var transition: PublishSubject<CHService.Transition> { get }
     func create(_ info:CHInfo)
     func edit(channelName:String,_ info:CHInfo)
+    func checkUser(channelID:Int,title:String)
     func checkAllMy()
     func checkAll()
     func check(title:String)
@@ -89,6 +90,16 @@ final class ChannelService:ChannelProtocol{
                 event.onNext(.check(response))
                 let users = try await NM.shared.checkCHUsers(wsID: mainWS, channelName: title)
                 let channelID = response.channelID
+                event.onNext(.channelUsers(id: channelID, users))
+            }catch{
+                print(error)
+            }
+        }
+    }
+    func checkUser(channelID:Int,title:String){
+        Task{
+            do{
+                let users = try await NM.shared.checkCHUsers(wsID: mainWS, channelName: title)
                 event.onNext(.channelUsers(id: channelID, users))
             }catch{
                 print(error)
