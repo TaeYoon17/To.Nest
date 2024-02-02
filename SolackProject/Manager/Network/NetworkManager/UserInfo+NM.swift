@@ -67,7 +67,6 @@ extension NetworkManager{
             return Disposables.create()
         }
     }
-    
     func signIn<T:SignInBody>(type:SignInType,body:T) async throws -> SignResponse {
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
@@ -81,6 +80,31 @@ extension NetworkManager{
                 }
                 signResponse(res: res, continuation: continuation)
                 return
+            }
+        }
+    }
+    func updateMyInfo(nickName:String? = nil,phone:String? = nil) async throws -> MyInfo{
+        let router = UserRouter.putMy(nickName: nickName, phone: phone)
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router, interceptor: authInterceptor).response { res in
+                self.generalResponse(err: AuthFailed.self, result: MyInfo.self, res: res, continuation: continuation)
+            }
+        }
+    }
+    func updateMyInfo(profileImage:Data?) async throws -> MyInfo{
+        let router = UserRouter.putMyImage(image: profileImage)
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: authInterceptor)
+                .response{ res in
+                self.generalResponse(err: AuthFailed.self, result: MyInfo.self, res: res, continuation: continuation)
             }
         }
     }

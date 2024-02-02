@@ -148,7 +148,6 @@ extension SignUpViewReactor{
         guard self.count < 13 else {
             return String(self[startIndex..<index(startIndex, offsetBy: 13)])
         }
-        
         var origin = self
         if let last = origin.last, last == "-"{
             _ = origin.popLast()

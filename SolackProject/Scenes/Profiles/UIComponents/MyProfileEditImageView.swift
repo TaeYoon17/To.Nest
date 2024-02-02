@@ -1,33 +1,14 @@
 //
-//  ProfileImgView.swift
+//  MyProfileEditImageView.swift
 //  SolackProject
 //
-//  Created by 김태윤 on 1/10/24.
+//  Created by 김태윤 on 2/1/24.
 //
 
-import UIKit
+import Foundation
 import SwiftUI
-import PhotosUI
-import RxSwift
-import Combine
-final class ProfileImgVM:ObservableObject{
-    var imageData = PublishSubject<Data>()
-    var defaultImage = CurrentValueSubject<Data?,Never>(nil)
-}
-final class ProfileImgVC: UIHostingController<ProfileImgView>{
-    let vm = ProfileImgVM()
-    init(){
-        super.init(rootView: ProfileImgView(vm: vm))
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Don't use storyboard")
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .gray1
-    }
-}
-struct ProfileImgView:View{
+
+struct MyProfileEditImageView:View{
     @ObservedObject var vm: ProfileImgVM
     @State var prevImage = false
     @State var pickerPresent: Bool = false
@@ -55,11 +36,16 @@ struct ProfileImgView:View{
                 }
             case .loading(_): ProgressView()
             case .success(let img):
-                Image(uiImage: img).resizable(resizingMode: .stretch).scaledToFill()
-                    .animToggler()
-                    .onAppear(){
+                Group{
+                    if let defaultImage{
+                        defaultImage.resizable().scaledToFill()
+                            .transition(.opacity)
+                    }else{
+                        emptyView.transition(.opacity)
+                    }
+                }.animToggler().onAppear(){
                         do{
-                            let imgData = try img.imageData(maxMB: 0.95)
+                            let imgData = try img.imageData(maxMB: 1)
                             print("이미지 가져오기 성공!!")
                             vm.imageData.onNext(imgData)
                         }catch{
@@ -92,7 +78,7 @@ struct ProfileImgView:View{
             }
     }
 }
-extension ProfileImgView{
+fileprivate extension MyProfileEditImageView{
     var smallCameraIcon: some View{
         Button{
             self.pickerPresent = true

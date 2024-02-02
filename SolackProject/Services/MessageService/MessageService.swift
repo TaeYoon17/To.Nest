@@ -19,8 +19,6 @@ protocol MessageProtocol{
     func closeSocket(channelID: Int)
 }
 final class MessageService:MessageProtocol{
-    
-    
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()

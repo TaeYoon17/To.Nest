@@ -9,7 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 final class NaviBar: BaseView{
+    @DefaultsState(\.myProfile) var data
     var workSpaceTap: ControlEvent<Void>!
+    var updateMyProfileImage: PublishSubject<()> = .init()
     var title:String = ""{
         didSet{
             let attr = title.attr(type: FontType.title1)
@@ -21,6 +23,7 @@ final class NaviBar: BaseView{
             updateWSImage()
         }
     }
+    var disposeBag = DisposeBag()
     var workSpace:UIButton = .init()
     var workSpaceLabel:UILabel = .init()
     var profile:UIButton = .init()
@@ -57,13 +60,22 @@ final class NaviBar: BaseView{
     }
     override func configureView() {
         updateWSImage()
-        profile.config.backgroundImage(.arKit, mode: .scaleAspectFill).cornerRadius(8).apply()
-        
+        updateProfileImage()
         let attr = title.attr(type: FontType.title1)
         workSpaceLabel.attributedText = NSAttributedString(attr)
         workSpaceLabel.textColor = .text
         workSpaceLabel.lineBreakMode = .byTruncatingTail
         workSpaceLabel.numberOfLines = 1
+        self.updateMyProfileImage.bind(with: self) { owner, _ in
+            owner.updateProfileImage()
+        }.disposed(by: disposeBag)
+    }
+    private func updateProfileImage(){
+        guard let imageData = data, let image = try? UIImage.fetchBy(data: imageData, type: .small) else {
+            profile.config.backgroundImage(.noPhotoA, mode: .scaleAspectFill).cornerRadius(8).apply()
+            return
+        }
+        profile.config.backgroundImage(image, mode: .scaleAspectFill).cornerRadius(8).apply()
     }
     func updateWSImage(){
         Task{@MainActor in

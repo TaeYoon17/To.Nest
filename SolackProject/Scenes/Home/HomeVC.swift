@@ -15,6 +15,12 @@ final class HomeVC: BaseVC, View{
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
     func bind(reactor: HomeReactor) {
+        // 프로필 이미지 업데이트 시키기... 깃 머지시 고려사항
+        reactor.state.map{$0.isProfileUpdated}.distinctUntilChanged().bind(with: self) { owner, value in
+            guard value else {return}
+            owner.navBar.updateMyProfileImage.onNext(())
+        }.disposed(by: disposeBag)
+        
         reactor.state.map{$0.wsTitle}.distinctUntilChanged()
             .delay(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, title in
             owner.navBar.title = title
@@ -99,7 +105,6 @@ final class HomeVC: BaseVC, View{
     var sliderVM = SliderVM()
     lazy var sliderVC = WSSliderVC(reactor!.provider, sliderVM: sliderVM)
     var wsEmpty: WSEmpty = .init()
-    
     override var prefersStatusBarHidden: Bool { false }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,6 +116,10 @@ final class HomeVC: BaseVC, View{
             owner.present(owner.sliderVC, animated: false)
         }.disposed(by: disposeBag)
         reactor?.action.onNext(.initMainWS)
+        navBar.profile.rx.tap.bind(with: self) { owner, _ in
+            let vc = MyProfileVC(provider: owner.reactor!.provider)
+            owner.navigationController?.pushViewController(vc, animated: true)
+        }.disposed(by: disposeBag)
     }
     override func configureLayout() {
         view.addSubview(navBar)

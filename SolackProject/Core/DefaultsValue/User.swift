@@ -7,22 +7,18 @@
 
 import Foundation
 extension UserDefaults{
-    var nickname:String{
-        get{self.string(forKey: "nickname") ?? "" }
-        set{
-            setValue(newValue, forKey: "nickname")
-        }
-    }
-    var phoneNumber:String?{
-        get{ self.string(forKey: "phoneNumber") }
-        set{ setValue(newValue,forKey: "phoneNumber") }
-    }
-    var profile:Data?{
+    var myProfile:Data?{
         get{data(forKey: "profile")}
         set{setValue(newValue, forKeyPath: "profile")}
     }
-    var email:String{
-        get{string(forKey: "email") ?? ""}
-        set{setValue(newValue, forKey: "email")}
+    var myInfo: MyInfo?{
+        get{
+            guard let data:Data = data(forKey: "myInfo") else {return nil}
+            return try? JSONDecoder().decode(MyInfo.self, from: data)
+        }
+        set{
+            let data = try? JSONEncoder().encode(newValue)
+            self.setValue(data, forKey: "myInfo")
+        }
     }
 }

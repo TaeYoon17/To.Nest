@@ -17,11 +17,9 @@ protocol SignServiceProtocol{
 final class SignService: SignServiceProtocol{
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
-    @DefaultsState(\.nickname) var nickname
-    @DefaultsState(\.phoneNumber) var phoneNumber
-    @DefaultsState(\.profile) var profile
-    @DefaultsState(\.email) var email
     @DefaultsState(\.expiration) var expiration
+    @DefaultsState(\.myProfile) var myProfile
+    @DefaultsState(\.myInfo) var myInfo
     @DefaultsState(\.userID) var userID
     let event = PublishSubject<Event>()
     enum Event{
@@ -93,10 +91,27 @@ extension SignService{
     fileprivate func defaultsSign(_ response: SignResponse){
         accessToken = response.token.accessToken
         refreshToken = response.token.refreshToken
-        nickname = response.nickname
-        phoneNumber = response.phone
-        email = response.email
         expiration = Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds)
-        userID = response.userID
+        let myInfo = MyInfo.getBySignResponse(response)
+        self.myInfo = myInfo
+        print("사인 myInfo \(myInfo)")
+        self.userID = myInfo.userID
+        Task{
+            if let webImageURL = response.profileImage{
+                let data = await NM.shared.getThumbnail(webImageURL)
+                self.myProfile = data
+            }
+        }
+    }
+}
+extension MyInfo{
+    static func getBySignResponse(_ res: SignResponse) -> MyInfo {
+        Self.init(userID: res.userID,
+                  email: res.email,
+                  nickname: res.nickname,
+                  profileImage: res.profileImage,
+                  phone: res.phone,
+                  vendor: res.vendor,
+                  createdAt: res.createdAt)
     }
 }

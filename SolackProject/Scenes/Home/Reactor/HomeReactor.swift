@@ -31,6 +31,7 @@ final class HomeReactor: Reactor{
         case wsLogo(String)
         case setUnreads([UnreadsResponse]?)
         case setChannelList([CHResponse]?)
+        case isProfileUpdated(Bool)
     }
     struct State{
         var channelDialog:HomePresent? = nil
@@ -39,6 +40,7 @@ final class HomeReactor: Reactor{
         var unreads:[UnreadsResponse]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
+        var isProfileUpdated:Bool = false
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -83,12 +85,24 @@ final class HomeReactor: Reactor{
             state.wsTitle = title
         case .setUnreads(let responses):
             state.unreads = responses
+        case .isProfileUpdated(let update):
+            state.isProfileUpdated = update
         }
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let wsService = wsMutationTransform
         let chService = chMutationTransform
-        return Observable.merge(mutation,wsService,chService)
+        let profileService = provider.profileService.event.flatMap { event -> Observable<Mutation> in
+            switch event{
+            case .updatedImage:
+                return Observable.concat([
+                    .just(Mutation.isProfileUpdated(true)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                   .just(Mutation.isProfileUpdated(false))
+              ])
+            default: return Observable.concat([])
+            }
+        }
+        return Observable.merge(mutation,wsService,chService,profileService)
     }
 }
