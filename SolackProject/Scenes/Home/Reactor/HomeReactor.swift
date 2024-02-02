@@ -25,11 +25,12 @@ final class HomeReactor: Reactor{
     }
     enum Mutation{
         case channelDialog(HomePresent?)
-        case setChannelList([CHResponse]?)
+        
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
         case setUnreads([UnreadsResponse]?)
+        case setChannelList([CHResponse]?)
     }
     struct State{
         var channelDialog:HomePresent? = nil

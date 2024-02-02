@@ -12,7 +12,6 @@ import RxSwift
 import RxCocoa
 
 final class WSManagerView: BaseVC,View{
-    
     var disposeBag: DisposeBag = .init()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     var dataSource: DataSource!

@@ -13,7 +13,7 @@ import ReactorKit
 extension CHSettingView{
     final class DataSource: UICollectionViewDiffableDataSource<SectionType,Item>{
         var disposeBag = DisposeBag()
-        let infoItem = InfoItem()
+        var infoItem = InfoItem()
         private(set) var memberListHeader: MemberListHeader!
         let memberListModel = AnyModelStore<MemberListItem>([])
         let editListModel = AnyModelStore<EditListItem>([])
@@ -22,6 +22,19 @@ extension CHSettingView{
             initHeaders()
             initMembers()
             initEdits()
+//MARK: -- 정보(Info) 구성
+            reactor.state.map{($0.title,$0.description)}.bind { [weak self] title,description in
+                guard let self else {return}
+                DispatchQueue.main.async{[weak self] in
+                    guard let self else {return}
+                    var snapshot = snapshot()
+                    self.infoItem.title = title
+                    self.infoItem.description = description
+                    snapshot.reconfigureItems([Item(infoItem)])
+                    apply(snapshot)
+                }
+            }.disposed(by: disposeBag)
+//MARK: -- Edit 구성
             reactor.state.map{$0.ownerType}.distinctUntilChanged().bind(with: self) { owner, ownerType in
                 guard let ownerType else {return}
                 print("ownerType called \(ownerType)")
@@ -30,7 +43,6 @@ extension CHSettingView{
                     let editListItems:[EditListItem] = [EditListItem(editingType: .edit),.init(editingType: .exit),
                                                         .init(editingType: .adminChange),.init(editingType: .delete)]
                     owner.editListModel.insertModel(items: editListItems)
-//                    Task{@MainActor in
                     DispatchQueue.main.async{
                         var snapshot = owner.snapshot()
                         let items = editListItems.map{Item($0)}
@@ -48,6 +60,7 @@ extension CHSettingView{
                     }
                 }
             }.disposed(by: disposeBag)
+//MARK: -- 멤버 구성
             reactor.state.map{$0.members}.bind(with: self) { owner, responses in
                 Task{
                     var memberListItems:[MemberListItem] = []
@@ -66,8 +79,6 @@ extension CHSettingView{
                     owner.memberListModel.insertModel(items:memberListItems)
                     let items = memberListItems.map{Item($0)}
                     owner.memberListHeader.numbers = items.count
-                    print("Items",items,items
-                        .count)
                     DispatchQueue.main.async{
                         var snapshot = owner.snapshot(for: .member)
                         snapshot.deleteAll()
@@ -87,7 +98,6 @@ extension CHSettingView{
             var snapshot = snapshot()
             snapshot.appendSections([.info])
             snapshot.appendItems([Item(infoItem)],toSection: .info)
-            
             apply(snapshot)
         }
         func initMembers(){

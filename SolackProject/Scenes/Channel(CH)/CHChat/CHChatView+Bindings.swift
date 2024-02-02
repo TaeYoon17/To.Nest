@@ -14,7 +14,7 @@ extension CHChatView{
     typealias Action = CHChatReactor.Action
     func naviBarBinding(reactor: CHChatReactor){
         Observable.combineLatest(reactor.state.map{$0.memberCount}, reactor.state.map{$0.title})
-            .bind(with: self) { owner, args in
+            .subscribe(on: MainScheduler.asyncInstance).bind(with: self) { owner, args in
             var (number, title) = args
             owner.updateTitleLabel(title: title, number: number)
         }.disposed(by: disposeBag)
@@ -24,7 +24,6 @@ extension CHChatView{
         
     }
     func textFieldBinding(reactor: CHChatReactor){
-        
         // 채팅 전송 버튼 탭
         chatField.send.map{Action.actionSendChat}.bind(to: reactor.action).disposed(by: disposeBag)
         // 이미지 항목 하나 삭제

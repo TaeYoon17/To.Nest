@@ -17,11 +17,6 @@ extension CHChatView:UICollectionViewDelegate,UICollectionViewDataSourcePrefetch
         dataSource = .init(reactor: reactor!, collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             collectionView.dequeueConfiguredReusableCell(using: cellRegi, for: indexPath, item: itemIdentifier)
         })
-//        dataSource.bottomFinished.delay(.milliseconds(150), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, _ in
-//            UIView.animate(withDuration: 0.2) {
-//                owner.collectionView.alpha = 1
-//            }
-//        }.disposed(by: disposeBag)
     }
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {

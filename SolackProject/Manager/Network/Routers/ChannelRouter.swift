@@ -60,6 +60,9 @@ enum ChannelRouter:URLRequestConvertible{
             }else{
                 parameters["after"] = ""
             }
+        case .edit(wsID: _, chName: _, info: let info):
+            parameters["name"] = info.name
+            parameters["description"] = info.description
         default: break
         }
         return parameters
@@ -67,9 +70,7 @@ enum ChannelRouter:URLRequestConvertible{
     var headers:HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
-        case .create:
-            headers["Content-Type"] = "application/json"
-        case .unreads:
+        case .create,.unreads,.edit:
             headers["Content-Type"] = "application/json"
         default: break
         }

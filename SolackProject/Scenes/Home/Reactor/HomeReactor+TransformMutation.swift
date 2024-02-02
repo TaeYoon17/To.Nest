@@ -48,16 +48,23 @@ extension HomeReactor{
                 provider.wsService.setHomeWS(wsID: mainWS)
                 return Observable.concat([])
             case .allMy(let responses):
-                _ = self.provider.msgService
-                responses.forEach { res in
+                responses.forEach { res in // 채널들의 메시지들 업데이트
                     self.provider.msgService.getChannelDatas(chID: res.channelID, chName: res.name)
                 }
-                return Observable.concat([.just(.setChannelList(responses))])
+                return Observable.concat([.just(.setChannelList(responses)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance)])
             case .unreads(let unreads):
                 return Observable.concat([
                     .just(.setUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                     .just(.setUnreads(nil))
                 ])
+            case .update(let response):
+                guard response.workspaceID == mainWS else {return Observable.concat([])}
+                // 여기 수정해야 할 수도..? unreads도 다 같이 부르는 문제가 발생하긴 한다...
+                provider.chService.checkAllMy()
+                return Observable.concat([])
+            case .delete(chID: let chID):
+                provider.chService.checkAllMy()
+                return Observable.concat([])
             default: return Observable.concat([])
             }
         }

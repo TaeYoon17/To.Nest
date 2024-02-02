@@ -48,9 +48,12 @@ extension MessageService:SocketReceivable{
         }
     }
     func getChannelDatas(chID:Int,chName:String){
+        
         Task{@BackgroundActor in
             do{
+//                try await Task.sleep(for: .seconds(0.1))
                 let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
+//                print("채널 메시지들 가져온다 \(chName) \(lastCheckDate)")
                 let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS, chName: chName, date: lastCheckDate)
                 try await getResponses(responses: responses, channelID: chID)
             }catch{

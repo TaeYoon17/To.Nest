@@ -21,48 +21,52 @@ final class CHSettingReactor:Reactor{
     var initialState: State = .init()
     @DefaultsState(\.userID) var userID
     weak var provider: ServiceProviderProtocol!
+    var info = CHInfo()
     var title:String
     var channelID:Int
     enum Action{
         case initAction
-        case actionEdit
-        case actionExit
-        case actionChangeAdmin
-        case actionDelete
+        case actionDialog(CHEditingType)
+        case deleteAction
     }
     enum Mutation{
         case setDialog(CHEditingType?)
         case setOnwer(CHOwnerType?)
         case setMembers([UserResponse])
+        case setInfo(title:String,description:String)
+        case isLoading(Bool)
+        case isClose(Bool)
     }
     struct State{
+        var title:String = ""
+        var description:String = ""
         var dialog: CHEditingType? = nil
         var ownerType: CHOwnerType? = nil
         var members: [UserResponse] = []
+        var isLoading:Bool = false
+        var isClose:Bool = false
     }
     init(_ provider: ServiceProviderProtocol,channelTitle:String,channelID:Int) {
         self.title = channelTitle
         self.channelID = channelID
         self.provider = provider
+        self.info.name = channelTitle
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .initAction:
             provider.chService.check(title: title)
             return Observable.concat([])
-        case .actionChangeAdmin: return Observable.concat([])
-        case .actionDelete: return Observable.concat([
-            .just(.setDialog(.delete)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-            .just(.setDialog(nil))
-        ])
-        case .actionEdit: return Observable.concat([
-            .just(.setDialog(.edit)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-            .just(.setDialog(nil))
-        ])
-        case .actionExit: return Observable.concat([
-            .just(.setDialog(.exit)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-            .just(.setDialog(nil))
-        ])
+        case .actionDialog(let type):
+            return Observable.concat([
+                .just(.setDialog(type)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                .just(.setDialog(nil))
+            ])
+        case .deleteAction:
+            provider.chService.delete(channelID: channelID, channelName: self.title)
+            return Observable.concat([
+                .just(.isLoading(true))
+            ])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -73,6 +77,13 @@ final class CHSettingReactor:Reactor{
             state.ownerType = owner
         case .setMembers(let members):
             state.members = members
+        case .setInfo(title: let title, description: let description):
+            state.title = title
+            state.description = description
+        case .isLoading(let isLoading):
+            state.isLoading = isLoading
+        case .isClose(let isClose):
+            state.isClose = true
         }
         return state
     }
@@ -83,8 +94,11 @@ final class CHSettingReactor:Reactor{
             case .check(let response):
                 if response.channelID == self.channelID{
                     self.title = response.name
+                    self.info.name = response.name
+                    self.info.description = response.description ?? ""
                     let ownerType = response.ownerID == self.userID ? CHOwnerType.my : CHOwnerType.others
                     return Observable.concat([
+                        .just(.setInfo(title: response.name, description: response.description ?? "")),
                         .just(.setOnwer(ownerType)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                         .just(.setOnwer(nil))
                     ])
@@ -98,6 +112,18 @@ final class CHSettingReactor:Reactor{
                 }else{
                     return Observable.concat([])
                 }
+            case .update(let response):
+                guard response.channelID == self.channelID else {return Observable.concat([]) }
+                self.title = response.name
+                self.info.name = response.name
+                self.info.description = response.description ?? ""
+                return Observable.concat([
+                    .just(.setInfo(title: response.name, description: response.description ?? ""))
+                ])
+            case .delete(chID: let chID):
+                return Observable.concat([
+                    .just(.isClose(true))
+                ])
             default: return Observable.concat([])
             }
         }

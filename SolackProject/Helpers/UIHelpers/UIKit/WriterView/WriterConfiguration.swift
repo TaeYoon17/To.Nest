@@ -15,7 +15,12 @@ protocol WritableView{
     func apply(config:WriterConfigureation)
 }
 struct WriterConfigureation{
-    var buttonText:String = ""
+    var buttonText:String = ""{
+        didSet{
+            mainField.accessoryText = buttonText
+            descriptionField.accessoryText = buttonText
+        }
+    }
     lazy var mainField:InputFieldView.Configuration = .init(field: "", placeholder: "", keyType: .default, accessoryText: buttonText)
     lazy var descriptionField:InputFieldView.Configuration = .init(field: "", placeholder: "", keyType: .default, accessoryText: buttonText)
     var navigationTitle:String = ""

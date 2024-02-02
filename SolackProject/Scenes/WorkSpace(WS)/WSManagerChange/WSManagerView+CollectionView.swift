@@ -23,7 +23,6 @@ extension WSManagerView:UICollectionViewDelegate{
         listCellConfig.showsSeparators = false
         listCellConfig.backgroundColor = .gray1
         var layout = UICollectionViewCompositionalLayout.list(using: listCellConfig)
-
         return layout
     }
     var cellRegistration: UICollectionView.CellRegistration<UICollectionViewCell,String>{
@@ -62,7 +61,6 @@ struct WSChagneManagerListView: View{
                     .font(FontType.body.font)
                     .foregroundStyle(.secondary)
                     .frame(height:18)
-                
             }
             Spacer()
         }

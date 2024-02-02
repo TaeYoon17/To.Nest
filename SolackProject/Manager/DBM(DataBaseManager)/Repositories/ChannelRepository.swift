@@ -28,6 +28,13 @@ typealias CHRepository = ChannelRepository
             })
         }
     }
+    func updateChannelName(channelID:Int,name:String) async{
+        if let table = self.getTableBy(tableID: channelID){
+            try! await self.realm.asyncWrite({
+                table.channelName = name
+            })
+        }
+    }
     // 채널 테이블에 채팅 테이블 추가하기
     func appendChat(channelID:Int,chatTables:[CHChatTable]) async {
         guard let table = self.getTableBy(tableID: channelID) else {fatalError("Can't find channel table")}

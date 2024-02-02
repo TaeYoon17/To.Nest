@@ -13,19 +13,27 @@ protocol ChannelProtocol{
     var event:PublishSubject<CHService.Event> {get}
     var transition: PublishSubject<CHService.Transition> { get }
     func create(_ info:CHInfo)
+    func edit(channelName:String,_ info:CHInfo)
     func checkAllMy()
     func checkAll()
     func check(title:String)
+    func delete(channelID:Int,channelName:String)
 }
 final class ChannelService:ChannelProtocol{
     @DefaultsState(\.mainWS) var mainWS
     let event = PublishSubject<Event>()
     let transition = PublishSubject<Transition>()
     @BackgroundActor var repository:ChannelRepository!
+    @BackgroundActor var chChatrepository: ChannelChatRepository!
+    @BackgroundActor var userRepository: UserInfoRepository!
+    @BackgroundActor var imageReferenceCountManager: ImageRCM!
+    @BackgroundActor var userReferenceCountManager: UserRCM!
     enum Event{
         case create(CHResponse)
         case allMy([CHResponse])
         case all([CHResponse])
+        case update(CHResponse)
+        case delete(chID:Int)
         case failed(ChannelFailed)
         case unreads([UnreadsResponse])
         case check(CHResponse)
@@ -37,6 +45,10 @@ final class ChannelService:ChannelProtocol{
     init(){
         Task{@BackgroundActor in
             repository = try await ChannelRepository()
+            chChatrepository = try await ChannelChatRepository()
+            userRepository = try await UserInfoRepository()
+            userReferenceCountManager = UserRCM.shared
+            imageReferenceCountManager = ImageRCM.shared
         }
     }
     func create(_ info: CHInfo){
@@ -56,6 +68,20 @@ final class ChannelService:ChannelProtocol{
             }
         }
     }
+    func edit(channelName:String,_ info: CHInfo) {
+        Task{
+            do{
+                let result = try await NM.shared.editCH(wsID: mainWS,name:channelName, info)
+                Task{@BackgroundActor in
+                    await repository.updateChannelName(channelID:result.channelID,name:result.name)
+                }
+                print("updateResult: \(result)")
+                event.onNext(.update(result))
+            }catch{
+                
+            }
+        }
+    }
     func check(title:String){
         Task{
             do{
@@ -64,6 +90,21 @@ final class ChannelService:ChannelProtocol{
                 let users = try await NM.shared.checkCHUsers(wsID: mainWS, channelName: title)
                 let channelID = response.channelID
                 event.onNext(.channelUsers(id: channelID, users))
+            }catch{
+                print(error)
+            }
+        }
+    }
+    func delete(channelID:Int,channelName:String){
+        Task{
+            do{
+                let response = try await NM.shared.deleteCH(wsID: mainWS, channelName: channelName)
+                Task{ @BackgroundActor in
+                    await deleteChannel(channelID:channelID)
+                }
+                if response{
+                    event.onNext(.delete(chID:channelID))
+                }
             }catch{
                 print(error)
             }
@@ -95,10 +136,7 @@ final class ChannelService:ChannelProtocol{
                 // 기존에 없었던 테이블 생성... or 기존에 있었지만 받아온 채널아이디가 없는 테이블 삭제
                 Task{@BackgroundActor in
                     let exiseted = repository.getTasks.where { $0.wsID == self.mainWS}
-                    
                     let checkUnreads = Array(exiseted.map{ ($0.lastReadDate,$0.channelName) })
-                    print("여기도 가라 \(checkUnreads)")
-                    
                     Task.detached {
                         var unreadsResponses: [UnreadsResponse] = []
                         for checks in checkUnreads{
@@ -117,12 +155,13 @@ final class ChannelService:ChannelProtocol{
                     }
                     
                     for v in results{ // 채널 response
-                        // 기존에 존재하지 않아서 새로 추가해야하는 채널
-                        if nil == repository.getTableBy(tableID: v.channelID){
+                        if let table = repository.getTableBy(tableID: v.channelID){ 
+                            // 기존에 존재하는 채널... 업데이트 필요
+                            await repository.updateChannelName(channelID: v.channelID, name: v.name)
+                        }else{// 기존에 존재하지 않아서 새로 추가해야하는 채널
                             await repository.create(item: ChannelTable(channelInfo: v))
                         }
                     }
-                    
                     let existedChannels = exiseted.map{$0.channelID}
                     let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
                     repository.removeChannelTables(ids: Array(removeChannelIDs))

@@ -134,7 +134,29 @@ final class CHChatReactor:Reactor{
                 ])
             }
         }
-        return Observable.merge([mutation,msgMutation])
+        let chMutation = provider.chService.event.flatMap { [weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            switch event{
+            case .update(let response):
+                guard self.channelID == response.channelID else {return Observable.concat([])}
+                self.title = response.name
+                return Observable.concat([
+                    .just(.setTitle(response.name)),
+                ])
+            case .check(let response):
+                guard self.channelID == response.channelID else {return Observable.concat([])}
+                self.title = response.name
+                return Observable.concat([
+                    .just(.setTitle(response.name)),
+                ])
+            case .channelUsers(id: let channelID, let responses):
+                guard self.channelID == channelID else {return Observable.concat([])}
+                let count = responses.count
+                return Observable.concat([.just(.setMemberCount(count))])
+            default: return Observable.concat([])
+            }
+        }
+        return Observable.merge([mutation,msgMutation,chMutation])
     }
     func transform(state: Observable<State>) -> Observable<State> {
         return state.flatMap { state -> Observable<State> in

@@ -17,8 +17,10 @@ extension CHSettingView{
             var item = dataSource.infoItem
             cell.contentConfiguration = UIHostingConfiguration(content: {
                 VStack(alignment:.leading,spacing: 10){
-                    Text("#그냥 떠들고 싶을 때").font(FontType.title2.font)
-                    Text(item.description).font(FontType.body.font)
+                    Text("#\(item.title)").font(FontType.title2.font)
+                    if !item.description.isEmpty{
+                        Text(item.description).font(FontType.body.font)
+                    }
                 }
             }).margins(.top,16)
             var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
@@ -33,7 +35,6 @@ extension CHSettingView{
             var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
             backgroundConfig.backgroundColor = .gray2
             cell.backgroundConfiguration = backgroundConfig
-//            let image = try? examineImage.randomElement()?.downSample(type: .small)
             Task{
                 let image = if let imageName = item.userResponse.profileImage{
                     try await UIImage.fetchWebCache(name: imageName,type: .medium)
@@ -42,13 +43,17 @@ extension CHSettingView{
                 }
                 await MainActor.run{
                     cell.contentConfiguration = UIHostingConfiguration(content: {
-                        VStack(alignment:.center){
-                            Image(uiImage: image).resizable().scaledToFit().frame(width: 44,height: 44)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            Text(
-                                item.userResponse.nickname.isEmpty ? "이름 없는 사용자" : item.userResponse.nickname
-                            ).font(FontType.body.font)
-                        }
+                        Button{
+                            print("프로필 탭탭탭 \(item.userResponse.userID)")
+                        }label:{
+                            VStack(alignment:.center){
+                                Image(uiImage: image).resizable().scaledToFit().frame(width: 44,height: 44)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                Text(
+                                    item.userResponse.nickname.isEmpty ? "이름 없는 사용자" : item.userResponse.nickname
+                                ).font(FontType.body.font)
+                            }
+                        }.tint(.text)
                     }).background(.gray2)
                 }
             }
@@ -60,7 +65,7 @@ extension CHSettingView{
             guard let item = dataSource.editListModel.fetchByID(itemIdentifier.id) else {return}
             cell.contentConfiguration = UIHostingConfiguration(content: {
                     Button{
-                        print("Channel Edit Button")
+                        self.reactor!.action.onNext(.actionDialog(item.editingType))
                     }label:{
                         HStack{
                             Spacer()
