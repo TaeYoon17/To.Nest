@@ -31,29 +31,21 @@ extension CHSettingView{
     var memberRegistration:UICollectionView.CellRegistration<UICollectionViewCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             guard let self else {return}
-            guard let item = dataSource.memberListModel.fetchByID(itemIdentifier.id) else {return}
+            guard let item:CHMemberListItem = dataSource.memberListModel.fetchByID(itemIdentifier.id) else {return}
             var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
             backgroundConfig.backgroundColor = .gray2
             cell.backgroundConfiguration = backgroundConfig
             Task{
-                let image = if let imageName = item.userResponse.profileImage{
-                    try await UIImage.fetchWebCache(name: imageName,type: .medium)
+                let asset = if let item: MemberListAsset = self.dataSource.memberListAssets.object(forKey: itemIdentifier.id as NSString){
+                    item
                 }else{
-                    UIImage.arKit
+                    await self.dataSource.appendAssetCache(item: item)
                 }
                 await MainActor.run{
                     cell.contentConfiguration = UIHostingConfiguration(content: {
-                        Button{
-                            print("프로필 탭탭탭 \(item.userResponse.userID)")
-                        }label:{
-                            VStack(alignment:.center){
-                                Image(uiImage: image).resizable().scaledToFit().frame(width: 44,height: 44)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                Text(
-                                    item.userResponse.nickname.isEmpty ? "이름 없는 사용자" : item.userResponse.nickname
-                                ).font(FontType.body.font)
-                            }
-                        }.tint(.text)
+                        MemberButton(item: item, asset: asset) { response in
+                            print(response)
+                        }
                     }).background(.gray2)
                 }
             }
@@ -133,3 +125,4 @@ extension CHSettingView{
         return layout
     }
 }
+

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 extension CHSettingView{
     enum SectionType:String{
         case info
@@ -46,17 +47,19 @@ extension CHSettingView{
         var title:String = ""
         var description:String = ""
     }
-    struct MemberListItem:CollectionItemable,Identifiable{
-        var id: String{"\(userResponse.userID)" } // 유저 고유 번호를 ID로 채택할 필요 있음
-        var sectionType:SectionType = .member
-        var itemType: ItemType = .listItem
-        var userResponse:UserResponse
-    }
+    
     struct MemberListHeader: CollectionItemable{
         var id:String{sectionType.rawValue + itemType.rawValue }
         var sectionType: SectionType = .member
         var itemType: ItemType = .header
         var numbers:Int
+    }
+    final class CHMemberListItem: MemberListItem,CollectionItemable{
+        static func == (lhs: CHSettingView.CHMemberListItem, rhs: CHSettingView.CHMemberListItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        var sectionType:SectionType = .member
+        var itemType: ItemType = .listItem
     }
     struct EditListItem: CollectionItemable,Identifiable{
         var id:String{ editingType.rawValue }

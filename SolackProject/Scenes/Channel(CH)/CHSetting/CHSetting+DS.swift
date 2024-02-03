@@ -15,7 +15,8 @@ extension CHSettingView{
         var disposeBag = DisposeBag()
         var infoItem = InfoItem()
         private(set) var memberListHeader: MemberListHeader!
-        let memberListModel = AnyModelStore<MemberListItem>([])
+        let memberListModel = AnyModelStore<CHMemberListItem>([])
+        let memberListAssets = NSCache<NSString,MemberListAsset>()
         let editListModel = AnyModelStore<EditListItem>([])
         init(reactor: CHSettingReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<SectionType, Item>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
@@ -63,18 +64,11 @@ extension CHSettingView{
 //MARK: -- 멤버 구성
             reactor.state.map{$0.members}.bind(with: self) { owner, responses in
                 Task{
-                    var memberListItems:[MemberListItem] = []
+                    var memberListItems:[CHMemberListItem] = []
                     for response in responses{
-                        let item = MemberListItem(sectionType: .member, itemType: .listItem, userResponse: response)
+                        let item = CHMemberListItem(userResponse: response)
                         memberListItems.append(item)
-                        if let profileImage = response.profileImage,let imageData = await NM.shared.getThumbnail(profileImage){
-                            let image = UIImage.fetchBy(data: imageData, type: .medium)
-                            do{
-                                try await image.appendWebCache(name: profileImage, type: .medium)
-                            }catch{
-                                print(error)
-                            }
-                        }
+                        await owner.appendAssetCache(item: item)
                     }
                     owner.memberListModel.insertModel(items:memberListItems)
                     let items = memberListItems.map{Item($0)}
@@ -102,7 +96,7 @@ extension CHSettingView{
         }
         func initMembers(){
             var sectionSnapshot = NSDiffableDataSourceSectionSnapshot<Item>()
-            var memberListItems:[MemberListItem] = []
+            var memberListItems:[CHMemberListItem] = []
             memberListModel.insertModel(items:memberListItems)
             var items = memberListItems.map{Item($0)}
             memberListHeader = .init(numbers: items.count)
@@ -118,6 +112,20 @@ extension CHSettingView{
             snapshot.appendItems([],toSection: .editing)
             apply(snapshot)
         }
+    }
+}
+extension CHSettingView.DataSource{
+    @discardableResult
+    func appendAssetCache(item:MemberListItem) async -> MemberListAsset{
+        let response = item.userResponse
+        let image = if let profileImage = response.profileImage,let imageData = await NM.shared.getThumbnail(profileImage){
+            UIImage.fetchBy(data: imageData, type: .medium)
+        }else{
+            UIImage.noPhotoA
+        }
+        let listItem = MemberListAsset(userId: item.id, image: image)
+        memberListAssets.setObject(listItem, forKey: listItem.id as NSString)
+        return listItem
     }
 }
 extension CHEditingType{
