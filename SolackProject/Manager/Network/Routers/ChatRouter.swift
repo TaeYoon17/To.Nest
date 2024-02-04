@@ -49,7 +49,7 @@ enum ChatRouter:URLRequestConvertible{
         return headers
     }
     func asURLRequest() throws -> URLRequest {
-        guard var url = Self.baseURL?.appendingPathComponent(endPoint) else {
+        guard let url = Self.baseURL?.appendingPathComponent(endPoint) else {
             return URLRequest(url: URL(string: "www.naver.com")!)
         }
         var urlRequest = URLRequest(url: url)
@@ -67,7 +67,7 @@ enum ChatRouter:URLRequestConvertible{
     var multipartFormData: MultipartFormData {
         let multipartFormData = MultipartFormData()
         switch self {
-        case .create(wsID: let wsID, chName: let chName, info: let info):
+        case .create(wsID: _, chName: _, info: let info):
             for file in info.files{
                 let fileName = "\(file.name).\(file.type.rawValue)"
                 print(fileName, fileName,file.type.mimeType)

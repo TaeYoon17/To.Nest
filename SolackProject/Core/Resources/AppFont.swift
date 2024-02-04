@@ -91,15 +91,15 @@ extension String{
         
         var attr :AttributedString = AttributedString(self)
         
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         let font = type.get()
         attr.font = font
-        let line:CGFloat = switch type{
-        case .bodyBold, .caption,.body: 18
-        case .title1: 30
-        case .title2: 20
-        case .caption2: 18
-        }
+//        let line:CGFloat = switch type{
+//        case .bodyBold, .caption,.body: 18
+//        case .title1: 30
+//        case .title2: 20
+//        case .caption2: 18
+//        }
 //        paragraphStyle.minimumLineHeight = line
 //        paragraphStyle.maximumLineHeight = line
 //        attr.paragraphStyle = paragraphStyle

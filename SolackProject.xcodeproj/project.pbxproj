@@ -112,6 +112,8 @@
 		636B2B242B6E249E00BE9751 /* MemberListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636B2B232B6E249E00BE9751 /* MemberListItem.swift */; };
 		636C13872B4986BB006D9962 /* SignInToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C13862B4986BB006D9962 /* SignInToastType.swift */; };
 		636CFBB42B510743003F02ED /* WSMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636CFBB32B510743003F02ED /* WSMainVM.swift */; };
+		636F16012B6FE9ED00536E6F /* MsgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636F16002B6FE9ED00536E6F /* MsgView.swift */; };
+		636F16032B6FEA3600536E6F /* DMMainVC+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636F16022B6FEA3600536E6F /* DMMainVC+Binding.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
 		637318432B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */; };
 		637318452B6A1DA90001B4A9 /* MyProfileToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */; };
@@ -381,6 +383,8 @@
 		636B2B232B6E249E00BE9751 /* MemberListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberListItem.swift; sourceTree = "<group>"; };
 		636C13862B4986BB006D9962 /* SignInToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInToastType.swift; sourceTree = "<group>"; };
 		636CFBB32B510743003F02ED /* WSMainVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSMainVM.swift; sourceTree = "<group>"; };
+		636F16002B6FE9ED00536E6F /* MsgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgView.swift; sourceTree = "<group>"; };
+		636F16022B6FEA3600536E6F /* DMMainVC+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMMainVC+Binding.swift"; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
 		637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyProfileVM+TextValidation.swift"; sourceTree = "<group>"; };
 		637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileToastType.swift; sourceTree = "<group>"; };
@@ -954,6 +958,7 @@
 		636990BA2B6CC0A300E9FFBA /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
+				636F15FF2B6FE9B800536E6F /* MessageView */,
 				636B2B202B6E242500BE9751 /* MemberList */,
 				636990BB2B6CC0AD00E9FFBA /* ChangeManager */,
 			);
@@ -982,10 +987,8 @@
 			isa = PBXGroup;
 			children = (
 				636B2B122B6D4B9700BE9751 /* DMMainVC.swift */,
-				636B2B182B6D517D00BE9751 /* DMMainVC+DS.swift */,
-				636B2B142B6D4DAC00BE9751 /* DMMainVC+CollectionView.swift */,
-				636B2B162B6D4E0800BE9751 /* DMMainVC+CellRegistraion.swift */,
-				636B2B1A2B6D51CA00BE9751 /* DMMainVC+CollectionStructures.swift */,
+				636F16022B6FEA3600536E6F /* DMMainVC+Binding.swift */,
+				636F16042B6FEAAB00536E6F /* DMMianVC+CollectionViews */,
 			);
 			path = DMMain;
 			sourceTree = "<group>";
@@ -1014,6 +1017,25 @@
 				63E38EE42B516B2F00BD6C93 /* WSMainVM+WSServiceBinding.swift */,
 			);
 			path = SideVM;
+			sourceTree = "<group>";
+		};
+		636F15FF2B6FE9B800536E6F /* MessageView */ = {
+			isa = PBXGroup;
+			children = (
+				636F16002B6FE9ED00536E6F /* MsgView.swift */,
+			);
+			path = MessageView;
+			sourceTree = "<group>";
+		};
+		636F16042B6FEAAB00536E6F /* DMMianVC+CollectionViews */ = {
+			isa = PBXGroup;
+			children = (
+				636B2B182B6D517D00BE9751 /* DMMainVC+DS.swift */,
+				636B2B142B6D4DAC00BE9751 /* DMMainVC+CollectionView.swift */,
+				636B2B162B6D4E0800BE9751 /* DMMainVC+CellRegistraion.swift */,
+				636B2B1A2B6D51CA00BE9751 /* DMMainVC+CollectionStructures.swift */,
+			);
+			path = "DMMianVC+CollectionViews";
 			sourceTree = "<group>";
 		};
 		637488C02B50C739008AAD4A /* Library */ = {
@@ -1823,6 +1845,7 @@
 				63B6101C2B6CC45100861A7D /* CHAdminChange+DS.swift in Sources */,
 				631A60EC2B44EE0B005509C2 /* AuthService.swift in Sources */,
 				6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */,
+				636F16012B6FE9ED00536E6F /* MsgView.swift in Sources */,
 				636213032B4E94F90093D089 /* CropView.swift in Sources */,
 				6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */,
 				63E974C82B691E24004BCA00 /* MyProfileVM.swift in Sources */,
@@ -1869,6 +1892,7 @@
 				6364BC762B6BBE9000C311CE /* ChannelService+DB.swift in Sources */,
 				6329FE592B6E94DD0018909F /* StringValidation.swift in Sources */,
 				636213082B4E96220093D089 /* ImageManager+Fetch.swift in Sources */,
+				636F16032B6FEA3600536E6F /* DMMainVC+Binding.swift in Sources */,
 				63FF41252B6285E5004CD7EA /* ChatInfo.swift in Sources */,
 				639AFDE52B52D37D00FA8280 /* WSManagerView+DS.swift in Sources */,
 				639AFDE32B52D04100FA8280 /* WSManagerView+CollectionView.swift in Sources */,

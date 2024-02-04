@@ -21,20 +21,29 @@ final class DMMainReactor: Reactor{
     enum Mutation{
         case setMembsers([UserResponse])
         case setWSThumbnail(String)
+        case isProfileUpdated(Bool)
     }
     struct State{
         var membsers:[UserResponse] = []
         var wsThumbnail:String = ""
+        var isProfileUpdated = false
     }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .initAction:
-            provider.wsService
             return Observable.concat([])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
+        switch mutation{
+        case .setMembsers(let members):
+            state.membsers = members
+        case .setWSThumbnail(let thumbnail):
+            state.wsThumbnail = thumbnail
+        case .isProfileUpdated(let updated):
+            state.isProfileUpdated = updated
+        }
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
@@ -42,10 +51,14 @@ final class DMMainReactor: Reactor{
             guard let self else {return Observable.concat([])}
             switch event{
             case .homeWS(let wsResponse):
+                var arr:[Observable<Mutation>] = []
                 guard let members = wsResponse?.workspaceMembers else {return Observable.concat([])}
-                return Observable.concat([
-                    .just(.setMembsers(members)).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
-                ])
+                if let profileImage = wsResponse?.thumbnail{
+                    print(profileImage)
+                    arr.append(.just(.setWSThumbnail(profileImage)).delay(.microseconds(100), scheduler: MainScheduler.instance))
+                }
+                arr.append(.just(.setMembsers(members)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance))
+                return Observable.concat(arr)
             case .members(let response):
                 return Observable.concat([
                     .just(.setMembsers(response)).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
@@ -53,6 +66,16 @@ final class DMMainReactor: Reactor{
             default: return Observable.concat([])
             }
         }
-        return Observable.merge([mutation,wsMutation])
+        let profileMutation = provider.profileService.event.flatMap { event -> Observable<Mutation> in
+            switch event{
+            case .updatedImage:
+                return Observable.concat([
+                    .just(Mutation.isProfileUpdated(true)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                   .just(Mutation.isProfileUpdated(false))
+              ])
+            default: return Observable.concat([])
+            }
+        }
+        return Observable.merge([mutation,wsMutation,profileMutation])
     }
 }

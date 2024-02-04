@@ -30,7 +30,6 @@ extension DMMainVC{
                 section.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
                 let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(1))
                 section.boundarySupplementaryItems = [
-//                    .init(layoutSize: size, elementKind: "TopSeperator", alignment: .top),
                     .init(layoutSize: size, elementKind: "BottomSeperator", alignment: .bottom),
                 ]
                 return section
@@ -40,23 +39,30 @@ extension DMMainVC{
     var memberCellRegistration : UICollectionView.CellRegistration<UICollectionViewListCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             guard let self else {return}
-            guard let item = dataSource.memberModel.fetchByID(itemIdentifier.id) else {return}
-            let memberAsset = if let asset = dataSource.memberAssets.object(forKey: itemIdentifier.id as NSString){
-                asset
-            }else{
-                dataSource.appendMemberAsset(memberItem: item)
+            guard let item = dataSource.memberModel.fetchByID(itemIdentifier.id) else {
+                print("member item error")
+                return
             }
-            cell.backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
-            cell.backgroundConfiguration?.backgroundColor = .clear
-            cell.contentConfiguration = UIHostingConfiguration(content: {
-                HStack{
-                    Spacer()
-                    MemberButton(item: item, asset: memberAsset) { response in
-                        print("선택 되었습니다.")
-                    }
-                    Spacer()
+            Task{
+                let memberAsset = if let asset = self.dataSource.memberAssets.object(forKey: itemIdentifier.id as NSString){
+                    asset
+                }else{
+                    await self.dataSource.appendMemberAsset(memberItem: item)
                 }
-            })
+                await MainActor.run {
+                    cell.backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
+                    cell.backgroundConfiguration?.backgroundColor = .clear
+                    cell.contentConfiguration = UIHostingConfiguration(content: {
+                        HStack{
+                            Spacer()
+                            MemberButton(item: item, asset: memberAsset) { response in
+                                print("선택 되었습니다.")
+                            }
+                            Spacer()
+                        }
+                    })
+                }
+            }
         }
     }
     var dmCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,Item>{

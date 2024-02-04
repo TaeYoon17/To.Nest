@@ -11,6 +11,7 @@ final class DMMainVC:BaseVC ,View{
     var disposeBag: DisposeBag = DisposeBag()
     func bind(reactor: DMMainReactor) {
         configureCollectionView(reactor: reactor)
+        navBarBind(reactor: reactor)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,5 +39,21 @@ final class DMMainVC:BaseVC ,View{
     }
     override func configureView() {
         view.backgroundColor = .systemBackground
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.tabBarController?.tabBar.isHidden == true{
+            self.tabBarController?.tabBar.layer.opacity = 0
+            self.tabBarController?.tabBar.isHidden = false
+            self.tabBarController?.tabBar.layoutIfNeeded()
+            UIView.animate(withDuration: 0.1) {
+                self.tabBarController?.tabBar.layer.opacity = 1
+            }
+        }
     }
 }

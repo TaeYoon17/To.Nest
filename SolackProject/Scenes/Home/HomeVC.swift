@@ -15,12 +15,12 @@ final class HomeVC: BaseVC, View,Toastable{
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
     func bind(reactor: HomeReactor) {
+        //MARK: -- 네비게이션 바
         // 프로필 이미지 업데이트 시키기... 깃 머지시 고려사항
         reactor.state.map{$0.isProfileUpdated}.distinctUntilChanged().bind(with: self) { owner, value in
             guard value else {return}
             owner.navBar.updateMyProfileImage.onNext(())
         }.disposed(by: disposeBag)
-        
         reactor.state.map{$0.wsTitle}.distinctUntilChanged()
             .delay(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, title in
             owner.navBar.title = title
@@ -93,7 +93,6 @@ final class HomeVC: BaseVC, View,Toastable{
             }.disposed(by: disposeBag)
         reactor.state.map{$0.toast}.delay(.microseconds(100), scheduler: MainScheduler.instance).bind(with: self) { owner, type in
             guard let type else {return}
-            print("toastUp \(type)")
             owner.toastUp(type: type)
         }.disposed(by: disposeBag)
         wsEmpty.btnTapped.bind(with: self) { owner, _ in

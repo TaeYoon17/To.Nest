@@ -12,7 +12,7 @@ enum ChangeManager{
         var listCellConfig = UICollectionLayoutListConfiguration(appearance: .plain)
         listCellConfig.showsSeparators = false
         listCellConfig.backgroundColor = .gray1
-        var layout = UICollectionViewCompositionalLayout.list(using: listCellConfig)
+        let layout = UICollectionViewCompositionalLayout.list(using: listCellConfig)
         return layout
     }
     static var cellRegistration: UICollectionView.CellRegistration<UICollectionViewCell,String>{
