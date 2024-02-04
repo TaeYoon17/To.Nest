@@ -36,6 +36,11 @@ extension HomeReactor{
                 }else{ // 메인에 이미 워크스페이스가 존재했음
                     return Observable.concat([])
                 }
+            case .invited(_):
+                return Observable.concat([
+                    .just(.setToast(WSInviteToastType.inviteSuccess)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                    .just(.setToast(nil))
+                ])
             default: return Observable.concat([])
             }
         }
@@ -78,5 +83,13 @@ extension HomeReactor{
             }
         }
         return Observable.merge(service,transition)
+    }
+    var dmMutation: Observable<Mutation>{
+        provider.dmService.event.flatMap { [weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            switch event{
+            case .allMy(let responses):return Observable.concat([])
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ import ReactorKit
 final class DMMainVC:BaseVC ,View{
     var disposeBag: DisposeBag = DisposeBag()
     func bind(reactor: DMMainReactor) {
-        
+        configureCollectionView(reactor: reactor)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +23,17 @@ final class DMMainVC:BaseVC ,View{
     }
     override func configureNavigation() {
         navBar.title = "Direct Message"
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     override func configureConstraints() {
         navBar.snp.makeConstraints { make in
             make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(44)
+            make.height.equalTo(46)
+        }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(navBar.snp.bottom)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
     override func configureView() {

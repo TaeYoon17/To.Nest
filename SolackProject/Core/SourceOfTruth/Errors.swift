@@ -27,6 +27,7 @@ enum SignFailed:String,FailedProtocol{
 }
 typealias WSFailed = WorkSpaceFailed
 enum WorkSpaceFailed:String,FailedProtocol{
+    case unknwonAccount = "E03"
     case lackCoin = "E21"
     case bad = "E11"
     case doubled = "E12"
@@ -73,5 +74,11 @@ enum MessageFailed: String, FailedProtocol{
     case nonExistData = "E13"
     static func converter(val: String) -> MessageFailed? {
         MessageFailed(rawValue: val)
+    }
+}
+enum DMFailed: String,FailedProtocol{
+    case nonExistData = "E13"
+    static func converter(val: String) -> DMFailed? {
+        DMFailed(rawValue: val)
     }
 }

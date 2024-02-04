@@ -18,7 +18,9 @@ final class CHChatView: BaseVC,View{
         configureCollectionView(reactor: reactor)
         naviBarBinding(reactor: reactor)
         textFieldBinding(reactor: reactor)
-        reactor.action.onNext(.initChat)
+        Task{@MainActor in
+            reactor.action.onNext(.initChat)
+        }
     }
     deinit{
         print("채널 뷰가 사라짐!!")
@@ -31,7 +33,7 @@ final class CHChatView: BaseVC,View{
     var showKeyboard:Bool = false
     var originHeight:CGFloat = 0
     var progressView = CHProgressView()
-    @MainActor func updateTitleLabel(title:String,number:Int){
+    func updateTitleLabel(title:String,number:Int){
         
         let fullText = if number <= 0{ "#\(title)" } else { "#\(title) \(number)" }
         let attributedString = NSMutableAttributedString(string: fullText,attributes: [
@@ -44,7 +46,6 @@ final class CHChatView: BaseVC,View{
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.titleLabel.attributedText = attributedString
-            
         }
     }
     override func configureNavigation() {

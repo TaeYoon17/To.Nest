@@ -77,7 +77,6 @@ extension NM{
                 }
         }
     }
-    
     func deleteWS(_ wsID: String) async throws -> Bool{
         let router = WSRouter.delete(wsID: wsID)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
@@ -113,6 +112,41 @@ extension NM{
                     }
                 }
             return
+        }
+    }
+}
+//MARK: -- 워크스페이스 멤버용 API
+extension NM{
+    func checkWSMembers(_ wsID: Int) async throws -> [UserResponse]{
+        let router = WSRouter.check(.memberAll(id: wsID))
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else{
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
+                guard let self else{
+                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    return
+                }
+                self.generalResponse(err: WSFailed.self, result: [UserResponse].self, res: res, continuation: continuation)
+            }
+        }
+    }
+    func inviteWS(_ wsID:Int,email:String) async throws -> UserResponse{
+        let router = WSRouter.invite(wsID: wsID, email: email)
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else{
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
+                guard let self else{
+                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    return
+                }
+                self.generalResponse(err: WSFailed.self, result: UserResponse.self, res: res, continuation: continuation)
+            }
         }
     }
 }

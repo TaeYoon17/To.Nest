@@ -11,7 +11,7 @@ import RxCocoa
 import Combine
 import ReactorKit
 
-final class HomeVC: BaseVC, View{
+final class HomeVC: BaseVC, View,Toastable{
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
     func bind(reactor: HomeReactor) {
@@ -91,6 +91,11 @@ final class HomeVC: BaseVC, View{
                     }
                 }
             }.disposed(by: disposeBag)
+        reactor.state.map{$0.toast}.delay(.microseconds(100), scheduler: MainScheduler.instance).bind(with: self) { owner, type in
+            guard let type else {return}
+            print("toastUp \(type)")
+            owner.toastUp(type: type)
+        }.disposed(by: disposeBag)
         wsEmpty.btnTapped.bind(with: self) { owner, _ in
             let vc = WSwriterView(.create, reactor: WScreateReactor(reactor.provider))
             let nav = UINavigationController(rootViewController: vc)
@@ -105,6 +110,11 @@ final class HomeVC: BaseVC, View{
     var sliderVM = SliderVM()
     lazy var sliderVC = WSSliderVC(reactor!.provider, sliderVM: sliderVM)
     var wsEmpty: WSEmpty = .init()
+    var isShowKeyboard: CGFloat? = nil
+    var toastY: CGFloat{
+        collectionView.frame.maxY-(toastHeight / 2) - 20
+    }
+    var toastHeight: CGFloat = 0
     override var prefersStatusBarHidden: Bool { false }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,12 +144,12 @@ final class HomeVC: BaseVC, View{
     override func configureConstraints() {
         navBar.snp.makeConstraints { make in
             make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(44)
+            make.height.equalTo(46)
         }
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(navBar.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide )
         }
         newMessageBtn.snp.makeConstraints { make in
             make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)

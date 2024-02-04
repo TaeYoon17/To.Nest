@@ -62,12 +62,13 @@ extension HomeVC:UICollectionViewDelegate{
             alert.addAction(.init(title: "취소", style: .cancel))
             self.present(alert,animated: true)
         case (.bottom,.direct): break
-        case (.bottom, .team):
-            let vc = CHInviteView()
+        case (.bottom, .team): // 팀원 초대 뷰
+            let vc = WSInviteView()
+            vc.reactor = WSInviteReactor(reactor!.provider)
             let nav = UINavigationController(rootViewController: vc)
             nav.fullSheetSetting()
             self.present(nav, animated: true)
-        case (.list,.channel):
+        case (.list,.channel): // 채널 채팅 뷰
             let chatItem = dataSource.fetchChannel(item: item)
             let chatReactor = CHChatReactor(reactor!.provider, id: chatItem.channelID, title: chatItem.name)
             let vc = CHChatView()
@@ -75,7 +76,6 @@ extension HomeVC:UICollectionViewDelegate{
             self.navigationController?.pushViewController(vc, animated: true)
         case (.list,.direct):break
         case (.list, .team): break
-        
         }
     }
 

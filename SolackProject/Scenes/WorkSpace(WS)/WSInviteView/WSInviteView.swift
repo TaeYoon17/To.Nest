@@ -11,14 +11,27 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 import Toast
-class CHInviteView: BaseVC,Toastable{
-
+final class WSInviteView: BaseVC,View,Toastable{
     var disposeBag = DisposeBag()
+    func bind(reactor: WSInviteReactor) {
+        field.inputText.map{WSInviteReactor.Action.setEmail($0)}.bind(to: reactor.action).disposed(by: disposeBag)
+        actionBtn.rx.tap.map{WSInviteReactor.Action.inviteAction}.bind(to: reactor.action).disposed(by: disposeBag)
+        field.accAction.map{WSInviteReactor.Action.inviteAction}.bind(to: reactor.action).disposed(by: disposeBag)
+        
+        
+        reactor.state.map{$0.isInvitable}.distinctUntilChanged().subscribe(on: MainScheduler.asyncInstance).bind(to: field.authValid).disposed(by: disposeBag)
+        reactor.state.map{$0.isInvitable}.distinctUntilChanged().subscribe(on: MainScheduler.asyncInstance).bind(with: self) { owner, value in
+            owner.actionBtn.isAvailable = value
+        }.disposed(by: disposeBag)
+        reactor.state.map{$0.toast}.delay(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, type in
+            guard let type else {return}
+            owner.toastUp(type: type)
+        }.disposed(by: disposeBag)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .gray1
     }
-    
     let field = InputFieldView(field: "이메일", placeholder: "초대하려는 팀원의 이메일을 입력하세요.",keyType: .emailAddress,accessoryText: "초대 보내기")
     let actionBtn = AuthBtn()
     var isShowKeyboard: CGFloat? = nil
@@ -73,7 +86,7 @@ class CHInviteView: BaseVC,Toastable{
     }
     var toastHeight: CGFloat = 0
 }
-extension CHInviteView{
+extension WSInviteView{
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow),
@@ -87,7 +100,6 @@ extension CHInviteView{
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     @objc func handleKeyboardShow(notification: Notification) {
-        
         if let userInfo = notification.userInfo {
             if let keyboardFrameValue = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue) {
                 let keyboardFrame = keyboardFrameValue.cgRectValue

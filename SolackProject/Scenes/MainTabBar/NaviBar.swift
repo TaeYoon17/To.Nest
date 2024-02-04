@@ -23,10 +23,16 @@ final class NaviBar: BaseView{
             updateWSImage()
         }
     }
+    var lineVisible: Bool = true{
+        didSet{
+            line.isHidden = !lineVisible
+        }
+    }
     var disposeBag = DisposeBag()
     var workSpace:UIButton = .init()
     var workSpaceLabel:UILabel = .init()
     var profile:UIButton = .init()
+    private let line = UIView()
     override init() {
         super.init()
         self.workSpaceTap = workSpace.rx.tap
@@ -39,23 +45,27 @@ final class NaviBar: BaseView{
         self.addSubview(workSpace)
         self.addSubview(workSpaceLabel)
         self.addSubview(profile)
+        self.addSubview(line)
     }
     override func configureConstraints() {
         workSpace.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
             make.width.height.equalTo(32)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
         }
-        
         profile.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.width.height.equalTo(32)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
         }
         workSpaceLabel.snp.makeConstraints { make in
             make.leading.equalTo(workSpace.snp.trailing).inset(-8)
             make.trailing.equalTo(profile.snp.leading).inset(-8)
-            make.centerY.equalToSuperview()
+            make.centerY.equalTo(profile)
+        }
+        line.snp.makeConstraints { make in
+            make.bottom.horizontalEdges.equalToSuperview()
+            make.height.equalTo(1)
         }
     }
     override func configureView() {
@@ -69,6 +79,7 @@ final class NaviBar: BaseView{
         self.updateMyProfileImage.bind(with: self) { owner, _ in
             owner.updateProfileImage()
         }.disposed(by: disposeBag)
+        line.backgroundColor = .sepa
     }
     private func updateProfileImage(){
         guard let imageData = data, let image = try? UIImage.fetchBy(data: imageData, type: .small) else {

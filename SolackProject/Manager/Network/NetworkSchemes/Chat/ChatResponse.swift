@@ -6,11 +6,10 @@
 //
 
 import Foundation
-struct ChatResponse:Codable,Equatable{
+struct ChatResponse:Codable,Equatable,Sendable{
     static func == (lhs: ChatResponse, rhs: ChatResponse) -> Bool {
         lhs.chatID == rhs.chatID
     }
-    
     var channelID:Int
     var channelName:String
     var chatID: Int

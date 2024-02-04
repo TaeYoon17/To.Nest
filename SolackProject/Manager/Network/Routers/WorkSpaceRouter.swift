@@ -13,10 +13,12 @@ extension WorkSpaceRouter{
         case my(id:String)
         case myAll
         case member(id:String,userID:String?)
+        case memberAll(id: Int)
     }
 }
 enum WorkSpaceRouter:URLRequestConvertible{
-    case create(info:WSInfo),check(CheckType),edit(wsID:String,info:WSInfo),delete(wsID: String),invite,search,leave,adminChange
+    case create(info:WSInfo),check(CheckType),edit(wsID:String,info:WSInfo),delete(wsID: String)
+    case invite(wsID:Int,email:String),search,leave,adminChange
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
     var endPoint:String{
         switch self{
@@ -24,11 +26,12 @@ enum WorkSpaceRouter:URLRequestConvertible{
         case .check(let checkType):
             switch checkType{
             case .my(id: let myID): "/\(myID)"
+            case .memberAll(id: let wsID): "/\(wsID)/members"
             default:""
             }
         case .create: ""
         case .delete(let wsID): "/\(wsID)"
-        case .invite: ""
+        case .invite(let wsID,_): "/\(wsID)/members"
         case .edit(let id,_): "/\(id)"
         case .search: ""
         case .leave: ""
@@ -43,22 +46,26 @@ enum WorkSpaceRouter:URLRequestConvertible{
         }
     }
     var params: Parameters{
+        var params = Parameters()
         switch self{
-        case .adminChange: .init()
-        case .create: .init()
-        case .check(_): .init()
-        case .edit: .init()
-        case .delete: .init()
-        case .invite: .init()
-        case .search: .init()
-        case .leave: .init()
+        case .adminChange: break
+        case .create: break
+        case .check(_): break
+        case .edit: break
+        case .delete: break
+        case .invite(_ ,let email): params["email"] = email
+        case .search: break
+        case .leave: break
         }
+        return params
     }
     var headers:HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
         case .create,.edit:
             headers["Content-Type"] = "multipart/form-data"
+        case .invite:
+            headers["Content-Type"] = "application/json"
         default: break
         }
         return headers

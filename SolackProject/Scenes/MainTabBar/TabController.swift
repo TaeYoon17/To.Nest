@@ -25,6 +25,7 @@ extension TabController{
         let vc1 = HomeVC()
         vc1.reactor = HomeReactor(provider)
         let vc2 = DMMainVC()
+        vc2.reactor = DMMainReactor(provider)
         let vc3 = ViewController()
         let vc4 = ViewController()
         vc4.title = "Account"

@@ -25,13 +25,13 @@ final class HomeReactor: Reactor{
     }
     enum Mutation{
         case channelDialog(HomePresent?)
-        
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
         case setUnreads([UnreadsResponse]?)
         case setChannelList([CHResponse]?)
         case isProfileUpdated(Bool)
+        case setToast(ToastType?)
     }
     struct State{
         var channelDialog:HomePresent? = nil
@@ -41,6 +41,7 @@ final class HomeReactor: Reactor{
         var wsTitle:String = ""
         var wsLogo: String = ""
         var isProfileUpdated:Bool = false
+        var toast:ToastType? = nil
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -87,6 +88,8 @@ final class HomeReactor: Reactor{
             state.unreads = responses
         case .isProfileUpdated(let update):
             state.isProfileUpdated = update
+        case .setToast(let toast):
+            state.toast = toast
         }
         return state
     }

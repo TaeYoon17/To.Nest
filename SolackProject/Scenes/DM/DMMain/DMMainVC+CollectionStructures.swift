@@ -21,7 +21,7 @@ extension DMMainVC{
     struct Item:Identifiable,Hashable{
         var id:String
         var sectionType:SectionType
-        init(memberItem:MemberItem){
+        init(memberItem:DMMemberItem){
             self.id = memberItem.id
             self.sectionType = .member
         }
@@ -33,16 +33,12 @@ extension DMMainVC{
             hasher.combine(id)
         }
     }
-    struct MemberItem:Identifiable{
-        var id:String{
-            "\(memberID)"
-        }
-        var memberID:Int
+    final class DMMemberItem:MemberListItem{
+        var sectionType:SectionType = .member
     }
     struct DMItem:Identifiable{
-        var id:String{
-            "\(dmID)"
-        }
+        var id:String{ "\(sectionType.rawValue)_\(dmID)" }
         var dmID:Int
+        var sectionType: SectionType = .dm
     }
 }

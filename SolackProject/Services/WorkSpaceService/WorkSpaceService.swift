@@ -16,6 +16,8 @@ protocol WorkSpaceProtocol{
     func checkAllWS()
     func initHome()
     func setHomeWS(wsID:Int?)
+    func checkMembers()
+    func inviteUser(emailText:String)
 }
 final class WorkSpaceService:WorkSpaceProtocol{
     @DefaultsState(\.mainWS) var mainWS
@@ -29,6 +31,8 @@ final class WorkSpaceService:WorkSpaceProtocol{
         case failed(WSFailed)
         case unknownError
         case requireReSign
+        case invited(UserResponse)
+        case members([UserResponse])
     }
     func create(_ info:WSInfo){
         Task{

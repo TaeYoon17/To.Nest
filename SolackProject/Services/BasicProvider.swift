@@ -14,6 +14,7 @@ protocol ServiceProviderProtocol: AnyObject{
     var chService: ChannelProtocol { get }
     var msgService: MessageProtocol { get }
     var profileService: ProfileProtocol { get }
+    var dmService: DMProtocol{get}
 }
 final class ServiceProvider: ServiceProviderProtocol{
     lazy var authService: AuthServiceProtocol = AuthService()
@@ -21,6 +22,7 @@ final class ServiceProvider: ServiceProviderProtocol{
     lazy var profileService: ProfileProtocol = ProfileService()
     lazy var wsService: WorkSpaceProtocol = WSService()
     lazy var chService: ChannelProtocol = CHService()
+    lazy var dmService: DMProtocol = DMService()
     var msgService: MessageProtocol = MSGService()
     
 }

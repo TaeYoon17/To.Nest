@@ -93,7 +93,9 @@ extension SignService{
         refreshToken = response.token.refreshToken
         expiration = Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds)
         let myInfo = MyInfo.getBySignResponse(response)
-        self.myInfo = myInfo
+        Task{@MainActor in
+            self.myInfo = myInfo
+        }
         print("사인 myInfo \(myInfo)")
         self.userID = myInfo.userID
         Task{

@@ -10,7 +10,6 @@ struct WSDetailResponse:Codable,Equatable{
     static func == (lhs: WSDetailResponse, rhs: WSDetailResponse) -> Bool {
         lhs.workspaceID == rhs.workspaceID
     }
-    
     var workspaceID:Int
     var name:String
     var description:String?

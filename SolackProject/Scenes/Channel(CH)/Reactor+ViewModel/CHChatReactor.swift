@@ -118,20 +118,20 @@ final class CHChatReactor:Reactor{
             guard let self else {return Observable.concat([])}
             switch event{
             case .create(response: let response):
-                print("db통신")
                 return Observable.concat([
-                    .just(.appendChat(.create(response))).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.appendChat(.create(response))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                     .just(.appendChat(nil))
                 ])
             case .check(response: let responses):
 //                self.provider.msgService.openSocket(channelID: self.channelID)
+                print("response가 두번 일어난다... \(responses.count)")
                 return Observable.concat([
-                    .just(.appendChat(.dbResponse(responses))).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.appendChat(.dbResponse(responses))).throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                     .just(.appendChat(nil))
                 ])
             case .socketReceive(response: let response):
                 return Observable.concat([
-                    .just(.appendChat(.socketResponse(response))).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.appendChat(.socketResponse(response))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                     .just(.appendChat(nil))
                 ])
             }

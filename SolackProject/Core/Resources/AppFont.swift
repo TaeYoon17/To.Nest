@@ -14,11 +14,13 @@ enum FontType{
     case bodyBold
     case body
     case caption
+    case caption2
     func action( text:String) -> NSAttributedString{
         switch self{
         case .body: text.body
         case .bodyBold: text.bodyBold
         case .caption: text.caption
+        case .caption2:text.caption2
         case .title1: text.title1
         case .title2: text.title2
         }
@@ -35,6 +37,8 @@ enum FontType{
             UIFont(name: "SFPro-Bold", size: 22)!
         case .title2:
             UIFont(name: "SFPro-Bold", size: 14)!
+        case .caption2:
+            UIFont(name: "SFPro-Regular", size: 11)!
         }
     }
     var font: Font{
@@ -42,6 +46,7 @@ enum FontType{
         case .body: Font.custom("SFPro-Regular", size: 13)
         case .bodyBold: Font.custom("SFPro-Bold", size: 13)
         case .caption: Font.custom("SFPro-Regular", size: 12)
+        case .caption2: Font.custom("SFPro-Regular", size: 11)
         case .title1: Font.custom("SFPro-Bold", size: 22)
         case .title2: Font.custom("SFPro-Bold", size: 14)
         }
@@ -79,6 +84,9 @@ extension String{
     var caption: NSAttributedString{
         maker(font: FontType.caption.get(), line: 18)
     }
+    var caption2: NSAttributedString{
+        maker(font: FontType.caption2.get(), line: 18)
+    }
     func attr(type:FontType) -> AttributedString{
         
         var attr :AttributedString = AttributedString(self)
@@ -90,6 +98,7 @@ extension String{
         case .bodyBold, .caption,.body: 18
         case .title1: 30
         case .title2: 20
+        case .caption2: 18
         }
 //        paragraphStyle.minimumLineHeight = line
 //        paragraphStyle.maximumLineHeight = line
