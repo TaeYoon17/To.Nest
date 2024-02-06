@@ -36,9 +36,7 @@ final class HomeVC: BaseVC, View,Toastable{
     lazy var sliderVC = WSSliderVC(reactor!.provider, sliderVM: sliderVM)
     var wsEmpty: WSEmpty = .init()
     var isShowKeyboard: CGFloat? = nil
-    var toastY: CGFloat{
-        collectionView.frame.maxY-(toastHeight / 2) - 20
-    }
+    var toastY: CGFloat{ collectionView.frame.maxY-(toastHeight / 2) - 20 }
     var toastHeight: CGFloat = 0
     override var prefersStatusBarHidden: Bool { false }
     override func viewDidLoad() {

@@ -17,8 +17,6 @@ final class WSInviteView: BaseVC,View,Toastable{
         field.inputText.map{WSInviteReactor.Action.setEmail($0)}.bind(to: reactor.action).disposed(by: disposeBag)
         actionBtn.rx.tap.map{WSInviteReactor.Action.inviteAction}.bind(to: reactor.action).disposed(by: disposeBag)
         field.accAction.map{WSInviteReactor.Action.inviteAction}.bind(to: reactor.action).disposed(by: disposeBag)
-        
-        
         reactor.state.map{$0.isInvitable}.distinctUntilChanged().subscribe(on: MainScheduler.asyncInstance).bind(to: field.authValid).disposed(by: disposeBag)
         reactor.state.map{$0.isInvitable}.distinctUntilChanged().subscribe(on: MainScheduler.asyncInstance).bind(with: self) { owner, value in
             owner.actionBtn.isAvailable = value
@@ -26,6 +24,11 @@ final class WSInviteView: BaseVC,View,Toastable{
         reactor.state.map{$0.toast}.delay(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, type in
             guard let type else {return}
             owner.toastUp(type: type)
+        }.disposed(by: disposeBag)
+        reactor.state.map{$0.isClose}.delay(.microseconds(100), scheduler: MainScheduler.instance).bind(with: self) { owner, value in
+            if value{
+                owner.dismiss(animated: true)
+            }
         }.disposed(by: disposeBag)
     }
     override func viewDidLoad() {
