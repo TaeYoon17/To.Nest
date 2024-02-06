@@ -34,6 +34,7 @@ extension Toastable{
         style.verticalPadding = 9
         style.horizontalPadding = 16
         style.backgroundColor = type.getColor
+        style.messageAlignment = .center
         return style
     }
     func toastUp(type: any ToastType){

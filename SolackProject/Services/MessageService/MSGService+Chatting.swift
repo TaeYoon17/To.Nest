@@ -28,7 +28,7 @@ extension MessageService:SocketReceivable{
         Task{
             do{
                 var ircSnapshot = await imageReferenceCountManager.snapshot
-                var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS,chName: chName,info: chat)
+                var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS.id,chName: chName,info: chat)
                 for (fileName, file) in zip(res.files,chat.files){// 파일 데이터 저장하기
                     if !FileManager.checkExistDocument(fileName: fileName){ try file.file.saveToDocument(fileName: fileName) }
                     await ircSnapshot.plusCount(id: fileName)
@@ -39,7 +39,7 @@ extension MessageService:SocketReceivable{
                 await chChatrepository.create(item: chatTable)
                 await channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
                 try await appendUserReferenceCounts(channelID: chID, createUsers: [result.user])
-                try await updateUserInformationToDataBase(channelID: chID, userResponses: [result.user])
+                try await updateUserInformationToDataBase(channelID: chID, userIDs: [result.user.userID])
             }catch{
                 print(error)
             }
@@ -53,7 +53,7 @@ extension MessageService:SocketReceivable{
 //                try await Task.sleep(for: .seconds(0.1))
                 let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
 //                print("채널 메시지들 가져온다 \(chName) \(lastCheckDate)")
-                let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS, chName: chName, date: lastCheckDate)
+                let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS.id, chName: chName, date: lastCheckDate)
                 try await getResponses(responses: responses, channelID: chID)
             }catch{
                 print(error)
@@ -92,8 +92,8 @@ extension MessageService:SocketReceivable{
         // 1. 새로운 채팅 내역의 유저 참조 계수 업데이트 혹은 새로 생성
         try await appendUserReferenceCounts(channelID: chID, createUsers: createResponses.map(\.user))
         // 2. 유저 프로필 업데이트 진행 -- 모든 response의 유저 중 한 개씩만 존재하면 된다.
-        let allUsers = responses.map(\.user).makeSet()
-        try await updateUserInformationToDataBase(channelID: chID, userResponses: allUsers)
+        let allUsers = responses.map{$0.user.userID}.makeSet()
+        try await updateUserInformationToDataBase(channelID: chID, userIDs: allUsers)
     }
     func fetchChannelDB(channelID:Int,channelName:String){
         Task{@BackgroundActor in
@@ -101,9 +101,11 @@ extension MessageService:SocketReceivable{
             guard let chatTablesLists = channelRepostory.getTableBy(tableID: channelID)?.chatList else{
                 fatalError("존재하지 않는 채팅")
             }
+            let allUsers = chatTablesLists.map{$0.userID}.makeSet()
+            try await updateUserInformationToDataBase(channelID: channelID, userIDs: allUsers)
             var chResponses:[ChatResponse] = []
             for chatTable in chatTablesLists{
-                guard let userTable = userRepository.getTableBy(userID: userID) else {fatalError("존재하지 않는 유저 정보")}
+                guard let userTable = userRepository.getTableBy(userID: chatTable.userID) else {fatalError("존재하지 않는 유저 정보")}
                 let userResponse = userTable.getResponse
                 let chatResponse = chatTable.getResponse(userResponse: userResponse)
                 chResponses.append(chatResponse)

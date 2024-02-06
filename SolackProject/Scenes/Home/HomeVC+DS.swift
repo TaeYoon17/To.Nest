@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 extension HomeVC{
     final class HomeDataSource: UICollectionViewDiffableDataSource<SectionType,Item>{
-//        let channelUnreadsModel = AnyModelStore<UnreadsResponse>([])
+        @DefaultsState(\.mainWS) var mainWS
         let channelListModel = AnyModelStore<ChannelListItem>([])
         let directListModel = AnyModelStore<DirectListItem>([])
         let bottomModel = AnyModelStore<BottomItem>([])
@@ -62,6 +62,7 @@ extension HomeVC{
                     owner.apply(snapshot,animatingDifferences: false)
                 }
             }.disposed(by: disposeBag)
+            // 관리자인지 아닌지 업데이트
         }
         func fetchDirect(item:Item) -> DirectListItem{
             directListModel.fetchByID(item.id)

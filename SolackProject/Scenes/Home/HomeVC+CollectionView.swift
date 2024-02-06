@@ -63,11 +63,8 @@ extension HomeVC:UICollectionViewDelegate{
             self.present(alert,animated: true)
         case (.bottom,.direct): break
         case (.bottom, .team): // 팀원 초대 뷰
-            let vc = WSInviteView()
-            vc.reactor = WSInviteReactor(reactor!.provider)
-            let nav = UINavigationController(rootViewController: vc)
-            nav.fullSheetSetting()
-            self.present(nav, animated: true)
+            reactor!.action.onNext(.setPresent(.invite))
+                
         case (.list,.channel): // 채널 채팅 뷰
             let chatItem = dataSource.fetchChannel(item: item)
             let chatReactor = CHChatReactor(reactor!.provider, id: chatItem.channelID, title: chatItem.name)

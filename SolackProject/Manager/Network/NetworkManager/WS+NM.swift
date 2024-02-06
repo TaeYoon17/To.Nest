@@ -64,9 +64,6 @@ extension NM{
         return try await withCheckedThrowingContinuation { continuation in
             AF.request(router,interceptor: self.authInterceptor)
                 .validate(customValidation)
-//                .responseString { str in
-//                    print(str)
-//                }
                 .response{ [weak self] res in
                     guard let self else{
                         continuation.resume(throwing: Errors.API.FailFetchToken)
@@ -77,7 +74,7 @@ extension NM{
                 }
         }
     }
-    func deleteWS(_ wsID: String) async throws -> Bool{
+    func deleteWS(_ wsID: Int) async throws -> Bool{
         let router = WSRouter.delete(wsID: wsID)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else{
@@ -91,27 +88,26 @@ extension NM{
                         continuation.resume(throwing: Errors.API.FailFetchToken)
                         return
                     }
-                    switch res.result{
-                    case .success(let data):
-                        if let data, let errorCode = try? JSONDecoder().decode(ErrorCode.self, from: data){
-                            if let common = CommonFailed(rawValue: errorCode.errorCode){
-                                continuation.resume(throwing: common)
-                                return
-                            }else if let ws = WSFailed(rawValue: errorCode.errorCode){
-                                continuation.resume(throwing: ws)
-                                return
-                            }
-                        }
-                        if res.response?.statusCode == 200{
-                                continuation.resume(returning: true)
-                                return
-                        }
-                    case .failure(let error):
+                    checkCompleteResponse(result: res, continuation: continuation)
+                }
+        }
+    }
+    func exitWS(_ wsID: Int) async throws -> Bool{
+        let router = WSRouter.leave(wsID: wsID)
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else{
+                continuation.resume(throwing: Errors.API.FailResponseDataDecoding)
+                return
+            }
+            AF.request(router,interceptor: authInterceptor)
+                .validate(customValidation)
+                .response {[weak self] res in
+                    guard let self else{
                         continuation.resume(throwing: Errors.API.FailFetchToken)
                         return
                     }
+                    checkCompleteResponse(result: res, continuation: continuation)
                 }
-            return
         }
     }
 }
@@ -147,6 +143,32 @@ extension NM{
                 }
                 self.generalResponse(err: WSFailed.self, result: UserResponse.self, res: res, continuation: continuation)
             }
+        }
+    }
+}
+extension NM{
+    fileprivate func checkCompleteResponse(result res:AFDataResponse<Data?>,continuation: CheckedContinuation<Bool, Error>){
+        switch res.result{
+        case .success(let data):
+            if res.response?.statusCode == 200{
+                    continuation.resume(returning: true)
+                    return
+            }
+            if let data, let errorCode = try? JSONDecoder().decode(ErrorCode.self, from: data){
+                if let common = CommonFailed(rawValue: errorCode.errorCode){
+                    continuation.resume(throwing: common)
+                    return
+                }else if let ws = WSFailed(rawValue: errorCode.errorCode){
+                    continuation.resume(throwing: ws)
+                    return
+                }
+            }else{
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+        case .failure(let error):
+            continuation.resume(throwing: Errors.API.FailFetchToken)
+            return
         }
     }
 }

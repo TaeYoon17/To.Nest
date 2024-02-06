@@ -95,6 +95,18 @@ extension NetworkManager{
             }
         }
     }
+    func checkUser(userID:Int) async throws -> UserResponse{
+        let router = UserRouter.getUser(id: "\(userID)")
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router, interceptor: authInterceptor).response { res in
+                self.generalResponse(err: AuthFailed.self, result: UserResponse.self, res: res, continuation: continuation)
+            }
+        }
+    }
     func updateMyInfo(profileImage:Data?) async throws -> MyInfo{
         let router = UserRouter.putMyImage(image: profileImage)
         return try await withCheckedThrowingContinuation {[weak self] continuation in

@@ -54,7 +54,7 @@ extension HomeReactor{
             guard let self else {return Observable.concat([])}
             switch event{
             case .create(let chInfo):
-                provider.wsService.setHomeWS(wsID: mainWS)
+                provider.wsService.setHomeWS(wsID: mainWS.id)
                 return Observable.concat([])
             case .allMy(let responses):
                 responses.forEach { res in // 채널들의 메시지들 업데이트
@@ -67,7 +67,7 @@ extension HomeReactor{
                     .just(.setUnreads(nil))
                 ])
             case .update(let response):
-                guard response.workspaceID == mainWS else {return Observable.concat([])}
+                guard response.workspaceID == mainWS.id else {return Observable.concat([])}
                 // 여기 수정해야 할 수도..? unreads도 다 같이 부르는 문제가 발생하긴 한다...
                 provider.chService.checkAllMy()
                 return Observable.concat([])

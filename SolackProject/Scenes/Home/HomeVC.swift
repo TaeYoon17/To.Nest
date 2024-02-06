@@ -12,6 +12,7 @@ import Combine
 import ReactorKit
 
 final class HomeVC: BaseVC, View,Toastable{
+    
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
     func bind(reactor: HomeReactor) {

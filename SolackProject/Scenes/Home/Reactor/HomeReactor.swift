@@ -13,6 +13,7 @@ enum HomePresent:Equatable{
     case create
     case explore
     case chatting(chID:Int,chName:String)
+    case invite
 }
 final class HomeReactor: Reactor{
     let initialState: State = .init()
@@ -57,6 +58,13 @@ final class HomeReactor: Reactor{
                     Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
                     Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
                 ])
+            case .invite:
+                if !mainWS.myManaging{
+                    return Observable.concat([
+                        .just(.setToast(WSToastType.inviteNotManager)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                        .just(.setToast(nil))
+                    ])
+                }
                 default:break
             }
             return Observable.concat([

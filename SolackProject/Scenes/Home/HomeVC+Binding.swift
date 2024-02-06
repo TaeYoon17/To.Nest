@@ -26,7 +26,6 @@ extension HomeVC{
                     let myImage:UIImage
                     do{
                         myImage = try await UIImage.fetchWebCache(name: imageName, type: .small)
-                        print("캐시 데이터 잘 가져옴!!")
                     }catch{
                         let image = if let imageData = await NM.shared.getThumbnail(imageName){
                             UIImage.fetchBy(data: imageData, type:.small)
@@ -67,6 +66,12 @@ extension HomeVC{
                     let vc = CHChatView()
                     vc.reactor = chatReactor
                     navigationController?.pushViewController(vc, animated: true)
+                case .invite:
+                    let vc = WSInviteView()
+                    vc.reactor = WSInviteReactor(reactor.provider)
+                    let nav = UINavigationController(rootViewController: vc)
+                    nav.fullSheetSetting()
+                    self.present(nav, animated: true)
                 }
             }).disposed(by: disposeBag)
         reactor.state.map{$0.isMasking}.distinctUntilChanged()

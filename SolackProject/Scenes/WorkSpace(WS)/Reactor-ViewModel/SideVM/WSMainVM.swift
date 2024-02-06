@@ -11,7 +11,7 @@ import RxSwift
 import UIKit
 
 final class WSMainVM: ObservableObject{
-    @DefaultsState(\.mainWS) var mainWS
+    @MainActor @DefaultsState(\.mainWS) var mainWS
     // View - ViewController 간 통신
     var createWorkSpaceTapped: PassthroughSubject<(),Never> = .init()
     var changeWorkSpaceManagerTapped:PassthroughSubject<(),Never> = .init()
@@ -41,7 +41,7 @@ final class WSMainVM: ObservableObject{
         self.list[selectedIdx].isSelected = true
         // 메인 화면 워크스페이스도 바꾼다.
         provider.wsService.setHomeWS(wsID: list[idx].id)
-        self.mainWS = list[idx].id
+        self.mainWS.updateMainWSID(id: list[idx].id, myManaging: list[idx].isMyManaging)
         // 사이드바 dismiss처리도 해야한다.
         closeAction.send(())
     }
@@ -53,6 +53,9 @@ extension WSMainVM{
         provider.wsService.checkAllWS()
     }
     @MainActor func deleteWorkSpace(){
-        provider.wsService.delete(workspaceID:"\(self.mainWS)")
+        provider.wsService.delete(workspaceID:self.mainWS.id)
+    }
+    @MainActor func exitWorkSpace(){
+        provider.wsService.exit(workspaceID: mainWS.id)
     }
 }

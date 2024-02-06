@@ -32,7 +32,7 @@ final class SignService: SignServiceProtocol{
                 let response = try await NM.shared.signIn(type: .email, body: info)
                 // MARK: -- 여기 수정해야함
                 //                profile = response.profileImage
-                defaultsSign(response)
+                await defaultsSign(response)
                 AppManager.shared.userAccessable.onNext(true)
                 event.onNext(.successSign)
             }catch let failed where failed is SignFailed{
@@ -48,7 +48,7 @@ final class SignService: SignServiceProtocol{
         Task{
             do{
                 let resposne = try await NM.shared.signIn(type: .apple, body: info)
-                defaultsSign(resposne)
+                await defaultsSign(resposne)
                 AppManager.shared.userAccessable.onNext(true)
                 event.onNext(.successSign)
             }catch let failed where failed is SignFailed{
@@ -65,7 +65,7 @@ final class SignService: SignServiceProtocol{
             do {
                 let kakaoToken = try await KakaoManager.shared.getKakaoToken()
                 let signResponse = try await NM.shared.signIn(type: .kakao, body: KakaoInfo(oauthToken: kakaoToken))
-                defaultsSign(signResponse)
+                await defaultsSign(signResponse)
                 AppManager.shared.userAccessable.onNext(true)
             }catch{
                 print("error here:")
@@ -77,7 +77,7 @@ final class SignService: SignServiceProtocol{
         Task{
             do{
                 let response = try await NM.shared.signUp(info)
-                defaultsSign(response)
+                await defaultsSign(response)
                 event.onNext(.successSign)
             }catch let failed where failed is SignFailed{
                 event.onNext(.failedSign(failed as! SignFailed))
@@ -88,7 +88,7 @@ final class SignService: SignServiceProtocol{
     }
 }
 extension SignService{
-    fileprivate func defaultsSign(_ response: SignResponse){
+    fileprivate func defaultsSign(_ response: SignResponse)async {
         accessToken = response.token.accessToken
         refreshToken = response.token.refreshToken
         expiration = Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds)
@@ -98,12 +98,11 @@ extension SignService{
         }
         print("사인 myInfo \(myInfo)")
         self.userID = myInfo.userID
-        Task{
+        
             if let webImageURL = response.profileImage{
                 let data = await NM.shared.getThumbnail(webImageURL)
                 self.myProfile = data
             }
-        }
     }
 }
 extension MyInfo{

@@ -18,16 +18,17 @@ enum WorkSpaceToastType: ToastType{
         case .created: "워크스페이스가 생성되었습니다"
         case .edit: "워크스페이스가 편집되었습니다"
         case .delete: "워크스페이스가 삭제되었습니다"
+        case .inviteNotManager: "워크스페이스 관리자만 팀원을 초대할 수 있어요.\n관리자에게 요청을 해보세요."
         }
     }
     
     var getColor: UIColor{
         switch self{
-        case .unknown,.emptyData,.notAuthority,.lackCoin: UIColor.error
+        case .unknown,.emptyData,.notAuthority,.lackCoin,.inviteNotManager: UIColor.error
         case .created,.edit,.delete: UIColor.accent
         }
     }
     
     case unknown,emptyData,notAuthority,lackCoin
-    case created,edit,delete
+    case created,edit,delete,inviteNotManager
 }

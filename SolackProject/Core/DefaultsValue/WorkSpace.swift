@@ -6,13 +6,26 @@
 //
 
 import Foundation
+struct MainWS:Codable{
+    var id:Int
+    var myManaging:Bool
+    func updateMainWSID(id:Int,myManaging:Bool){
+        @DefaultsState(\.mainWS) var mainWS
+        let ws = MainWS(id: id, myManaging: myManaging)
+        mainWS = ws
+    }
+}
 extension UserDefaults{
-    var mainWS:Int{
+    var mainWS:MainWS{
         get{
-            self.integer(forKey: "mainWS")
+            guard let data = self.data(forKey: "mainWS") else {return MainWS(id: -1, myManaging: false)}
+            return try! JSONDecoder().decode(MainWS.self, from: data)
         }
         set{
-            self.setValue(newValue, forKey: "mainWS")
+//            self.setValue(newValue, forKey: "mainWS")
+            let data = try! JSONEncoder().encode(newValue)
+            setValue(data, forKey: "mainWS")
         }
     }
+    
 }

@@ -14,6 +14,11 @@ typealias CHRepository = ChannelRepository
         try await super.init()
         self.channelChatRepository = try await ChannelChatRepository()
     }
+    func getChannelsByWS(wsID: Int) async -> Results<CHTable>{
+        return self.getTasks.where { table in
+            table.wsID == wsID
+        }
+    }
     func updateChannelCheckDate(channelID:Int) async{
         if let table = self.getTableBy(tableID: channelID){
             try! await self.realm.asyncWrite({
@@ -55,6 +60,11 @@ typealias CHRepository = ChannelRepository
             if includeSubTables{
                 let tables = Array(table.chatList)
                 channelChatRepository.deleteAllChatList(tables: tables)
+            }
+            Task{@BackgroundActor in
+                try await realm.asyncWrite {
+                    realm.delete(table)
+                }
             }
         }
     }

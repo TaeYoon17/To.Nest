@@ -12,7 +12,8 @@ protocol WorkSpaceProtocol{
     var event: PublishSubject<WorkSpaceService.Event> {get}
     func create(_ info:WSInfo)
     func edit(_ info:WSInfo,id:String)
-    func delete(workspaceID: String)
+    func delete(workspaceID: Int)
+    func exit(workspaceID: Int)
     func checkAllWS()
     func initHome()
     func setHomeWS(wsID:Int?)
@@ -21,6 +22,12 @@ protocol WorkSpaceProtocol{
 }
 final class WorkSpaceService:WorkSpaceProtocol{
     @DefaultsState(\.mainWS) var mainWS
+    @DefaultsState(\.userID) var userID
+    var channelRepository: ChannelRepository!
+    var dmRoomRepository: DMRoomRepository!
+    var userRepository: UserInfoRepository!
+    @BackgroundActor var imageReferenceCountManager: ImageRCM!
+    @BackgroundActor var userReferenceCountManager: UserRCM!
     let event = PublishSubject<Event>()
     enum Event{
         case homeWS(WSDetailResponse?)
@@ -28,11 +35,21 @@ final class WorkSpaceService:WorkSpaceProtocol{
         case edit(WSResponse)
         case checkAll([WSResponse])
         case delete
+        case exit
         case failed(WSFailed)
         case unknownError
         case requireReSign
         case invited(UserResponse)
         case members([UserResponse])
+    }
+    init(){
+        Task{@BackgroundActor in
+            channelRepository = try await ChannelRepository()
+            dmRoomRepository = try await DMRoomRepository()
+            userRepository = try await UserInfoRepository()
+            userReferenceCountManager = UserRCM.shared
+            imageReferenceCountManager = ImageRCM.shared
+        }
     }
     func create(_ info:WSInfo){
         Task{
@@ -93,11 +110,14 @@ final class WorkSpaceService:WorkSpaceProtocol{
     }
     
     //MARK: -- Delete WorkSpace
-    func delete(workspaceID: String){
+    func delete(workspaceID: Int){
         Task{
             do{
                 let res = try await NM.shared.deleteWS(workspaceID)
-                event.onNext(.delete)
+                if res{
+                    await self.deleteAllWS(id: workspaceID)
+                    event.onNext(.delete)
+                }
             }catch{
                 guard authValidCheck(error: error) else {
                     AppManager.shared.userAccessable.onNext(false)
@@ -111,5 +131,28 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
-    
+    //MARK: -- Exit Workspace
+    func exit(workspaceID: Int){
+        Task{
+            do{
+                let res = try await NM.shared.exitWS(workspaceID)
+                if res{
+                    await self.deleteAllWS(id: workspaceID)
+                    event.onNext(.exit)
+                }else{
+                    event.onNext(.unknownError)
+                }
+            }catch{
+                guard authValidCheck(error: error) else {
+                    AppManager.shared.userAccessable.onNext(false)
+                    return
+                }
+                if let ws = error as? WSFailed{
+                    return
+                }
+                // 그냥 알 수 없는 에러라고 보내버리기
+                event.onNext(.unknownError)
+            }
+        }
+    }
 }

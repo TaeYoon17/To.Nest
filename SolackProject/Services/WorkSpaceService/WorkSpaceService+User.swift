@@ -12,7 +12,7 @@ extension WorkSpaceService{
     func inviteUser(emailText:String){
         Task{
             do{
-                let res = try await NM.shared.inviteWS(mainWS, email: emailText)
+                let res = try await NM.shared.inviteWS(mainWS.id, email: emailText)
                 event.onNext(.invited(res))
             }catch{
                 guard authValidCheck(error: error) else {

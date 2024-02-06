@@ -52,7 +52,10 @@ class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsse
             let image = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
             images.append(Image(uiImage: image))
         }
-        let msgAssets = CellAsset(messageID: item.id, images: images)
+        let profileImage:Image? = if let profileFile = item.profileImage{
+            Image(uiImage: UIImage.fetchBy(fileName: profileFile, type: .small))
+        }else{nil}
+        let msgAssets = CellAsset(messageID: item.id, images: images, profileImage: profileImage)
         msgAssetModel.setObject(msgAssets, forKey: "\(item.id)" as NSString)
         return msgAssets
     }

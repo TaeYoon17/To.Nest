@@ -80,7 +80,10 @@ extension CHChatView{
                 let image = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
                 images.append(Image(uiImage: image))
             }
-            let chatAssets = ChatAssets(chatID: item.id, images: images)
+            let image:Image? = if let profilefile = item.profileImage{
+                Image(uiImage: UIImage.fetchBy(fileName: profilefile, type: .small))
+            }else{nil}
+            let chatAssets = ChatAssets(chatID: item.id, images: images,profileImage: image)
             chatAssetModel.setObject(chatAssets, forKey: "\(item.chatID)" as NSString)
             return chatAssets
         }

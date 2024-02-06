@@ -210,6 +210,7 @@
 		63B6101C2B6CC45100861A7D /* CHAdminChange+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B6101B2B6CC45100861A7D /* CHAdminChange+DS.swift */; };
 		63B6101E2B6CC4DD00861A7D /* CHAdminChange+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B6101D2B6CC4DD00861A7D /* CHAdminChange+CollectionView.swift */; };
 		63C0C37F2B720AE300BAE99B /* HomeVC+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C0C37E2B720AE300BAE99B /* HomeVC+Binding.swift */; };
+		63C0C3812B724B3600BAE99B /* WorkSpaceService+DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C0C3802B724B3600BAE99B /* WorkSpaceService+DB.swift */; };
 		63C346F42B55738C00293991 /* WSInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346F32B55738C00293991 /* WSInviteView.swift */; };
 		63C346F72B55754C00293991 /* CHChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346F62B55754C00293991 /* CHChatView.swift */; };
 		63C346FD2B55882700293991 /* WriterConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346FC2B55882700293991 /* WriterConfiguration.swift */; };
@@ -491,6 +492,7 @@
 		63B6101B2B6CC45100861A7D /* CHAdminChange+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHAdminChange+DS.swift"; sourceTree = "<group>"; };
 		63B6101D2B6CC4DD00861A7D /* CHAdminChange+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHAdminChange+CollectionView.swift"; sourceTree = "<group>"; };
 		63C0C37E2B720AE300BAE99B /* HomeVC+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+Binding.swift"; sourceTree = "<group>"; };
+		63C0C3802B724B3600BAE99B /* WorkSpaceService+DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSpaceService+DB.swift"; sourceTree = "<group>"; };
 		63C346F32B55738C00293991 /* WSInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSInviteView.swift; sourceTree = "<group>"; };
 		63C346F62B55754C00293991 /* CHChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatView.swift; sourceTree = "<group>"; };
 		63C346FC2B55882700293991 /* WriterConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterConfiguration.swift; sourceTree = "<group>"; };
@@ -1353,9 +1355,9 @@
 		639DEAF92B452E3B00108979 /* Onboardin&Auth */ = {
 			isa = PBXGroup;
 			children = (
+				6324D6E92B46EF5100AA1AC0 /* Reactors */,
 				63775F3F2B54C40400F54F9A /* AuthenticationManager */,
 				638FCD282B4800010053D1BB /* UIComponents */,
-				6324D6E92B46EF5100AA1AC0 /* Reactors */,
 				633584672B4560F900B83555 /* SignInEmail */,
 				639DEAFC2B4532D900108979 /* SignUp */,
 				631A60EF2B44EE15005509C2 /* OnboardingView.swift */,
@@ -1548,6 +1550,7 @@
 			isa = PBXGroup;
 			children = (
 				63F7C4A02B4EEA4B003D8447 /* WorkSpaceService.swift */,
+				63C0C3802B724B3600BAE99B /* WorkSpaceService+DB.swift */,
 				6304819A2B6F5DC1003DFB3C /* WorkSpaceService+User.swift */,
 				63F265F92B53BA76007D865C /* WSService+AvailCheck.swift */,
 				6389CEB42B5D8398002A70A9 /* WSService+HomeFeatures.swift */,
@@ -1923,6 +1926,7 @@
 				636F16152B6FFFD700536E6F /* MSGCollectionLayouts.swift in Sources */,
 				63F0AECB2B4AD886000A597B /* ChannelListItemView.swift in Sources */,
 				636B2B172B6D4E0800BE9751 /* DMMainVC+CellRegistraion.swift in Sources */,
+				63C0C3812B724B3600BAE99B /* WorkSpaceService+DB.swift in Sources */,
 				639CA1C02B5F86D500C21006 /* Channel+NM.swift in Sources */,
 				63F7C4AA2B4F7CE8003D8447 /* ErrorCode.swift in Sources */,
 				63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */,

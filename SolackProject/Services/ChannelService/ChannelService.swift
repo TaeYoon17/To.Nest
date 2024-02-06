@@ -55,7 +55,7 @@ final class ChannelService:ChannelProtocol{
     func create(_ info: CHInfo){
         Task{
             do{
-                let result:CHResponse = try await NM.shared.createCH(wsID: mainWS, info)
+                let result:CHResponse = try await NM.shared.createCH(wsID: mainWS.id, info)
                 await appendMyChannel(channelInfo: result)
                 event.onNext(.create(result))
             }catch{
@@ -72,7 +72,7 @@ final class ChannelService:ChannelProtocol{
     func edit(channelName:String,_ info: CHInfo) {
         Task{
             do{
-                let result = try await NM.shared.editCH(wsID: mainWS,name:channelName, info)
+                let result = try await NM.shared.editCH(wsID: mainWS.id,name:channelName, info)
                 Task{@BackgroundActor in
                     await repository.updateChannelName(channelID:result.channelID,name:result.name)
                 }
@@ -86,9 +86,9 @@ final class ChannelService:ChannelProtocol{
     func check(title:String){
         Task{
             do{
-                let response = try await NM.shared.checkCH(wsID: mainWS,channelName: title)
+                let response = try await NM.shared.checkCH(wsID: mainWS.id,channelName: title)
                 event.onNext(.check(response))
-                let users = try await NM.shared.checkCHUsers(wsID: mainWS, channelName: title)
+                let users = try await NM.shared.checkCHUsers(wsID: mainWS.id, channelName: title)
                 let channelID = response.channelID
                 event.onNext(.channelUsers(id: channelID, users))
             }catch{
@@ -99,7 +99,7 @@ final class ChannelService:ChannelProtocol{
     func checkUser(channelID:Int,title:String){
         Task{
             do{
-                let users = try await NM.shared.checkCHUsers(wsID: mainWS, channelName: title)
+                let users = try await NM.shared.checkCHUsers(wsID: mainWS.id, channelName: title)
                 event.onNext(.channelUsers(id: channelID, users))
             }catch{
                 print(error)
@@ -109,7 +109,7 @@ final class ChannelService:ChannelProtocol{
     func delete(channelID:Int,channelName:String){
         Task{
             do{
-                let response = try await NM.shared.deleteCH(wsID: mainWS, channelName: channelName)
+                let response = try await NM.shared.deleteCH(wsID: mainWS.id, channelName: channelName)
                 Task{ @BackgroundActor in
                     await deleteChannel(channelID:channelID)
                 }
@@ -124,7 +124,7 @@ final class ChannelService:ChannelProtocol{
     func checkAll(){
         Task{
             do{
-                let results:[CHResponse] = try await NM.shared.checkAllCH(wsID: mainWS)
+                let results:[CHResponse] = try await NM.shared.checkAllCH(wsID: mainWS.id)
                 event.onNext(.all(results))
             }catch{
                 guard authValidCheck(error: error) else {
@@ -141,12 +141,12 @@ final class ChannelService:ChannelProtocol{
         Task{
             do{
                 print("checkAllMy mainWS \(mainWS)")
-                let results = try await NM.shared.checkAllMyCH(wsID: mainWS)
+                let results = try await NM.shared.checkAllMyCH(wsID: mainWS.id)
                 self.event.onNext(.allMy(results))
                 // 해당 워크스페이스 아이디를 갖으면서
                 // 기존에 없었던 테이블 생성... or 기존에 있었지만 받아온 채널아이디가 없는 테이블 삭제
                 Task{@BackgroundActor in
-                    let exiseted = repository.getTasks.where { $0.wsID == self.mainWS}
+                    let exiseted = repository.getTasks.where { $0.wsID == self.mainWS.id}
                     let checkUnreads = Array(exiseted.map{ ($0.lastReadDate,$0.channelName) })
                     Task.detached {
                         var unreadsResponses: [UnreadsResponse] = []
@@ -191,7 +191,7 @@ final class ChannelService:ChannelProtocol{
         }
     }
     func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsResponse{
-        try await NM.shared.checkUnreads(wsID: mainWS, channelName: channelName, date: lastDate)
+        try await NM.shared.checkUnreads(wsID: mainWS.id, channelName: channelName, date: lastDate)
     }
     func authValidCheck(error: Error)->Bool{
         print(error)

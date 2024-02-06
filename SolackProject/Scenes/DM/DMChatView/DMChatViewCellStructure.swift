@@ -21,12 +21,12 @@ final class DMCellItem: MessageCellItem{
 }
 final class DMAsset: MessageAsset{
     var dmID:Int
-    init(dmID: Int,images:[Image]) {
+    init(dmID: Int,images:[Image],profileImage:Image?) {
         self.dmID = dmID
-        super.init(messageID: dmID, images: images)
+        super.init(messageID: dmID, images: images,profileImage: profileImage)
     }
-    required init(messageID: Int, images: [Image]) {
+    required init(messageID: Int, images: [Image],profileImage:Image?) {
         self.dmID = messageID
-        super.init(messageID: messageID, images: images)
+        super.init(messageID: messageID, images: images,profileImage: profileImage)
     }
 }

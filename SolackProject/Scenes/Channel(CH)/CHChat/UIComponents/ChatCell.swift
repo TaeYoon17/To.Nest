@@ -58,14 +58,22 @@ struct ChatCell:View{
 }
 extension ChatCell{
     var profile:some View{
-        Image(.asyncSwift).resizable().scaledToFill()
-            .background(.gray6)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .frame(width:34,height:34)
+        if let profileImage = images.profileImages{
+            profileImage.resizable().scaledToFill()
+                .background(.gray6)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .frame(width:34,height:34)
+        }else{
+            Image(.noPhotoA)
+                .resizable().scaledToFill()
+                    .background(.gray6)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(width:34,height:34)
+        }
     }
     var contents: some View{
         VStack(alignment:.leading,spacing:5){
-            Text(chatItem.profileName).font(FontType.caption.font)
+            Text(chatItem.profileName).font(FontType.caption.font).foregroundStyle(.text)
             if let content = chatItem.content, !content.isEmpty{
                 Text(content)
                     .font(FontType.body.font)
@@ -82,7 +90,7 @@ extension ChatCell{
         }
     }
     var dates: some View{
-        Rectangle().fill(.clear).overlay(alignment:.bottomTrailing) {
+        Rectangle().fill(.clear).overlay(alignment: chatItem.profileID == userID ? .bottomTrailing:.bottomLeading) {
             Text(chatItem.createdAt)
                 .foregroundStyle(.secondary)
                 .font(FontType.caption.font)

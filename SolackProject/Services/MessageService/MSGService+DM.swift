@@ -14,7 +14,7 @@ extension MessageService{
         Task{
             do{
                 var ircSnapshot = await imageReferenceCountManager.snapshot
-                let res = try await NM.shared.createDM(wsID: mainWS, roomID: roomID, info: dmChat)
+                let res = try await NM.shared.createDM(wsID: mainWS.id, roomID: roomID, info: dmChat)
                 for (fileName,file) in zip(res.files,dmChat.files){
                     if !FileManager.checkExistDocument(fileName: fileName){
                         try file.file.saveToDocument(fileName: fileName)
@@ -27,7 +27,7 @@ extension MessageService{
                 await dmChatRepository.create(item: dmTable)
                 await roomRepository.appendChat(roomID: roomID, chatTables: [dmTable])
                 try await appendUserReferenceCounts(roomID: roomID, createUsers: [result.user])
-                try await updateUserInformationToDataBase(roomID: roomID, userResponses: [result.user])
+                try await updateUserInformationToDataBase(roomID: roomID, userIDs: [result.user.userID])
             }catch{
                 print(error)
             }

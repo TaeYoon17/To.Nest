@@ -25,12 +25,12 @@ extension CHChatView{
     }
     final class ChatAssets: MessageAsset{
         var chatID:Int = 0
-        init(chatID: Int, images: [Image]) {
+        init(chatID: Int, images: [Image],profileImage:Image?) {
             self.chatID = chatID
-            super.init(messageID: chatID, images: images)
+            super.init(messageID: chatID, images: images,profileImage: profileImage)
         }
-        required init(messageID: Int, images: [Image]) {
-            super.init(messageID: messageID, images: images)
+        required init(messageID: Int, images: [Image],profileImage:Image?) {
+            super.init(messageID: messageID, images: images,profileImage: profileImage)
         }
     }
 }

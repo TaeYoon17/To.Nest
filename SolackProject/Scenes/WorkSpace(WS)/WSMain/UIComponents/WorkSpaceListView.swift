@@ -61,7 +61,7 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
             },
                          confirmTitle:"나가기",
                          confirm: {
-                print("user exit ok")
+                vm.exitWorkSpace()
             })
     }
     private func goAnim(action:()->()){

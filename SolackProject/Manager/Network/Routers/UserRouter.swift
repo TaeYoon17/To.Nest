@@ -31,7 +31,7 @@ enum UserRouter: URLRequestConvertible{
         case .getMy,.putMy:
             return "/v1/users/my"
         case .getUser(id: let id):
-            return "/v1/users/my/\(id)"
+            return "/v1/users/\(id)"
         case .putMyImage:
             return "/v1/users/my/image"
         }
@@ -55,7 +55,6 @@ enum UserRouter: URLRequestConvertible{
             var params = Parameters()
             if let nickName{ params["nickname"] = nickName }
             if let phone{ params["phone"] = phone }
-            print("params:",params)
             return params
         case .putMyImage:
             return Parameters()
@@ -115,7 +114,9 @@ extension SignUpInfo{
         var parameters = Parameters()
         parameters["email"] = email
         parameters["password"] = pw
-        parameters["nickname"] = nick
+        if !nick.isEmpty{
+            parameters["nickname"] = nick
+        }
         parameters["phone"] = phone
         @DefaultsState(\.deviceToken) var deviceToken
         parameters["deviceToken"] = deviceToken ?? ""
@@ -146,7 +147,9 @@ extension AppleInfo:SignInBody{
     func getParameter() -> Parameters {
         var params = Parameters()
         params["idToken"] = idToken
-        params["nickname"] = nickName
+        if !nickName.isEmpty{
+            params["nickname"] = nickName
+        }
         @DefaultsState(\.deviceToken) var deviceToken
         params["deviceToken"] = deviceToken ?? ""
         return params

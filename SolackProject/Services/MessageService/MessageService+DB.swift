@@ -32,11 +32,11 @@ extension MessageService{
         await createUsers.asyncForEach { await userSnapshot.plusCount(channelID: channelID, userID: $0.userID) }
         await self.userReferenceCountManager.apply(userSnapshot)
     }
-    @BackgroundActor func updateUserInformationToDataBase(channelID:Int,userResponses: any Collection<UserResponse>) async throws{
-        try await userResponses.asyncForEach { response in
-            var response = response
+    @BackgroundActor func updateUserInformationToDataBase(channelID:Int,userIDs: any Collection<Int>) async throws{
+        try await userIDs.asyncForEach { userID in
+            var response = try await NM.shared.checkUser(userID: userID)
             if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
-                if table.getResponse == response {return}
+                if table.getResponse.profileImage == response.profileImage?.webFileToDocFile() && table.getResponse.nickname == response.nickname{return}
                 response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
                 await self.userRepository.update(table: table, response: response)
             }else{
@@ -85,21 +85,21 @@ extension MessageService{
         await createUsers.asyncForEach { await userSnapshot.plucCount(roomID: roomID, userID: $0.userID) }
         await self.userReferenceCountManager.apply(userSnapshot)
     }
-    @BackgroundActor func updateUserInformationToDataBase(roomID:Int,userResponses: any Collection<UserResponse>) async throws{
-        try await userResponses.asyncForEach { response in
-            var response = response
-            if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
-                if table.getResponse == response {return}
-                response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
-                await self.userRepository.update(table: table, response: response)
-            }else{
-                if let profileImage = response.profileImage{
-                    try await saveProfileImageAsDocumentThumbnail(webPath: profileImage)
-                }
-                response.convertWebPathToFilePath()
-                let table = UserInfoTable(userResponse: response)
-                await self.userRepository.create(item: table)
-            }
+    @BackgroundActor func updateUserInformationToDataBase(roomID:Int,userIDs: any Collection<Int>) async throws{
+        try await userIDs.asyncForEach { userID in
+//            let userResponse = NM.shared.user
+//            if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
+//                if table.getResponse == response {return}
+//                response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
+//                await self.userRepository.update(table: table, response: response)
+//            }else{
+//                if let profileImage = response.profileImage{
+//                    try await saveProfileImageAsDocumentThumbnail(webPath: profileImage)
+//                }
+//                response.convertWebPathToFilePath()
+//                let table = UserInfoTable(userResponse: response)
+//                await self.userRepository.create(item: table)
+//            }
         }
     }
 }

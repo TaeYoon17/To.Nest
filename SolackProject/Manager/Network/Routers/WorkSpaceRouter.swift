@@ -17,8 +17,8 @@ extension WorkSpaceRouter{
     }
 }
 enum WorkSpaceRouter:URLRequestConvertible{
-    case create(info:WSInfo),check(CheckType),edit(wsID:String,info:WSInfo),delete(wsID: String)
-    case invite(wsID:Int,email:String),search,leave,adminChange
+    case create(info:WSInfo),check(CheckType),edit(wsID:String,info:WSInfo),delete(wsID: Int)
+    case invite(wsID:Int,email:String),search,leave(wsID:Int),adminChange
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
     var endPoint:String{
         switch self{
@@ -34,7 +34,7 @@ enum WorkSpaceRouter:URLRequestConvertible{
         case .invite(let wsID,_): "/\(wsID)/members"
         case .edit(let id,_): "/\(id)"
         case .search: ""
-        case .leave: ""
+        case .leave(let id): "/\(id)/leave"
         }
     }
     var method:HTTPMethod{

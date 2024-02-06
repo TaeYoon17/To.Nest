@@ -24,16 +24,16 @@ extension WSMainVM{
                 }
             case .checkAll(let value):
                 owner.wsResponses(value)
-            case .delete:
+            case .delete,.exit:
                 self.list.remove(at:owner.selectedIdx)
                 Task{@MainActor in
                     if let firstItem = owner.list.first{
                         owner.selectedIdx = 0
                         owner.list[owner.selectedIdx].isSelected = true
-                        owner.mainWS = owner.list[owner.selectedIdx].id
-                        owner.provider.wsService.setHomeWS(wsID:owner.mainWS)
+                        owner.mainWS.updateMainWSID(id: owner.list[owner.selectedIdx].id, myManaging: owner.list[owner.selectedIdx].isMyManaging)
+                        owner.provider.wsService.setHomeWS(wsID:owner.mainWS.id)
                     }else{
-                        self.mainWS = -1
+                        self.mainWS.updateMainWSID(id: -1, myManaging: false)
                         owner.selectedIdx = -1
                         owner.provider.wsService.setHomeWS(wsID: nil)
                     }
@@ -67,7 +67,7 @@ extension WSMainVM{
             var tempItem = try await makeWSItem(value)
             if isFirstItem{ 
                 tempItem.isSelected = true
-                self.mainWS = tempItem.id
+                await self.mainWS.updateMainWSID(id: tempItem.id, myManaging: true)
             }
             let item = tempItem
             await MainActor.run {
@@ -126,7 +126,7 @@ extension WSMainVM{
             myImage = try image.downSample(type:.small)
         }
         return await WorkSpaceListItem(id:res.workspaceID,
-                                       isSelected: res.workspaceID == mainWS,
+                                       isSelected: res.workspaceID == mainWS.id,
                                        isMyManaging: res.ownerID == userID,
                                        image: myImage,
                                        name: res.name,

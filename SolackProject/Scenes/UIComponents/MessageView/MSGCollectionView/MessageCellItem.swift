@@ -35,8 +35,9 @@ class MessageAsset:ObservableObject,Identifiable{
     var messageID:Int = 0
     var profileImages: Image?
     var images:[Image] = []
-    required init(messageID: Int, images: [Image]) {
+    required init(messageID: Int, images: [Image],profileImage:Image?) {
         self.messageID = messageID
         self.images = images
+        self.profileImages = profileImage
     }
 }
