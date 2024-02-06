@@ -24,6 +24,7 @@ final class DMMainVC:BaseVC ,View{
     }
     override func configureNavigation() {
         navBar.title = "Direct Message"
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     override func configureConstraints() {

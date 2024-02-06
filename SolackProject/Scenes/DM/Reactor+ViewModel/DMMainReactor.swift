@@ -8,7 +8,6 @@
 import Foundation
 import ReactorKit
 import RxSwift
-
 final class DMMainReactor: Reactor{
     var initialState: State = .init()
     weak var provider: ServiceProviderProtocol!
@@ -20,6 +19,7 @@ final class DMMainReactor: Reactor{
     }
     enum Mutation{
         case setMembsers([UserResponse])
+        case appendMembers([UserResponse])
         case setWSThumbnail(String)
         case isProfileUpdated(Bool)
     }
@@ -39,6 +39,8 @@ final class DMMainReactor: Reactor{
         switch mutation{
         case .setMembsers(let members):
             state.membsers = members
+        case .appendMembers(let members):
+            state.membsers.append(contentsOf: members)
         case .setWSThumbnail(let thumbnail):
             state.wsThumbnail = thumbnail
         case .isProfileUpdated(let updated):
@@ -49,22 +51,25 @@ final class DMMainReactor: Reactor{
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let wsMutation = provider.wsService.event.flatMap { [weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
+            var mutList:[Observable<Mutation>] = []
             switch event{
             case .homeWS(let wsResponse):
-                var arr:[Observable<Mutation>] = []
                 guard let members = wsResponse?.workspaceMembers else {return Observable.concat([])}
                 if let profileImage = wsResponse?.thumbnail{
-                    print(profileImage)
-                    arr.append(.just(.setWSThumbnail(profileImage)).delay(.microseconds(100), scheduler: MainScheduler.instance))
+                    mutList.append(.just(.setWSThumbnail(profileImage)).delay(.microseconds(100), scheduler: MainScheduler.instance))
                 }
-                arr.append(.just(.setMembsers(members)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance))
-                return Observable.concat(arr)
+                mutList.append(.just(.setMembsers(members)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance))
             case .members(let response):
-                return Observable.concat([
+                mutList.append(
                     .just(.setMembsers(response)).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
-                ])
-            default: return Observable.concat([])
+                )
+            case .invited(let response):
+                mutList.append(
+                    .just(.appendMembers([response])).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
+                )
+            default: break
             }
+            return Observable.concat(mutList)
         }
         let profileMutation = provider.profileService.event.flatMap { event -> Observable<Mutation> in
             switch event{

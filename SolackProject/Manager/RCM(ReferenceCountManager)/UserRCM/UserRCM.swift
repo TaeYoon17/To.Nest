@@ -79,15 +79,27 @@ final class UserRCM: RCMAble{
     }
 }
 extension RCMSnapshot<UserRCM, UserItem, UserRCMTable>{
-    private func idConverter(channelID: Int,userID:Int) -> String{
-        "\(channelID)__\(userID)"
+    private func idConverter(messageID: Int,userID:Int) -> String{
+        "\(messageID)__\(userID)"
     }
     func existItem(channelID: Int,userID:Int) -> Bool{
-        let id = idConverter(channelID: channelID, userID: userID)
+        let id = idConverter(messageID: channelID, userID: userID)
+        return instance[id] != nil
+    }
+    func existItem(roomID: Int,userID:Int) -> Bool{
+        let id = idConverter(messageID: roomID, userID: userID)
         return instance[id] != nil
     }
     mutating func plusCount(channelID: Int,userID:Int) async{
-        let id = idConverter(channelID: channelID, userID: userID)
+        let id = idConverter(messageID: channelID, userID: userID)
+        if instance[id] == nil{
+            instance[id] = Item(name: id, count: 1)
+        }else{
+            instance[id]?.count += 1
+        }
+    }
+    mutating func plucCount(roomID:Int, userID:Int) async{
+        let id = idConverter(messageID: roomID, userID: userID)
         if instance[id] == nil{
             instance[id] = Item(name: id, count: 1)
         }else{
@@ -95,7 +107,11 @@ extension RCMSnapshot<UserRCM, UserItem, UserRCMTable>{
         }
     }
     mutating func minusCount(channelID:Int, userID:Int)async {
-        let id = idConverter(channelID: channelID, userID: userID)
+        let id = idConverter(messageID: channelID, userID: userID)
+        instance[id]?.count -= 1
+    }
+    mutating func minusCount(roomID:Int, userID:Int)async {
+        let id = idConverter(messageID: roomID, userID: userID)
         instance[id]?.count -= 1
     }
 }

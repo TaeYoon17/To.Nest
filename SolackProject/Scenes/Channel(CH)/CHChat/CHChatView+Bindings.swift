@@ -66,7 +66,7 @@ extension CHChatView{
         reactor.state.map{$0.sendFiles}
             .distinctUntilChanged()
             .map{ $0.map{ data in
-                ImageViewerItem(imageID: data.name, image: UIImage.fetchBy(data: data.file,size: .init(width: 44, height: 44)))
+                MSGImageViewerItem(imageID: data.name, image: UIImage.fetchBy(data: data.file,size: .init(width: 44, height: 44)))
                 }}
             .subscribe(on: MainScheduler.asyncInstance)
             .bind(with: self, onNext: { owner, items in

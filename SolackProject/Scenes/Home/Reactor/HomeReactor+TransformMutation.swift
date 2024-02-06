@@ -9,42 +9,46 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
+//MARK: -- 워크스페이스 Transform
 extension HomeReactor{
     var wsMutationTransform:Observable<Mutation>{
         provider.wsService.event.flatMap {[weak self] event -> Observable<Mutation> in
             guard let self else{return Observable.concat([])}
+            var observeList:[Observable<Mutation>] = []
             switch event{
             case .homeWS(let response):
                 if let response{
                     provider.chService.checkAllMy()
-                    return Observable.concat([.just(.isMasking(false)),
-                                              .just(.wsTitle(response.name)),
-                                              .just(.wsLogo(response.thumbnail)),
-                                              ])
+                    observeList.append(contentsOf: [.just(.isMasking(false)),
+                                                    .just(.wsTitle(response.name)),
+                                                    .just(.wsLogo(response.thumbnail)),
+                                                    ])
                 }else{
-                    return Observable.concat([.just(.isMasking(true))])
+                    observeList.append(.just(.isMasking(true)))
                 }
             case .create(let response): // 새로 만든 것
                 // 현재 마스크가 되어있음... 워크스페이스가 없음...
                 if let isMask = currentState.isMasking, isMask == true{
-                    return Observable.concat([
+                    observeList.append(contentsOf: [
                         .just(.isMasking(false)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                         .just(.wsTitle(response.name)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                         .just(.wsLogo(response.thumbnail)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                         .just(.setChannelList([]))
                     ])
-                }else{ // 메인에 이미 워크스페이스가 존재했음
-                    return Observable.concat([])
                 }
             case .invited(_):
-                return Observable.concat([
+                observeList.append(contentsOf: [
                     .just(.setToast(WSInviteToastType.inviteSuccess)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                     .just(.setToast(nil))
                 ])
-            default: return Observable.concat([])
+            default: break
             }
+            return Observable.concat(observeList)
         }
     }
+}
+//MARK: -- 채널 Transform
+extension HomeReactor{
     var chMutationTransform:Observable<Mutation>{
         let service = provider.chService.event.flatMap {[weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
@@ -84,11 +88,30 @@ extension HomeReactor{
         }
         return Observable.merge(service,transition)
     }
-    var dmMutation: Observable<Mutation>{
+}
+//MARK: -- DM 기록 Transform
+extension HomeReactor{
+    var dmMutationTransform: Observable<Mutation>{
         provider.dmService.event.flatMap { [weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
             switch event{
             case .allMy(let responses):return Observable.concat([])
+            }
+        }
+    }
+}
+//MARK: -- Profile Transform
+extension HomeReactor{
+    var profileMutationTransform: Observable<Mutation>{
+        provider.profileService.event.flatMap {[weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            switch event{
+            case .updatedImage:
+                return Observable.concat([
+                    .just(Mutation.isProfileUpdated(true)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                   .just(Mutation.isProfileUpdated(false))
+              ])
+            default: return Observable.concat([])
             }
         }
     }

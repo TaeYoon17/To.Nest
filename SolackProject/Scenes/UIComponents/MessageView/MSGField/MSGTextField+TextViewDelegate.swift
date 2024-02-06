@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-extension ChatFields.ChatTextField{
+extension MSGField.MSGTextField{
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == .secondary{
             textView.text = ""

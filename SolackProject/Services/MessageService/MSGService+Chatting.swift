@@ -34,7 +34,7 @@ extension MessageService:SocketReceivable{
                     await ircSnapshot.plusCount(id: fileName)
                 }
                 let result = res
-                event.onNext(.create(response: result))
+                event.onNext(.create(response: .channel([result])))
                 let chatTable = CHChatTable(response: result)
                 await chChatrepository.create(item: chatTable)
                 await channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
@@ -108,7 +108,7 @@ extension MessageService:SocketReceivable{
                 let chatResponse = chatTable.getResponse(userResponse: userResponse)
                 chResponses.append(chatResponse)
             }
-            self.event.onNext(.check(response: chResponses))
+            self.event.onNext(.check(response: .channel(chResponses)))
         }
     }
 }

@@ -8,7 +8,6 @@
 import Foundation
 extension WorkSpaceService{
     func checkMembers() {
-        
     }
     func inviteUser(emailText:String){
         Task{
@@ -21,9 +20,6 @@ extension WorkSpaceService{
                     return
                 }
                 if let ws = error as? WSFailed{
-//                    switch ws{
-//                    case .doubled
-//                    }
                     event.onNext(.failed(ws))
                 }
             }

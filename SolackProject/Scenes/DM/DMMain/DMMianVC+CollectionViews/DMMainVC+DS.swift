@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 extension DMMainVC{
     final class DataSource:UICollectionViewDiffableDataSource<SectionType,Item>{
+        @DefaultsState(\.userID) var userID
         var memberModel = AnyModelStore<DMMemberItem>([])
         var memberAssets = NSCache<NSString,MemberListAsset>()
         var disposeBag = DisposeBag()
@@ -21,12 +22,8 @@ extension DMMainVC{
                 Task{
                     var items:[Item] = []
                     for response in responses{
-                        var memberItem = DMMemberItem(userResponse: response)
-//                        if let imgURL = response.profileImage,let imageData = await NM.shared.getThumbnail(imgURL){
-//                            let image = UIImage.fetchBy(data: imageData, type: .small)
-//                            var memberAsset = MemberListAsset(userId: memberItem.id, image: image)
-//                            
-//                        }
+                        if response.userID == self.userID { continue }
+                        let memberItem = DMMemberItem(userResponse: response)
                         await self.appendMemberAsset(memberItem: memberItem)
                         self.memberModel.insertModel(item: memberItem)
                         items.append(Item(memberItem: memberItem))
@@ -34,13 +31,12 @@ extension DMMainVC{
                     self.setDataSource(memberItem: items)
                 }
             }.disposed(by: disposeBag)
-            
         }
         @MainActor func setDataSource(memberItem:[Item]){
             var snapshot = snapshot()
             let items = snapshot.itemIdentifiers(inSection: .member)
             snapshot.deleteItems(items)
-            snapshot.appendItems(memberItem.shuffled(),toSection: .member)
+            snapshot.appendItems(memberItem,toSection: .member)
             Task{@MainActor in
                 await apply(snapshot,animatingDifferences: true)
             }

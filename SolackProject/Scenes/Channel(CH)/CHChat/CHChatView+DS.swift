@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import SwiftUI
 extension CHChatView{
-    class DataSource: UICollectionViewDiffableDataSource<String,ChatItem.ID>{
+    final class DataSource: UICollectionViewDiffableDataSource<String,ChatItem.ID>{
         var bottomFinished: PublishSubject<()> = .init()
         var disposeBag = DisposeBag()
         var chatModel = AnyModelStore<ChatItem>([])
@@ -80,7 +80,7 @@ extension CHChatView{
                 let image = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
                 images.append(Image(uiImage: image))
             }
-            let chatAssets = ChatAssets(chatID: item.chatID, images: images)
+            let chatAssets = ChatAssets(chatID: item.id, images: images)
             chatAssetModel.setObject(chatAssets, forKey: "\(item.chatID)" as NSString)
             return chatAssets
         }

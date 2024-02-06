@@ -116,25 +116,39 @@ final class CHChatReactor:Reactor{
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let msgMutation = provider.msgService.event.flatMap {[weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
+            var resList: [Observable<Mutation>] = []
             switch event{
             case .create(response: let response):
-                return Observable.concat([
-                    .just(.appendChat(.create(response))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
-                    .just(.appendChat(nil))
-                ])
+                switch response{
+                case .channel(let channelRes):
+                    guard let res = channelRes.first else {break}
+                    resList.append(contentsOf: [
+                        .just(.appendChat(.create(res))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                        .just(.appendChat(nil))
+                    ])
+                default: break
+                }
             case .check(response: let responses):
-//                self.provider.msgService.openSocket(channelID: self.channelID)
-                print("response가 두번 일어난다... \(responses.count)")
-                return Observable.concat([
-                    .just(.appendChat(.dbResponse(responses))).throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance),
-                    .just(.appendChat(nil))
-                ])
+                switch responses{
+                case .channel(let channels):
+                    resList.append(contentsOf:[
+                        .just(.appendChat(.dbResponse(channels))).throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                        .just(.appendChat(nil))
+                    ])
+                default:break
+                }
             case .socketReceive(response: let response):
-                return Observable.concat([
-                    .just(.appendChat(.socketResponse(response))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
-                    .just(.appendChat(nil))
-                ])
+                switch response{
+                case .channel(let channelRes):
+                    guard let res = channelRes.first else {break}
+                    resList.append(contentsOf: [
+                        .just(.appendChat(.socketResponse(res))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                        .just(.appendChat(nil))
+                    ])
+                default: break
+                }
             }
+            return Observable.concat(resList)
         }
         let chMutation = provider.chService.event.flatMap { [weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}

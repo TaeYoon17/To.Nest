@@ -15,7 +15,7 @@ final class ChannelTable:Object,Identifiable{
     @Persisted var channelName:String
     @Persisted var lastReadDate:Date?
     @Persisted var lastCheckDate:Date?
-    convenience init(channelID:Int,channelName:String,wsID:Int,date:Date? = nil) {
+    convenience init(channelID:Int,channelName:String,wsID:Int) {
         self.init()
         self.channelID = channelID
         self.channelName = channelName

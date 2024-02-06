@@ -72,9 +72,34 @@ extension MessageService{
             }
         }
     }
-    private func saveProfileImageAsDocumentThumbnail(webPath:String) async throws{
+    fileprivate func saveProfileImageAsDocumentThumbnail(webPath:String) async throws{
         let filePath = webPath.webFileToDocFile()
         guard let profileOriginalData = await NM.shared.getThumbnail(webPath) else { fatalError("Can't find profileThumbnail")}
         try profileOriginalData.saveToDocument(fileName: filePath)
+    }
+}
+//MARK: -- DM 관련
+extension MessageService{
+    func appendUserReferenceCounts(roomID:Int,createUsers: [UserResponse]) async throws{
+        var userSnapshot = await self.userReferenceCountManager.snapshot
+        await createUsers.asyncForEach { await userSnapshot.plucCount(roomID: roomID, userID: $0.userID) }
+        await self.userReferenceCountManager.apply(userSnapshot)
+    }
+    @BackgroundActor func updateUserInformationToDataBase(roomID:Int,userResponses: any Collection<UserResponse>) async throws{
+        try await userResponses.asyncForEach { response in
+            var response = response
+            if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
+                if table.getResponse == response {return}
+                response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
+                await self.userRepository.update(table: table, response: response)
+            }else{
+                if let profileImage = response.profileImage{
+                    try await saveProfileImageAsDocumentThumbnail(webPath: profileImage)
+                }
+                response.convertWebPathToFilePath()
+                let table = UserInfoTable(userResponse: response)
+                await self.userRepository.create(item: table)
+            }
+        }
     }
 }

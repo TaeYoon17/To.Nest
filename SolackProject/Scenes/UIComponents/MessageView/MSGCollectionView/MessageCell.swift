@@ -1,21 +1,21 @@
 //
-//  ChatCell.swift
+//  MessageCell.swift
 //  SolackProject
 //
-//  Created by 김태윤 on 1/19/24.
+//  Created by 김태윤 on 2/5/24.
 //
 
 import Foundation
 import SwiftUI
-struct ChatCell:View{
-    @ObservedObject var chatItem: CHChatView.ChatItem
-    @ObservedObject var images: CHChatView.ChatAssets
+struct MessageCell:View{
+    @ObservedObject var msgItem: MessageCellItem
+    @ObservedObject var images: MessageAsset
     @DefaultsState(\.userID) var userID
     @State private var date:String = "08:16 오전"
     @State private var dateWidth:CGFloat = 0
     @State private var show = false
     var body: some View{
-        if userID == chatItem.profileID{
+        if userID == msgItem.profileID{
             myUser
         }else{
             otherUser
@@ -35,7 +35,7 @@ struct ChatCell:View{
             Spacer()
             dates
             VStack(alignment:.trailing,spacing:5){
-                if let content = chatItem.content, !content.isEmpty{
+                if let content = msgItem.content, !content.isEmpty{
                     Text(content)
                         .font(FontType.body.font)
                         .padding(.all,8)
@@ -56,7 +56,7 @@ struct ChatCell:View{
         }
     }
 }
-extension ChatCell{
+extension MessageCell{
     var profile:some View{
         Image(.asyncSwift).resizable().scaledToFill()
             .background(.gray6)
@@ -65,8 +65,8 @@ extension ChatCell{
     }
     var contents: some View{
         VStack(alignment:.leading,spacing:5){
-            Text(chatItem.profileName).font(FontType.caption.font)
-            if let content = chatItem.content, !content.isEmpty{
+            Text(msgItem.profileName).font(FontType.caption.font)
+            if let content = msgItem.content, !content.isEmpty{
                 Text(content)
                     .font(FontType.body.font)
                     .padding(.all,12)
@@ -83,10 +83,10 @@ extension ChatCell{
     }
     var dates: some View{
         Rectangle().fill(.clear).overlay(alignment:.bottomTrailing) {
-            Text(chatItem.createdAt)
+            Text(msgItem.createdAt)
                 .foregroundStyle(.secondary)
                 .font(FontType.caption.font)
-                .multilineTextAlignment(chatItem.profileID == userID ? .trailing : .leading)
+                .multilineTextAlignment(msgItem.profileID == userID ? .trailing : .leading)
                 .onAppear(){
                     let label = UILabel()
                     label.font = FontType.caption.get()
@@ -97,9 +97,3 @@ extension ChatCell{
         .frame(width: dateWidth)
     }
 }
-//#Preview {
-//    List{
-//        ChatCell(message: "Hello world!!", chatUser: .init(nickName: "고래고래박", thumbnail: "Metal"))
-//    }.listStyle(.plain)
-//}
-

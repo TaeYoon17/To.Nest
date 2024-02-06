@@ -56,7 +56,6 @@ extension DMMainVC{
                         HStack{
                             Spacer()
                             MemberButton(item: item, asset: memberAsset) { response in
-                                print("선택 되었습니다.")
                             }
                             Spacer()
                         }

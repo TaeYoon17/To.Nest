@@ -11,19 +11,28 @@ import UIKit
 typealias MSGService = MessageService
 protocol MessageProtocol{
     var event:PublishSubject<MSGService.Event> {get}
+    // 채널
     func fetchChannelDB(channelID:Int,channelName:String)
     func create(chID:Int,chName:String,chat: ChatInfo)
-    func create(dm: ChatInfo)
+    func create(roomID: Int,dmChat: ChatInfo)
     func getChannelDatas(chID:Int,chName:String)
     func openSocket(channelID: Int)
     func closeSocket(channelID: Int)
+    // DM
+    func fetchDirectMessageDB(roomID: Int)
+    func openSocket(roomID:Int)
+    func closeSocket(roomID:Int)
 }
 final class MessageService:MessageProtocol{
+    
+    
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()
     @BackgroundActor var channelRepostory: ChannelRepository!
     @BackgroundActor var chChatrepository: ChannelChatRepository!
+    @BackgroundActor var roomRepository: DMRoomRepository!
+    @BackgroundActor var dmChatRepository: DMChatRepository!
     @BackgroundActor var userRepository: UserInfoRepository!
     @BackgroundActor var imageReferenceCountManager: ImageRCM!
     @BackgroundActor var userReferenceCountManager: UserRCM!
@@ -33,18 +42,22 @@ final class MessageService:MessageProtocol{
             channelRepostory = try await ChannelRepository()
             chChatrepository = try await ChannelChatRepository()
             userRepository = try await UserInfoRepository()
+            roomRepository = try await DMRoomRepository()
+            dmChatRepository = try await DMChatRepository()
             imageReferenceCountManager = ImageRCM.shared
             userReferenceCountManager = UserRCM.shared
         }
     }
+    enum MSGResponse{
+        case dm([DMResponse])
+        case channel([ChatResponse])
+    }
     enum Event{
-        case create(response:ChatResponse)
-        case check(response:[ChatResponse])
-        case socketReceive(response:ChatResponse)
+        case create(response:MSGResponse)
+        case check(response:MSGResponse)
+        case socketReceive(response:MSGResponse)
     }
-    func create(dm: ChatInfo) {
-        
-    }
+    
 }
 
 

@@ -96,16 +96,8 @@ final class HomeReactor: Reactor{
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let wsService = wsMutationTransform
         let chService = chMutationTransform
-        let profileService = provider.profileService.event.flatMap { event -> Observable<Mutation> in
-            switch event{
-            case .updatedImage:
-                return Observable.concat([
-                    .just(Mutation.isProfileUpdated(true)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
-                   .just(Mutation.isProfileUpdated(false))
-              ])
-            default: return Observable.concat([])
-            }
-        }
-        return Observable.merge(mutation,wsService,chService,profileService)
+        let dmService = dmMutationTransform
+        let profileService = profileMutationTransform
+        return Observable.merge(mutation,wsService,chService,dmService,profileService)
     }
 }

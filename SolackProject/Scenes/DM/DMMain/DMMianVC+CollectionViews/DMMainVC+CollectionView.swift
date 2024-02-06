@@ -32,5 +32,8 @@ extension DMMainVC:UICollectionViewDelegate{
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        let vc = DMChatView()
+        vc.reactor = DMChatReactor(reactor!.provider, id: 1, title: "두비두밥")
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

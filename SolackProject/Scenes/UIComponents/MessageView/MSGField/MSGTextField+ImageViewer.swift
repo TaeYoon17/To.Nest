@@ -9,12 +9,13 @@ import Foundation
 import UIKit
 import SwiftUI
 import RxSwift
-extension ChatFields.ChatTextField{
+typealias MSGImageViewerItem = MSGField.MSGTextField.ImageViewer.Item
+extension MSGField.MSGTextField{
     final class ImageViewer:UIView{
-        private lazy var collectionView:UICollectionView = .init(frame: .zero, collectionViewLayout: ChatFields.ChatTextField.ImageViewer.layout)
+        private lazy var collectionView:UICollectionView = .init(frame: .zero, collectionViewLayout: MSGField.MSGTextField.ImageViewer.layout)
         private var dataSource: UICollectionViewDiffableDataSource<String,Item>!
         var deleteItemID: PublishSubject<String> = .init()
-        var updatedFileDatas: PublishSubject<[ImageViewerItem]> = .init()
+        var updatedFileDatas: PublishSubject<[MSGImageViewerItem]> = .init()
         var disposeBag = DisposeBag()
         init(){
             super.init(frame: .zero)
@@ -34,7 +35,7 @@ extension ChatFields.ChatTextField{
             dataSource.apply(snapshot,animatingDifferences: true)
             updatedFileDatas
                 .distinctUntilChanged()
-                .bind(with: self) { (owner:ChatFields.ChatTextField.ImageViewer, datas) in
+                .bind(with: self) { (owner:MSGField.MSGTextField.ImageViewer, datas) in
                 Task{
                     await MainActor.run {
                         owner.applyDataSource(items:datas)
@@ -70,7 +71,7 @@ extension ChatFields.ChatTextField{
 }
 
 //MARK: -- 레이아웃과 셀
-fileprivate extension ChatFields.ChatTextField.ImageViewer{
+fileprivate extension MSGField.MSGTextField.ImageViewer{
     static var layout: UICollectionViewCompositionalLayout{
         let size = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1), heightDimension: .fractionalHeight(1))
         let item  = NSCollectionLayoutItem(layoutSize: size)
