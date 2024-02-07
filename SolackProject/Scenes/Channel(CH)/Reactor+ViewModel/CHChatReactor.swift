@@ -131,7 +131,7 @@ final class CHChatReactor:Reactor{
             case .check(response: let responses):
                 switch responses{
                 case .channel(let channels):
-                    print(channels)
+                    provider.msgService.openSocket(channelID: self.channelID)
                     resList.append(contentsOf:[
                         .just(.appendChat(.dbResponse(channels))).throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                         .just(.appendChat(nil))

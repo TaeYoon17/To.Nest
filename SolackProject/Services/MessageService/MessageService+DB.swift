@@ -25,7 +25,6 @@ extension MessageService{
         }
         await channelRepostory?.appendChat(channelID: channelID, chatTables: tables)
         await imageReferenceCountManager.apply(ircSnapshot)
-        
     }
     func appendUserReferenceCounts(channelID:Int,createUsers: [UserResponse]) async throws{
         var userSnapshot = await self.userReferenceCountManager.snapshot

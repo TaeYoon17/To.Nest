@@ -64,9 +64,11 @@ final class DMMainReactor: Reactor{
                     .just(.setMembsers(response)).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
                 )
             case .invited(let response):
-                mutList.append(
-                    .just(.appendMembers([response])).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
-                )
+                if !currentState.membsers.contains(response){
+                    mutList.append(
+                        .just(.appendMembers([response])).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
+                    )
+                }
             default: break
             }
             return Observable.concat(mutList)

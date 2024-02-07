@@ -8,12 +8,9 @@
 import Foundation
 import SwiftUI
 struct ChannelListItemView: View{
-    var isRecent:Bool
-    let name:String
-    @State var count:Int = 0
-    @State var showCount:Bool = true
+    @ObservedObject var item: HomeVC.ChannelListItem
     var body: some View{
-        if isRecent{
+        if item.messageCount > 0{
             recent
         }else{
             notRecent
@@ -23,10 +20,10 @@ struct ChannelListItemView: View{
         Label(
             title: {
                 HStack{
-                    Text(name)
+                    Text(item.name)
                     Spacer()
-                    if count > 0{
-                        Text("\(count)")
+                    if item.messageCount > 0{
+                        Text("\(item.messageCount)")
                             .foregroundStyle(.white)
                             .padding(.vertical,2)
                             .padding(.horizontal,4)
@@ -44,10 +41,10 @@ struct ChannelListItemView: View{
         Label(
             title: {
                 HStack{
-                    Text(name)
+                    Text(item.name)
                     Spacer()
-                    if count > 0{
-                        Text("\(count)")
+                    if item.messageCount > 0{
+                        Text("\(item.messageCount)")
                             .font(FontType.bodyBold.font)
                             .foregroundStyle(.white)
                             .padding(.vertical,2)

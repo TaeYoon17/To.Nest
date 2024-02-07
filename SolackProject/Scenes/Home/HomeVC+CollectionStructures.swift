@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 extension HomeVC{
     enum SectionType:String{
         case channel
@@ -31,14 +32,26 @@ extension HomeVC{
             hasher.combine(id)
         }
     }
-    struct ChannelListItem:Identifiable,CollectionItemable{
+    final class ChannelListItem:ObservableObject,Identifiable,CollectionItemable{
+        static func == (lhs: HomeVC.ChannelListItem, rhs: HomeVC.ChannelListItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
         let itemType: ItemType = .list
         let sectionType: SectionType = .channel
         var id:String{"\(channelID)"}
-        var channelID:Int
-        var name :String
-        var messageCount:Int
-        var isRecent: Bool
+        var channelID:Int = 0
+        @Published var name :String
+        @Published var messageCount:Int
+        @Published var isRecent: Bool
+        init(channelID: Int, name: String, messageCount: Int, isRecent: Bool) {
+            self.channelID = channelID
+            self.name = name
+            self.messageCount = messageCount
+            self.isRecent = isRecent
+        }
     }
     struct DirectListItem: Identifiable,CollectionItemable{
         let itemType:ItemType = .list

@@ -23,6 +23,7 @@ final class HomeReactor: Reactor{
         case setPresent(HomePresent?)
         case setMainWS(wsID:String)
         case initMainWS
+        case updateChannels
     }
     enum Mutation{
         case channelDialog(HomePresent?)
@@ -76,6 +77,9 @@ final class HomeReactor: Reactor{
             return Observable.concat([])
         case .initMainWS:
             provider.wsService.initHome()
+            return Observable.concat([])
+        case .updateChannels:
+            provider.chService.checkAllMy()
             return Observable.concat([])
         }
     }

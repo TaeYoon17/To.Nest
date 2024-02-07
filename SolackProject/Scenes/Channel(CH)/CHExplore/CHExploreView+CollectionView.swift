@@ -30,7 +30,7 @@ extension CHExploreView{
     var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             cell.contentConfiguration = UIHostingConfiguration(content: {
-                ChannelListItemView(isRecent: true, name: itemIdentifier.name, count: 0,showCount: false)
+                ChannelListItemView(item: .init(channelID: 0, name: itemIdentifier.name, messageCount: 0, isRecent: false))
             })
             cell.configurationUpdateHandler = { cell, state in
                 var backConfig = cell.defaultBackgroundConfiguration()

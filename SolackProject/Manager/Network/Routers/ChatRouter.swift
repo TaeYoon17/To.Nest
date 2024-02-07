@@ -31,7 +31,7 @@ enum ChatRouter:URLRequestConvertible{
         switch self{
         case .check(wsID: _, chName: _, cursorDate: let date):
             if let date{
-                parameters["cursor_date"] = date.convertToString()
+                parameters["cursor_date"] = date.ISO8601Format()
             }
         default: break
         }
@@ -44,7 +44,7 @@ enum ChatRouter:URLRequestConvertible{
             headers["Content-Type"] = "multipart/form-data"
             headers["accept"] = "application/json"
         case .check:
-            headers["Content-Type"] = "application/json"
+            headers["accept"] = "application/json"
         }
         return headers
     }
@@ -60,6 +60,7 @@ enum ChatRouter:URLRequestConvertible{
         case .check:
             if let queryItem = params.urlQueryItems{
                 urlRequest.url?.append(queryItems: queryItem)
+                print(urlRequest.url)
             }
             return urlRequest
         }

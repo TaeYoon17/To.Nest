@@ -26,6 +26,7 @@ protocol MessageProtocol{
 final class MessageService:MessageProtocol{
     
     
+    
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()
@@ -57,7 +58,6 @@ final class MessageService:MessageProtocol{
         case check(response:MSGResponse)
         case socketReceive(response:MSGResponse)
     }
-    
 }
 
 

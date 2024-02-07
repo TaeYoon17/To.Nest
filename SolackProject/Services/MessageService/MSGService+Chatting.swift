@@ -10,56 +10,18 @@ import Foundation
 extension MessageService:SocketReceivable{
     func openSocket(channelID: Int){
         do{
-            try SocketManagerr.shared.openChatSocket(channelID: channelID,delegate: self)
+            try SocketManagerr.shared.openDMSocket(connect: .chat(channelID: channelID), delegate: self)
             Task{@BackgroundActor in
-                await channelRepostory?.updateChannelReadDate(channelID: channelID)
+                await channelRepostory.updateChannelReadDate(channelID: channelID)
             }
         }catch{
             print(error)
         }
     }
     func closeSocket(channelID: Int){
-        Task{@BackgroundActor in
-            await channelRepostory?.updateChannelReadDate(channelID: channelID)
-        }
         SocketManagerr.shared.closeChatSocket(channelID: channelID)
-    }
-    func create(chID:Int,chName:String,chat: ChatInfo){
-        Task{
-            do{
-                var ircSnapshot = await imageReferenceCountManager.snapshot
-                var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS.id,chName: chName,info: chat)
-                for (fileName, file) in zip(res.files,chat.files){// 파일 데이터 저장하기
-                    if !FileManager.checkExistDocument(fileName: fileName){ try file.file.saveToDocument(fileName: fileName) }
-                    await ircSnapshot.plusCount(id: fileName)
-                }
-                let result = res
-                event.onNext(.create(response: .channel([result])))
-                let chatTable = CHChatTable(response: result)
-                await chChatrepository.create(item: chatTable)
-                await channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
-                try await appendUserReferenceCounts(channelID: chID, createUsers: [result.user])
-                try await updateUserInformationToDataBase(channelID: chID, userIDs: [result.user.userID])
-            }catch{
-                print(error)
-            }
-            await imageReferenceCountManager.saveRepository()
-            await userReferenceCountManager.saveRepository()
-        }
-    }
-    func getChannelDatas(chID:Int,chName:String){
         Task{@BackgroundActor in
-            do{
-//                try await Task.sleep(for: .seconds(0.1))
-                let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
-//                print("채널 메시지들 가져온다 \(chName) \(lastCheckDate)")
-                let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS.id, chName: chName, date: lastCheckDate)
-                try await getResponses(responses: responses, channelID: chID)
-            }catch{
-                print(error)
-            }
-            await imageReferenceCountManager.saveRepository()
-            await userReferenceCountManager.saveRepository()
+            await channelRepostory.updateChannelReadDate(channelID: channelID)
         }
     }
     func receivedSocketData(result: Result<Data,Error>,channelID: Int) {
@@ -67,9 +29,17 @@ extension MessageService:SocketReceivable{
             switch result{
             case .success(let data):
                 let responseData = try JSONDecoder().decode(ChatResponse.self, from: data)
-                Task{@BackgroundActor in // database에 저장하기 위함
+                Task{@BackgroundActor in
                     do{
+                        try await Task.sleep(for: .milliseconds(100))
+                        await channelRepostory.updateChannelReadDate(channelID: channelID)
                         try await getResponses(responses: [responseData], channelID: channelID)
+                        Task{
+                            var response = responseData
+                            response.files = response.files.map{$0.webFileToDocFile()}
+                            response.user.profileImage = response.user.profileImage?.webFileToDocFile()
+                            self.event.onNext(.socketReceive(response: .channel([response])))
+                        }
                     }catch{
                         print(error)
                     }
@@ -81,6 +51,50 @@ extension MessageService:SocketReceivable{
         }catch{
             print(error)
         }
+    }
+    func create(chID:Int,chName:String,chat: ChatInfo){
+        Task{
+            do{
+                var ircSnapshot = await imageReferenceCountManager.snapshot
+                var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS.id,chName: chName,info: chat)
+                for (fileName, file) in zip(res.files,chat.files){// 파일 데이터 저장하기
+                    if !FileManager.checkExistDocument(fileName: fileName.webFileToDocFile()){ try file.file.saveToDocument(fileName: fileName) }
+                    await ircSnapshot.plusCount(id: fileName)
+                }
+                res.files = res.files.map{$0.webFileToDocFile()}
+                res.user.profileImage = res.user.profileImage?.webFileToDocFile()
+                let result = res
+                let chatTable = CHChatTable(response: result)
+                await chChatrepository.create(item: chatTable)
+                await channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
+                try await appendUserReferenceCounts(channelID: chID, createUsers: [result.user])
+                try await updateUserInformationToDataBase(channelID: chID, userIDs: [result.user.userID])
+                event.onNext(.create(response: .channel([result])))
+            }catch{
+                print(error)
+            }
+            await imageReferenceCountManager.saveRepository()
+            await userReferenceCountManager.saveRepository()
+        }
+    }
+    func getChannelDatas(chID:Int,chName:String){
+        Task{@BackgroundActor in
+            await _getChannelDatas(chID:chID,chName:chName)
+        }
+    }
+    @BackgroundActor private func _getChannelDatas(chID:Int,chName:String) async {
+        do{
+            let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
+            let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS.id, chName: chName, date: lastCheckDate)
+            print(responses,"_getchannelDatas")
+            guard !responses.isEmpty else {return}
+            try await getResponses(responses: responses, channelID: chID)
+        }catch{
+            print("_getChannelDatasError!!")
+            print(error)
+        }
+        await imageReferenceCountManager.saveRepository()
+        await userReferenceCountManager.saveRepository()
     }
     @BackgroundActor private func getResponses(responses:[ChatResponse],channelID chID: Int) async throws{
         await channelRepostory?.updateChannelCheckDate(channelID: chID)
@@ -97,7 +111,7 @@ extension MessageService:SocketReceivable{
     }
     func fetchChannelDB(channelID:Int,channelName:String){
         Task{@BackgroundActor in
-            self.getChannelDatas(chID: channelID, chName: channelName)
+            await self._getChannelDatas(chID: channelID, chName: channelName)
             guard let chatTablesLists = channelRepostory.getTableBy(tableID: channelID)?.chatList else{
                 fatalError("존재하지 않는 채팅")
             }

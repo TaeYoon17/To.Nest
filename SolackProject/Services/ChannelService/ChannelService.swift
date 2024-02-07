@@ -146,8 +146,19 @@ final class ChannelService:ChannelProtocol{
                 // 해당 워크스페이스 아이디를 갖으면서
                 // 기존에 없었던 테이블 생성... or 기존에 있었지만 받아온 채널아이디가 없는 테이블 삭제
                 Task{@BackgroundActor in
+                    for v in results{ // 채널 response
+                        try await Task.sleep(for: .microseconds(10))
+                        if let table = repository.getTableBy(tableID: v.channelID){
+                            // 기존에 존재하는 채널... 업데이트 필요
+                            await repository.updateChannelName(channelID: v.channelID, name: v.name)
+                        }else{// 기존에 존재하지 않아서 새로 추가해야하는 채널
+                            await repository.create(item: ChannelTable(channelInfo: v))
+                        }
+                    }
                     let exiseted = repository.getTasks.where { $0.wsID == self.mainWS.id}
                     let checkUnreads = Array(exiseted.map{ ($0.lastReadDate,$0.channelName) })
+                    let existedChannels = exiseted.map{$0.channelID}
+                    let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
                     Task.detached {
                         var unreadsResponses: [UnreadsResponse] = []
                         for checks in checkUnreads{
@@ -160,23 +171,12 @@ final class ChannelService:ChannelProtocol{
                             }
                         }
                         let responses = unreadsResponses
+                        print("unreadsResponses",responses)
                         await MainActor.run {
                             self.event.onNext(.unreads(responses))
                         }
                     }
-                    
-                    for v in results{ // 채널 response
-                        if let table = repository.getTableBy(tableID: v.channelID){ 
-                            // 기존에 존재하는 채널... 업데이트 필요
-                            await repository.updateChannelName(channelID: v.channelID, name: v.name)
-                        }else{// 기존에 존재하지 않아서 새로 추가해야하는 채널
-                            await repository.create(item: ChannelTable(channelInfo: v))
-                        }
-                    }
-                    let existedChannels = exiseted.map{$0.channelID}
-                    let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
                     repository.removeChannelTables(ids: Array(removeChannelIDs))
-                    
                 }
             }catch{
                 print("checkAllMy() 여기 에러")

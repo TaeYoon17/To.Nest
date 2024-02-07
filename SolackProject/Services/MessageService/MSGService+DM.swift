@@ -7,8 +7,12 @@
 
 import Foundation
 extension MessageService{
-    func openSocket(roomID:Int){
-        
+    func openSocket(roomID: Int){
+        do{
+            try SocketManagerr.shared.openDMSocket(connect: .chat(channelID: roomID), delegate: self)
+        }catch{
+            print(error)
+        }
     }
     func create(roomID: Int, dmChat: ChatInfo) {
         Task{
@@ -43,7 +47,6 @@ extension MessageService{
     }
     func getDirectMessageDatas(roomID:Int){
         Task{@BackgroundActor in
-//            let lastCheckDate =
         }
     }
     func fetchDirectMessageDB(roomID: Int){

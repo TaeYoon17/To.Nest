@@ -55,12 +55,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             case .authorized:
                 print("Authorized")
                 Task{
-                    await MainActor.run {
-                        print("여기 허가됨...")
+//                    await MainActor.run {
+//                        print("여기 허가됨...")
 //                        window?.rootViewController = MainViewController()
 //                        self.window = window
 //                        window.makeKeyAndVisible()
-                    }
+//                    }
                 }
             default: print("NOT FOUND")
             }
@@ -117,6 +117,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        AppManager.shared.provider.chService.checkAllMy()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -134,7 +135,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 

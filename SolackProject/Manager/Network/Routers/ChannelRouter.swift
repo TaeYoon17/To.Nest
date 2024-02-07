@@ -56,7 +56,7 @@ enum ChannelRouter:URLRequestConvertible{
             parameters["description"] = info.description
         case .unreads(wsID: _, chName: _, lastDate: let date):
             if let date{
-                parameters["after"] = date.convertToString()
+                parameters["after"] = date.ISO8601Format()
             }else{
                 parameters["after"] = ""
             }
@@ -70,8 +70,10 @@ enum ChannelRouter:URLRequestConvertible{
     var headers:HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
-        case .create,.unreads,.edit:
+        case .create ,.edit:
             headers["Content-Type"] = "application/json"
+        case .unreads:
+            headers["accept"] = "application/json"
         default: break
         }
         return headers
@@ -81,7 +83,7 @@ enum ChannelRouter:URLRequestConvertible{
             return URLRequest(url: URL(string: "www.naver.com")!)
         }
         switch self{
-        case .unreads:
+        case .unreads(_,_,let date):
             if let queryItem = params.urlQueryItems{
                 url.append(queryItems: queryItem)
             }
