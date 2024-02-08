@@ -81,7 +81,10 @@ fileprivate extension IM{
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceThumbnailMaxPixelSize: maxPixel
         ] as CFDictionary
-        let downSampledImage = CGImageSourceCreateThumbnailAtIndex(resource, 0, downSampleOptions)!
-        return UIImage(cgImage: downSampledImage)
+        return if let downSampledImage = CGImageSourceCreateThumbnailAtIndex(resource, 0, downSampleOptions){
+            UIImage(cgImage: downSampledImage)
+        }else{
+            UIImage.noPhotoA
+        }
     }
 }

@@ -20,7 +20,7 @@ final class ProgressVC: BaseVC{
         self.progressView.progress.setProgress(0, animated: false)
     }
     private var disposeBag = DisposeBag()
-    private let progressView = ProgressView()
+    private let progressView = ImageProgressView()
     override func viewDidLoad() {
         super.viewDidLoad()
         progressNumber.subscribe(on: MainScheduler.instance).bind(with: self) { owner, value in
@@ -37,8 +37,8 @@ final class ProgressVC: BaseVC{
         }
     }
 }
-extension ProgressVC{
-    final class ProgressView: UIView{
+
+    final class ImageProgressView: UIView{
         var progress = UIProgressView()
         var progressNumber: BehaviorSubject<Float> = .init(value: 0)
         var placeholder:String = ""{
@@ -96,4 +96,4 @@ extension ProgressVC{
             fatalError("Don't use storyboard")
         }
     }
-}
+

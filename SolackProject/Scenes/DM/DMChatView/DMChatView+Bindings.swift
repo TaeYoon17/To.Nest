@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 import Combine
-
 extension DMChatView{
     typealias Action = DMChatReactor.Action
     func naviBarBinding(reactor: DMChatReactor){
@@ -19,9 +18,11 @@ extension DMChatView{
         }.disposed(by: disposeBag)
     }
     func textFieldBinding(reactor: DMChatReactor){
+        msgField.text.map{ Action.setChatText($0)}.bind(to: reactor.action).disposed(by: disposeBag)
         msgField.send.map{Action.actionSendChat}.bind(to: reactor.action).disposed(by: disposeBag)
-        msgField.deleteImageItem.map{Action.setDeleteImage($0)}.bind(to: reactor.action).disposed(by: disposeBag)
+        // 전송 가능 값
         reactor.state.map{$0.isActiveSend}.bind(to: msgField.isActiveSend).disposed(by: disposeBag)
+        msgField.deleteImageItem.map{Action.setDeleteImage($0)}.bind(to: reactor.action).disposed(by: disposeBag)
         msgField.addImages.map{Action.addImages}.bind(to: reactor.action).disposed(by: disposeBag)
         msgField.addImages.bind(with: self) { owner, _ in
             owner.dismissMyKeyboard()

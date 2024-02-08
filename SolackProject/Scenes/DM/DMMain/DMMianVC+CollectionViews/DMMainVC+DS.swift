@@ -11,8 +11,9 @@ import RxSwift
 extension DMMainVC{
     final class DataSource:UICollectionViewDiffableDataSource<SectionType,Item>{
         @DefaultsState(\.userID) var userID
+        var roomModel = AnyModelStore<DMRoomItem>([])
         var memberModel = AnyModelStore<DMMemberItem>([])
-        var memberAssets = NSCache<NSString,MemberListAsset>()
+        var dmAssets = NSCache<NSString,DMAssets>() // 유저 아이디로 썸네일 가져옴
         var disposeBag = DisposeBag()
         init(reactor: DMMainReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<DMMainVC.SectionType, DMMainVC.Item>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
@@ -24,11 +25,26 @@ extension DMMainVC{
                     for response in responses{
                         if response.userID == self.userID { continue }
                         let memberItem = DMMemberItem(userResponse: response)
-                        await self.appendMemberAsset(memberItem: memberItem)
+                        await self.appendDMAsset(memberItem: memberItem)
                         self.memberModel.insertModel(item: memberItem)
                         items.append(Item(memberItem: memberItem))
                     }
                     self.setDataSource(memberItem: items)
+                }
+            }.disposed(by: disposeBag)
+            reactor.state.map{$0.rooms}.throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind { [weak self] responses in
+                Task{
+                    var items:[Item] = []
+                    for response in responses{
+                        if response.user.userID == self?.userID {
+                            continue
+                        }
+                        let dmItem = DMRoomItem(roomResponse: response)
+                        await self?.appendDMAsset(roomItem: dmItem)
+                        self?.roomModel.insertModel(item: dmItem)
+                        items.append(Item(roomItem: dmItem))
+                    }
+                    self?.setDataSource(roomItem: items)
                 }
             }.disposed(by: disposeBag)
         }
@@ -37,26 +53,44 @@ extension DMMainVC{
             let items = snapshot.itemIdentifiers(inSection: .member)
             snapshot.deleteItems(items)
             snapshot.appendItems(memberItem,toSection: .member)
+//            Task{@MainActor in
+                apply(snapshot,animatingDifferences: true)
+//            }
+        }
+        @MainActor func setDataSource(roomItem:[Item]){
+            var snapshot = snapshot()
+            let items = snapshot.itemIdentifiers(inSection: .dm)
+            snapshot.deleteItems(items)
+            snapshot.appendItems(roomItem,toSection: .dm)
             Task{@MainActor in
-                await apply(snapshot,animatingDifferences: true)
+                apply(snapshot,animatingDifferences: true)
             }
         }
         @MainActor func initDataSource(memberItem: [Item]){
             var snapshot = snapshot()
             snapshot.appendSections([.member,.dm])
-            let dmItem = [Item(dmItem: .init(dmID: 1,sectionType: .dm)),Item(dmItem: .init(dmID: 2,sectionType: .dm))]
             snapshot.appendItems([],toSection: .member)
-            snapshot.appendItems(dmItem,toSection: .dm)
+            snapshot.appendItems([],toSection: .dm)
             apply(snapshot,animatingDifferences: true)
         }
         @discardableResult
-        func appendMemberAsset(memberItem:MemberListItem) async -> MemberListAsset{
+        func appendDMAsset(memberItem:MemberListItem) async -> DMAssets{
             let image = if let imageName = memberItem.userResponse.profileImage,
                 let imageData = await NM.shared.getThumbnail(imageName){
                 UIImage.fetchBy(data: imageData, type: .small)
             }else{ UIImage.noPhotoA}
-            let asset = MemberListAsset(userId: memberItem.id, image: image)
-            self.memberAssets.setObject(asset, forKey: asset.id as NSString)
+            let asset = DMAssets(userId: "\(memberItem.userResponse.userID)", image: image)
+            self.dmAssets.setObject(asset, forKey: asset.id as NSString)
+            return asset
+        }
+        @discardableResult
+        func appendDMAsset(roomItem: DMRoomItem) async -> DMAssets{
+            let image = if let imageName = roomItem.profileImage,
+                let imageData = await NM.shared.getThumbnail(imageName){
+                UIImage.fetchBy(data: imageData, type: .small)
+            }else{ UIImage.noPhotoA}
+            let asset = DMAssets(userId: "\(roomItem.userID)", image: image)
+            self.dmAssets.setObject(asset, forKey: asset.id as NSString)
             return asset
         }
     }

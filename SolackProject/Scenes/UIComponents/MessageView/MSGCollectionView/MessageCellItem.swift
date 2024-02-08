@@ -13,13 +13,13 @@ class MessageCellItem:ObservableObject,Hashable,Identifiable{
     }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
     var id : Int{ messageID }
-    var messageID: Int = 0
-    var content:String? = nil
-    var images:[String] = []
-    var createdAt:String
-    var profileID:Int = 0
-    var profileName:String = ""
-    var profileImage:String? = nil
+    @Published var messageID: Int = 0
+    @Published var content:String? = nil
+    @Published var images:[String] = []
+    @Published var createdAt:String
+    @Published var profileID:Int = 0
+    @Published var profileName:String = ""
+    @Published var profileImage:String? = nil
     init(id: Int, content: String? = nil, images: [String], createdAt: String, profileID: Int, profileName: String, profileImage: String? = nil) {
         self.messageID = id
         self.content = content
@@ -32,9 +32,9 @@ class MessageCellItem:ObservableObject,Hashable,Identifiable{
 }
 class MessageAsset:ObservableObject,Identifiable{
     var id: Int{ messageID }
-    var messageID:Int = 0
-    var profileImages: Image?
-    var images:[Image] = []
+    @Published var messageID:Int = 0
+    @Published var profileImages: Image?
+    @Published var images:[Image] = []
     required init(messageID: Int, images: [Image],profileImage:Image?) {
         self.messageID = messageID
         self.images = images

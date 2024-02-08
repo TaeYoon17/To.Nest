@@ -22,18 +22,20 @@ class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsse
         self.collectionView = collectionView
         collectionView.layer.opacity = 0
     }
-    @MainActor private func initDataSource(){
+    @MainActor func initDataSource(){
         var snapshot = NSDiffableDataSourceSnapshot<String,CellItem.ID>()
         snapshot.appendSections(["Hello"])
         var arr:[CellItem.ID] = []
         snapshot.appendItems(arr, toSection: "Hello")
         apply(snapshot,animatingDifferences: true)
     }
-    @MainActor private func appendDataSource(items:[CellItem.ID],goDown:Bool = false) async{
+    @MainActor func appendDataSource(items:[CellItem.ID],goDown:Bool = false) async{
         var snapshot = snapshot()
         snapshot.appendItems(items, toSection: "Hello")
         Task{@MainActor in
             await apply(snapshot,animatingDifferences: false)
+            print("재확인")
+            print(goDown,collectionView.isScrollable)
             if goDown,collectionView.isScrollable{
                 let lastIdx = self.snapshot(for: "Hello").items.count
                 let lastIndexPath = IndexPath(item: lastIdx - 1, section: 0)
@@ -52,7 +54,8 @@ class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsse
             let image = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
             images.append(Image(uiImage: image))
         }
-        let profileImage:Image? = if let profileFile = item.profileImage{
+        let profileImage:Image? = if let profileFile = item.profileImage?.webFileToDocFile(){
+            
             Image(uiImage: UIImage.fetchBy(fileName: profileFile, type: .small))
         }else{nil}
         let msgAssets = CellAsset(messageID: item.id, images: images, profileImage: profileImage)

@@ -151,6 +151,14 @@
 		637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B15792B4CD72500B68963 /* TransparentBackground.swift */; };
 		637B157D2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */; };
 		637B157F2B4CF20600B68963 /* WorkSpaceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B157E2B4CF20600B68963 /* WorkSpaceListView.swift */; };
+		63817E8C2B73A19F0034EA1D /* DMChatsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E8B2B73A19F0034EA1D /* DMChatsResponse.swift */; };
+		63817E8F2B73A3AA0034EA1D /* DMMainMutationTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E8E2B73A3AA0034EA1D /* DMMainMutationTransform.swift */; };
+		63817E912B73B4D70034EA1D /* DMService+DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E902B73B4D70034EA1D /* DMService+DB.swift */; };
+		63817E932B73D2410034EA1D /* DMChatCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E922B73D2410034EA1D /* DMChatCollectionView.swift */; };
+		63817E962B73DD8D0034EA1D /* DMChatTransformMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E952B73DD8D0034EA1D /* DMChatTransformMutation.swift */; };
+		63817E982B73F4AF0034EA1D /* UnreadsChannelRes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E972B73F4AF0034EA1D /* UnreadsChannelRes.swift */; };
+		63817E9A2B73F4E20034EA1D /* UnreadDMRes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E992B73F4E20034EA1D /* UnreadDMRes.swift */; };
+		63817E9C2B74042D0034EA1D /* DMRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63817E9B2B74042D0034EA1D /* DMRoomCell.swift */; };
 		6384A9B82B47122500AA2F1B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6324D6EB2B46F15F00AA1AC0 /* Alamofire */; };
 		6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9BA2B47123400AA2F1B /* KakaoAuthManager.swift */; };
 		6384A9C62B47125600AA2F1B /* BaseInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384A9BF2B47125600AA2F1B /* BaseInterceptor.swift */; };
@@ -443,6 +451,14 @@
 		637B15792B4CD72500B68963 /* TransparentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentBackground.swift; sourceTree = "<group>"; };
 		637B157C2B4CF1BA00B68963 /* WorkSpaceEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceEmptyView.swift; sourceTree = "<group>"; };
 		637B157E2B4CF20600B68963 /* WorkSpaceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceListView.swift; sourceTree = "<group>"; };
+		63817E8B2B73A19F0034EA1D /* DMChatsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMChatsResponse.swift; sourceTree = "<group>"; };
+		63817E8E2B73A3AA0034EA1D /* DMMainMutationTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMMainMutationTransform.swift; sourceTree = "<group>"; };
+		63817E902B73B4D70034EA1D /* DMService+DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMService+DB.swift"; sourceTree = "<group>"; };
+		63817E922B73D2410034EA1D /* DMChatCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMChatCollectionView.swift; sourceTree = "<group>"; };
+		63817E952B73DD8D0034EA1D /* DMChatTransformMutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMChatTransformMutation.swift; sourceTree = "<group>"; };
+		63817E972B73F4AF0034EA1D /* UnreadsChannelRes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadsChannelRes.swift; sourceTree = "<group>"; };
+		63817E992B73F4E20034EA1D /* UnreadDMRes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadDMRes.swift; sourceTree = "<group>"; };
+		63817E9B2B74042D0034EA1D /* DMRoomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMRoomCell.swift; sourceTree = "<group>"; };
 		6384A9BA2B47123400AA2F1B /* KakaoAuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KakaoAuthManager.swift; sourceTree = "<group>"; };
 		6384A9BF2B47125600AA2F1B /* BaseInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseInterceptor.swift; sourceTree = "<group>"; };
 		6384A9C02B47125600AA2F1B /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -848,6 +864,8 @@
 			children = (
 				6329FE492B6E7E6F0018909F /* DMRoomResponse.swift */,
 				636F162A2B7134D100536E6F /* DMResponse.swift */,
+				63817E8B2B73A19F0034EA1D /* DMChatsResponse.swift */,
+				63817E992B73F4E20034EA1D /* UnreadDMRes.swift */,
 			);
 			path = DM;
 			sourceTree = "<group>";
@@ -856,6 +874,7 @@
 			isa = PBXGroup;
 			children = (
 				6329FE4F2B6E80CC0018909F /* DMService.swift */,
+				63817E902B73B4D70034EA1D /* DMService+DB.swift */,
 			);
 			path = DMService;
 			sourceTree = "<group>";
@@ -1040,8 +1059,8 @@
 		636B2B1D2B6E0DDD00BE9751 /* Reactor+ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				636B2B1E2B6E0DE700BE9751 /* DMMainReactor.swift */,
-				636F16242B712CAA00536E6F /* DMChatReactor.swift */,
+				63817E942B73DD760034EA1D /* DMChatReactor */,
+				63817E8D2B73A3930034EA1D /* DMMainReactor */,
 			);
 			path = "Reactor+ViewModel";
 			sourceTree = "<group>";
@@ -1082,6 +1101,7 @@
 				636B2B142B6D4DAC00BE9751 /* DMMainVC+CollectionView.swift */,
 				636B2B162B6D4E0800BE9751 /* DMMainVC+CellRegistraion.swift */,
 				636B2B1A2B6D51CA00BE9751 /* DMMainVC+CollectionStructures.swift */,
+				63817E9B2B74042D0034EA1D /* DMRoomCell.swift */,
 			);
 			path = "DMMianVC+CollectionViews";
 			sourceTree = "<group>";
@@ -1110,6 +1130,7 @@
 			isa = PBXGroup;
 			children = (
 				636F16172B70061500536E6F /* DMChatView.swift */,
+				63817E922B73D2410034EA1D /* DMChatCollectionView.swift */,
 				636F16222B712B9700536E6F /* DMChatView+Bindings.swift */,
 				636F16192B70077600536E6F /* DMChatViewDS.swift */,
 				636F161B2B7007AC00536E6F /* DMChatViewCellStructure.swift */,
@@ -1173,6 +1194,24 @@
 				639E0C9F2B583DE00076A4D8 /* WSMainView.swift */,
 			);
 			path = WSMain;
+			sourceTree = "<group>";
+		};
+		63817E8D2B73A3930034EA1D /* DMMainReactor */ = {
+			isa = PBXGroup;
+			children = (
+				636B2B1E2B6E0DE700BE9751 /* DMMainReactor.swift */,
+				63817E8E2B73A3AA0034EA1D /* DMMainMutationTransform.swift */,
+			);
+			path = DMMainReactor;
+			sourceTree = "<group>";
+		};
+		63817E942B73DD760034EA1D /* DMChatReactor */ = {
+			isa = PBXGroup;
+			children = (
+				636F16242B712CAA00536E6F /* DMChatReactor.swift */,
+				63817E952B73DD8D0034EA1D /* DMChatTransformMutation.swift */,
+			);
+			path = DMChatReactor;
 			sourceTree = "<group>";
 		};
 		6384A9BD2B47125600AA2F1B /* Network */ = {
@@ -1662,6 +1701,7 @@
 			children = (
 				63FF41242B6285E5004CD7EA /* ChatInfo.swift */,
 				63FF41262B628636004CD7EA /* ChatResponse.swift */,
+				63817E972B73F4AF0034EA1D /* UnreadsChannelRes.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1805,7 +1845,9 @@
 				634F023C2B5A6BA900505B65 /* ChatCell.swift in Sources */,
 				639B8A702B491BA40024B4DD /* AuthReactor.swift in Sources */,
 				637488C52B50C739008AAD4A /* UserDefaults+State.swift in Sources */,
+				63817E9A2B73F4E20034EA1D /* UnreadDMRes.swift in Sources */,
 				636B2B1F2B6E0DE700BE9751 /* DMMainReactor.swift in Sources */,
+				63817E8F2B73A3AA0034EA1D /* DMMainMutationTransform.swift in Sources */,
 				63FF412C2B62A48A004CD7EA /* MSGField.swift in Sources */,
 				631A60E12B44EE02005509C2 /* AppConstraints.swift in Sources */,
 				634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */,
@@ -1874,6 +1916,7 @@
 				636F16182B70061500536E6F /* DMChatView.swift in Sources */,
 				6384A9CA2B47125600AA2F1B /* UserRouter.swift in Sources */,
 				6312A2572B6182B400593117 /* ImageRCM.swift in Sources */,
+				63817E8C2B73A19F0034EA1D /* DMChatsResponse.swift in Sources */,
 				639AFDE12B52CA1A00FA8280 /* WSManagerView.swift in Sources */,
 				636F16232B712B9700536E6F /* DMChatView+Bindings.swift in Sources */,
 				636028052B555B5E00AF8731 /* WriterView.swift in Sources */,
@@ -1909,6 +1952,7 @@
 				6323E1C52B60F70100D91E46 /* CHSetting+CollectionView.swift in Sources */,
 				636F16212B71294A00536E6F /* MSGReactor.swift in Sources */,
 				6384A9D12B47134200AA2F1B /* Errors.swift in Sources */,
+				63817E912B73B4D70034EA1D /* DMService+DB.swift in Sources */,
 				63B6101A2B6CC16E00861A7D /* ChangeManagerListCell.swift in Sources */,
 				636F161E2B71217D00536E6F /* UIBarButtonItemExtensions.swift in Sources */,
 				631A60F02B44EE15005509C2 /* OnboardingReactor.swift in Sources */,
@@ -1916,6 +1960,8 @@
 				63FF411F2B626CDD004CD7EA /* ChatRouter.swift in Sources */,
 				63FF41172B62212A004CD7EA /* ChannelChatRepository.swift in Sources */,
 				63F0AED52B4B0889000A597B /* NaviBar.swift in Sources */,
+				63817E932B73D2410034EA1D /* DMChatCollectionView.swift in Sources */,
+				63817E982B73F4AF0034EA1D /* UnreadsChannelRes.swift in Sources */,
 				63E38ED32B510A4600BD6C93 /* TaskCounter.swift in Sources */,
 				636F16252B712CAA00536E6F /* DMChatReactor.swift in Sources */,
 				63F7C4BC2B4FDC5A003D8447 /* WSwriter+Binding.swift in Sources */,
@@ -1937,6 +1983,7 @@
 				63F0AEC42B4AB920000A597B /* HomeVC+CollectionView.swift in Sources */,
 				631A60AA2B44ECEE005509C2 /* AppDelegate.swift in Sources */,
 				630763F92B63C241000747F8 /* PhotoManager.swift in Sources */,
+				63817E9C2B74042D0034EA1D /* DMRoomCell.swift in Sources */,
 				63F0AECD2B4AE21A000A597B /* AppendListBottom.swift in Sources */,
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
 				6329FE4D2B6E80630018909F /* MSGService+DM.swift in Sources */,
@@ -1987,6 +2034,7 @@
 				63F265F82B53AFAE007D865C /* WSEditReactor.swift in Sources */,
 				6312A2592B6183B100593117 /* ReferenceRepository.swift in Sources */,
 				6389CEB52B5D8398002A70A9 /* WSService+HomeFeatures.swift in Sources */,
+				63817E962B73DD8D0034EA1D /* DMChatTransformMutation.swift in Sources */,
 				6362130A2B4E96360093D089 /* ImageManagerError.swift in Sources */,
 				63F7C4B02B4F9298003D8447 /* AuthCredentail.swift in Sources */,
 				63F0AEC92B4ABC05000A597B /* NewMessageBtn.swift in Sources */,

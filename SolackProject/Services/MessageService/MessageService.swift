@@ -12,21 +12,19 @@ typealias MSGService = MessageService
 protocol MessageProtocol{
     var event:PublishSubject<MSGService.Event> {get}
     // 채널
+    func getChannelDatas(chID:Int,chName:String)
     func fetchChannelDB(channelID:Int,channelName:String)
     func create(chID:Int,chName:String,chat: ChatInfo)
-    func create(roomID: Int,dmChat: ChatInfo)
-    func getChannelDatas(chID:Int,chName:String)
     func openSocket(channelID: Int)
     func closeSocket(channelID: Int)
     // DM
-    func fetchDirectMessageDB(roomID: Int)
+    func getDirectMessageDatas(roomID:Int,userID:Int)
+    func fetchDirectMessageDB(userID:Int,roomID: Int)
+    func create(roomID: Int,dmChat: ChatInfo)
     func openSocket(roomID:Int)
     func closeSocket(roomID:Int)
 }
 final class MessageService:MessageProtocol{
-    
-    
-    
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()

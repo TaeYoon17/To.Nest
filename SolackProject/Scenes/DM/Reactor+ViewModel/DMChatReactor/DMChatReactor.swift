@@ -10,11 +10,10 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 enum SendMessageType{
-    case create( ChatResponse)
-    case socketResponse(ChatResponse)
-    case dbResponse([ChatResponse])
+    case create( [DMResponse])
+    case socketResponse([DMResponse])
+    case dbResponse([DMResponse])
 }
-
 final class DMChatReactor:Reactor{
     @DefaultsState(\.mainWS) var mainWS
     weak var provider: ServiceProviderProtocol!
@@ -32,7 +31,6 @@ final class DMChatReactor:Reactor{
         case setSendFiles([FileData],[String]) // 포토피커에서 가져온 파일데이터 정보
     }
     enum Mutation{
-        case setMemberCount(Int)
         case setChatText(String)
         case prevIdentifiers([String]?)
         case setSendFiles([FileData])
@@ -59,12 +57,13 @@ final class DMChatReactor:Reactor{
         switch action{
         case .initChat:
             if let roomID{
-                provider.msgService.fetchDirectMessageDB(roomID: roomID)
+                provider.msgService.fetchDirectMessageDB(userID: mainWS.id, roomID: roomID)
             }
             return Observable.concat([.just(.setTitle(title))])
         case .actionSendChat:
-//            provider.msgService.create
-            return Observable.concat([])
+            provider.msgService.create(roomID: self.roomID!, dmChat: chatMessage)
+            self.chatMessage = ChatInfo(content: "", files: [])
+            return Observable.concat(.just(.setChatText("")),.just(.setSendFiles([])))
         case .addImages:
             let identifiers = chatMessage.files.map(\.name)
             return Observable.concat([
@@ -84,7 +83,32 @@ final class DMChatReactor:Reactor{
         case .setChatText(let text):
             chatMessage.content = text
             return Observable.concat([.just(.setChatText(text))])
-        
         }
+    }
+    func reduce(state: State, mutation: Mutation) -> State {
+        var state = state
+        switch mutation {
+        case .setChatText(let chatText):
+            state.chatText = chatText
+        case .prevIdentifiers(let photoIdentifiers):
+            state.prevIdentifiers = photoIdentifiers
+        case .setSendFiles(let sendFiles):
+            state.sendFiles = sendFiles
+        case .setTitle(let title):
+            state.title = title
+        case .appendChat(let sendMessageType):
+            state.sendChat = sendMessageType
+        }
+        return state
+    }
+    func transform(state: Observable<State>) -> Observable<State> {
+        return state.flatMap {[weak self] state -> Observable<State> in
+            var st = state
+            st.isActiveSend = !st.sendFiles.isEmpty || !st.chatText.isEmpty
+            return .just(st)
+        }
+    }
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        Observable.merge(mutation,messageMutation)
     }
 }

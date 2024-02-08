@@ -13,7 +13,6 @@ final class DMChatTable: Object,Identifiable{
     @Persisted var roomID:Int?
     @Persisted var userID: Int
     @Persisted var userName:String?
-    
     @Persisted var content: String?
     @Persisted var imagePathes: List<String> = .init()
     @Persisted var createdAt: Date
@@ -31,6 +30,7 @@ final class DMChatTable: Object,Identifiable{
 }
 extension DMChatTable{
     convenience init(response info:DMResponse) {
-        self.init(dmID: info.dmID, roomID: info.roomID, userID: info.user.userID,  imagePathes: info.files, createdAt: info.createdAt.convertToDate())
+        self.init(dmID: info.dmID, roomID: info.roomID, userID: info.user.userID,
+                  userName: info.user.nickname,content: info.content, imagePathes: info.files, createdAt: info.createdAt.convertToDate())
     }
 }

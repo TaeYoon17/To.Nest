@@ -40,14 +40,14 @@ extension DMMainVC{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             guard let self else {return}
             guard let item = dataSource.memberModel.fetchByID(itemIdentifier.id) else {
-                print("member item error")
+                fatalError("member item error")
                 return
             }
             Task{
-                let memberAsset = if let asset = self.dataSource.memberAssets.object(forKey: itemIdentifier.id as NSString){
+                let memberAsset = if let asset = self.dataSource.dmAssets.object(forKey: "\(item.userResponse.userID)" as NSString){
                     asset
                 }else{
-                    await self.dataSource.appendMemberAsset(memberItem: item)
+                    await self.dataSource.appendDMAsset(memberItem: item)
                 }
                 await MainActor.run {
                     cell.backgroundConfiguration = UIBackgroundConfiguration.listPlainCell()
@@ -55,7 +55,8 @@ extension DMMainVC{
                     cell.contentConfiguration = UIHostingConfiguration(content: {
                         HStack{
                             Spacer()
-                            MemberButton(item: item, asset: memberAsset) { response in
+                            MemberButton(item: item, asset: memberAsset) { (response:UserResponse) in
+                                self.reactor!.action.onNext(.setRoom(response))
                             }
                             Spacer()
                         }
@@ -67,31 +68,19 @@ extension DMMainVC{
     var dmCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             guard let self else {return}
-            cell.contentConfiguration = UIHostingConfiguration(content: {
-                HStack(alignment:.top){
-                    Image(.macOS).resizable().scaledToFill().frame(width: 34,height:34).clipShape(RoundedRectangle(cornerRadius: 8))
-                    VStack(spacing:2) {
-                        HStack{
-                            Text("Hue").font(FontType.caption.font)
-                            Spacer()
-                            Text("2024년 1월 3일").font(FontType.caption2.font)
-                        }
-                        HStack(alignment:.top){
-                            Text("Cause I know what you like boy You're my chemical hype boy 내 지난날들은 눈 뜨면 잊는 꿈 Hype boy 너만 원해 Hype boy 너만 원해").font(FontType.caption2.font)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.leading)
-                                .lineLimit(2)
-                            Spacer()
-                            Text("4")
-                                .font(FontType.caption2.font)
-                                .padding(.vertical,2).padding(.horizontal,4)
-                                .background(.accent)
-                                .foregroundStyle(.white)
-                                .clipShape(Capsule())
-                        }
-                    }.padding(.horizontal,8)
+            guard let item = dataSource.roomModel.fetchByID(itemIdentifier.id) else {return}
+            Task{
+                let roomAsset = if let asset = self.dataSource.dmAssets.object(forKey: "\(item.userID)" as NSString){
+                    asset
+                }else{
+                    await self.dataSource.appendDMAsset(roomItem: item)
                 }
-            }).margins(.horizontal,16).margins(.vertical,6)
+                await MainActor.run {
+                    cell.contentConfiguration = UIHostingConfiguration(content: {
+                        DMRoomCell(item: item, asset: roomAsset)
+                    }).margins(.horizontal,16).margins(.vertical,6)
+                }
+            }
         }
     }
     func seperatorRegistration(elementKind:String) -> UICollectionView.SupplementaryRegistration<UICollectionReusableView>{

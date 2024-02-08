@@ -9,17 +9,28 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 import Combine
+
 class MessageView<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsset:MessageAsset>:BaseVC,View{
     var disposeBag: DisposeBag = .init()
     var subscription = Set<AnyCancellable>()
     @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     @MainActor let titleLabel = UILabel(frame: .init(x: 0, y: 0, width: 300, height: 300))
-    var dataSource: MessageDataSource<MessageReactor, CellItem, CellAsset>!
     let msgField = MSGField(placeholder: "메시지를 입력하세요")
     var isShowKeyboard:CGFloat? = nil
     var showKeyboard:Bool = false
     var originHeight:CGFloat = 0
-    var progressView = ProgressVC.ProgressView()
+    let progressView = ImageProgressView()
+    func updateTitleLabel(title:String){
+        let attributedString = NSMutableAttributedString(string: title,attributes: [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17),
+            NSAttributedString.Key.foregroundColor: UIColor.text
+        ])
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.titleLabel.attributedText = attributedString
+            self.navigationItem.titleView = self.titleLabel
+            self.titleLabel.textAlignment = .center
+        }
+    }
     func updateTitleLabel(title:String,number:Int = 0){
         let fullText = if number <= 0{ "#\(title)" } else { "#\(title) \(number)" }
         let attributedString = NSMutableAttributedString(string: fullText,attributes: [
@@ -32,6 +43,8 @@ class MessageView<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsset:Mess
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.titleLabel.attributedText = attributedString
+            self.titleLabel.textAlignment = .center
+            self.navigationItem.titleView = self.titleLabel
         }
     }
     func bind(reactor: MessageReactor) { }
@@ -50,6 +63,7 @@ class MessageView<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsset:Mess
     override func configureLayout() {
         self.view.addSubview(collectionView)
         self.view.addSubview(msgField)
+        
         view.addSubview(progressView)
     }
     override func configureConstraints() {
@@ -70,6 +84,7 @@ class MessageView<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsset:Mess
         collectionView.endEditing(true)
         collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))
         progressView.placeholder = "이미지를 로딩 중입니다."
+//        collectionView.backgroundColor = .red
     }
     @objc func dismissMyKeyboard(){
         collectionView.endEditing(true)

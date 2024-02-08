@@ -36,7 +36,7 @@ final class ChannelService:ChannelProtocol{
         case update(CHResponse)
         case delete(chID:Int)
         case failed(ChannelFailed)
-        case unreads([UnreadsResponse])
+        case unreads([UnreadsChannelRes])
         case check(CHResponse)
         case channelUsers(id:Int,[UserResponse])
     }
@@ -160,7 +160,7 @@ final class ChannelService:ChannelProtocol{
                     let existedChannels = exiseted.map{$0.channelID}
                     let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
                     Task.detached {
-                        var unreadsResponses: [UnreadsResponse] = []
+                        var unreadsResponses: [UnreadsChannelRes] = []
                         for checks in checkUnreads{
                             do{
                                 let unreads = try await self.updateChannelUnreads(channelName: checks.1,lastDate: checks.0)
@@ -190,7 +190,7 @@ final class ChannelService:ChannelProtocol{
             }
         }
     }
-    func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsResponse{
+    func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsChannelRes{
         try await NM.shared.checkUnreads(wsID: mainWS.id, channelName: channelName, date: lastDate)
     }
     func authValidCheck(error: Error)->Bool{

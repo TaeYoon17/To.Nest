@@ -11,9 +11,15 @@ import RxSwift
 import ReactorKit
 
 final class DMChatView:MessageView<DMChatReactor,DMCellItem,DMAsset>{
+    var dataSource: DMDataSource!
     override func bind(reactor: DMChatReactor) {
-        
+        super.bind(reactor: reactor)
+        naviBarBinding(reactor: reactor)
+        textFieldBinding(reactor: reactor)
+        configureCollectionView(reactor: reactor)
+        reactor.action.onNext(.initChat)
     }
+    
     override func configureView() {
         super.configureView()
     }
@@ -22,7 +28,9 @@ final class DMChatView:MessageView<DMChatReactor,DMCellItem,DMAsset>{
     }
     override func configureNavigation() {
         super.configureNavigation()
-        self.titleLabel.attributedText = titleTextStyle(fullText: "안녕하세요")
+        self.titleLabel.attributedText = titleTextStyle(fullText: reactor?.title ?? "")
+        self.navigationItem.rightBarButtonItem = .init(systemItem: .action)
+        self.navigationItem.rightBarButtonItem?.tintColor = .clear
     }
     override func configureConstraints() {
         super.configureConstraints()

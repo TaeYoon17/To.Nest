@@ -11,36 +11,92 @@ import RealmSwift
 protocol DMProtocol{
     var event:PublishSubject<DMService.Event> {get}
     func checkAll(wsID:Int)
+    func getRoomID(user:UserResponse)
 }
 final class DMService:DMProtocol{
     @DefaultsState(\.mainWS) var mainWS
     let event = PublishSubject<Event>()
-    @BackgroundActor var repository:ChannelRepository!
-    @BackgroundActor var chChatrepository: ChannelChatRepository!
+    @BackgroundActor var repository:DMRoomRepository!
+    @BackgroundActor var dmChatrepository: DMChatRepository!
     @BackgroundActor var userRepository: UserInfoRepository!
     @BackgroundActor var imageReferenceCountManager: ImageRCM!
     @BackgroundActor var userReferenceCountManager: UserRCM!
     enum Event{
-        case allMy([DMResponse])
+        case allMy([DMRoomResponse])
+        case dmRoomID(id:Int,userResponse:UserResponse)
+        case unreads([UnreadDMRes])
     }
     init(){
         Task{@BackgroundActor in
-            repository = try await ChannelRepository()
-            chChatrepository = try await ChannelChatRepository()
+            repository = try await DMRoomRepository()
+            dmChatrepository = try await DMChatRepository()
             userRepository = try await UserInfoRepository()
             userReferenceCountManager = UserRCM.shared
             imageReferenceCountManager = ImageRCM.shared
         }
     }
-    
     func checkAll(wsID: Int) {
+        let wsID = mainWS.id
         Task{
             do{
-                let responses:[DMResponse] = try await NM.shared.checkAllDM(wsID:wsID)
-                event.onNext(.allMy(responses))
+                let responses:[DMRoomResponse] = try await NM.shared.checkAllRooms(wsID:wsID)
+                Task{@BackgroundActor in
+                    var sendResponses:[DMRoomResponse] = []
+                    for var response in responses{
+                        try await Task.sleep(for: .microseconds(10))
+                        if let table = repository.getTableBy(tableID: response.roomID){
+                            response.content = table.lastContent
+                            response.lastDate = table.lastReadDate
+                        }else{
+                            await repository.create(item: DMRoomTable(roomID: response.roomID, wsID: response.workspaceID, userID: response.user.userID,createdAt: response.createdAt.convertToDate()))
+                        }
+                        sendResponses.append(response)
+                    }
+                    event.onNext(.allMy(sendResponses))
+                    let existed = repository.getTasks.where{$0.wsID == self.mainWS.id}
+                    let checkUnreads = Array(existed.map{($0.lastReadDate,$0.roomID)})
+                    let existedRooms = existed.map{$0.roomID}
+                    let removeRoomIDs = Set(existedRooms).subtracting(responses.map(\.roomID))
+                    Task.detached {
+                        var unreadsResponses:[UnreadDMRes] = []
+                        for checkUnread in checkUnreads{
+                            do{
+                                let unreads = try await self.updateDMUnreads(roomID: checkUnread.1, wsID: wsID, lastDate: checkUnread.0)
+                                unreadsResponses.append(unreads)
+                            }catch{
+                                print("DM Unreads Error")
+                                print(error)
+                            }
+                        }
+                        let responses = unreadsResponses
+                        await MainActor.run {
+                            self.event.onNext(.unreads(responses))
+                        }
+                    }
+                    repository.removeChannelTables(ids: Array(removeRoomIDs))
+                }
             }catch{
+                print("DMService checkAll")
                 print(error)
             }
         }
+    }
+    func getRoomID(user:UserResponse){
+        Task{
+            do{
+                let wsID = mainWS.id
+                let response = try await NM.shared.checkDM(wsID: wsID, userID: user.userID, date: Date.nowKorDate)
+                await appendMyRoom(roomID: response.roomID, wsID: response.workspaceID, userResponse: user)
+                event.onNext(.dmRoomID(id: response.roomID,userResponse: user))
+            }catch{
+                print("DMService getRoomID")
+                print(error)
+            }
+        }
+    }
+}
+fileprivate extension DMService{
+    func updateDMUnreads(roomID:Int,wsID:Int,lastDate:Date?) async throws -> UnreadDMRes{
+        try await NM.shared.unreadDM(wsID: wsID, roomID: roomID, date: lastDate)
     }
 }

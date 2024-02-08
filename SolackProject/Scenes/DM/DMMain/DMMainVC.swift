@@ -8,10 +8,20 @@ import UIKit
 import SnapKit
 import ReactorKit
 final class DMMainVC:BaseVC ,View{
+    @DefaultsState(\.mainWS) var mainWS
     var disposeBag: DisposeBag = DisposeBag()
     func bind(reactor: DMMainReactor) {
         configureCollectionView(reactor: reactor)
         navBarBind(reactor: reactor)
+        reactor.state.map{$0.dialog}.distinctUntilChanged().bind {[weak self] present in
+            guard let self,let present else {return}
+            switch present{
+            case .room(roomID: let roomID, user: let userResponse):
+                let vc = DMChatView()
+                vc.reactor = DMChatReactor(reactor.provider, id: roomID, title: userResponse.nickname)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }.disposed(by: disposeBag)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +54,7 @@ final class DMMainVC:BaseVC ,View{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
+        reactor!.provider.dmService.checkAll(wsID: mainWS.id)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

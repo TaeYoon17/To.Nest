@@ -99,7 +99,7 @@ extension RCMSnapshot<UserRCM, UserItem, UserRCMTable>{
         }
     }
     mutating func plucCount(roomID:Int, userID:Int) async{
-        let id = idConverter(messageID: roomID, userID: userID)
+        let id = idConverter(messageID: -roomID, userID: userID)
         if instance[id] == nil{
             instance[id] = Item(name: id, count: 1)
         }else{
@@ -111,7 +111,7 @@ extension RCMSnapshot<UserRCM, UserItem, UserRCMTable>{
         instance[id]?.count -= 1
     }
     mutating func minusCount(roomID:Int, userID:Int)async {
-        let id = idConverter(messageID: roomID, userID: userID)
+        let id = idConverter(messageID: -roomID, userID: userID)
         instance[id]?.count -= 1
     }
 }

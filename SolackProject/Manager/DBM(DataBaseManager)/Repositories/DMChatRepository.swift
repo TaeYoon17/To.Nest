@@ -8,8 +8,8 @@
 import Foundation
 import RealmSwift
 @BackgroundActor final class DMChatRepository: TableRepository<DMChatTable>{
-    func isExistTable(chatID: Int)-> Bool{
-        self.getTableBy(tableID: chatID) != nil
+    func isExistTable(dmID: Int)-> Bool{
+        self.getTableBy(tableID: dmID) != nil
     }
     func deleteAllChatList(tables:[DMChatTable]){
         Task{@BackgroundActor in

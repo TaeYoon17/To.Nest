@@ -117,7 +117,7 @@ extension NM{
             }
         }
     }
-    func checkUnreads(wsID: Int,channelName: String,date:Date?) async throws -> UnreadsResponse{
+    func checkUnreads(wsID: Int,channelName: String,date:Date?) async throws -> UnreadsChannelRes{
         let router = ChannelRouter.unreads(wsID: wsID, chName: channelName,lastDate: date)
         return try await withCheckedThrowingContinuation{ [weak self] continuation in
             guard let self else {
@@ -125,7 +125,7 @@ extension NM{
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response { res in
-                self.generalResponse(err: CHFailed.self, result: UnreadsResponse.self, res: res, continuation: continuation)
+                self.generalResponse(err: CHFailed.self, result: UnreadsChannelRes.self, res: res, continuation: continuation)
             }
         }
     }
@@ -144,16 +144,3 @@ extension NM{
         }
     }
 }
-struct UnreadsResponse:Codable{
-    var channelID: Int
-    var name: String
-    var count:Int
-    enum CodingKeys: String, CodingKey{
-        case channelID = "channel_id"
-        case name
-        case count
-    }
-}
-//extension UnreadsResponse:Identifiable{
-//    var id:Int{ channelID}
-//}

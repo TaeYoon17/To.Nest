@@ -20,7 +20,7 @@ class MemberListItem:ObservableObject,Identifiable{
        self.userResponse = userResponse
    }
 }
-final class MemberListAsset:Identifiable,ObservableObject{
+class MemberListAsset:Identifiable,ObservableObject{
     static func == (lhs: MemberListAsset, rhs: MemberListAsset) -> Bool {
         lhs.id == rhs.id
     }

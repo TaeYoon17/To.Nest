@@ -96,6 +96,7 @@ extension HomeReactor{
             guard let self else {return Observable.concat([])}
             switch event{
             case .allMy(let responses):return Observable.concat([])
+            default: return Observable.concat([])
             }
         }
     }

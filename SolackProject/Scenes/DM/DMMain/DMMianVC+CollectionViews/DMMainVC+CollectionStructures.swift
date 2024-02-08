@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 extension DMMainVC{
     enum SectionType:String{
         case member
@@ -25,8 +26,8 @@ extension DMMainVC{
             self.id = memberItem.id
             self.sectionType = .member
         }
-        init(dmItem:DMItem){
-            self.id = dmItem.id
+        init(roomItem:DMRoomItem){
+            self.id = roomItem.id
             self.sectionType = .dm
         }
         func hash(into hasher: inout Hasher) {
@@ -36,9 +37,34 @@ extension DMMainVC{
     final class DMMemberItem:MemberListItem{
         var sectionType:SectionType = .member
     }
-    struct DMItem:Identifiable{
-        var id:String{ "\(sectionType.rawValue)_\(dmID)" }
-        var dmID:Int
-        var sectionType: SectionType = .dm
+    final class DMRoomItem:ObservableObject,Identifiable,Hashable{
+        static func == (lhs: DMMainVC.DMRoomItem, rhs: DMMainVC.DMRoomItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+        var id:String{ "\(sectionType.rawValue)_\(roomID)" }
+        private(set) var sectionType: SectionType = .dm
+        var roomID:Int = 0
+        @Published var userName:String
+        @Published var userID:Int
+        @Published var lastContent:String?
+        @Published var profileImage:String?
+        @Published var lastDate:String?
+        init(roomID: Int, userName: String, lastContent: String? = nil, profileImage: String?, lastDate: String?,userID:Int) {
+            self.roomID = roomID
+            self.userName = userName
+            self.lastContent = lastContent
+            self.profileImage = profileImage
+            self.lastDate = lastDate
+            self.userID = userID
+        }
+        convenience init(roomResponse info:DMRoomResponse){
+            self.init(roomID: info.roomID, userName: info.user.nickname, lastContent: info.content, profileImage: info.user.profileImage, lastDate: info.lastDate?.msgDateConverter(), userID: info.user.userID)
+        }
+    }
+    final class DMAssets: MemberListAsset{
+        
     }
 }

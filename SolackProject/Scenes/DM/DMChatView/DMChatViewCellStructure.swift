@@ -13,11 +13,11 @@ extension DMChatView{
 }
 final class DMCellItem: MessageCellItem{
     var dmID:Int
-    init(response: ChatResponse) {
-        self.dmID = response.chatID
-        super.init(id: response.chatID, images: response.files, createdAt: response.createdAt.convertToDate().convertToString(), profileID: response.user
-            .userID, profileName: response.user.nickname)
+    init(response info:DMResponse) {
+        self.dmID = info.dmID
+        super.init(id: info.dmID, content: info.content, images: info.files, createdAt: info.createdAt.convertToDate().msgDateConverter(), profileID: info.user.userID, profileName: info.user.nickname, profileImage: info.user.profileImage)
     }
+    
 }
 final class DMAsset: MessageAsset{
     var dmID:Int

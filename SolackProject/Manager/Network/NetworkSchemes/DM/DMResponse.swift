@@ -25,3 +25,8 @@ struct DMResponse:Codable,Equatable,Sendable{
         case user
     }
 }
+extension DMResponse{
+    mutating func convertWebPathToFilePath(){
+        self.files = self.files.map{$0.webFileToDocFile()}
+    }
+}

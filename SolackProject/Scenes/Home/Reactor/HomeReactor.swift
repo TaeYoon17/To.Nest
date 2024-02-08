@@ -30,7 +30,7 @@ final class HomeReactor: Reactor{
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
-        case setUnreads([UnreadsResponse]?)
+        case setUnreads([UnreadsChannelRes]?)
         case setChannelList([CHResponse]?)
         case isProfileUpdated(Bool)
         case setToast(ToastType?)
@@ -39,7 +39,7 @@ final class HomeReactor: Reactor{
         var channelDialog:HomePresent? = nil
         var isMasking: Bool? = nil
         var channelList:[CHResponse]? = nil
-        var unreads:[UnreadsResponse]? = nil
+        var unreads:[UnreadsChannelRes]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
         var isProfileUpdated:Bool = false
@@ -53,7 +53,7 @@ final class HomeReactor: Reactor{
         case .setPresent(let present):
             switch present{
                 case .chatting(chID: let id, chName: let name):
-                let unreads = UnreadsResponse(channelID: id, name: name, count: 0)
+                let unreads = UnreadsChannelRes(channelID: id, name: name, count: 0)
                 return Observable.concat([
                     .just(.setUnreads([unreads])),
                     Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),

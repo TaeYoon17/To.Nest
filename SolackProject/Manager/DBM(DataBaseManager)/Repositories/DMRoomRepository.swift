@@ -13,21 +13,28 @@ import RealmSwift
         try await super.init()
         self.dmChatRepository = try await DMChatRepository()
     }
-    func updateChannelCheckDate(channelID:Int) async{
-        if let table = self.getTableBy(tableID: channelID){
+    func updateLastContent(roomID:Int,text:String) async{
+        if let table = self.getTableBy(tableID: roomID){
+            try! await self.realm.asyncWrite({
+                table.lastContent = text
+            })
+        }
+    }
+    func updateRoomCheckDate(roomID:Int) async{
+        if let table = self.getTableBy(tableID: roomID){
             try! await self.realm.asyncWrite({
                 table.lastCheckDate = Date()
             })
         }
     }
-    func updateChannelReadDate(channelID:Int) async{
-        if let table = self.getTableBy(tableID: channelID){
+    func updateRoomReadDate(roomID:Int) async{
+        if let table = self.getTableBy(tableID: roomID){
             try! await self.realm.asyncWrite({
                 table.lastReadDate = Date()
             })
         }
     }
-//    func updateChannelName(channelID:Int,name:String) async{
+//    func updateRoomName(channelID:Int,name:String) async{
 //        if let table = self.getTableBy(tableID: channelID){
 //            try! await self.realm.asyncWrite({
 //                table.channelName = name

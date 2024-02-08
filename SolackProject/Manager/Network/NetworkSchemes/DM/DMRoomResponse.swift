@@ -12,6 +12,8 @@ struct DMRoomResponse:Codable{
     var roomID:Int
     var createdAt:String
     var user:UserResponse
+    var content:String?
+    var lastDate:Date?
     enum CodingKeys: String, CodingKey{
         case workspaceID = "workspace_id"
         case roomID = "room_id"
