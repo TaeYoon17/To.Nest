@@ -27,12 +27,14 @@ final class DMMainReactor: Reactor{
         case setMembsers([UserResponse])
         case appendMembers([UserResponse])
         case setRooms([DMRoomResponse])
+        case setUnreads([UnreadDMRes])
         case setWSThumbnail(String)
         case isProfileUpdated(Bool)
     }
     struct State{
         var membsers:[UserResponse] = []
         var rooms:[DMRoomResponse] = []
+        var roomUnreads:[UnreadDMRes] = []
         var wsThumbnail:String = ""
         var isProfileUpdated = false
         var dialog:DMMainPresent? = nil
@@ -62,6 +64,8 @@ final class DMMainReactor: Reactor{
             state.dialog = present
         case .setRooms(let rooms):
             state.rooms = rooms
+        case .setUnreads(let unreads):
+            state.roomUnreads = unreads
         }
         return state
     }

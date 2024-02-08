@@ -14,7 +14,6 @@ extension DMChatView{
         override init(reactor: DMChatReactor, collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, DMCellItem.ID>.CellProvider) {
             super.init(reactor: reactor, collectionView: collectionView, cellProvider: cellProvider)
             reactor.state.map{$0.sendChat}
-                
                 .bind { [weak self] chatType in
                 guard let self,let chatType else {return}
                     switch chatType{

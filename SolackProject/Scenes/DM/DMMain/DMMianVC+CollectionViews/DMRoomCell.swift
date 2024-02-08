@@ -27,12 +27,14 @@ extension DMMainVC{
                             .multilineTextAlignment(.leading)
                             .lineLimit(2)
                         Spacer()
-                        Text("4")
-                            .font(FontType.caption2.font)
-                            .padding(.vertical,2).padding(.horizontal,4)
-                            .background(.accent)
-                            .foregroundStyle(.white)
-                            .clipShape(Capsule())
+                        if item.unreads > 0{
+                            Text("\(item.unreads)")
+                                .font(FontType.caption2.font)
+                                .padding(.vertical,2).padding(.horizontal,4)
+                                .background(.accent)
+                                .foregroundStyle(.white)
+                                .clipShape(Capsule())
+                        }
                     }
                 }.padding(.horizontal,8)
             }

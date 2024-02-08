@@ -13,6 +13,7 @@ final class DMRoomTable:Object,Identifiable{
     @Persisted var chatList: List<DMChatTable> = .init()
     @Persisted var userID:Int
     @Persisted var lastContent:String?
+    @Persisted var lastContentDate:Date?
     @Persisted var lastReadDate:Date?
     @Persisted var lastCheckDate:Date?
     convenience init(roomID:Int,wsID:Int,userID:Int,createdAt:Date) {

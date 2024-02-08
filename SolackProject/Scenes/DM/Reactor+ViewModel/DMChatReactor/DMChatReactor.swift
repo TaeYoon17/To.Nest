@@ -19,7 +19,8 @@ final class DMChatReactor:Reactor{
     weak var provider: ServiceProviderProtocol!
     var initialState: State = .init()
     var title:String
-    var roomID:Int? = nil
+    var roomID:Int = 0
+    var userID:Int = 0
     var chatMessage = ChatInfo(content: "", files: [])
     var chatResponse:[DMResponse] = []
     enum Action{
@@ -46,22 +47,23 @@ final class DMChatReactor:Reactor{
         var sendFiles:[FileData] = []
         var sendChat:SendMessageType? = nil
     }
-    init(_ provider: ServiceProviderProtocol,id:Int,title:String){
+    init(_ provider: ServiceProviderProtocol,roomID:Int,userID:Int,title:String){
         self.provider = provider
         self.initialState = .init(title: title, memberCount: 0)
-        self.roomID = id
+        self.roomID = roomID
+        self.userID = userID
         self.title = title
     }
-    
+    deinit{
+        provider.msgService.closeSocket(roomID: roomID)
+    }
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .initChat:
-            if let roomID{
-                provider.msgService.fetchDirectMessageDB(userID: mainWS.id, roomID: roomID)
-            }
+            provider.msgService.fetchDirectMessageDB(userID: mainWS.id, roomID: roomID)
             return Observable.concat([.just(.setTitle(title))])
         case .actionSendChat:
-            provider.msgService.create(roomID: self.roomID!, dmChat: chatMessage)
+            provider.msgService.create(roomID: self.roomID, dmChat: chatMessage)
             self.chatMessage = ChatInfo(content: "", files: [])
             return Observable.concat(.just(.setChatText("")),.just(.setSendFiles([])))
         case .addImages:

@@ -47,6 +47,23 @@ extension DMMainVC{
                     self?.setDataSource(roomItem: items)
                 }
             }.disposed(by: disposeBag)
+            reactor.state.map{$0.roomUnreads}.bind { [weak self] responses in
+                guard let self,!responses.isEmpty else {return}
+                Task{
+                    var items:[Item] = []
+                    for response in responses{
+                        guard var roomItem = self.roomModel.fetchByID(DMRoomItem.idConverter(roomID: response.roomID)) else {continue}
+                        roomItem.unreads = response.count
+                        self.roomModel.insertModel(item: roomItem)
+                        items.append(Item(roomItem: roomItem))
+                    }
+                    await MainActor.run {
+                        var snapshot = self.snapshot()
+                        snapshot.reloadItems(items)
+                        self.apply(snapshot,animatingDifferences: false)
+                    }
+                }
+            }.disposed(by: disposeBag)
         }
         @MainActor func setDataSource(memberItem:[Item]){
             var snapshot = snapshot()

@@ -10,7 +10,7 @@ import Foundation
 extension MessageService:SocketReceivable{
     func openSocket(channelID: Int){
         do{
-            try SocketManagerr.shared.openDMSocket(connect: .chat(channelID: channelID), delegate: self)
+            try SocketManagerr.shared.openSocket(connect: .chat(channelID: channelID), delegate: self)
             Task{@BackgroundActor in
                 await channelRepostory.updateChannelReadDate(channelID: channelID)
             }
@@ -19,7 +19,7 @@ extension MessageService:SocketReceivable{
         }
     }
     func closeSocket(channelID: Int){
-        SocketManagerr.shared.closeChatSocket(channelID: channelID)
+        SocketManagerr.shared.closeChatSocket()
         Task{@BackgroundActor in
             await channelRepostory.updateChannelReadDate(channelID: channelID)
         }

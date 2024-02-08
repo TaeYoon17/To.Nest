@@ -41,6 +41,9 @@ extension DMMainVC{
         static func == (lhs: DMMainVC.DMRoomItem, rhs: DMMainVC.DMRoomItem) -> Bool {
             lhs.id == rhs.id
         }
+        static func idConverter(roomID:Int) -> String{
+            "\(SectionType.dm.rawValue)_\(roomID)"
+        }
         func hash(into hasher: inout Hasher) {
             hasher.combine(id)
         }
@@ -52,6 +55,7 @@ extension DMMainVC{
         @Published var lastContent:String?
         @Published var profileImage:String?
         @Published var lastDate:String?
+        @Published var unreads:Int = 0
         init(roomID: Int, userName: String, lastContent: String? = nil, profileImage: String?, lastDate: String?,userID:Int) {
             self.roomID = roomID
             self.userName = userName

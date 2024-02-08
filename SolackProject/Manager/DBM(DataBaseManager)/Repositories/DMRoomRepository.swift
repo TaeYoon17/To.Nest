@@ -13,10 +13,11 @@ import RealmSwift
         try await super.init()
         self.dmChatRepository = try await DMChatRepository()
     }
-    func updateLastContent(roomID:Int,text:String) async{
+    func updateLastContent(roomID:Int,text:String,date:Date) async{
         if let table = self.getTableBy(tableID: roomID){
             try! await self.realm.asyncWrite({
                 table.lastContent = text
+                table.lastContentDate = date
             })
         }
     }

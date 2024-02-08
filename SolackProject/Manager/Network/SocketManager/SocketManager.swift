@@ -19,19 +19,25 @@ extension NetworkManager{
         enum ConnectType{
             case dm( roomID:Int)
             case chat(channelID:Int)
+            var name:String{
+                switch self{
+                case .chat: "channel"
+                case .dm:"dm"
+                }
+            }
         }
         @DefaultsState(\.accessToken) var accessToken
         static let shared = SocketManagerr()
         private var timer:Timer? // 핑 생성용
         private let socketURL = URL(string: API.socketURL)!
-        var socket: SocketIOClient!
         private var isOpen = false
         private override init(){ super.init() }
         var channelID:Int!
         var roomID:Int!
         weak var delegate: (any SocketReceivable)?
+        var socket: SocketIOClient!
         var manager: SocketManager!
-        func openDMSocket(connect: ConnectType,delegate: SocketReceivable) throws{
+        func openSocket(connect: ConnectType,delegate: SocketReceivable) throws{
             self.delegate = delegate
             self.manager = SocketManager(socketURL: socketURL)
             switch connect{
@@ -47,11 +53,7 @@ extension NetworkManager{
                 self?.isOpen = true
             }
             ping()
-            let onName = switch connect{
-            case .chat(channelID: let id): "channel"
-            case .dm(roomID: let id): "dm"
-            }
-            socket.on(onName) {[weak self] dataArray, ack in
+            socket.on(connect.name) {[weak self] dataArray, ack in
                 print("CHANNEL RECEIVED", dataArray, ack)
                 guard let self,self.isOpen else {return}
                 guard let jsonDict = dataArray[0] as? [String:Any] else {fatalError("데이터 가져오기 오류" )}
@@ -65,7 +67,7 @@ extension NetworkManager{
             }
             socket.connect()
         }
-        func closeChatSocket(channelID: Int){
+        func closeChatSocket(){
             print("소켓을 닫는다...")
             self.channelID = nil
             self.roomID = nil
@@ -81,12 +83,10 @@ extension NetworkManager{
             isOpen = false
         }
         private func ping(){
-            print("핑 생성생성")
             Task{@MainActor in
-                self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [weak self] _ in // 5초마다 반복적으로 실행
+                self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [weak self] _ in // 10초마다 반복적으로 실행
                     self?.socket.on(clientEvent: .ping, callback: { data, ack in
                         print("SOCKET IS PING", data, ack)
-                        
                     })
                 })
             }

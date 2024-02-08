@@ -15,6 +15,7 @@ extension DMChatReactor{
             var mutations:[Observable<Mutation>] = []
             switch event{
             case .check(response: .dm(let response)):
+                provider.msgService.openSocket(roomID: roomID)
                 mutations.append(.just(.appendChat(.dbResponse(response))).throttle(.microseconds(200), scheduler: MainScheduler.instance))
                 mutations.append(.just(.appendChat(nil)))
             case .create(response: .dm(let response)):

@@ -62,12 +62,12 @@ extension DMMainReactor{
                 for res in responses{
                     self.provider.msgService.getDirectMessageDatas(roomID: res.roomID, userID: res.user.userID)
                 }
-                print("allMy:",responses)
                 mutations.append(.just(.setRooms(responses)).subscribe(on:MainScheduler.instance))
             case .dmRoomID(id: let id, userResponse: let response):
                 mutations.append(.just(.setPresent(.room(roomID: id, user: response))).delay(.microseconds(100), scheduler: MainScheduler.instance))
                 mutations.append(.just(.setPresent(nil)))
-            case .unreads(_):
+            case .unreads(let responses):
+                mutations.append(.just(.setUnreads(responses)).delay(.microseconds(100), scheduler: MainScheduler.instance))
                 break
             }
             return Observable.concat(mutations)

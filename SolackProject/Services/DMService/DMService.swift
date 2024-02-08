@@ -46,7 +46,7 @@ final class DMService:DMProtocol{
                         try await Task.sleep(for: .microseconds(10))
                         if let table = repository.getTableBy(tableID: response.roomID){
                             response.content = table.lastContent
-                            response.lastDate = table.lastReadDate
+                            response.lastDate = table.lastContentDate
                         }else{
                             await repository.create(item: DMRoomTable(roomID: response.roomID, wsID: response.workspaceID, userID: response.user.userID,createdAt: response.createdAt.convertToDate()))
                         }

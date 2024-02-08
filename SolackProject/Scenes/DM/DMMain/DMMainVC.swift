@@ -18,7 +18,7 @@ final class DMMainVC:BaseVC ,View{
             switch present{
             case .room(roomID: let roomID, user: let userResponse):
                 let vc = DMChatView()
-                vc.reactor = DMChatReactor(reactor.provider, id: roomID, title: userResponse.nickname)
+                vc.reactor = DMChatReactor(reactor.provider, roomID: roomID, userID: userResponse.userID, title: userResponse.nickname)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }.disposed(by: disposeBag)

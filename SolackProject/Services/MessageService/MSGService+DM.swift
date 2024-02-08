@@ -9,7 +9,7 @@ import Foundation
 extension MessageService{
     func openSocket(roomID: Int){
         do{
-            try SocketManagerr.shared.openDMSocket(connect: .chat(channelID: roomID), delegate: self)
+            try SocketManagerr.shared.openSocket(connect: .dm(roomID: roomID), delegate: self)
             Task{@BackgroundActor in
                 await roomRepository.updateRoomReadDate(roomID: roomID)
             }
@@ -18,7 +18,10 @@ extension MessageService{
         }
     }
     func closeSocket(roomID:Int){
-        
+        SocketManagerr.shared.closeChatSocket()
+        Task{@BackgroundActor in
+            await roomRepository.updateRoomReadDate(roomID:roomID)
+        }
     }
     func create(roomID: Int, dmChat: ChatInfo) {
         Task{
@@ -39,7 +42,6 @@ extension MessageService{
                 await roomRepository.appendChat(roomID: roomID, chatTables: [dmTable])
                 try await appendUserReferenceCounts(roomID: roomID, createUsers: [result.user])
                 try await updateUserInformationToDataBase(userIDs: [result.user.userID])
-                print("DMcreateResult:",result)
                 event.onNext(.create(response: .dm([result])))
             }catch{
                 print("MessageService DM Error!!")
@@ -51,7 +53,34 @@ extension MessageService{
     }
     
     func receivedSocketData(result: Result<Data,Error>,roomID:Int){
-        
+        do{
+            switch result{
+            case .success(let data):
+                let responseData = try JSONDecoder().decode(DMResponse.self, from: data)
+                Task{@BackgroundActor in
+                    do{
+                        try await Task.sleep(for: .milliseconds(100))
+                        await roomRepository.updateRoomReadDate(roomID: roomID)
+                        try await getResponses(responses: [responseData], roomID: roomID)
+                        Task{
+                            var response = responseData
+                            response.files = response.files.map{$0.webFileToDocFile()}
+                            response.user.profileImage = response.user.profileImage?.webFileToDocFile()
+                            self.event.onNext(.socketReceive(response: .dm([response])))
+                        }
+                    }catch{
+                        print(#function)
+                        print(error)
+                    }
+                    await imageReferenceCountManager.saveRepository()
+                    await userReferenceCountManager.saveRepository()
+                }
+            case .failure(let error): throw error
+            }
+        }catch{
+            print(#function)
+            print(error)
+        }
     }
     func getDirectMessageDatas(roomID:Int,userID:Int){
         let wsID = mainWS.id
@@ -89,7 +118,7 @@ fileprivate extension MessageService{
             await roomRepository.updateRoomCheckDate(roomID: roomID)
             if let lastResponse = dmChatsResponse.chats.last{
                 let text = lastResponse.content ?? "사진"
-                await roomRepository.updateLastContent(roomID: roomID, text: text)
+                await roomRepository.updateLastContent(roomID: roomID, text: text,date: lastResponse.createdAt.convertToDate())
             }
             try await getResponses(responses: chatResponses, roomID: roomID)
             await imageReferenceCountManager.saveRepository()
