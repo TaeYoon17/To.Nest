@@ -32,4 +32,9 @@ struct RCMSnapshot<RCM:RCMAble,Item:RCMTableConvertable,Table:RCMTableAble> wher
     mutating func minusCount(id: Item.ID)async {
         instance[id]?.count -= 1
     }
+    mutating func allResetCount()async{
+        for (k,v) in instance{
+            instance[k] = Item(name: k, count: 0)
+        }
+    }
 }

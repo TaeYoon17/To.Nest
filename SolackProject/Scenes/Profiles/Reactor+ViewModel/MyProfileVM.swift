@@ -10,11 +10,8 @@ import Combine
 import RxSwift
 import RxCombine
 import ReactorKit
-//enum SocialType:String{
-//    case kakao = "kakao"
-//    case apple = "apple"
-//}
 final class MyProfileReactor:Reactor,ObservableObject{
+    var logOutTapped = PassthroughSubject<(),Never>()
     @MainActor @DefaultsState(\.myInfo) var myInfo
     @DefaultsState(\.myProfile) var myProfile
     @MainActor @Published var st: State = .init()
@@ -137,8 +134,15 @@ final class MyProfileReactor:Reactor,ObservableObject{
         return Observable.merge(mutation,profileTransform)
     }
 }
-
-
+extension MyProfileReactor{
+    func logOut(){
+        Task{
+            provider.signService.signOut()
+        }
+        AppManager.shared.userAccessable.onNext(false)
+    }
+}
+    /*
 final class MyProfileVM: ObservableObject{
     var provider:ServiceProviderProtocol!
     @MainActor var goHome = PassthroughSubject<(),Never>()
@@ -279,11 +283,13 @@ final class MyProfileVM: ObservableObject{
         return Publishers.Merge(mutation, profilePublisher).eraseToAnyPublisher()
     }
 }
-extension MyProfileVM{
-    var emptyPublisher:AnyPublisher<Mutation,Never>{
-        Empty<Mutation, Never>().eraseToAnyPublisher()
-    }
-}
+//extension MyProfileVM{
+//    var emptyPublisher:AnyPublisher<Mutation,Never>{
+//        Empty<Mutation, Never>().eraseToAnyPublisher()
+//    }
+//}
+     */
+
 // MARK: -- 오류 원인...
 //            .map { mutation -> State in
 //                print("mutation이 발생한다.")

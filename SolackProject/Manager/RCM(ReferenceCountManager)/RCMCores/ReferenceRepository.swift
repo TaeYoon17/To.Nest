@@ -41,7 +41,7 @@ typealias RCMRepository = ReferenceRepository
         }
     }
     
-    func clearTable(type: ClearType = .emptyBT,format: FormatType) async{
+    func clearTable(type: ClearType = .emptyBT,format: FormatType? = nil) async{
         let allTables = self.getTasks
         switch type{
         case .all:
@@ -53,8 +53,11 @@ typealias RCMRepository = ReferenceRepository
             emptyTables.forEach { tables in
                 switch format{
                 case .jpg:
-                    FileManager.removeFromDocument(fileName: tables.name, type: .jpg)
+                    FileManager.removeFromDocument(fileName: tables.name,type: .jpg)
+                case .none:
+                    FileManager.removeFromDocument(fileName: tables.name)
                 }
+                
             }
             try! await realm.asyncWrite{
                 realm.delete(emptyTables)

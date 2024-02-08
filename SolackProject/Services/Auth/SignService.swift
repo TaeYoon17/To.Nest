@@ -13,6 +13,7 @@ protocol SignServiceProtocol{
     func kakaoSignIn()
     func appleSignIn(_ info: AppleInfo)
     func signUp(_ info:SignUpInfo)
+    func signOut()
 }
 final class SignService: SignServiceProtocol{
     @DefaultsState(\.accessToken) var accessToken

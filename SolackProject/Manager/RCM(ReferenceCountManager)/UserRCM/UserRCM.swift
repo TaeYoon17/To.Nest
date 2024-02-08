@@ -118,7 +118,7 @@ extension RCMSnapshot<UserRCM, UserItem, UserRCMTable>{
 
 fileprivate extension ReferenceRepository where T: UserRCMTable{
     func clearChannelChatUserTable(userRepository: UIRepository) async {
-        let emptyTables = self.getTasks.where{ $0.count <= 0 }
+        let emptyTables:Results<T> = self.getTasks.where{ $0.count <= 0 }
         if emptyTables.isEmpty { return }
         let emptyUsers = Set(emptyTables.map{$0.userID}) // 채팅방에서 삭제할 대상의 유저 정보
         // 채널 채팅에서 없앨 유저 정보

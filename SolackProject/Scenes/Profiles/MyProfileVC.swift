@@ -26,22 +26,31 @@ final class MyProfileVC: UIHostingController<MyProfileView>{
         vm.state.map{$0.image}.bind(with: self) { owner, data in
             Task{@MainActor in imgVM.defaultImage.send(data) }
         }.disposed(by: disposeBag)
+        vm.logOutTapped.sink { [weak self] _ in
+            self?.logOutAction(vm:vm)
+        }.store(in: &subscription)
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("Don't use storyboard")
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        self.navigationItem.title = "내 정보 수정"
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //        self.navigationController?.setNavigationBarHidden(false, animated: true)
         UIView.animate(withDuration: 0.2) {
             self.tabBarController?.tabBar.alpha = 0
         }completion: { _ in
             self.tabBarController?.tabBar.isHidden = true
         }
+    }
+    private func logOutAction(vm:MyProfileReactor){
+        let vc = SolackAlertVC(title: "로그아웃", description: "정말 로그아웃 할까요?", cancelTitle: "취소", cancel: {},confirmTitle: "로그아웃",
+                               confirm: {[weak self] in
+            vm.logOut()
+        })
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: false)
     }
 }
 extension MyProfileView{
@@ -59,6 +68,7 @@ struct MyProfileView:View{
     @ObservedObject var imgVM :ProfileImgVM
     @DefaultsState(\.myInfo) var myInfo
     @State var vendor: VendorType? = nil
+    @State var isLogOut:Bool = false
     var body: some View{
         NavigationStack {
             List{
@@ -103,7 +113,11 @@ struct MyProfileView:View{
                             }
                         }
                     }
-                    defaultListItemView(title: "로그아웃")
+                    Button{
+                        vm.logOutTapped.send(())
+                    }label:{
+                        defaultListItemView(title: "로그아웃")
+                    }
                 }.listRowSeparator(.hidden)
             }
             .navigationDestination(for: NaviType.self, destination: { navi in

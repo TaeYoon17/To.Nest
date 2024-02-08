@@ -23,15 +23,14 @@ typealias UIRepository = UserInfoRepository
         return self.getTableBy(tableID: userID)
     }
     func deleteUserIDs(_ ids: [Int]) async {
-        var snapshot = imageRC.snapshot
         for id in ids{
             let table = self.getTableBy(tableID: id)!
-            if let profileImage = table.profileImage{
-                await snapshot.minusCount(id: profileImage)
+            if let profileImage = table.profileImage,FileManager.checkExistDocument(fileName: profileImage){
+                FileManager.removeFromDocument(fileName: profileImage)
             }
             await self.delete(item: table)
         }
-        imageRC.apply(snapshot)
-        await imageRC.saveRepository()
+//        imageRC.apply(snapshot)
+//        await imageRC.saveRepository()
     }
 }

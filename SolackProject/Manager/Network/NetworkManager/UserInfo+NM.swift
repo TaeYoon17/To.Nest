@@ -120,6 +120,11 @@ extension NetworkManager{
             }
         }
     }
+    func signOut(){
+        let router = UserRouter.signOut
+        AF.request(router,interceptor: authInterceptor).validate(customValidation).response { _ in
+        }
+    }
 }
 // 결과값 에러처리
 extension NetworkManager{

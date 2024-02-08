@@ -50,7 +50,7 @@ final class ImageRCM: RCMAble{
         for (k,v) in instance{
             await self.repository.insert(item: v)
         }
-        await repository.clearTable(type: .emptyBT, format: .jpg)
+        await repository.clearTable(type: .emptyBT)
         await resetInstance()
     }
     var snapshot: SnapShot{
