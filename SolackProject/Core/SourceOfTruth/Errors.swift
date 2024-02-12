@@ -21,6 +21,7 @@ enum SignFailed:String,FailedProtocol{
     case signUpDoubled = "E12" // 중복
     case signUpwrong = "E11" // 잘못됨
     case signInFailed = "E03" // 로그인 실패
+    
     static func converter(val: String) -> SignFailed? {
         SignFailed(rawValue: val)
     }
@@ -33,6 +34,7 @@ enum WorkSpaceFailed:String,FailedProtocol{
     case doubled = "E12"
     case nonExistData = "E13"
     case nonAuthority = "E14" // 워크스페이스 관리자만이 워크스페이스를 삭제할 수 있습니다!!
+    case denyExitWS = "E15" // 워크스페이스 채널 중 관리자인 채널이 있습니다.
     static func converter(val: String) -> WorkSpaceFailed? {
         WorkSpaceFailed(rawValue: val)
     }

@@ -46,6 +46,8 @@ extension CHSettingView{
                     owner.editListModel.insertModel(items: editListItems)
                     DispatchQueue.main.async{
                         var snapshot = owner.snapshot()
+                        var prevItems = snapshot.itemIdentifiers(inSection: .editing)
+                        snapshot.deleteItems(prevItems)
                         let items = editListItems.map{Item($0)}
                         snapshot.appendItems(items, toSection: .editing)
                         owner.apply(snapshot,animatingDifferences: true)
@@ -54,6 +56,8 @@ extension CHSettingView{
                     let editListItems:[EditListItem] = [.init(editingType: .exit)]
                     Task{@MainActor in
                         var snapshot = owner.snapshot()
+                        var prevItems = snapshot.itemIdentifiers(inSection: .editing)
+                        snapshot.deleteItems(prevItems)
                         owner.editListModel.insertModel(items: editListItems)
                         let items = editListItems.map{Item($0)}
                         snapshot.appendItems(items, toSection: .editing)

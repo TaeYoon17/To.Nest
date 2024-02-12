@@ -34,8 +34,8 @@ final class WSMainVM: ObservableObject{
         self.provider = provider
         binding()
     }
+    // 메인 워크스페이스를 바꾼다.
     @MainActor func updateMainWS(idx: Int){
-        self.tempToastUp()
         self.list[selectedIdx].isSelected = false
         selectedIdx = idx
         self.list[selectedIdx].isSelected = true

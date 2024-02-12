@@ -7,7 +7,16 @@
 
 import Foundation
 extension WorkSpaceService{
-    func checkMembers() {
+    func checkAllMembers() {
+        let wsID = mainWS.id
+        Task{
+            do{
+                let res = try await NM.shared.checkWSMembers(wsID)
+                event.onNext(.wsAllMembers(res))
+            }catch{
+                print("checkAllMembers")
+            }
+        }
     }
     func inviteUser(emailText:String){
         Task{
@@ -21,6 +30,25 @@ extension WorkSpaceService{
                 }
                 if let ws = error as? WSFailed{
                     event.onNext(.failed(ws))
+                }
+            }
+        }
+    }
+    func changeAdmin(userID:Int){
+        Task{
+            let mainWS = self.mainWS.id
+            do{
+                print("changeAdmin")
+                print(self.mainWS,self.userID)
+                let res = try await NM.shared.adminChangeWS(wsID: mainWS, userID: userID)
+                print("changeAdmin Success \(res)")
+                event.onNext(.adminChanged(res))
+            }
+            catch{
+                AppManager.shared.accessErrorHandler(of: WSFailed.self, error) { [weak self] wsFailed in
+                    guard let self, let wsFailed else {return}
+                    print("changeAdmin Error")
+                    event.onNext(.failed(wsFailed))
                 }
             }
         }

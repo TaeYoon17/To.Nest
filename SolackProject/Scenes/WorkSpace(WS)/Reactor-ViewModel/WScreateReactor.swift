@@ -24,12 +24,10 @@ final class WScreateReactor: WSwriterReactor{
                                       .just(Mutation.isCreatable(!str.isEmpty))
             ])
         case .confirmAction:
-            print(wsInfo)
             provider.wsService.create(wsInfo)
             return Observable.concat([.just(.isLoading(true))])
         case .setImageData(let data):
             self.wsInfo.image = data
-            print("이미지 받아오기!!")
             return Observable.concat([.just(.imageData(data))])
         }
     }

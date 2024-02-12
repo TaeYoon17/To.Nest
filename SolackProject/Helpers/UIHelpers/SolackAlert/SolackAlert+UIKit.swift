@@ -39,7 +39,8 @@ final class SolackAlertVC: BaseVC{
             self?.view.backgroundColor = .gray.withAlphaComponent(0.33)
         }
         buttonVC = if let confirmTitle = confirmTitle{
-            .init(title: alertTitle, description: self.alertDescription, cancelTitle: self.cancelTitle, cancel: {[weak self] in
+            .init(title: alertTitle, description: self.alertDescription,
+                  infos:self.infos,cancelTitle: self.cancelTitle, cancel: {[weak self] in
                 self?.cancel()
                 UIView.animate(withDuration: 0.33) {
                     self?.buttonVC.view.backgroundColor = .clear
@@ -53,7 +54,8 @@ final class SolackAlertVC: BaseVC{
                 }
             })
         }else{
-            .init(title: self.alertTitle, description: self.description, cancelTitle: self.cancelTitle, cancel: {[weak self] in
+            .init(title: self.alertTitle, description: self.alertDescription,
+                  infos:self.infos,cancelTitle: self.cancelTitle, cancel: {[weak self] in
                 self?.cancel()
                 UIView.animate(withDuration: 0.33) {
                     self?.buttonVC.view.backgroundColor = .clear
@@ -90,7 +92,7 @@ struct SolackAlertView:View{
     var confirm:(()->())?
     @State var isVisible = true
     var body:some View{
-        VStack(alignment:.center,spacing:16){
+        VStack(alignment:.center,spacing: infos.isEmpty ? 16 : 0){
             VStack(alignment: .center,spacing:8){
                 Text(title)
                     .font(FontType.title2.font)
@@ -100,9 +102,15 @@ struct SolackAlertView:View{
                     .font(FontType.body.font)
                     .multilineTextAlignment(.center)
                 if !infos.isEmpty{
-                    Text(infos.reduce(into: "") { $0 = $0 + "• \($1)\n" })
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
+                    HStack{
+                        Text(infos.reduce(into: "") { $0 = $0 + "• \($1)\n" })
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .font(FontType.body.font)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }.padding(.leading)
                 }
             }.frame(maxWidth: .infinity)
             if let confirm{

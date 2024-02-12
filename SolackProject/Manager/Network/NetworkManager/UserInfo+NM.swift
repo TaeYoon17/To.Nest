@@ -120,9 +120,37 @@ extension NetworkManager{
             }
         }
     }
-    func signOut(){
+    func signOut() async throws -> Bool{
         let router = UserRouter.signOut
-        AF.request(router,interceptor: authInterceptor).validate(customValidation).response { _ in
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router,interceptor: authInterceptor).validate(customValidation).response { res in
+                if res.response?.statusCode == 200{
+                    continuation.resume(returning: true)
+                    return
+                }
+                switch res.result{
+                case .success(let val):
+                    if let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
+                        if let failType = CommonFailed(rawValue: errorData.errorCode){
+                            continuation.resume(throwing: failType)
+                            return
+                        }else{
+                            continuation.resume(throwing: Errors.API.FailFetchToken)
+                            return
+                        }
+                    }else{
+                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        return
+                    }
+                case .failure(let error):
+                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    return
+                }
+            }
         }
     }
 }

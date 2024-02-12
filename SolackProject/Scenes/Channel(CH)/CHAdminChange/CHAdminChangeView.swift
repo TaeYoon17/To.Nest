@@ -10,13 +10,20 @@ import SnapKit
 import ReactorKit
 import RxSwift
 import RxCocoa
-final class CHAdminChangeView: BaseVC{
+final class CHAdminChangeView: BaseVC,View,Toastable{
+    var isShowKeyboard: CGFloat? = nil
+    var toastY: CGFloat{ self.collectionView.frame.maxY - (toastHeight / 2) }
+    var toastHeight: CGFloat = 0
+    
     var disposeBag = DisposeBag()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: ChangeManager.layout)
     var dataSource: DataSource!
-    override func configureView() {
-        configureCollectionView()
+    func bind(reactor: CHAdminChangeReactor) {
+        configureCollectionView(reactor: reactor)
+        dialogAndCloseBind(reactor: reactor)
+        reactor.action.onNext(.initAction)
     }
+    override func configureView() { }
     override func configureLayout() {
         self.view.addSubview(collectionView)
     }

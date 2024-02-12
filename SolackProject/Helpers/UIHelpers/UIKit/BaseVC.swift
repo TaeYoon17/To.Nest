@@ -33,7 +33,7 @@ class BaseVC: UIViewController{
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         activityIndicator.center = self.view.center
-        activityIndicator.color = UIColor.red
+        activityIndicator.color = UIColor.accent
         activityIndicator.hidesWhenStopped = true
         activityIndicator.style = UIActivityIndicatorView.Style.medium
         activityIndicator.stopAnimating()

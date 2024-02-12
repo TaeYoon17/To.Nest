@@ -18,19 +18,11 @@ extension WSManagerView:UICollectionViewDelegate{
             collectionView.dequeueConfiguredReusableCell(using: regi, for: indexPath, item: itemIdentifier)
         })
     }
-    var layout:UICollectionViewCompositionalLayout{
-        var listCellConfig = UICollectionLayoutListConfiguration(appearance: .plain)
-        listCellConfig.showsSeparators = false
-        listCellConfig.backgroundColor = .gray1
-        var layout = UICollectionViewCompositionalLayout.list(using: listCellConfig)
-        return layout
-    }
-    var cellRegistration: UICollectionView.CellRegistration<UICollectionViewCell,String>{
+    var cellRegistration: UICollectionView.CellRegistration<UICollectionViewCell,ChangeManagerListItem>{
         UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
             cell.contentConfiguration = UIHostingConfiguration(content: {
-                WSChagneManagerListView()
+                ChangeManagerListCell(item: itemIdentifier)
             }).margins(.leading, 14).margins(.vertical, 8)
-            
             cell.configurationUpdateHandler = { cell, state in
                 var backConfig = cell.defaultBackgroundConfiguration()
                 backConfig.backgroundInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
@@ -45,24 +37,7 @@ extension WSManagerView:UICollectionViewDelegate{
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-    }
-}
-struct WSChagneManagerListView: View{
-    var body: some View{
-        HStack(spacing:8){
-            Image(.arKit).resizable().scaledToFit().frame(width: 44,height: 44).clipShape(RoundedRectangle(cornerRadius: 8))
-            VStack(alignment:.leading,spacing:0){
-                Text("Coutrney Henry")
-                    .font(FontType.bodyBold.font)
-                    .foregroundStyle(.text)
-                    .frame(height: 18)
-                
-                Text(verbatim:"michelle.rivera@example.com")
-                    .font(FontType.body.font)
-                    .foregroundStyle(.secondary)
-                    .frame(height:18)
-            }
-            Spacer()
-        }
+        guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else {return}
+        reactor!.action.onNext(.changeAdminAction(userName: itemIdentifier.nickName, userID: itemIdentifier.userID))
     }
 }

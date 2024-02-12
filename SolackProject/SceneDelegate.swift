@@ -54,14 +54,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 print("Revoked")
             case .authorized:
                 print("Authorized")
-                Task{
-//                    await MainActor.run {
-//                        print("여기 허가됨...")
-//                        window?.rootViewController = MainViewController()
-//                        self.window = window
-//                        window.makeKeyAndVisible()
-//                    }
-                }
             default: print("NOT FOUND")
             }
         }

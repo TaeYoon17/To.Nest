@@ -59,7 +59,8 @@ extension DMMainVC{
                     }
                     await MainActor.run {
                         var snapshot = self.snapshot()
-                        snapshot.reloadItems(items)
+                        let dmItems = snapshot.itemIdentifiers(inSection: .dm)
+                        snapshot.reloadItems(Array(Set(items).intersection(dmItems)))
                         self.apply(snapshot,animatingDifferences: false)
                     }
                 }

@@ -9,11 +9,19 @@ import Foundation
 import RealmSwift
 extension SignService{
     func signOut(){
-        NM.shared.signOut()
-        cleanDefaultsState()
         Task{
-            await cleanDocument()
-            await cleanDB()
+            do{
+                let isOut = try await NM.shared.signOut()
+                if isOut{
+                    cleanDefaultsState()
+                    await cleanDocument()
+                    await cleanDB()
+                    print("모두 삭제 완셩")
+                }
+            }catch{
+                print("signout error")
+                print(error)
+            }
         }
     }
     @BackgroundActor private func cleanDB(){

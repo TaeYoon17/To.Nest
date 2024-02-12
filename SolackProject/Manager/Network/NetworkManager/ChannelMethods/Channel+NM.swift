@@ -7,6 +7,11 @@
 
 import Foundation
 import Alamofire
+// MARK: -- 채널 API 관련 메서드
+/// 1. 채널 생성
+/// 2. 채널 수정
+/// 3. 채널 삭제 -> 채널 관리자만 가능
+/// 4. 채널 나가기 -> 채널 회원만 가능
 extension NM{
     func createCH(wsID:Int,_ info:CHInfo) async throws -> CHResponse{
         let router = ChannelRouter.create(wsID: wsID, info: info)
@@ -23,38 +28,7 @@ extension NM{
         }
     }
     func editCH(wsID: Int,name:String,_ info:CHInfo) async throws -> CHResponse{
-        
         let router = ChannelRouter.edit(wsID: wsID, chName: name, info: info)
-        return try await withCheckedThrowingContinuation { [weak self] continuation in
-            guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
-                return
-            }
-            AF.request(router,interceptor: authInterceptor).validate(customValidation).response { [weak self] res in
-                guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
-                    return
-                }
-                generalResponse(err: CHFailed.self, result: CHResponse.self, res: res, continuation: continuation)
-            }
-        }
-    }
-    func checkAllCH(wsID: Int) async throws -> [CHResponse] {
-        let router = ChannelRouter.check(wsID: wsID, .allMy)
-        return try await withCheckedThrowingContinuation { continuation in
-            AF.request(router,interceptor: authInterceptor)
-                .validate(customValidation)
-                .response { [weak self] res in
-                    guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
-                        return
-                    }
-                    generalResponse(err: CHFailed.self, result: [CHResponse].self, res: res, continuation: continuation)
-                }
-        }
-    }
-    func checkCH(wsID: Int, channelName:String) async throws -> CHResponse{
-        let router = ChannelRouter.check(wsID: wsID, .specific(chName: channelName))
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
                 continuation.resume(throwing: Errors.API.FailFetchToken)
@@ -101,8 +75,8 @@ extension NM{
             }
         }
     }
-    func checkCHUsers(wsID: Int, channelName:String) async throws -> [UserResponse]{
-        let router = ChannelRouter.check(wsID: wsID, .members(chName: channelName))
+    func exitCH(wsID:Int, channelNmae:String) async throws -> [CHResponse]{
+        let router = CHRouter.leave(wsID: wsID, chName: channelNmae)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
                 continuation.resume(throwing: Errors.API.FailFetchToken)
@@ -113,34 +87,9 @@ extension NM{
                     continuation.resume(throwing: Errors.API.FailFetchToken)
                     return
                 }
-                generalResponse(err: CHFailed.self, result: [UserResponse].self, res: res, continuation: continuation)
+                generalResponse(err: CHFailed.self, result: [CHResponse].self, res: res, continuation: continuation)
             }
-        }
-    }
-    func checkUnreads(wsID: Int,channelName: String,date:Date?) async throws -> UnreadsChannelRes{
-        let router = ChannelRouter.unreads(wsID: wsID, chName: channelName,lastDate: date)
-        return try await withCheckedThrowingContinuation{ [weak self] continuation in
-            guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
-                return
-            }
-            AF.request(router,interceptor: authInterceptor).validate(customValidation).response { res in
-                self.generalResponse(err: CHFailed.self, result: UnreadsChannelRes.self, res: res, continuation: continuation)
-            }
-        }
-    }
-    func checkAllMyCH(wsID: Int) async throws -> [CHResponse]{
-        let router = ChannelRouter.check(wsID: wsID, .allMy)
-        return try await withCheckedThrowingContinuation { continuation in
-            AF.request(router,interceptor: authInterceptor)
-                .validate(customValidation)
-                .response { [weak self] res in
-                    guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
-                        return
-                    }
-                    generalResponse(err: CHFailed.self, result: [CHResponse].self, res: res, continuation: continuation)
-                }
         }
     }
 }
+

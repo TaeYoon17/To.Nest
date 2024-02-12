@@ -7,18 +7,22 @@
 
 import Foundation
 import RxSwift
+/// 워크스페이스 서비스에서는 DB 및 도큐먼트에 접근하는 API를 사용하지 않음
+/// 예외) 워크스페이스 삭제의 경우, DB 및 도큐먼트에 데이터를 삭제함
 typealias WSService = WorkSpaceService
 protocol WorkSpaceProtocol{
     var event: PublishSubject<WorkSpaceService.Event> {get}
     func create(_ info:WSInfo)
-    func edit(_ info:WSInfo,id:String)
+    func edit(_ info:WSInfo)
     func delete(workspaceID: Int)
     func exit(workspaceID: Int)
     func checkAllWS()
     func initHome()
-    func setHomeWS(wsID:Int?)
-    func checkMembers()
-    func inviteUser(emailText:String)
+    func setHomeWS(wsID:Int?) // 홈 워크스페이스 변경
+    //MARK: -- 유저(멤버) 관련
+    func inviteUser(emailText:String) // 유저 초대
+    func checkAllMembers() // 워크스페이스 내부 모든 멤버 조회
+    func changeAdmin(userID:Int)
 }
 final class WorkSpaceService:WorkSpaceProtocol{
     @DefaultsState(\.mainWS) var mainWS
@@ -40,7 +44,8 @@ final class WorkSpaceService:WorkSpaceProtocol{
         case unknownError
         case requireReSign
         case invited(UserResponse)
-        case members([UserResponse])
+        case wsAllMembers([UserResponse])
+        case adminChanged(WSResponse)
     }
     init(){
         Task{@BackgroundActor in
@@ -71,14 +76,15 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
-    func edit(_ info:WSInfo,id:String){
+    func edit(_ info:WSInfo){
         Task{
             do{
-                let res = try await NM.shared.editWS(info,wsID: id)
+                var mainWS = mainWS.id
+                let res = try await NM.shared.editWS(info,wsID: mainWS)
                 event.onNext(.edit(res)) // 이 일은 SideVM에서 처리하겠지..?
                 self.setHomeWS(wsID: res.workspaceID)
             }catch{
-                print("edit Error 가져오기 성공")
+                print("edit Error 가져오기  에러")
                 guard authValidCheck(error: error) else{
                     AppManager.shared.userAccessable.onNext(false)
                     return
@@ -115,7 +121,7 @@ final class WorkSpaceService:WorkSpaceProtocol{
             do{
                 let res = try await NM.shared.deleteWS(workspaceID)
                 if res{
-                    await self.deleteAllWS(id: workspaceID)
+                    await self.deleteAllDB(byWSId: workspaceID)
                     event.onNext(.delete)
                 }
             }catch{
@@ -131,13 +137,14 @@ final class WorkSpaceService:WorkSpaceProtocol{
             }
         }
     }
-    //MARK: -- Exit Workspace
+    //MARK: -- Exit Workspace 나가기
     func exit(workspaceID: Int){
         Task{
             do{
+                print("workSpaceID \(workspaceID)")
                 let res = try await NM.shared.exitWS(workspaceID)
                 if res{
-                    await self.deleteAllWS(id: workspaceID)
+                    await self.deleteAllDB(byWSId: workspaceID)
                     event.onNext(.exit)
                 }else{
                     event.onNext(.unknownError)
@@ -148,6 +155,7 @@ final class WorkSpaceService:WorkSpaceProtocol{
                     return
                 }
                 if let ws = error as? WSFailed{
+                    event.onNext(.failed(ws))
                     return
                 }
                 // 그냥 알 수 없는 에러라고 보내버리기

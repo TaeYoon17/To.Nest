@@ -26,6 +26,8 @@ final class ChannelTable:Object,Identifiable{
 }
 extension ChannelTable{
     convenience init(channelInfo info:CHResponse) {
-        self.init(channelID: info.channelID, channelName: info.name, wsID: info.workspaceID,date: info.createdAt.convertToDate())
+        self.init(channelID: info.channelID,
+                  channelName: info.name,
+                  wsID: info.workspaceID,date: info.createdAt.convertToDate())
     }
 }

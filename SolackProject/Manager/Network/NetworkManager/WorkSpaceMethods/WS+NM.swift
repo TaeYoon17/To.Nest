@@ -7,9 +7,13 @@
 
 import Foundation
 import Alamofire
+//MARK: -- 워크스페이스 관련 API 함수
+/// 1. 워크스페이스 생성
+/// 2. 워크스페이스 수정
+/// 3. 워크스페이스 삭제 -> 관리자일 경우만 실행
+/// 4. 워크스페이스 나가기 -> 관리자가 아닐 경우에만 실행
 extension NM{
     func createWS(_ info:WSInfo) async throws -> WSResponse{
-        print(#function)
         let router = WSRouter.create(info: info)
         return try await withCheckedThrowingContinuation { continutaion in
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: self.authInterceptor)
@@ -27,7 +31,7 @@ extension NM{
                 }
         }
     }
-    func editWS(_ info:WSInfo,wsID: String) async throws -> WSResponse{
+    func editWS(_ info:WSInfo,wsID: Int) async throws -> WSResponse{
         let router = WSRouter.edit(wsID: wsID, info: info)
         return try await withCheckedThrowingContinuation { continutaion in
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: self.authInterceptor)
@@ -41,36 +45,6 @@ extension NM{
                         return
                     }
                     generalResponse(err: WSFailed.self, result: WSResponse.self, res: res, continuation: continutaion)
-                }
-        }
-    }
-    func checkAllWS() async throws -> [WSResponse]{
-        let router = WSRouter.check(.myAll)
-        return try await withCheckedThrowingContinuation { contiuation in
-            AF.request(router,interceptor: self.authInterceptor)
-                .validate(customValidation)
-                .response{ [weak self] res in
-                    guard let self else{
-                        contiuation.resume(throwing: Errors.API.FailFetchToken)
-                        return
-                    }
-                    generalResponse(err: WSFailed.self, result: [WSResponse].self, res: res, continuation: contiuation)
-                }
-        }
-    }
-    func checkWS(wsID:Int) async throws -> WSDetailResponse {
-        let router = WSRouter.check(.my(id: "\(wsID)"))
-        print(router)
-        return try await withCheckedThrowingContinuation { continuation in
-            AF.request(router,interceptor: self.authInterceptor)
-                .validate(customValidation)
-                .response{ [weak self] res in
-                    guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
-                        return
-                    }
-                    print(res)
-                    generalResponse(err: WSFailed.self, result: WSDetailResponse.self, res: res, continuation: continuation)
                 }
         }
     }
@@ -111,41 +85,7 @@ extension NM{
         }
     }
 }
-//MARK: -- 워크스페이스 멤버용 API
-extension NM{
-    func checkWSMembers(_ wsID: Int) async throws -> [UserResponse]{
-        let router = WSRouter.check(.memberAll(id: wsID))
-        return try await withCheckedThrowingContinuation {[weak self] continuation in
-            guard let self else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
-                return
-            }
-            AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
-                guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
-                    return
-                }
-                self.generalResponse(err: WSFailed.self, result: [UserResponse].self, res: res, continuation: continuation)
-            }
-        }
-    }
-    func inviteWS(_ wsID:Int,email:String) async throws -> UserResponse{
-        let router = WSRouter.invite(wsID: wsID, email: email)
-        return try await withCheckedThrowingContinuation {[weak self] continuation in
-            guard let self else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
-                return
-            }
-            AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
-                guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
-                    return
-                }
-                self.generalResponse(err: WSFailed.self, result: UserResponse.self, res: res, continuation: continuation)
-            }
-        }
-    }
-}
+
 extension NM{
     fileprivate func checkCompleteResponse(result res:AFDataResponse<Data?>,continuation: CheckedContinuation<Bool, Error>){
         switch res.result{

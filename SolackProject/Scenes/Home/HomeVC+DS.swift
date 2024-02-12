@@ -58,7 +58,8 @@ extension HomeVC{
                 }
                 Task{@MainActor in
                     var snapshot = owner.snapshot()
-                    snapshot.reloadItems(items)
+                    let sectionItems = snapshot.itemIdentifiers(inSection: .channel)
+                    snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
                     owner.apply(snapshot,animatingDifferences: false)
                 }
             }.disposed(by: disposeBag)

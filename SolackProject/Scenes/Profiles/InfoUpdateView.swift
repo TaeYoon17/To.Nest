@@ -41,7 +41,7 @@ struct InfoUpdateView: View{
     }
     var body: some View{
         contents
-            .toast(type: $toastType, alignment: .bottom)
+            .toast(type: $toastType, alignment: .bottom, position: .zero)
             .contentModi()
             .onTapGesture {
                 if isFocused{ isFocused = false }

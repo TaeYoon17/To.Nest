@@ -40,6 +40,7 @@ extension Toastable{
     func toastUp(type: any ToastType){
         var style = defaultStyle(type: type)
         let toast = try! navigationController!.view.toastViewForMessage(type.contents, title: nil, image: nil, style: style)
+        toast.layer.zPosition = 100
         let radiusHeight = toast.frame.height / 2
         self.toastHeight = toast.frame.height
         Task{@MainActor in

@@ -20,7 +20,7 @@ extension CHRouter{
 enum ChannelRouter:URLRequestConvertible{
     case create(wsID: Int,info:CHInfo)
     case check(wsID:Int,CheckType),leave(wsID: Int,chName: String),unreads(wsID:Int,chName:String,lastDate:Date?)
-    case edit(wsID: Int,chName:String,info:CHInfo),changeAdmin(wsID:Int,chName:String,userID:String)
+    case edit(wsID: Int,chName:String,info:CHInfo),changeAdmin(wsID:Int,chName:String,userID:Int)
     case delete(wsID: Int,chName: String)
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
     var endPoint:String{

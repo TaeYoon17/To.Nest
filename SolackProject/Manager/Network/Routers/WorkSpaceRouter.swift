@@ -17,12 +17,13 @@ extension WorkSpaceRouter{
     }
 }
 enum WorkSpaceRouter:URLRequestConvertible{
-    case create(info:WSInfo),check(CheckType),edit(wsID:String,info:WSInfo),delete(wsID: Int)
-    case invite(wsID:Int,email:String),search,leave(wsID:Int),adminChange
+    case create(info:WSInfo),check(CheckType),edit(wsID:Int,info:WSInfo),delete(wsID: Int)
+    case invite(wsID:Int,email:String),search,leave(wsID:Int),adminChange(wsID:Int,userID:Int)
     static private let baseURL = URL(string: API.baseURL + "/v1/workspaces")
     var endPoint:String{
         switch self{
-        case .adminChange: ""
+        case .adminChange(wsID: let wsID, userID: let userID):
+            "/\(wsID)/change/admin/\(userID)"
         case .check(let checkType):
             switch checkType{
             case .my(id: let myID): "/\(myID)"

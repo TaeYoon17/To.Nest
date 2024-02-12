@@ -11,14 +11,17 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class WSManagerView: BaseVC,View{
+final class WSManagerView: BaseVC,View,Toastable{
+    var isShowKeyboard: CGFloat? = 0
+    var toastY: CGFloat = 0
+    var toastHeight: CGFloat = 0.0
+    
     var disposeBag: DisposeBag = .init()
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: ChangeManager.layout)
     var dataSource: DataSource!
     func bind(reactor: WSManagerReactor) {
-        reactor.state.map{$0.close}.bind(with: self) { owner, value in
-            if value{ owner.dismiss(animated: true) }
-        }.disposed(by: disposeBag)
+        dialogAndCloseBind(reactor: reactor)
+        reactor.action.onNext(.initAction)
     }
     override func viewDidLoad() {
         super.viewDidLoad()

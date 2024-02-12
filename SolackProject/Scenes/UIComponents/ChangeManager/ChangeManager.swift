@@ -7,6 +7,8 @@
 
 import UIKit
 import SwiftUI
+typealias ChangeManagerListCell = ChangeManager.ChangeManagerListCell
+typealias ChangeManagerListItem = ChangeManager.ChangeManagerCellItem
 enum ChangeManager{
     static var layout:UICollectionViewCompositionalLayout{
         var listCellConfig = UICollectionLayoutListConfiguration(appearance: .plain)
@@ -15,22 +17,42 @@ enum ChangeManager{
         let layout = UICollectionViewCompositionalLayout.list(using: listCellConfig)
         return layout
     }
-    static var cellRegistration: UICollectionView.CellRegistration<UICollectionViewCell,String>{
-        UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
-            cell.contentConfiguration = UIHostingConfiguration(content: {
-                ChangeManagerListCell()
-            }).margins(.leading, 14).margins(.vertical, 8)
-            
-            cell.configurationUpdateHandler = { cell, state in
-                var backConfig = cell.defaultBackgroundConfiguration()
-                backConfig.backgroundInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
-                if state.isSelected{
-                    backConfig.backgroundColor = UIColor.systemFill
-                }else{
-                    backConfig.backgroundColor = .gray1
+    struct ChangeManagerListCell: View{
+        @ObservedObject var item:ChangeManagerCellItem
+        var body: some View{
+            HStack(spacing:8){
+                item.profileImage.resizable().scaledToFit().frame(width: 44,height: 44).clipShape(RoundedRectangle(cornerRadius: 8))
+                VStack(alignment:.leading,spacing:2){
+                    Text(item.nickName)
+                        .font(FontType.bodyBold.font)
+                        .foregroundStyle(.text)
+                        .frame(height: 18)
+                    Text(verbatim:item.email)
+                        .font(FontType.body.font)
+                        .foregroundStyle(.secondary)
+                        .frame(height:18)
                 }
-                cell.backgroundConfiguration = backConfig
+                Spacer()
             }
+        }
+    }
+    final class ChangeManagerCellItem:ObservableObject,Identifiable,Hashable{
+        static func == (lhs: ChangeManager.ChangeManagerCellItem, rhs: ChangeManager.ChangeManagerCellItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+        var id:String{"\(userID)"}
+        var userID:Int
+        @Published var nickName:String
+        @Published var profileImage:Image
+        @Published var email:String
+        init(userID: Int, nickName: String, profileImage: Image, email: String) {
+            self.userID = userID
+            self.nickName = nickName
+            self.profileImage = profileImage
+            self.email = email
         }
     }
 }

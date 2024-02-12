@@ -25,6 +25,7 @@ final class CHSettingView: BaseVC, View{
             switch type{
             case .adminChange:
                 let vc = CHAdminChangeView()
+                vc.reactor = CHAdminChangeReactor(provider: reactor.provider, channelID: reactor.channelID, channelTitle: reactor.title)
                 let nav = UINavigationController(rootViewController: vc)
                 owner.present(nav,animated: true)
             case .delete:

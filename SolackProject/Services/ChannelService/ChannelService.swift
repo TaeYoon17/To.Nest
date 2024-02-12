@@ -19,6 +19,7 @@ protocol ChannelProtocol{
     func checkAll()
     func check(title:String)
     func delete(channelID:Int,channelName:String)
+    func changeAdmin(userID: Int,channelName: String)
 }
 final class ChannelService:ChannelProtocol{
     @DefaultsState(\.mainWS) var mainWS
@@ -39,6 +40,7 @@ final class ChannelService:ChannelProtocol{
         case unreads([UnreadsChannelRes])
         case check(CHResponse)
         case channelUsers(id:Int,[UserResponse])
+        case channelAdminChange(CHResponse)
     }
     enum Transition{
         case goChatting(chID:Int,chName:String)
@@ -52,6 +54,22 @@ final class ChannelService:ChannelProtocol{
             imageReferenceCountManager = ImageRCM.shared
         }
     }
+    func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsChannelRes{
+        try await NM.shared.checkUnreads(wsID: mainWS.id, channelName: channelName, date: lastDate)
+    }
+    func authValidCheck(error: Error)->Bool{
+        print("ChannelService authValidCheck")
+        if let auth = error as? AuthFailed{
+            switch auth{
+            case .isValid: return true // 로그인 필요 X
+            default: return false // 재로그인 로직 돌리기
+            }
+        }
+        return true
+    }
+}
+// MARK: --  CRUD
+extension ChannelService{
     func create(_ info: CHInfo){
         Task{
             do{
@@ -66,43 +84,6 @@ final class ChannelService:ChannelProtocol{
                 if let chError = error as? ChannelFailed{
                     event.onNext(.failed(chError))
                 }
-            }
-        }
-    }
-    func edit(channelName:String,_ info: CHInfo) {
-        Task{
-            do{
-                let result = try await NM.shared.editCH(wsID: mainWS.id,name:channelName, info)
-                Task{@BackgroundActor in
-                    await repository.updateChannelName(channelID:result.channelID,name:result.name)
-                }
-                print("updateResult: \(result)")
-                event.onNext(.update(result))
-            }catch{
-                
-            }
-        }
-    }
-    func check(title:String){
-        Task{
-            do{
-                let response = try await NM.shared.checkCH(wsID: mainWS.id,channelName: title)
-                event.onNext(.check(response))
-                let users = try await NM.shared.checkCHUsers(wsID: mainWS.id, channelName: title)
-                let channelID = response.channelID
-                event.onNext(.channelUsers(id: channelID, users))
-            }catch{
-                print(error)
-            }
-        }
-    }
-    func checkUser(channelID:Int,title:String){
-        Task{
-            do{
-                let users = try await NM.shared.checkCHUsers(wsID: mainWS.id, channelName: title)
-                event.onNext(.channelUsers(id: channelID, users))
-            }catch{
-                print(error)
             }
         }
     }
@@ -121,65 +102,15 @@ final class ChannelService:ChannelProtocol{
             }
         }
     }
-    func checkAll(){
+    func edit(channelName:String,_ info: CHInfo) {
         Task{
             do{
-                let results:[CHResponse] = try await NM.shared.checkAllCH(wsID: mainWS.id)
-                event.onNext(.all(results))
-            }catch{
-                guard authValidCheck(error: error) else {
-                    AppManager.shared.userAccessable.onNext(false)
-                    return
-                }
-                if let chError = error as? ChannelFailed{
-                    event.onNext(.failed(chError))
-                }
-            }
-        }
-    }
-    func checkAllMy() {
-        Task{
-            do{
-                print("checkAllMy mainWS \(mainWS)")
-                let results = try await NM.shared.checkAllMyCH(wsID: mainWS.id)
-                self.event.onNext(.allMy(results))
-                // 해당 워크스페이스 아이디를 갖으면서
-                // 기존에 없었던 테이블 생성... or 기존에 있었지만 받아온 채널아이디가 없는 테이블 삭제
+                let result = try await NM.shared.editCH(wsID: mainWS.id,name:channelName, info)
                 Task{@BackgroundActor in
-                    for v in results{ // 채널 response
-                        try await Task.sleep(for: .microseconds(10))
-                        if let table = repository.getTableBy(tableID: v.channelID){
-                            // 기존에 존재하는 채널... 업데이트 필요
-                            await repository.updateChannelName(channelID: v.channelID, name: v.name)
-                        }else{// 기존에 존재하지 않아서 새로 추가해야하는 채널
-                            await repository.create(item: ChannelTable(channelInfo: v))
-                        }
-                    }
-                    let exiseted = repository.getTasks.where { $0.wsID == self.mainWS.id}
-                    let checkUnreads = Array(exiseted.map{ ($0.lastReadDate,$0.channelName) })
-                    let existedChannels = exiseted.map{$0.channelID}
-                    let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
-                    Task.detached {
-                        var unreadsResponses: [UnreadsChannelRes] = []
-                        for checks in checkUnreads{
-                            do{
-                                let unreads = try await self.updateChannelUnreads(channelName: checks.1,lastDate: checks.0)
-                                unreadsResponses.append(unreads)
-                            }catch{
-                                print(error)
-                                print("여기 에러")
-                            }
-                        }
-                        let responses = unreadsResponses
-                        print("unreadsResponses",responses)
-                        await MainActor.run {
-                            self.event.onNext(.unreads(responses))
-                        }
-                    }
-                    repository.removeChannelTables(ids: Array(removeChannelIDs))
+                    await repository.updateChannelName(channelID:result.channelID,name:result.name)
                 }
+                event.onNext(.update(result))
             }catch{
-                print("checkAllMy() 여기 에러")
                 guard authValidCheck(error: error) else {
                     AppManager.shared.userAccessable.onNext(false)
                     return
@@ -190,17 +121,18 @@ final class ChannelService:ChannelProtocol{
             }
         }
     }
-    func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsChannelRes{
-        try await NM.shared.checkUnreads(wsID: mainWS.id, channelName: channelName, date: lastDate)
-    }
-    func authValidCheck(error: Error)->Bool{
-        print(error)
-        if let auth = error as? AuthFailed{
-            switch auth{
-            case .isValid: return true // 로그인 필요 X
-            default: return false // 재로그인 로직 돌리기
+}
+
+extension ChannelService{
+    func changeAdmin(userID: Int,channelName: String){
+        Task{
+            do{
+                let wsID = mainWS.id
+                let res = try await NM.shared.changeCHAdmin(wsID: wsID, channelName: channelName, userID: userID)
+                event.onNext(.channelAdminChange(res))
+            }catch{
+                print("changeAdmin Error \(error)")
             }
         }
-        return true
     }
 }

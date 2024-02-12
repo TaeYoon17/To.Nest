@@ -20,7 +20,7 @@ extension DMMainReactor{
                     mutList.append(.just(.setWSThumbnail(profileImage)).delay(.microseconds(100), scheduler: MainScheduler.instance))
                 }
                 mutList.append(.just(.setMembsers(members)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance))
-            case .members(let response):
+            case .wsAllMembers(let response):
                 mutList.append(
                     .just(.setMembsers(response)).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
                 )

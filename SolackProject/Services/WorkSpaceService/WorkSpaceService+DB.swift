@@ -8,8 +8,8 @@
 import Foundation
 import RealmSwift
 extension WorkSpaceService{
-    @BackgroundActor func deleteAllWS(id:Int) async{
-        let channelTasks = await self.channelRepository.getChannelsByWS(wsID: id)
+    @BackgroundActor func deleteAllDB(byWSId wsID:Int) async{
+        let channelTasks = await self.channelRepository.getChannelsByWS(wsID: wsID)
         for channel in channelTasks{
             await deleteChannelData(channel: channel)
         }

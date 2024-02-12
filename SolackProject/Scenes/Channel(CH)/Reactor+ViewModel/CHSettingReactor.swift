@@ -91,8 +91,9 @@ final class CHSettingReactor:Reactor{
         let channelMutation = provider.chService.event.flatMap { [weak self] event -> Observable<Mutation> in
             guard let self else {fatalError("이게 이상해")}
             switch event{
-            case .check(let response):
+            case .check(let response),.channelAdminChange(let response):
                 if response.channelID == self.channelID{
+                    print("여기 response \(response)")
                     self.title = response.name
                     self.info.name = response.name
                     self.info.description = response.description ?? ""
