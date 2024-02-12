@@ -86,7 +86,7 @@ extension MessageService:SocketReceivable{
         Task{@BackgroundActor in
             await self._getChannelDatas(chID: channelID, chName: channelName)
             guard let chatTablesLists = channelRepostory.getTableBy(tableID: channelID)?.chatList else{
-                fatalError("존재하지 않는 채팅")
+                fatalError("존재하지 않는 채팅 내역")
             }
             let allUsers = chatTablesLists.map{$0.userID}.makeSet()
             try await updateUserInformationToDataBase(userIDs: allUsers)

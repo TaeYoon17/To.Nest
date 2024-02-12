@@ -7,12 +7,13 @@
 
 import SwiftUI
 struct DirectMsgListItemView: View{
-    var thumbnail:String
-    var name:String
-    var isUnreadExist:Bool
-    var messageCount:Int
+    @ObservedObject var item:HomeVC.DirectListItem
+//    var thumbnail:String
+//    var name:String
+//    var isUnreadExist:Bool
+//    var messageCount:Int
     var body: some View{
-        if isUnreadExist{
+        if item.messageCount > 0{
             unread
         }else{
             allRead
@@ -22,9 +23,9 @@ struct DirectMsgListItemView: View{
         Label(
             title: {
                 HStack{
-                    Text(name)
+                    Text(item.name)
                     Spacer()
-                    Text("\(messageCount)")
+                    Text("\(item.messageCount)")
                         .foregroundStyle(.white)
                         .padding(.vertical,2)
                         .padding(.horizontal,4)
@@ -34,7 +35,7 @@ struct DirectMsgListItemView: View{
                 }.font(FontType.bodyBold.font)
             },
             icon: {
-                Image(thumbnail, bundle: nil).resizable().scaledToFill()
+                item.thumbnail.resizable().scaledToFill()
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
         )
@@ -43,19 +44,21 @@ struct DirectMsgListItemView: View{
         Label(
             title: {
                 HStack{
-                    Text(name)
+                    Text(item.name)
                     Spacer()
-                    Text("\(messageCount)")
-                        .font(FontType.bodyBold.font)
-                        .foregroundStyle(.white)
-                        .padding(.vertical,2)
-                        .padding(.horizontal,4)
-                        .background(.accent)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    if item.messageCount > 0{
+                        Text("\(item.messageCount)")
+                            .font(FontType.bodyBold.font)
+                            .foregroundStyle(.white)
+                            .padding(.vertical,2)
+                            .padding(.horizontal,4)
+                            .background(.accent)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
                 }.font(FontType.body.font)
             },
             icon: {
-                Image(thumbnail).resizable().scaledToFill()
+                item.thumbnail.resizable().scaledToFill()
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
         ).foregroundStyle(.secondary)

@@ -14,6 +14,8 @@ enum HomePresent:Equatable{
     case explore
     case chatting(chID:Int,chName:String)
     case invite
+    case dmExplore
+    case dm(roomID:Int,user:UserResponse)
 }
 final class HomeReactor: Reactor{
     let initialState: State = .init()
@@ -23,15 +25,17 @@ final class HomeReactor: Reactor{
         case setPresent(HomePresent?)
         case setMainWS(wsID:String)
         case initMainWS
-        case updateChannels
+        case updateUnreads
     }
     enum Mutation{
         case channelDialog(HomePresent?)
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
-        case setUnreads([UnreadsChannelRes]?)
+        case setChannelUnreads([UnreadsChannelRes]?)
         case setChannelList([CHResponse]?)
+        case setDMUnreads([UnreadDMRes]?)
+        case setDMList([DMRoomResponse]?)
         case isProfileUpdated(Bool)
         case setToast(ToastType?)
     }
@@ -39,7 +43,9 @@ final class HomeReactor: Reactor{
         var channelDialog:HomePresent? = nil
         var isMasking: Bool? = nil
         var channelList:[CHResponse]? = nil
-        var unreads:[UnreadsChannelRes]? = nil
+        var channelUnreads:[UnreadsChannelRes]? = nil
+        var dmList:[DMRoomResponse]? = nil
+        var dmUnreads:[UnreadDMRes]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
         var isProfileUpdated:Bool = false
@@ -55,7 +61,7 @@ final class HomeReactor: Reactor{
                 case .chatting(chID: let id, chName: let name):
                 let unreads = UnreadsChannelRes(channelID: id, name: name, count: 0)
                 return Observable.concat([
-                    .just(.setUnreads([unreads])),
+                    .just(.setChannelUnreads([unreads])),
                     Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
                     Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
                 ])
@@ -78,8 +84,9 @@ final class HomeReactor: Reactor{
         case .initMainWS:
             provider.wsService.initHome()
             return Observable.concat([])
-        case .updateChannels:
+        case .updateUnreads:
             provider.chService.checkAllMy()
+            provider.dmService.checkAll(wsID: mainWS.id)
             return Observable.concat([])
         }
     }
@@ -96,12 +103,16 @@ final class HomeReactor: Reactor{
             state.wsLogo = logo
         case .wsTitle(let title):
             state.wsTitle = title
-        case .setUnreads(let responses):
-            state.unreads = responses
+        case .setChannelUnreads(let responses):
+            state.channelUnreads = responses
         case .isProfileUpdated(let update):
             state.isProfileUpdated = update
         case .setToast(let toast):
             state.toast = toast
+        case .setDMUnreads(let unreads):
+            state.dmUnreads = unreads
+        case .setDMList(let dmList):
+            state.dmList = dmList
         }
         return state
     }

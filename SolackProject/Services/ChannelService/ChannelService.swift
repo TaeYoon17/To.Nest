@@ -20,6 +20,8 @@ protocol ChannelProtocol{
     func check(title:String)
     func delete(channelID:Int,channelName:String)
     func changeAdmin(userID: Int,channelName: String)
+    func exit(channelID:Int,channelName:String)
+    func join(channelID:Int,channelName:String)
 }
 final class ChannelService:ChannelProtocol{
     @DefaultsState(\.mainWS) var mainWS
@@ -36,11 +38,13 @@ final class ChannelService:ChannelProtocol{
         case all([CHResponse])
         case update(CHResponse)
         case delete(chID:Int)
+        case exit(chID:Int)
         case failed(ChannelFailed)
         case unreads([UnreadsChannelRes])
         case check(CHResponse)
         case channelUsers(id:Int,[UserResponse])
         case channelAdminChange(CHResponse)
+        case join(chID:Int,channelName:String)
     }
     enum Transition{
         case goChatting(chID:Int,chName:String)
@@ -118,6 +122,34 @@ extension ChannelService{
                 if let chError = error as? ChannelFailed{
                     event.onNext(.failed(chError))
                 }
+            }
+        }
+    }
+    func exit(channelID:Int,channelName:String){
+        Task{
+            do{
+                let wsID = mainWS.id
+                let res = try await NM.shared.exitCH(wsID: wsID, channelNmae: channelName)
+                Task{ @BackgroundActor in
+                    await deleteChannel(channelID:channelID)
+                }
+                self.event.onNext(.exit(chID: channelID))
+            }catch{
+                print("channelExit error")
+                print(error)
+            }
+        }
+    }
+    func join(channelID:Int,channelName:String){
+        Task{
+            do{
+                let wsID = mainWS.id
+                _ = try await NM.shared.checkChat(wsID: wsID, chName: channelName, date: Date())
+                await self._checkAllMy()
+                self.event.onNext(.join(chID: channelID, channelName: channelName))
+            }catch{
+                print("channel join error")
+                print(error)
             }
         }
     }

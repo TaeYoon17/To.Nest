@@ -24,24 +24,17 @@ import RealmSwift
     func updateRoomCheckDate(roomID:Int) async{
         if let table = self.getTableBy(tableID: roomID){
             try! await self.realm.asyncWrite({
-                table.lastCheckDate = Date()
+                table.lastCheckDate = Date.nowKorDate
             })
         }
     }
     func updateRoomReadDate(roomID:Int) async{
         if let table = self.getTableBy(tableID: roomID){
             try! await self.realm.asyncWrite({
-                table.lastReadDate = Date()
+                table.lastReadDate = Date.nowKorDate
             })
         }
     }
-//    func updateRoomName(channelID:Int,name:String) async{
-//        if let table = self.getTableBy(tableID: channelID){
-//            try! await self.realm.asyncWrite({
-//                table.channelName = name
-//            })
-//        }
-//    }
     // 채널 테이블에 채팅 테이블 추가하기
     func appendChat(roomID:Int,chatTables:[DMChatTable]) async {
         guard let table = self.getTableBy(tableID: roomID) else {fatalError("Can't find channel table")}

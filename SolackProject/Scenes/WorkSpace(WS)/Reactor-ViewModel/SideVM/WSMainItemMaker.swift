@@ -25,6 +25,6 @@ extension WSMainVM{
                                        image: myImage,
                                        name: res.name,
                                        description: res.description,
-                                       date: res.createdAt)
+                                       date: res.createdAt.convertToDate().wsDateConverter())
     }
 }

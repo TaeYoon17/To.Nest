@@ -39,7 +39,9 @@ final class CHSettingView: BaseVC, View{
                 let nav = UINavigationController(rootViewController: vc)
                 owner.present(nav,animated:true)
             case .exit:
-                let alert = SolackAlertVC(title: "채널에서 나가기", description: "나가기를 하면 채널 목록에서 삭제됩니다.", infos: [], cancelTitle: "취소", cancel: {}, confirmTitle: "나가기", confirm: {})
+                let alert = SolackAlertVC(title: "채널에서 나가기", description: "나가기를 하면 채널 목록에서 삭제됩니다.", infos: [], cancelTitle: "취소", cancel: {}, confirmTitle: "나가기", confirm: {[weak self] in
+                    reactor.action.onNext(.exitAction)
+                })
                 alert.modalPresentationStyle = .overFullScreen
                 owner.present(alert, animated: false)
             }

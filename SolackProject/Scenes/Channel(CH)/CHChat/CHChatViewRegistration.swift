@@ -25,12 +25,20 @@ extension CHChatView{
             cell.selectedBackgroundView = .none
             if let itemAssets = dataSource.chatAssetModel.object(forKey: "\(item.chatID)" as NSString){
                 cell.contentConfiguration = UIHostingConfiguration(content: {
-                    ChatCell(chatItem: item,images: itemAssets)
+                    ChatCell(chatItem: item,images: itemAssets, profileAction: {[weak self] userID in
+                        guard let self else {return}
+                        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
+                        navigationController?.pushViewController(vc, animated: true)
+                    })
                 })
             }else{
                 let itemAsset = self.dataSource.appendChatAssetModel(item: item)
                 cell.contentConfiguration = UIHostingConfiguration(content: {
-                    ChatCell(chatItem: item,images: itemAsset)
+                    ChatCell(chatItem: item,images: itemAsset, profileAction: {[weak self] userID in
+                        guard let self else {return}
+                        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
+                        navigationController?.pushViewController(vc, animated: true)
+                    })
                 })
             }
         }

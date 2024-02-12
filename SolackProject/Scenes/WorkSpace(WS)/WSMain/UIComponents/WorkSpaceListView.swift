@@ -113,7 +113,7 @@ struct WorkSpaceList:View{
         HStack(alignment:.center, spacing:8){
             let size = CGSize(width: 44, height: 44)
             Image(uiImage: item.image).resizable().frame(size).clipShape(RoundedRectangle(cornerRadius: 8))
-            VStack(alignment: .leading){
+            VStack(alignment: .leading,spacing: 4){
                 Text(item.name).font(FontType.bodyBold.font)
                 Text(item.date).font(FontType.body.font).foregroundStyle(.secondary)
             }

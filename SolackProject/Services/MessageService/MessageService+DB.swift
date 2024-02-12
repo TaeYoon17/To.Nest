@@ -14,6 +14,7 @@ extension MessageService{
     @BackgroundActor func updateUserInformationToDataBase(userIDs: any Collection<Int>) async throws{
         try await userIDs.asyncForEach { userID in
             var response = try await NM.shared.checkUser(userID: userID)
+            try await Task.sleep(nanoseconds: 100)
             if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
                 if table.getResponse.profileImage == response.profileImage?.webFileToDocFile() && table.getResponse.nickname == response.nickname{return}
                 response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
@@ -90,7 +91,8 @@ extension MessageService{
         }
         var ircSnapshot = await imageReferenceCountManager.snapshot
         var tables:[DMChatTable] = []
-        for var res in createResponses{ // 채팅 이미지 썸네일 IRC 업데이트 및 채팅 테이블 추가
+        // 채팅 이미지 썸네일 IRC 업데이트 및 채팅 테이블 추가
+        for var res in createResponses where await dmChatRepository.getTableBy(tableID: res.dmID) == nil{
             res.convertWebPathToFilePath()
             await ircSnapshot.plusCount(ids: res.files)
             let chatTable = DMChatTable(response: res)

@@ -39,6 +39,9 @@ extension DMMainVC{
                         if response.user.userID == self?.userID {
                             continue
                         }
+//                        if response.content == nil{
+//                            continue
+//                        }
                         let dmItem = DMRoomItem(roomResponse: response)
                         await self?.appendDMAsset(roomItem: dmItem)
                         self?.roomModel.insertModel(item: dmItem)

@@ -44,6 +44,8 @@ final class HomeVC: BaseVC, View,Toastable{
         view.backgroundColor = .systemBackground
         navBar.workSpaceTap.bind(with: self) { owner, _ in
             // 슬라이드 뷰 구현 with swiftui
+            owner.sliderVM.sliderPresent.onNext(())
+            owner.sliderVM.endedSlider.onNext(true)
         }.disposed(by: disposeBag)
         sliderVM.sliderPresent.bind(with: self) { owner, _ in
             owner.present(owner.sliderVC, animated: false)
@@ -75,8 +77,8 @@ final class HomeVC: BaseVC, View,Toastable{
             make.bottom.equalTo(view.safeAreaLayoutGuide )
         }
         newMessageBtn.snp.makeConstraints { make in
-            make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
-            make.height.width.equalTo(54)
+            make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(18)
+            make.height.width.equalTo(60)
         }
         wsEmpty.snp.makeConstraints { make in
             make.top.equalTo(navBar.snp.bottom)
@@ -91,7 +93,7 @@ final class HomeVC: BaseVC, View,Toastable{
             self.tabBarController?.tabBar.layer.opacity = 0
         }
         print("Home view will appear")
-        reactor?.action.onNext(.updateChannels)
+        reactor?.action.onNext(.updateUnreads)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -106,7 +108,8 @@ final class HomeVC: BaseVC, View,Toastable{
         collectionView.backgroundColor = .gray1
         configureCollectionView()
         newMessageBtn.rx.tap.bind(with: self) { owner, _ in
-            let vc = WSwriterView<WScreateReactor>(.create,reactor: WScreateReactor(owner.reactor!.provider))
+            let vc = WSInviteView()
+            vc.reactor = WSInviteReactor(owner.reactor!.provider)
             let nav = UINavigationController(rootViewController: vc)
             if let sheet = nav.sheetPresentationController{
                 sheet.detents = [.large()]
@@ -114,6 +117,7 @@ final class HomeVC: BaseVC, View,Toastable{
             }
             owner.present(nav,animated: true)
         }.disposed(by: disposeBag)
+        
         let edgeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(Self.edgeSwipe(_:)))
         let edgeGesture2 = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(Self.edgeSwipe(_:)))
         edgeGesture.edges = .left

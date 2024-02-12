@@ -22,7 +22,7 @@ extension DMMainReactor{
                 mutList.append(.just(.setMembsers(members)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance))
             case .wsAllMembers(let response):
                 mutList.append(
-                    .just(.setMembsers(response)).debounce(.microseconds(100), scheduler: MainScheduler.asyncInstance)
+                    .just(.setMembsers(response)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance)
                 )
             case .invited(let response):
                 if !currentState.membsers.contains(response){

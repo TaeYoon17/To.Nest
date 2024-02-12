@@ -69,7 +69,7 @@ extension MessageCell{
             if let content = msgItem.content, !content.isEmpty{
                 Text(content)
                     .font(FontType.body.font)
-                    .padding(.all,12)
+                    .padding(.all,8)
                     .overlay(content: {
                         RoundedRectangle(cornerRadius: 12).strokeBorder()
                 })

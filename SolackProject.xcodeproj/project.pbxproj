@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		630481972B6F5B71003DFB3C /* StringConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630481962B6F5B71003DFB3C /* StringConverter.swift */; };
-		630481992B6F5BA9003DFB3C /* DateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630481982B6F5BA9003DFB3C /* DateConverter.swift */; };
 		6304819B2B6F5DC1003DFB3C /* WorkSpaceService+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6304819A2B6F5DC1003DFB3C /* WorkSpaceService+User.swift */; };
 		630763F22B639484000747F8 /* MSGTextField+TextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630763F12B639484000747F8 /* MSGTextField+TextViewDelegate.swift */; };
 		630763F42B639509000747F8 /* MSGTextField+ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630763F32B639509000747F8 /* MSGTextField+ImageViewer.swift */; };
@@ -85,6 +84,14 @@
 		633E51B22B77645A00A87D29 /* Channel_User+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E51B12B77645A00A87D29 /* Channel_User+NM.swift */; };
 		633E51B52B77671100A87D29 /* WS_Check+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E51B42B77671100A87D29 /* WS_Check+NM.swift */; };
 		633E51B72B7768AC00A87D29 /* WS_Member+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E51B62B7768AC00A87D29 /* WS_Member+NM.swift */; };
+		6340ACA92B7A6E57008C672F /* DMExplore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACA82B7A6E57008C672F /* DMExplore.swift */; };
+		6340ACAB2B7A6EC5008C672F /* DMExplore+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACAA2B7A6EC5008C672F /* DMExplore+DS.swift */; };
+		6340ACAD2B7A6F2A008C672F /* DMExplore+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACAC2B7A6F2A008C672F /* DMExplore+Binding.swift */; };
+		6340ACAF2B7A6F52008C672F /* DMExplore+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACAE2B7A6F52008C672F /* DMExplore+CollectionView.swift */; };
+		6340ACB22B7A6FAB008C672F /* DMExploreReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACB12B7A6FAB008C672F /* DMExploreReactor.swift */; };
+		6340ACB42B7A83CC008C672F /* DMToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACB32B7A83CC008C672F /* DMToastType.swift */; };
+		6340ACB62B7A911F008C672F /* ProfileViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACB52B7A911F008C672F /* ProfileViewerVC.swift */; };
+		6340ACB82B7A98F7008C672F /* ProfileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACB72B7A98F7008C672F /* ProfileViewerVM.swift */; };
 		634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */; };
 		634F023C2B5A6BA900505B65 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634F023B2B5A6BA900505B65 /* ChatCell.swift */; };
 		636028052B555B5E00AF8731 /* WriterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636028042B555B5E00AF8731 /* WriterView.swift */; };
@@ -323,7 +330,6 @@
 
 /* Begin PBXFileReference section */
 		630481962B6F5B71003DFB3C /* StringConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConverter.swift; sourceTree = "<group>"; };
-		630481982B6F5BA9003DFB3C /* DateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConverter.swift; sourceTree = "<group>"; };
 		6304819A2B6F5DC1003DFB3C /* WorkSpaceService+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkSpaceService+User.swift"; sourceTree = "<group>"; };
 		630763F12B639484000747F8 /* MSGTextField+TextViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MSGTextField+TextViewDelegate.swift"; sourceTree = "<group>"; };
 		630763F32B639509000747F8 /* MSGTextField+ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MSGTextField+ImageViewer.swift"; sourceTree = "<group>"; };
@@ -397,6 +403,14 @@
 		633E51B12B77645A00A87D29 /* Channel_User+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel_User+NM.swift"; sourceTree = "<group>"; };
 		633E51B42B77671100A87D29 /* WS_Check+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WS_Check+NM.swift"; sourceTree = "<group>"; };
 		633E51B62B7768AC00A87D29 /* WS_Member+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WS_Member+NM.swift"; sourceTree = "<group>"; };
+		6340ACA82B7A6E57008C672F /* DMExplore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMExplore.swift; sourceTree = "<group>"; };
+		6340ACAA2B7A6EC5008C672F /* DMExplore+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMExplore+DS.swift"; sourceTree = "<group>"; };
+		6340ACAC2B7A6F2A008C672F /* DMExplore+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMExplore+Binding.swift"; sourceTree = "<group>"; };
+		6340ACAE2B7A6F52008C672F /* DMExplore+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMExplore+CollectionView.swift"; sourceTree = "<group>"; };
+		6340ACB12B7A6FAB008C672F /* DMExploreReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMExploreReactor.swift; sourceTree = "<group>"; };
+		6340ACB32B7A83CC008C672F /* DMToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMToastType.swift; sourceTree = "<group>"; };
+		6340ACB52B7A911F008C672F /* ProfileViewerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewerVC.swift; sourceTree = "<group>"; };
+		6340ACB72B7A98F7008C672F /* ProfileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewerVM.swift; sourceTree = "<group>"; };
 		634C4C602B4E2EDA006B6CCC /* ProfileImgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImgView.swift; sourceTree = "<group>"; };
 		634F023B2B5A6BA900505B65 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		636028042B555B5E00AF8731 /* WriterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterView.swift; sourceTree = "<group>"; };
@@ -987,6 +1001,25 @@
 			path = WorkSpaceMethods;
 			sourceTree = "<group>";
 		};
+		6340ACA72B7A6E43008C672F /* DMExplore */ = {
+			isa = PBXGroup;
+			children = (
+				6340ACA82B7A6E57008C672F /* DMExplore.swift */,
+				6340ACAA2B7A6EC5008C672F /* DMExplore+DS.swift */,
+				6340ACAC2B7A6F2A008C672F /* DMExplore+Binding.swift */,
+				6340ACAE2B7A6F52008C672F /* DMExplore+CollectionView.swift */,
+			);
+			path = DMExplore;
+			sourceTree = "<group>";
+		};
+		6340ACB02B7A6FA3008C672F /* DMExploreReactor */ = {
+			isa = PBXGroup;
+			children = (
+				6340ACB12B7A6FAB008C672F /* DMExploreReactor.swift */,
+			);
+			path = DMExploreReactor;
+			sourceTree = "<group>";
+		};
 		636028062B555D4100AF8731 /* Reactor+ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -1088,6 +1121,7 @@
 				636B2B1D2B6E0DDD00BE9751 /* Reactor+ViewModel */,
 				636B2B1C2B6E0DCE00BE9751 /* DMMain */,
 				636F16162B7005F500536E6F /* DMChatView */,
+				6340ACA72B7A6E43008C672F /* DMExplore */,
 			);
 			path = DM;
 			sourceTree = "<group>";
@@ -1105,6 +1139,7 @@
 		636B2B1D2B6E0DDD00BE9751 /* Reactor+ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				6340ACB02B7A6FA3008C672F /* DMExploreReactor */,
 				63817E942B73DD760034EA1D /* DMChatReactor */,
 				63817E8D2B73A3930034EA1D /* DMMainReactor */,
 			);
@@ -1314,7 +1349,6 @@
 				6384A9D02B47134200AA2F1B /* Errors.swift */,
 				6329FE582B6E94DD0018909F /* StringValidation.swift */,
 				630481962B6F5B71003DFB3C /* StringConverter.swift */,
-				630481982B6F5BA9003DFB3C /* DateConverter.swift */,
 			);
 			path = SourceOfTruth;
 			sourceTree = "<group>";
@@ -1428,6 +1462,7 @@
 				6329FE532B6E90D20018909F /* WSInviteToastType.swift */,
 				63E38EE22B5167E500BD6C93 /* WSTostType.swift */,
 				636028092B555DB200AF8731 /* CHToastType.swift */,
+				6340ACB32B7A83CC008C672F /* DMToastType.swift */,
 			);
 			path = ToastService;
 			sourceTree = "<group>";
@@ -1604,6 +1639,7 @@
 				63E974C42B690B19004BCA00 /* MyProfileVC.swift */,
 				63E974C92B693397004BCA00 /* InfoUpdateView.swift */,
 				637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */,
+				6340ACB52B7A911F008C672F /* ProfileViewerVC.swift */,
 			);
 			path = Profiles;
 			sourceTree = "<group>";
@@ -1613,6 +1649,7 @@
 			children = (
 				63E974C72B691E24004BCA00 /* MyProfileVM.swift */,
 				637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */,
+				6340ACB72B7A98F7008C672F /* ProfileViewerVM.swift */,
 			);
 			path = "Reactor+ViewModel";
 			sourceTree = "<group>";
@@ -1885,9 +1922,12 @@
 				6304819B2B6F5DC1003DFB3C /* WorkSpaceService+User.swift in Sources */,
 				636990B62B6CB76D00E9FFBA /* CHEditReactor.swift in Sources */,
 				63F0AECF2B4B001B000A597B /* HomeVC+CollectionStructures.swift in Sources */,
+				6340ACB22B7A6FAB008C672F /* DMExploreReactor.swift in Sources */,
 				63C346F72B55754C00293991 /* CHChatView.swift in Sources */,
 				633E51B52B77671100A87D29 /* WS_Check+NM.swift in Sources */,
+				6340ACB42B7A83CC008C672F /* DMToastType.swift in Sources */,
 				63358D712B540256005C5BD4 /* CHExploreView+DS.swift in Sources */,
+				6340ACAF2B7A6F52008C672F /* DMExplore+CollectionView.swift in Sources */,
 				632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */,
 				636213062B4E95F60093D089 /* ImageManager.swift in Sources */,
 				63E974D12B6962FF004BCA00 /* MyInfo.swift in Sources */,
@@ -1912,6 +1952,7 @@
 				637318432B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift in Sources */,
 				636CFBB42B510743003F02ED /* WSMainVM.swift in Sources */,
 				63E4AFD52B497FC300E0B6A1 /* EmailSignInReactor.swift in Sources */,
+				6340ACB62B7A911F008C672F /* ProfileViewerVC.swift in Sources */,
 				63F7C4BE2B4FE72F003D8447 /* UINavigationController.swift in Sources */,
 				639DEAFB2B452E8300108979 /* AuthViewReactor.swift in Sources */,
 				639A4AF12B52C7D4005360F6 /* SolackAlertComponents.swift in Sources */,
@@ -2047,6 +2088,7 @@
 				6329FE4D2B6E80630018909F /* MSGService+DM.swift in Sources */,
 				63F0B1A52B5FEC7B008C8C98 /* CHExploreVM.swift in Sources */,
 				6389CEAD2B5D7D3C002A70A9 /* CHResponse.swift in Sources */,
+				6340ACAB2B7A6EC5008C672F /* DMExplore+DS.swift in Sources */,
 				637B15782B4CD62700B68963 /* SolackAlert+UIKit.swift in Sources */,
 				63F265FA2B53BA76007D865C /* WSService+AvailCheck.swift in Sources */,
 				636F16272B7131D300536E6F /* RoomTable.swift in Sources */,
@@ -2076,6 +2118,7 @@
 				639CA1B52B5F770D00C21006 /* ChannelRouter.swift in Sources */,
 				636F162F2B713A9E00536E6F /* DMChatRepository.swift in Sources */,
 				631A60D72B44EDF5005509C2 /* ButtonConfiguration.swift in Sources */,
+				6340ACAD2B7A6F2A008C672F /* DMExplore+Binding.swift in Sources */,
 				63F0AEC62B4ABA1E000A597B /* HomeVC+DS.swift in Sources */,
 				637C38E52B785D5D00ADFCA1 /* ChangeManagerCell.swift in Sources */,
 				633E51B22B77645A00A87D29 /* Channel_User+NM.swift in Sources */,
@@ -2086,11 +2129,12 @@
 				636F162B2B7134D100536E6F /* DMResponse.swift in Sources */,
 				639CCA3B2B499F39005B35DF /* SignService.swift in Sources */,
 				630763FE2B63C420000747F8 /* ItemProvider.swift in Sources */,
-				630481992B6F5BA9003DFB3C /* DateConverter.swift in Sources */,
 				63152F302B6644A6003F3B55 /* UserInfoRepository.swift in Sources */,
 				636990B92B6CB7C000E9FFBA /* CHAdminChangeView.swift in Sources */,
+				6340ACA92B7A6E57008C672F /* DMExplore.swift in Sources */,
 				639CFE652B5801D40030729E /* HomeVC+Animation.swift in Sources */,
 				63F7C4A12B4EEA4B003D8447 /* WorkSpaceService.swift in Sources */,
+				6340ACB82B7A98F7008C672F /* ProfileViewerVM.swift in Sources */,
 				6329FE542B6E90D20018909F /* WSInviteToastType.swift in Sources */,
 				63F265F82B53AFAE007D865C /* WSEditReactor.swift in Sources */,
 				6312A2592B6183B100593117 /* ReferenceRepository.swift in Sources */,

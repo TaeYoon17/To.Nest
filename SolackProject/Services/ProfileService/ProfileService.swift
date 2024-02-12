@@ -13,12 +13,14 @@ protocol ProfileProtocol{
     func updateNickname(name:String)
     func updatePhone(phone:String)
     func updateImage(imageData:Data?)
+    func checkProfile(userID:Int)
 }
 final class ProfileService:ProfileProtocol{
     enum Event{
         case myInfo(MyInfo)
         case updatedImage
         case toast(MyProfileToastType)
+        case otherUserProfile(UserResponse)
     }
     var event:PublishSubject<Event> = .init()
     @DefaultsState(\.myInfo) var myInfo
@@ -76,6 +78,16 @@ final class ProfileService:ProfileProtocol{
         if let webImage = info.profileImage, prevImage != webImage{
             let data = await NM.shared.getThumbnail(webImage)
             profile = data
+        }
+    }
+    func checkProfile(userID:Int){
+        Task{
+            do{
+                let res = try await NM.shared.checkUser(userID: userID)
+                self.event.onNext(.otherUserProfile(res))
+            }catch{
+                print("checkProfile Error \(error)")
+            }
         }
     }
 }

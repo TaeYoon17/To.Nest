@@ -28,6 +28,7 @@ final class CHSettingReactor:Reactor{
         case initAction
         case actionDialog(CHEditingType)
         case deleteAction
+        case exitAction
     }
     enum Mutation{
         case setDialog(CHEditingType?)
@@ -62,11 +63,12 @@ final class CHSettingReactor:Reactor{
                 .just(.setDialog(type)).delay(.microseconds(100), scheduler: MainScheduler.instance),
                 .just(.setDialog(nil))
             ])
+        case .exitAction:
+            provider.chService.exit(channelID: channelID, channelName: title)
+            return Observable.concat([ .just(.isLoading(true))])
         case .deleteAction:
             provider.chService.delete(channelID: channelID, channelName: self.title)
-            return Observable.concat([
-                .just(.isLoading(true))
-            ])
+            return Observable.concat([ .just(.isLoading(true))])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -83,7 +85,7 @@ final class CHSettingReactor:Reactor{
         case .isLoading(let isLoading):
             state.isLoading = isLoading
         case .isClose(let isClose):
-            state.isClose = true
+            state.isClose = isClose
         }
         return state
     }
@@ -121,7 +123,7 @@ final class CHSettingReactor:Reactor{
                 return Observable.concat([
                     .just(.setInfo(title: response.name, description: response.description ?? ""))
                 ])
-            case .delete(chID: let chID):
+            case .delete(chID: let chID),.exit(chID: let chID):
                 return Observable.concat([
                     .just(.isClose(true))
                 ])

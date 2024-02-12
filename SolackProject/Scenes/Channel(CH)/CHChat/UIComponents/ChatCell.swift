@@ -13,7 +13,12 @@ struct ChatCell:View{
     @DefaultsState(\.userID) var userID
     @State private var date:String = "08:16 오전"
     @State private var dateWidth:CGFloat = 0
-    @State private var show = false
+    let profileAction: ((Int)->Void)
+    init(chatItem: CHChatView.ChatItem, images: CHChatView.ChatAssets, profileAction: @escaping (Int) -> Void) {
+        self.chatItem = chatItem
+        self.images = images
+        self.profileAction = profileAction
+    }
     var body: some View{
         if userID == chatItem.profileID{
             myUser
@@ -58,18 +63,23 @@ struct ChatCell:View{
 }
 extension ChatCell{
     var profile:some View{
-        if let profileImage = images.profileImages{
-            profileImage.resizable().scaledToFill()
-                .background(.gray6)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .frame(width:34,height:34)
-        }else{
-            Image(.noPhotoA)
-                .resizable().scaledToFill()
+        Button(action: {
+            self.profileAction(chatItem.profileID)
+        }, label: {
+            if let profileImage = images.profileImages{
+                profileImage.resizable().scaledToFill()
                     .background(.gray6)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .frame(width:34,height:34)
-        }
+            }else{
+                Image(.noPhotoA)
+                    .resizable().scaledToFill()
+                        .background(.gray6)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .frame(width:34,height:34)
+            }
+        })
+        
     }
     var contents: some View{
         VStack(alignment:.leading,spacing:5){
@@ -77,7 +87,7 @@ extension ChatCell{
             if let content = chatItem.content, !content.isEmpty{
                 Text(content)
                     .font(FontType.body.font)
-                    .padding(.all,12)
+                    .padding(.all,8)
                     .overlay(content: {
                         RoundedRectangle(cornerRadius: 12).strokeBorder()
                 })
@@ -105,9 +115,3 @@ extension ChatCell{
         .frame(width: dateWidth)
     }
 }
-//#Preview {
-//    List{
-//        ChatCell(message: "Hello world!!", chatUser: .init(nickName: "고래고래박", thumbnail: "Metal"))
-//    }.listStyle(.plain)
-//}
-

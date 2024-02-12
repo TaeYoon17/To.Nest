@@ -42,9 +42,9 @@ extension HomeVC{
     var directRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             guard let self else {return}
-            let channel = dataSource.fetchDirect(item: itemIdentifier)
+            let dm = dataSource.fetchDirect(item: itemIdentifier)
             cell.contentConfiguration = UIHostingConfiguration {
-                DirectMsgListItemView(thumbnail: channel.imageData, name: channel.name, isUnreadExist: channel.unreadExist, messageCount: channel.messageCount)
+                DirectMsgListItemView(item: dm)
             }
             cell.indentationLevel = 0
         }

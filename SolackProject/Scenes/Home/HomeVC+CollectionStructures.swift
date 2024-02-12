@@ -41,7 +41,7 @@ extension HomeVC{
         }
         let itemType: ItemType = .list
         let sectionType: SectionType = .channel
-        var id:String{"\(channelID)"}
+        var id:String{"\(sectionType.rawValue)_\(channelID)"}
         var channelID:Int = 0
         @Published var name :String
         @Published var messageCount:Int
@@ -53,14 +53,28 @@ extension HomeVC{
             self.isRecent = isRecent
         }
     }
-    struct DirectListItem: Identifiable,CollectionItemable{
+    final class DirectListItem:ObservableObject, Identifiable,CollectionItemable{
+        static func == (lhs: HomeVC.DirectListItem, rhs: HomeVC.DirectListItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
         let itemType:ItemType = .list
         let sectionType: HomeVC.SectionType = .direct
-        var id:String{ name }
-        var name:String
-        var imageData: String // 임시로 이름 넣기
-        var messageCount:Int
-        var unreadExist: Bool
+        var id:String{ "\(sectionType.rawValue)_\(roomID)" }
+        @Published var roomID:Int
+        @Published var userID: Int
+        @Published var name:String
+        @Published var messageCount:Int
+        @Published var thumbnail:Image
+        init(roomID:Int,userID:Int,name: String, thumbnail: Image, messageCount: Int) {
+            self.roomID = roomID
+            self.userID = userID
+            self.name = name
+            self.thumbnail = thumbnail
+            self.messageCount = messageCount
+        }
     }
     struct BottomItem:Identifiable,Hashable,CollectionItemable{
         var id :String{ sectionType.rawValue+itemType.rawValue }

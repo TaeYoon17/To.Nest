@@ -10,12 +10,14 @@ import RxSwift
 import RealmSwift
 protocol DMProtocol{
     var event:PublishSubject<DMService.Event> {get}
+    var transition: PublishSubject<DMService.Transition> {get}
     func checkAll(wsID:Int)
     func getRoomID(user:UserResponse)
 }
 final class DMService:DMProtocol{
     @DefaultsState(\.mainWS) var mainWS
     let event = PublishSubject<Event>()
+    let transition = PublishSubject<Transition>()
     @BackgroundActor var repository:DMRoomRepository!
     @BackgroundActor var dmChatrepository: DMChatRepository!
     @BackgroundActor var userRepository: UserInfoRepository!
@@ -26,6 +28,9 @@ final class DMService:DMProtocol{
         case dmRoomID(id:Int,userResponse:UserResponse)
         case unreads([UnreadDMRes])
     }
+    enum Transition{
+        case goDM(id:Int,userResponse:UserResponse)
+    }
     init(){
         Task{@BackgroundActor in
             repository = try await DMRoomRepository()
@@ -35,7 +40,7 @@ final class DMService:DMProtocol{
             imageReferenceCountManager = ImageRCM.shared
         }
     }
-    func checkAll(wsID: Int) {
+    func checkAll(wsID: Int) { // DM 방 조회하기
         let wsID = mainWS.id
         Task{
             do{
@@ -52,6 +57,7 @@ final class DMService:DMProtocol{
                         }
                         sendResponses.append(response)
                     }
+                    
                     event.onNext(.allMy(sendResponses))
                     let existed = repository.getTasks.where{$0.wsID == self.mainWS.id}
                     let checkUnreads = Array(existed.map{($0.lastReadDate,$0.roomID)})

@@ -129,6 +129,8 @@ final class MyProfileReactor:Reactor,ObservableObject{
                 return Observable.concat([ .just(.profileToast(toast)) ])
             case .updatedImage:
                 return Observable.concat([ .just(.setImage(self.myProfile))])
+            case .otherUserProfile(_):
+                return Observable.concat([])
             }
         }
         return Observable.merge(mutation,profileTransform)

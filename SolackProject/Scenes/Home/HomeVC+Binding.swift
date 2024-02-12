@@ -61,7 +61,6 @@ extension HomeVC{
                     nav.modalPresentationStyle = .fullScreen
                     present(nav, animated: true)
                 case .chatting(chID: let chID,chName: let name):
-                    print("채팅 뷰 이동 \(chID) \(name)")
                     let chatReactor = CHChatReactor(reactor.provider, id: chID, title: name)
                     let vc = CHChatView()
                     vc.reactor = chatReactor
@@ -72,6 +71,16 @@ extension HomeVC{
                     let nav = UINavigationController(rootViewController: vc)
                     nav.fullSheetSetting()
                     self.present(nav, animated: true)
+                case .dmExplore:
+                    let vc = DMExplore()
+                    vc.reactor = DMExploreReactor(provider: reactor.provider)
+                    let nav = UINavigationController(rootViewController: vc)
+                    nav.fullSheetSetting()
+                    self.present(nav, animated: true)
+                case .dm(roomID: let id, user: let userResponse):
+                    let vc = DMChatView()
+                    vc.reactor = DMChatReactor(reactor.provider, roomID: id, userID: userResponse.userID, title: userResponse.nickname)
+                    navigationController?.pushViewController(vc, animated: true)
                 }
             }).disposed(by: disposeBag)
         reactor.state.map{$0.isMasking}.distinctUntilChanged()
@@ -86,6 +95,7 @@ extension HomeVC{
                             owner.tabBarController?.tabBar.isHidden = true
                             owner.wsEmpty.isHidden = false
                             owner.view.layoutIfNeeded()
+                            owner.tabBarController?.tabBar.layoutIfNeeded()
                         }
                     }else{
                         owner.tabBarController?.tabBar.isHidden = false

@@ -31,7 +31,7 @@ enum ChannelRouter:URLRequestConvertible{
             case .allMy: "/\(wsID)/channels/my"
             case .my(let name): "/\(wsID)/channels/my/\(name)"
             case .members(chName: let name): "/\(wsID)/channels/\(name)/members"
-            case .all: "/\(wsID)/channels/my"
+            case .all: "/\(wsID)/channels"
             case .specific(chName: let name): "/\(wsID)/channels/\(name)"
             }
         case .unreads(wsID: let wsID, chName: let chName,_): "/\(wsID)/channels/\(chName)/unreads"

@@ -30,7 +30,7 @@ import RealmSwift
     @discardableResult
     func create(item: T) async -> Self?{
         do{
-            try await realm.asyncWrite{ realm.add(item) }
+            try await realm.asyncWrite{ realm.add(item, update: .modified) }
             tasks = realm.objects(T.self)
         }catch{
             print("생성 문제")

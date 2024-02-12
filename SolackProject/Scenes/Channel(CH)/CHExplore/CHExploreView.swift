@@ -18,7 +18,7 @@ final class CHExploreView: BaseVC{
             switch alertType{
             case .join(chID: let id, chName: let name):
                 let vc = SolackAlertVC(title: "채널 참여", description: "[\(name)] 채널에 참여하시겠습니까?", cancelTitle: "취소", cancel: {}, confirmTitle: "확인") {
-                    owner.vm.moveChatting.onNext((id,name))
+                    owner.vm.joinChatting.onNext((chID: id, chName: name))
                 }
                 owner.present(vc,animated: false)
             }

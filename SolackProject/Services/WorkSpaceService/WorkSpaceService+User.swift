@@ -12,6 +12,8 @@ extension WorkSpaceService{
         Task{
             do{
                 let res = try await NM.shared.checkWSMembers(wsID)
+                print("워크스페이스에 존재하는 전체 멤버" ) 
+                print(res)
                 event.onNext(.wsAllMembers(res))
             }catch{
                 print("checkAllMembers")

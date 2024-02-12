@@ -32,7 +32,7 @@ typealias RCMRepository = ReferenceRepository
         }else{
             let newTable = T.init(name: item.name, count: item.count)
             do{
-                try await realm.asyncWrite{ realm.add(newTable) }
+                try await realm.asyncWrite{ realm.add(newTable, update: .modified) }
                 tasks = realm.objects(T.self)
                 try await realm.asyncWrite({ newTable.count = item.count})
             }catch{

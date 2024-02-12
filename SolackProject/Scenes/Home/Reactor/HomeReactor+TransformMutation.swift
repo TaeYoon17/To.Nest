@@ -19,6 +19,7 @@ extension HomeReactor{
             case .homeWS(let response):
                 if let response{
                     provider.chService.checkAllMy()
+                    provider.dmService.checkAll(wsID: mainWS.id)
                     observeList.append(contentsOf: [.just(.isMasking(false)),
                                                     .just(.wsTitle(response.name)),
                                                     .just(.wsLogo(response.thumbnail)),
@@ -63,15 +64,15 @@ extension HomeReactor{
                 return Observable.concat([.just(.setChannelList(responses)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance)])
             case .unreads(let unreads):
                 return Observable.concat([
-                    .just(.setUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                    .just(.setUnreads(nil))
+                    .just(.setChannelUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                    .just(.setChannelUnreads(nil))
                 ])
             case .update(let response):
                 guard response.workspaceID == mainWS.id else {return Observable.concat([])}
                 // 여기 수정해야 할 수도..? unreads도 다 같이 부르는 문제가 발생하긴 한다...
                 provider.chService.checkAllMy()
                 return Observable.concat([])
-            case .delete(chID: let chID):
+            case .delete(chID: let chID),.exit(chID: let chID):
                 provider.chService.checkAllMy()
                 return Observable.concat([])
             default: return Observable.concat([])
@@ -92,13 +93,27 @@ extension HomeReactor{
 //MARK: -- DM 기록 Transform
 extension HomeReactor{
     var dmMutationTransform: Observable<Mutation>{
-        provider.dmService.event.flatMap { [weak self] event -> Observable<Mutation> in
+        let eventMutation = provider.dmService.event.flatMap { [weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
             switch event{
-            case .allMy(let responses):return Observable.concat([])
+            case .allMy(let responses):
+                return Observable.concat([.just(.setDMList(responses))])
+            case .unreads(let unreads): return Observable.concat(.just(.setDMUnreads(unreads)))
+
             default: return Observable.concat([])
             }
         }
+        let transitionMutation = provider.dmService.transition.flatMap { [weak self] transition -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            switch transition{
+            case .goDM(id: let roomID, userResponse: let userResponse):
+                return Observable.concat([
+                    .just(.channelDialog(.dm(roomID: roomID, user: userResponse))).delay(.milliseconds(100), scheduler: MainScheduler.asyncInstance),
+                    .just(.channelDialog(nil))
+                ])
+            }
+        }
+        return Observable.merge(eventMutation,transitionMutation)
     }
 }
 //MARK: -- Profile Transform

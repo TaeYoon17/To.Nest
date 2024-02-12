@@ -27,7 +27,6 @@ struct WorkSpaceMainView: View{
                     .padding(.leading,16)
                 VStack(spacing:0){
                     ZStack{
-                        
                         VStack(spacing:0){
                             Spacer()
                             WorkSpaceList().animation(nil)

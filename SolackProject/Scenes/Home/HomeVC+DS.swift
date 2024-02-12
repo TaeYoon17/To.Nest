@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SwiftUI
 import RxSwift
 extension HomeVC{
     final class HomeDataSource: UICollectionViewDiffableDataSource<SectionType,Item>{
@@ -44,11 +45,11 @@ extension HomeVC{
                         owner.apply(snapshot,to:channelHeader.sectionType)
                     }
                 }).disposed(by: disposeBag)
-            reactor.state.map{$0.unreads}.bind(with: self) { owner, responses in
+            reactor.state.map{$0.channelUnreads}.bind(with: self) { owner, responses in
                 guard let responses else {return}
                 var items:[Item] = []
                 for response in responses{
-                    guard var channelItem = owner.channelListModel.fetchByID("\(response.channelID)") else {
+                    guard var channelItem = owner.channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(response.channelID)") else {
                         fatalError("Empty Channel Item")
                     }
                     channelItem.messageCount = response.count
@@ -63,7 +64,56 @@ extension HomeVC{
                     owner.apply(snapshot,animatingDifferences: false)
                 }
             }.disposed(by: disposeBag)
-            // 관리자인지 아닌지 업데이트
+            reactor.state.map{$0.dmList}.bind { [weak self] roomResponses in
+                guard let self,let roomResponses else {return}
+                guard let headerItem = headerModel.fetchByID(SectionType.direct.rawValue + ItemType.header.rawValue) else {return}
+                guard let bottomItem = bottomModel.fetchByID(SectionType.direct.rawValue + ItemType.bottom.rawValue) else {return}
+                let dmHeader = Item(headerItem)
+                let dmBottom = Item(bottomItem)
+                Task{
+                    var dmListItem:[DirectListItem] = []
+                    for roomResponse in roomResponses{
+                        let image = if let imageURL = roomResponse.user.profileImage, let imageData = await NM.shared.getThumbnail(imageURL){
+                            Image(uiImage: UIImage.fetchBy(data: imageData,type: .small))
+                        }else{
+                            Image(uiImage: .noPhotoA)
+                        }
+                        let item = DirectListItem(roomID: roomResponse.roomID,userID: roomResponse.user.userID, name: roomResponse.user.nickname, thumbnail: image, messageCount: 0)
+                        self.directListModel.insertModel(item: item)
+                        dmListItem.append(item)
+                    }
+                    var items = dmListItem.map{Item($0)}
+                    await MainActor.run {
+                        var snapshot = self.snapshot(for: .direct)
+                        snapshot.deleteAll()
+                        items.append(dmBottom)
+                        snapshot.append([dmHeader])
+                        snapshot.append(items, to: dmHeader)
+                        snapshot.expand([dmHeader])
+                        self.apply(snapshot,to:dmHeader.sectionType)
+                    }
+                }
+            }.disposed(by: disposeBag)
+            reactor.state.map{$0.dmUnreads}.bind { [weak self] unreads in
+                guard let self, let unreads else {return}
+                Task{
+                    var items:[Item] = []
+                    for unread in unreads{
+                        guard var unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
+                            continue
+                        }
+                        unreadItem.messageCount = unread.count
+                        self.directListModel.insertModel(item: unreadItem)
+                        items.append(Item(unreadItem))
+                    }
+                    Task{@MainActor in
+                        var snapshot = self.snapshot()
+                        let sectionItems = snapshot.itemIdentifiers(inSection: .direct)
+                        snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
+                        self.apply(snapshot,animatingDifferences: false)
+                    }
+                }
+            }.disposed(by: disposeBag)
         }
         func fetchDirect(item:Item) -> DirectListItem{
             directListModel.fetchByID(item.id)
@@ -112,4 +162,7 @@ extension HomeVC{
             apply(snapshot,to:top.sectionType)
         }
     }
+}
+extension HomeVC.HomeDataSource{
+    
 }
