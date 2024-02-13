@@ -12,7 +12,7 @@ fileprivate struct UserDialog:ViewModifier{
     let cancel:()->()
     func body(content: Content) -> some View {
         content.confirmationDialog("userWorkSpace", isPresented: $isPresent) {
-            Button("워크스페이스 편집"){
+            Button("워크스페이스 나가기"){
                 exit()
             }
             Button("취소", role:.cancel){

@@ -36,8 +36,7 @@ final class WSEditReactor: WSwriterReactor{
             self.wsInfo.name = str
             return Observable.concat([.just(.setName(str)) ])
         case .confirmAction:
-            print(wsInfo)
-            provider.wsService.edit(wsInfo, id: "\(mainWS)")
+            provider.wsService.edit(wsInfo)
             return Observable.concat([.just(.isLoading(true))])
         case .setImageData(let data):
             self.wsInfo.image = data

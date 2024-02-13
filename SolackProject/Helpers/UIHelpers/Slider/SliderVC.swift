@@ -15,6 +15,7 @@ final class SliderVM: ObservableObject{
     var slider = PublishSubject<CGFloat>()
     var endedSlider = PublishSubject<Bool>()
     var sliderPresent = PublishSubject<()>()
+    var toastPublisher = PublishSubject<ToastType?>()
 }
 
 class SliderVC<T:ObservableObject>:BaseVC{
@@ -26,7 +27,6 @@ class SliderVC<T:ObservableObject>:BaseVC{
     private lazy var dismissView = UIView()
     private lazy var sliderView = Slider(sliderVM,viewVM)
     override var prefersStatusBarHidden: Bool { true }
-
     init(viewVM vm: T,sliderVM:SliderVM){
         self.viewVM = vm
         self.sliderVM = sliderVM
@@ -61,8 +61,9 @@ class SliderVC<T:ObservableObject>:BaseVC{
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         sliderBinding()
-        wsMainBinding()
+        
     }
     @objc private func dimissTapGesture(_ gesture: UITapGestureRecognizer){
         Task{@MainActor in
@@ -70,9 +71,6 @@ class SliderVC<T:ObservableObject>:BaseVC{
             try await Task.sleep(for: .seconds(0.3))
             self.dismiss(animated: false)
         }
-    }
-    func wsMainBinding(){
-        fatalError("It must be override!!")
     }
 }
 //MARK: -- SliderVM 통신 binder

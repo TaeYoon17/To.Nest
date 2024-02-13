@@ -13,31 +13,34 @@ extension CHChatView{
         var listConfig = UICollectionLayoutListConfiguration(appearance: .plain)
         listConfig.backgroundColor = .white
         listConfig.showsSeparators = false
-        var layout = UICollectionViewCompositionalLayout.list(using: listConfig)
+        let layout = UICollectionViewCompositionalLayout.list(using: listConfig)
         return layout
     }
-    var chatCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,ChatItem>{
-        UICollectionView.CellRegistration { cell, indexPath, itemIdentifier in
-            cell.backgroundColor = .blue
-            Task{
-                var image:[Image] = []
-                for  imageName in itemIdentifier.images {
-                    do{
-                        let uiimage = try await UIImage.fetchWebCache(name: imageName, size: .init(width: 120, height: 80))
-                        image.append(Image(uiImage: uiimage))
-                    }catch{
-                        let uiimage = try UIImage(named: imageName)!.downSample(size: .init(width: 120, height: 80))
-                        image.append(Image(uiImage: uiimage))
-                    }
-                }
-                await MainActor.run {
-                    cell.contentConfiguration = UIHostingConfiguration(content: {
-                        ChatCell(realImage: image)
+    
+    var chatCellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,ChatItem.ID>{
+        UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
+            guard let self else{ fatalError("메모리 SELF 오류!!") }
+            guard let item = dataSource.chatModel.fetchByID(itemIdentifier) else {return}
+            cell.backgroundColor = .clear
+            cell.selectedBackgroundView = .none
+            if let itemAssets = dataSource.chatAssetModel.object(forKey: "\(item.chatID)" as NSString){
+                cell.contentConfiguration = UIHostingConfiguration(content: {
+                    ChatCell(chatItem: item,images: itemAssets, profileAction: {[weak self] userID in
+                        guard let self else {return}
+                        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
+                        navigationController?.pushViewController(vc, animated: true)
                     })
-                    cell.layoutIfNeeded()
-                }
+                })
+            }else{
+                let itemAsset = self.dataSource.appendChatAssetModel(item: item)
+                cell.contentConfiguration = UIHostingConfiguration(content: {
+                    ChatCell(chatItem: item,images: itemAsset, profileAction: {[weak self] userID in
+                        guard let self else {return}
+                        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
+                        navigationController?.pushViewController(vc, animated: true)
+                    })
+                })
             }
-            
         }
     }
 }

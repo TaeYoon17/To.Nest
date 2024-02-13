@@ -5,36 +5,51 @@
 //  Created by 김태윤 on 1/14/24.
 //
 
-import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
-enum HomePresent{
+enum HomePresent:Equatable{
     case create
     case explore
+    case chatting(chID:Int,chName:String)
+    case invite
+    case dmExplore
+    case dm(roomID:Int,user:UserResponse)
 }
 final class HomeReactor: Reactor{
     let initialState: State = .init()
     weak var provider: ServiceProviderProtocol!
+    @DefaultsState(\.mainWS) var mainWS
     enum Action{
         case setPresent(HomePresent?)
         case setMainWS(wsID:String)
         case initMainWS
+        case updateUnreads
     }
     enum Mutation{
         case channelDialog(HomePresent?)
-        case mainWS(WSDetailResponse?)
         case isMasking(Bool)
         case wsTitle(String)
         case wsLogo(String)
+        case setChannelUnreads([UnreadsChannelRes]?)
+        case setChannelList([CHResponse]?)
+        case setDMUnreads([UnreadDMRes]?)
+        case setDMList([DMRoomResponse]?)
+        case isProfileUpdated(Bool)
+        case setToast(ToastType?)
     }
     struct State{
         var channelDialog:HomePresent? = nil
-        var mainWS: WSDetailResponse? = nil
         var isMasking: Bool? = nil
+        var channelList:[CHResponse]? = nil
+        var channelUnreads:[UnreadsChannelRes]? = nil
+        var dmList:[DMRoomResponse]? = nil
+        var dmUnreads:[UnreadDMRes]? = nil
         var wsTitle:String = ""
         var wsLogo: String = ""
+        var isProfileUpdated:Bool = false
+        var toast:ToastType? = nil
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -42,6 +57,23 @@ final class HomeReactor: Reactor{
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .setPresent(let present):
+            switch present{
+                case .chatting(chID: let id, chName: let name):
+                let unreads = UnreadsChannelRes(channelID: id, name: name, count: 0)
+                return Observable.concat([
+                    .just(.setChannelUnreads([unreads])),
+                    Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                    Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
+                ])
+            case .invite:
+                if !mainWS.myManaging{
+                    return Observable.concat([
+                        .just(.setToast(WSToastType.inviteNotManager)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                        .just(.setToast(nil))
+                    ])
+                }
+                default:break
+            }
             return Observable.concat([
                 Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
                 Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
@@ -52,6 +84,10 @@ final class HomeReactor: Reactor{
         case .initMainWS:
             provider.wsService.initHome()
             return Observable.concat([])
+        case .updateUnreads:
+            provider.chService.checkAllMy()
+            provider.dmService.checkAll(wsID: mainWS.id)
+            return Observable.concat([])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -59,44 +95,32 @@ final class HomeReactor: Reactor{
         switch mutation{
         case .channelDialog(let present):
             state.channelDialog = present
-        case .mainWS(let mainWS):
-            state.mainWS = mainWS
+        case .setChannelList(let list):
+            state.channelList = list
         case .isMasking(let isMasking):
             state.isMasking = isMasking
         case .wsLogo(let logo):
             state.wsLogo = logo
         case .wsTitle(let title):
             state.wsTitle = title
+        case .setChannelUnreads(let responses):
+            state.channelUnreads = responses
+        case .isProfileUpdated(let update):
+            state.isProfileUpdated = update
+        case .setToast(let toast):
+            state.toast = toast
+        case .setDMUnreads(let unreads):
+            state.dmUnreads = unreads
+        case .setDMList(let dmList):
+            state.dmList = dmList
         }
         return state
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let res = provider.wsService.event.flatMap {[weak self] event -> Observable<Mutation> in
-            guard let self else{return Observable.concat([])}
-            switch event{
-            case .homeWS(let response):
-                if let response{
-                    return Observable.concat([.just(.isMasking(false)),
-                                              .just(.wsTitle(response.name)),
-                                              .just(.wsLogo(response.thumbnail))
-                                              ])
-                }else{
-                    return Observable.concat([.just(.isMasking(true))])
-                }
-            case .create(let response): // 새로 만든 것
-                // 현재 마스크가 되어있음... 워크스페이스가 없음...
-                if let isMask = currentState.isMasking, isMask == true{
-                    return Observable.concat([
-                        .just(.isMasking(false)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                        .just(.wsTitle(response.name)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                        .just(.wsLogo(response.thumbnail)).delay(.microseconds(100), scheduler: MainScheduler.instance)
-                    ])
-                }else{ // 메인에 이미 워크스페이스가 존재했음
-                    return Observable.concat([])
-                }
-            default: return Observable.concat([])
-            }
-        }
-        return Observable.merge(mutation,res)
+        let wsService = wsMutationTransform
+        let chService = chMutationTransform
+        let dmService = dmMutationTransform
+        let profileService = profileMutationTransform
+        return Observable.merge(mutation,wsService,chService,dmService,profileService)
     }
 }

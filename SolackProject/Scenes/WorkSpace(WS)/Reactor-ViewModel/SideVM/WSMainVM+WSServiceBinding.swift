@@ -11,38 +11,36 @@ import RxSwift
 import UIKit
 extension WSMainVM{
     func binding(){
-        provider.wsService.event.bind(with: self) { owner, event in
+        provider.wsService.event.bind(with: self) {[weak self] owner, event in
+            guard let self else {return}
             switch event{
-            case .create(let res):
+            case .create(let res):// 1. 생성하기 결과
                 Task{ await owner.createResponse(res) }
                 owner.toastType = .created
-            case .edit(let res):
+            case .edit(let res): // 2. 수정하기 결과
                 Task{
                     await owner.editResponse(res)
                     try await Task.sleep(for: .seconds(0.5))
                     await MainActor.run { owner.toastType = .edit}
                 }
-            case .checkAll(let value):
+            case .checkAll(let value): // 3. 워크스페이스 전체 조회
                 owner.wsResponses(value)
-            case .delete:
-                self.list.remove(at:owner.selectedIdx)
-                Task{@MainActor in
-                    if let firstItem = owner.list.first{
-                        owner.selectedIdx = 0
-                        owner.list[owner.selectedIdx].isSelected = true
-                        owner.mainWS = owner.list[owner.selectedIdx].id
-                        owner.provider.wsService.setHomeWS(wsID:owner.mainWS)
-                    }else{
-                        self.mainWS = -1
-                        owner.selectedIdx = -1
-                        owner.provider.wsService.setHomeWS(wsID: nil)
-                    }
-                }
+            case .delete: // 4. 삭제했다.
+                removeWorkSpaceList()
                 Task{
                     try await Task.sleep(for: .seconds(0.5))
-                    await MainActor.run { owner.toastType = .edit}
+                    await MainActor.run { owner.toastType = .delete}
                 }
-            case .failed(let faild):
+            case .exit: // 5. 나갔다.
+                removeWorkSpaceList()
+            case .adminChanged(let response):
+                self.toastType = .managerChangeSuccess
+                self.list[self.selectedIdx].isMyManaging = false
+                Task{@MainActor in
+                    self.mainWS.updateMainWSID(id:response.workspaceID,myManaging:false)
+                    self.toastType = .managerChangeSuccess
+                }
+            case .failed(let faild): // 다양한 실패들...
                 switch faild{
                 case .nonExistData:
                     owner.toastType = .emptyData
@@ -50,6 +48,8 @@ extension WSMainVM{
                     owner.toastType = .notAuthority
                 case .lackCoin:
                     owner.toastType = .lackCoin
+                case .denyExitWS:
+                    owner.toastType = .existChannelManaging
                 default:
                     owner.toastType = .unknown
                 }
@@ -60,14 +60,14 @@ extension WSMainVM{
         }.disposed(by: disposeBag)
     }
 }
-extension WSMainVM{
-    fileprivate func createResponse(_ value: WSResponse) async {
+fileprivate extension WSMainVM{
+     func createResponse(_ value: WSResponse) async {
         let isFirstItem = await self.list.isEmpty
         do{
             var tempItem = try await makeWSItem(value)
-            if isFirstItem{ 
+            if isFirstItem{
                 tempItem.isSelected = true
-                self.mainWS = tempItem.id
+                await self.mainWS.updateMainWSID(id: tempItem.id, myManaging: true)
             }
             let item = tempItem
             await MainActor.run {
@@ -81,7 +81,7 @@ extension WSMainVM{
             print(error)
         }
     }
-    fileprivate func editResponse(_ value:WSResponse) async{
+    func editResponse(_ value:WSResponse) async{
         do{
             // 캐시 덮어쓰기
             var tempItem = try await makeWSItem(value,coverCache: true)
@@ -95,12 +95,27 @@ extension WSMainVM{
             print(error)
         }
     }
-    fileprivate func wsResponses(_ value:[WSResponse]){
+    // 워크스페이스 리스트에서 삭제 및 메인 워크스페이스 변경 후, 서비스에서 업데이트 시도
+    func removeWorkSpaceList(){
+        self.list.remove(at:selectedIdx)
+        Task{@MainActor in
+            if let firstItem = list.first{
+                selectedIdx = 0
+                list[selectedIdx].isSelected = true
+                mainWS.updateMainWSID(id: list[selectedIdx].id, myManaging: list[selectedIdx].isMyManaging)
+                provider.wsService.setHomeWS(wsID:mainWS.id)
+            }else{
+                self.mainWS.updateMainWSID(id: -1, myManaging: false)
+                selectedIdx = -1
+                provider.wsService.setHomeWS(wsID: nil)
+            }
+        }
+    }
+    func wsResponses(_ value:[WSResponse]){
         Task{
             do{
                 let listItem = try await counter.run(value) {[weak self] response in
                     // 여기에 이미지 가져오는 로직 추가해야함
-//                    let imageData = try! examineImage.randomElement()!.imageData()
                     guard let self else{ throw Errors.cachingEmpty }
                     return try await makeWSItem(response)
                 }
@@ -114,38 +129,4 @@ extension WSMainVM{
             }
         }
     }
-    func makeWSItem(_ res:WSResponse,coverCache:Bool = false) async throws -> WorkSpaceListItem{
-        let myImage:UIImage
-        do{
-            myImage = try await UIImage.fetchWebCache(name: res.thumbnail,type:.small)
-        }catch{
-            let image = if let data = await NM.shared.getThumbnail(res.thumbnail){
-                UIImage.fetchBy(data: data,type:.small)
-            }else{examineImage.randomElement()!}
-            try await image.appendWebCache(name: res.thumbnail,isCover: coverCache)
-            myImage = try image.downSample(type:.small)
-        }
-        return await WorkSpaceListItem(id:res.workspaceID,
-                                       isSelected: res.workspaceID == mainWS,
-                                       isMyManaging: res.ownerID == userID,
-                                       image: myImage,
-                                       name: res.name,
-                                       description: res.description,
-                                       date: res.createdAt)
-    }
-}
-extension WSMainVM{
-    func tempToastUp(){
-        toastType = .created
-    }
-}
-//MARK: -- 워크스페이스 리스트 아이템
-struct WorkSpaceListItem:Identifiable,Equatable{
-    var id:Int
-    var isSelected:Bool
-    var isMyManaging:Bool = false
-    var image:UIImage
-    var name:String
-    var description:String?
-    var date:String // 이거 수정해야함!!
 }

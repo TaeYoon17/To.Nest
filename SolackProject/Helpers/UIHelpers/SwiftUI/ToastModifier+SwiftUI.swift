@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 import Toast
 import Combine
-struct Toastt:View{
+struct ToastView:View{
     var type: (any ToastType)
     var body: some View{
         Text(type.contents)
@@ -21,17 +21,20 @@ struct Toastt:View{
             .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
+
 struct ToastModifier:ViewModifier{
     @State private var undertype: (any ToastType)?
     @Binding var type: (any ToastType)?
     let alignment: Alignment
+    let position: CGPoint
     func body(content: Content) -> some View {
         content.overlay(alignment:alignment) {
             if let undertype{
-                Toastt(type: undertype )
+                ToastView(type: undertype )
                     .padding(.bottom)
                     .transition(.opacity)
                     .zIndex(10)
+                    .position(x: position.x,y:position.y)
             }
         }.onChange(of: type?.contents,perform:{ _ in
             guard let type else {return}
@@ -72,7 +75,7 @@ extension View{
 //    func toast<P>(alignment:Alignment,publisher: P) -> some View where P : Publisher, P.Failure == Never,P.Output == ToastType?{
 //        self.modifier(ToastModifier(publisher: publisher, alignment: alignment))
 //    }
-    func toast(type:Binding<ToastType?>,alignment:Alignment) -> some View{
-        self.modifier(ToastModifier(type: type, alignment: alignment))
+    func toast(type:Binding<ToastType?>,alignment:Alignment,position:CGPoint) -> some View{
+        self.modifier(ToastModifier(type: type, alignment: alignment,position: position))
     }
 }

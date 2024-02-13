@@ -19,20 +19,12 @@ final class OnboardingViewReactor: Reactor {
         case auth
         case signInWithKakaoTalk
     }
-    
-    /// 처리 단위를 정의합니다.
-    ///
-    /// 액션을 받았을 때 변화
     enum Mutation {
         case requestSignIn(SignInType)
         case setLoading(Bool)
         case requestSignUp
         case authPresenting
     }
-    
-    /// 현재 상태를 기록합니다.
-    ///
-    /// 어떠한 변화를 받은 상태!
     struct State {
         var value = 0
         var isLoading = false
@@ -46,7 +38,7 @@ final class OnboardingViewReactor: Reactor {
         self.initialState = State()
     }
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let eventMutation = provider.authService.event.flatMap { event -> Observable<Mutation> in
+        let eventMutation = provider.authService.event.flatMap {[weak self] event -> Observable<Mutation> in
             switch event{
             case .signIn(let signIn):
                 return Observable.concat([

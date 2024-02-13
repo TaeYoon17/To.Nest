@@ -11,20 +11,26 @@ import SwiftUI
 extension CHExploreView:UICollectionViewDelegate{
     func configureCollectionView(){
         collectionView.delegate = self
-        var cellRegi = cellRegistration
-        dataSource = .init(reactor: CHExploreReactor(),collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        let cellRegi = cellRegistration
+        dataSource = .init(vm:vm,collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             collectionView.dequeueConfiguredReusableCell(using: cellRegi, for: indexPath, item: itemIdentifier)
         })
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        guard let nowChannel = dataSource.itemIdentifier(for: indexPath) else {return}
+        if dataSource.isMyChannel(item: nowChannel){
+            vm.moveChatting.onNext((nowChannel.channelID,nowChannel.name))
+        }else{
+            vm.alerts.onNext(.join(chID: nowChannel.id, chName: nowChannel.name))
+        }
     }
 }
 extension CHExploreView{
-    var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,String>{
+    var cellRegistration: UICollectionView.CellRegistration<UICollectionViewListCell,Item>{
         UICollectionView.CellRegistration {[weak self] cell, indexPath, itemIdentifier in
             cell.contentConfiguration = UIHostingConfiguration(content: {
-                ChannelListItemView(isRecent: true, name: itemIdentifier, count: 0,showCount: false)
+                ChannelListItemView(item: .init(channelID: 0, name: itemIdentifier.name, messageCount: 0, isRecent: false))
             })
             cell.configurationUpdateHandler = { cell, state in
                 var backConfig = cell.defaultBackgroundConfiguration()

@@ -18,7 +18,7 @@ typealias IMCache = IM.Cache
 extension IM{
     final class Cache{
         // 메모리 캐시입니다.
-        let memoryCache = SourceType.allCases.reduce(into: [:]) {
+        var memoryCache = SourceType.allCases.reduce(into: [:]) {
             $0[$1] = NSCache<NSString,UIImage>()
         }
         static let shared = Cache()

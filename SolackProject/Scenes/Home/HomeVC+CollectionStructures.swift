@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import SwiftUI
 extension HomeVC{
-    enum SectionType{
+    enum SectionType:String{
         case channel
         case direct
         case team
     }
-    enum ItemType{
+    enum ItemType:String{
         case header
         case list
         case bottom
@@ -22,7 +23,7 @@ extension HomeVC{
         var sectionType:SectionType
         var itemType: ItemType
         
-        init(_ itemAble:any Itemable){
+        init<T:CollectionItemable>(_ itemAble:T)where T.ItemType == ItemType, T.SectionType == SectionType{
             self.id = itemAble.id
             self.itemType = itemAble.itemType
             self.sectionType = itemAble.sectionType
@@ -31,41 +32,60 @@ extension HomeVC{
             hasher.combine(id)
         }
     }
-    struct ChannelListItem:Identifiable,Itemable{
+    final class ChannelListItem:ObservableObject,Identifiable,CollectionItemable{
+        static func == (lhs: HomeVC.ChannelListItem, rhs: HomeVC.ChannelListItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
         let itemType: ItemType = .list
         let sectionType: SectionType = .channel
-        var id:String{name}
-        var name :String
-        var messageCount:Int
-        var isRecent: Bool
+        var id:String{"\(sectionType.rawValue)_\(channelID)"}
+        var channelID:Int = 0
+        @Published var name :String
+        @Published var messageCount:Int
+        @Published var isRecent: Bool
+        init(channelID: Int, name: String, messageCount: Int, isRecent: Bool) {
+            self.channelID = channelID
+            self.name = name
+            self.messageCount = messageCount
+            self.isRecent = isRecent
+        }
     }
-    struct DirectListItem: Identifiable,Itemable{
+    final class DirectListItem:ObservableObject, Identifiable,CollectionItemable{
+        static func == (lhs: HomeVC.DirectListItem, rhs: HomeVC.DirectListItem) -> Bool {
+            lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
         let itemType:ItemType = .list
         let sectionType: HomeVC.SectionType = .direct
-        var id:String{ name }
-        var name:String
-        var imageData: String // 임시로 이름 넣기
-        var messageCount:Int
-        var unreadExist: Bool
+        var id:String{ "\(sectionType.rawValue)_\(roomID)" }
+        @Published var roomID:Int
+        @Published var userID: Int
+        @Published var name:String
+        @Published var messageCount:Int
+        @Published var thumbnail:Image
+        init(roomID:Int,userID:Int,name: String, thumbnail: Image, messageCount: Int) {
+            self.roomID = roomID
+            self.userID = userID
+            self.name = name
+            self.thumbnail = thumbnail
+            self.messageCount = messageCount
+        }
     }
-    struct BottomItem:Identifiable,Itemable{
-        var id = UUID().uuidString+"Bottom"
+    struct BottomItem:Identifiable,Hashable,CollectionItemable{
+        var id :String{ sectionType.rawValue+itemType.rawValue }
         let itemType: HomeVC.ItemType = .bottom // 혹시 모를 해싱 고유값 중첩 문제
         var sectionType: HomeVC.SectionType
         var name:String
     }
-    struct HeaderItem:Identifiable,Itemable{
-        var id = UUID().uuidString+"Header" // 혹시 모를 해싱 고유값 중첩 문제
+    struct HeaderItem:Identifiable,Hashable,CollectionItemable{
+        var id:String{ sectionType.rawValue + itemType.rawValue}
         var itemType: HomeVC.ItemType = .header
         var sectionType: HomeVC.SectionType
         var name:String
     }
-}
-protocol Itemable:Identifiable,Hashable{
-    var id:String { get }
-    var itemType:HomeVC.ItemType { get }
-    var sectionType:HomeVC.SectionType{get}
-}
-extension Itemable{
-    
 }

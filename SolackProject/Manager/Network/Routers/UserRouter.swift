@@ -11,7 +11,7 @@ enum UserRouter: URLRequestConvertible{
     case signUp(info:SignUpInfo),signIn(type:SignInType,body:SignInBody),validation(email:String)
     case deviceToken(String)
     case signOut,getMy,getUser(id:String)
-    case putMy,putMyImage
+    case putMy(nickName:String?,phone:String?),putMyImage(image:Data?)
     static private let baseURL = URL(string: API.baseURL)
     var endPoint: String{
         switch self{
@@ -32,7 +32,7 @@ enum UserRouter: URLRequestConvertible{
         case .getMy,.putMy:
             return "/v1/users/my"
         case .getUser(id: let id):
-            return "/v1/users/my/\(id)"
+            return "/v1/users/\(id)"
         case .putMyImage:
             return "/v1/users/my/image"
         }
@@ -52,8 +52,14 @@ enum UserRouter: URLRequestConvertible{
             params["email"] = email
             return params
         case .signIn(_,let body): return body.getParameter()
-        case .putMy,.putMyImage:
+        case .putMy(nickName: let nickName, phone: let phone):
+            var params = Parameters()
+            if let nickName{ params["nickname"] = nickName }
+            if let phone{ params["phone"] = phone }
+            return params
+        case .putMyImage:
             return Parameters()
+            
         case .signOut,.getMy,.getUser: return Parameters()
         case .deviceToken(let deviceToken):
             var params = Parameters()
@@ -61,7 +67,18 @@ enum UserRouter: URLRequestConvertible{
             return params
         }
     }
-    
+    var headers: HTTPHeaders{
+        var headers = HTTPHeaders()
+        switch self{
+        case .putMy:
+            headers["Content-Type"] = "application/json"
+        case .putMyImage:
+            headers["Content-Type"] = "multipart/form-data"
+        default:
+            break
+        }
+        return headers
+    }
     func asURLRequest() throws -> URLRequest {
         guard var url = Self.baseURL?.appendingPathComponent(endPoint) else {
             print("hello world")
@@ -69,15 +86,25 @@ enum UserRouter: URLRequestConvertible{
         }
         var urlRequest = URLRequest(url: url)
         urlRequest.method = self.method
+        urlRequest.headers = self.headers
         switch self{
-        case .signOut,.getMy,.getUser: break
+        case .signOut,.getMy,.getUser,.putMyImage: break
         default:
             urlRequest.httpBody = try? JSONEncoding.default.encode(urlRequest, with: parameters).httpBody
         }
         return urlRequest
     }
-    
-    
+    var multipartFormData: MultipartFormData {
+        let multipartFormData = MultipartFormData()
+        switch self {
+        case .putMyImage(image: let data):
+            if let data{
+                multipartFormData.append(data, withName: "image", fileName: "123.jpg", mimeType: "image/jpeg")
+            }
+        default: ()
+        }
+        return multipartFormData
+    }
 }
 protocol SignInBody{
     func getParameter()->Parameters
@@ -87,7 +114,9 @@ extension SignUpInfo{
         var parameters = Parameters()
         parameters["email"] = email
         parameters["password"] = pw
-        parameters["nickname"] = nick
+        if !nick.isEmpty{
+            parameters["nickname"] = nick
+        }
         parameters["phone"] = phone
         @DefaultsState(\.deviceToken) var deviceToken
         parameters["deviceToken"] = deviceToken
@@ -118,7 +147,9 @@ extension AppleInfo:SignInBody{
     func getParameter() -> Parameters {
         var params = Parameters()
         params["idToken"] = idToken
-        params["nickname"] = nickName
+        if !nickName.isEmpty{
+            params["nickname"] = nickName
+        }
         @DefaultsState(\.deviceToken) var deviceToken
         params["deviceToken"] = deviceToken
         return params

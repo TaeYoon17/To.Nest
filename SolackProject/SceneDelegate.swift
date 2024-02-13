@@ -12,7 +12,6 @@ import KakaoSDKAuth
 import RxSwift
 import AuthenticationServices
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
     var disposeBag = DisposeBag()
     @DefaultsState(\.expiration) var expiration
@@ -20,20 +19,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.appleID) var appleID
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
-        print(accessToken)
         window = UIWindow(windowScene: scene)
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.white
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        AppManager.shared.initNavigationAppearances()
+        print("-------accessToken-------")
+        print(accessToken)
+        Task{
+            do{
+                let repository = try await TableRepository()
+                await repository.checkPath()
+            }catch{
+                fatalError("리포지토리 생성 오류 \(error)")
+            }
+        }
         RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
         userAccessConnect()
-//        accessByAppleSignIn()
         if accessToken.isEmpty{
             let reactor = OnboardingViewReactor(AppManager.shared.provider)
             let vc = OnboardingView()
@@ -54,14 +54,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 print("Revoked")
             case .authorized:
                 print("Authorized")
-                Task{
-                    await MainActor.run {
-                        print("여기 허가됨...")
-//                        window?.rootViewController = MainViewController()
-//                        self.window = window
-//                        window.makeKeyAndVisible()
-                    }
-                }
             default: print("NOT FOUND")
             }
         }
@@ -117,6 +109,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        AppManager.shared.provider.chService.checkAllMy()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -134,7 +127,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 

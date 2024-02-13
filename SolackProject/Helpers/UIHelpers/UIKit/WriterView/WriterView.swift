@@ -13,7 +13,12 @@ import Toast
 
 class WriterView<Fail:FailedProtocol,Toast:ToastType,T: WriterReactor<Fail,Toast>>: BaseVC,View,Toastable,WritableView{
     func apply(config: WriterConfigureation) {
-        fatalError("It must be override!!")
+        var config = config
+        pwField.apply(config.descriptionField)
+        emailField.apply(config.mainField)
+        navigationItem.title = config.navigationTitle
+        actionBtn.text = config.buttonText
+        self.isModalInPresentation = !config.isAvaileScrollClose
     }
     typealias GenericWriterReactor = WriterReactor<Fail,Toast>
     var disposeBag = DisposeBag()
@@ -22,13 +27,19 @@ class WriterView<Fail:FailedProtocol,Toast:ToastType,T: WriterReactor<Fail,Toast
     init(config: WriterConfigureation,reactor:T){
         self.writerConfig = config
         super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+//        self.apply(config: writerConfig)
     }
     required init?(coder: NSCoder) {
         fatalError("Don't use storyboard")
     }
     func bind(reactor: T) {
+        print(reactor.initialState)
         let fields = [emailField,pwField]
-        func actionBinding(_ action : Observable<A>){ action.bind(to: reactor.action).disposed(by: disposeBag) }
+        func actionBinding(_ action : Observable<A>){
+            action.bind(to: reactor.action).disposed(by: disposeBag)
+        }
+        emailField.inputText.map{T.Action.setName($0)}.bind(to: reactor.action).disposed(by: disposeBag)
         actionBinding(emailField.inputText.map{A.setName($0)})
         actionBinding(pwField.inputText.map{A.setDescription($0)})
         actionBinding(actionBtn.rx.tap.map{A.confirmAction})
@@ -52,6 +63,13 @@ class WriterView<Fail:FailedProtocol,Toast:ToastType,T: WriterReactor<Fail,Toast
 //            owner.toastUp(type: type)
             owner.toastUp(type: type)
         }.disposed(by: disposeBag)
+        reactor.state.map{$0.isClose}.subscribe(on: MainScheduler.instance).bind(with: self) { owner, isClose in
+            if isClose{
+                Task{@MainActor in
+                    owner.dismiss(animated: true)
+                }
+            }
+        }.disposed(by: disposeBag)
     }
     func fieldErrorBinding(_ reactor: GenericWriterReactor){
         reactor.state.map{$0.erroredName}.bind(to: emailField.validFailed).disposed(by: disposeBag)
@@ -60,11 +78,12 @@ class WriterView<Fail:FailedProtocol,Toast:ToastType,T: WriterReactor<Fail,Toast
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .gray1
+        apply(config: self.writerConfig)
     }
     //MARK: -- 뷰 구성
     let scrollView = UIScrollView()
     lazy var emailField = InputFieldView(field: writerConfig.mainField.field, placeholder: writerConfig.mainField.placeholder,keyType: writerConfig.mainField.keyType,accessoryText: writerConfig.mainField.accessoryText)
-    lazy var pwField = InputFieldView(field: writerConfig.descriptionField.field, placeholder: writerConfig.descriptionField.placeholder,accessoryText: writerConfig.descriptionField.accessoryText)
+    lazy var pwField = InputFieldView(field: writerConfig.descriptionField.field, placeholder: writerConfig.descriptionField.placeholder,keyType: writerConfig.descriptionField.keyType,accessoryText: writerConfig.descriptionField.accessoryText)
     let actionBtn = AuthBtn()
     var isShowKeyboard :CGFloat? = nil
     lazy var stView = {
@@ -80,8 +99,6 @@ class WriterView<Fail:FailedProtocol,Toast:ToastType,T: WriterReactor<Fail,Toast
         view.endEditing(true)
         scrollView.endEditing(true)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))
-        emailField.tf.autocapitalizationType = .none
-        pwField.tf.isSecureTextEntry = true
     }
     @objc func dismissMyKeyboard(){
         view.endEditing(true)

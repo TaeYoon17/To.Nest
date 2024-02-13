@@ -7,20 +7,54 @@
 
 import UIKit
 import SnapKit
-final class CHExploreReactor{
-    
+import RxSwift
+extension CHExploreView{
+    struct Item:Identifiable,Hashable{
+        var id:Int{ channelID }
+        var channelID:Int
+        var name:String
+    }
 }
 extension CHExploreView{
-    final class DataSource: UICollectionViewDiffableDataSource<String,String>{
-        init(reactor: CHExploreReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, String>.CellProvider){
+    final class DataSource: UICollectionViewDiffableDataSource<String,Item>{
+        private var disposeBag = DisposeBag()
+        var myChannelModel = AnyModelStore<Item>([])
+        init(vm: CHExploreVM,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, Item>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
             initSnapshot()
+            vm.allChannels
+                .subscribe(on: MainScheduler.asyncInstance)
+                .bind(with: self) { (owner:DataSource, response:[CHResponse]) in
+                    var snapshot = owner.snapshot()
+                    snapshot.deleteAllItems()
+                    snapshot.appendSections(["탐색"])
+                    snapshot.appendItems(response.map{Item(channelID: $0.channelID, name: $0.name)},toSection: "탐색")
+                    Task{@MainActor in
+                        await MainActor.run {
+                            owner.apply(snapshot,animatingDifferences: true)
+                        }
+                    }
+                }.disposed(by: disposeBag)
+            vm.myChannels.subscribe(on: MainScheduler.asyncInstance)
+                .bind(with: self) { (owner:DataSource, response:[CHResponse]) in
+                    response.forEach{
+                        let item = Item(channelID: $0.channelID, name: $0.name)
+                        owner.myChannelModel.insertModel(item: item)
+                    }
+                }.disposed(by: disposeBag)
         }
-        func initSnapshot(){
-            var snapshot = NSDiffableDataSourceSnapshot<String,String>()
+        func isMyChannel(item:Item)-> Bool{
+            if let item = myChannelModel.fetchByID(item.id){ true }else{ false }
+        }
+        @MainActor func initSnapshot(){
+            var snapshot = NSDiffableDataSourceSnapshot<String,Item>()
             snapshot.appendSections(["탐색"])
-            snapshot.appendItems(["이것이 레거시다","취준이직정보방","code-review"], toSection: "탐색")
-            apply(snapshot,animatingDifferences: true)
+            snapshot.appendItems([], toSection: "탐색")
+            Task{@MainActor in
+                await MainActor.run {
+                    apply(snapshot,animatingDifferences: true)
+                }
+            }
         }
     }
 }

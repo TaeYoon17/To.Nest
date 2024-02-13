@@ -8,21 +8,23 @@
 import UIKit
 import SnapKit
 final class WSSliderVC:SliderVC<WSMainVM>{
+    var isShowKeyboard: CGFloat? = nil
+    var toastY: CGFloat{ view.bounds.minY}
+    var toastHeight: CGFloat = 0
     init(_ provider: ServiceProviderProtocol,sliderVM: SliderVM){
         let vm = WSMainVM(provider)
         vm.getList()
         super.init(viewVM: vm, sliderVM: sliderVM)
-        vm.closeAction.sink { [weak self] _ in
-            sliderVM.endedSlider.onNext(false)
-        }.store(in: &subscription)
+        sliderWSViewConnect(vm,sliderVM)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        wsMainBinding()
     }
-    override func wsMainBinding(){
+    func wsMainBinding(){
         viewVM.createWorkSpaceTapped.sink { [weak self] _ in
             self?.presentCreateWS()
         }.store(in: &subscription)
@@ -31,6 +33,15 @@ final class WSSliderVC:SliderVC<WSMainVM>{
         }.store(in: &subscription)
         viewVM.editWorkSpaceManagerTapped.sink { [weak self] _ in
             self?.presentEditWS()
+        }.store(in: &subscription)
+    }
+    func sliderWSViewConnect(_ vm:WSMainVM,_ sliderVM:SliderVM){
+        vm.closeAction.sink { [weak self] _ in
+            sliderVM.endedSlider.onNext(false)
+        }.store(in: &subscription)
+        vm.$toastType.sink { [weak self] toast in
+            guard let self else {return}
+            sliderVM.toastPublisher.onNext(toast)
         }.store(in: &subscription)
     }
 }

@@ -47,18 +47,3 @@ extension EmailSignInReactor{
         }
     }
 }
-fileprivate extension String{
-    func validationEmail()->Bool{
-        let email = ".*\\.(com|co\\.kr|net).*"
-        let emailRegex = ".*@.*"
-        do{
-            let val = try Regex(emailRegex)
-            let one = try Regex(email)
-            guard self.contains(one) else {return false}
-            return self.contains(val)
-        }catch{
-            return false
-        }
-    }
-
-}

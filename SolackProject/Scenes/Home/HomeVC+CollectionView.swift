@@ -61,18 +61,23 @@ extension HomeVC:UICollectionViewDelegate{
             }))
             alert.addAction(.init(title: "취소", style: .cancel))
             self.present(alert,animated: true)
-        case (.bottom,.direct): break
-        case (.bottom, .team):
-            let vc = CHInviteView()
-            let nav = UINavigationController(rootViewController: vc)
-            nav.fullSheetSetting()
-            self.present(nav, animated: true)
-        case (.list,.channel):
+        case (.bottom,.direct):
+            reactor!.action.onNext(.setPresent(.dmExplore))
+        case (.bottom, .team): // 팀원 초대 뷰
+            reactor!.action.onNext(.setPresent(.invite))
+        case (.list,.channel): // 채널 채팅 뷰
+            let chatItem = dataSource.fetchChannel(item: item)
+            let chatReactor = CHChatReactor(reactor!.provider, id: chatItem.channelID, title: chatItem.name)
             let vc = CHChatView()
+            vc.reactor = chatReactor
             self.navigationController?.pushViewController(vc, animated: true)
-        case (.list,.direct):break
+        case (.list,.direct):
+            let directItem = dataSource.fetchDirect(item: item)
+            let chatReactor = DMChatReactor(reactor!.provider, roomID: directItem.roomID, userID: directItem.userID, title: directItem.name)
+            let vc = DMChatView()
+            vc.reactor = chatReactor
+            self.navigationController?.pushViewController(vc, animated: true)
         case (.list, .team): break
-        
         }
     }
 

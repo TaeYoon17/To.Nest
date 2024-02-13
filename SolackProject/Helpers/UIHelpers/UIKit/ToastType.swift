@@ -34,11 +34,13 @@ extension Toastable{
         style.verticalPadding = 9
         style.horizontalPadding = 16
         style.backgroundColor = type.getColor
+        style.messageAlignment = .center
         return style
     }
     func toastUp(type: any ToastType){
         var style = defaultStyle(type: type)
         let toast = try! navigationController!.view.toastViewForMessage(type.contents, title: nil, image: nil, style: style)
+        toast.layer.zPosition = 100
         let radiusHeight = toast.frame.height / 2
         self.toastHeight = toast.frame.height
         Task{@MainActor in
