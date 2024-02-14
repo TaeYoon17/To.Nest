@@ -21,6 +21,7 @@ extension DMMainReactor{
                 }
                 mutList.append(.just(.setMembsers(members)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance))
             case .wsAllMembers(let response):
+                print("워크스페이스 멤버 가져오기 성공!!")
                 mutList.append(
                     .just(.setMembsers(response)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance)
                 )

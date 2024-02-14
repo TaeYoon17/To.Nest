@@ -76,7 +76,6 @@ enum DMRouter:URLRequestConvertible{
         case .create(wsID: _, roomID: _,dmInfo: let info):
             for file in info.files{
                 let fileName = "\(file.name).\(file.type.rawValue)"
-                print(fileName, fileName,file.type.mimeType)
                 multipartFormData.append(file.file, withName: "files",fileName: fileName,mimeType: file.type.mimeType)
             }
             multipartFormData.append(Data(info.content.utf8), withName: "content")

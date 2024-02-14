@@ -14,6 +14,9 @@ extension WSService{
                 let allWS = try await NM.shared.checkAllWS()
                 if let id = allWS.first?.workspaceID{
                     let homeWS = try await NM.shared.checkWS(wsID: id)
+                    if let members = homeWS.workspaceMembers{
+                        await updateUserProfile(responses: members)
+                    }
                     mainWS.updateMainWSID(id: id, myManaging: homeWS.ownerID == userID)
                     event.onNext(.homeWS(homeWS))
                 }else{
@@ -36,6 +39,9 @@ extension WSService{
         }
         Task{
             let newHomeWS = try await NM.shared.checkWS(wsID:wsID)
+            if let members = newHomeWS.workspaceMembers{
+                await updateUserProfile(responses: members)
+            }
             mainWS.updateMainWSID(id: newHomeWS.workspaceID, myManaging: newHomeWS.ownerID == userID)
             event.onNext(.homeWS(newHomeWS))
         }

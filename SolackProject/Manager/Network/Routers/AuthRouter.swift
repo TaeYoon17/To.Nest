@@ -32,7 +32,6 @@ enum AuthRouter:URLRequestConvertible{
     }
     func asURLRequest() throws -> URLRequest {
         guard let url = Self.baseURL?.appendingPathComponent(endPoint) else {
-            print("hello world")
             return URLRequest(url: URL(string: "www.naver.com")!)
         }
         var urlRequest = URLRequest(url: url)

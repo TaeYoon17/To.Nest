@@ -71,7 +71,7 @@ extension MessageService:SocketReceivable{
                 try await updateUserInformationToDataBase(userIDs: [result.user.userID])
                 event.onNext(.create(response: .channel([result])))
             }catch{
-                print(error)
+                print("create error",error)
             }
             await imageReferenceCountManager.saveRepository()
             await userReferenceCountManager.saveRepository()
@@ -102,6 +102,8 @@ extension MessageService:SocketReceivable{
     }
 }
 fileprivate extension MessageService{
+    
+    // 서버 채팅 데이터 내역 가져오기
     @BackgroundActor func _getChannelDatas(chID:Int,chName:String) async {
         do{
             let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
@@ -115,6 +117,8 @@ fileprivate extension MessageService{
             print(error)
         }
     }
+    
+    // 채팅 내역들 디비에 저장하기
     @BackgroundActor func getResponses(responses:[ChatResponse],channelID chID: Int) async throws{
         await channelRepostory?.updateChannelCheckDate(channelID: chID)
         let createResponses =  await responses.asyncFilter {// 이미 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
@@ -124,7 +128,7 @@ fileprivate extension MessageService{
         try await appendChatResponseToDataBase(channelID:chID,createResponses: createResponses)
         // 1. 새로운 채팅 내역의 유저 참조 계수 업데이트 혹은 새로 생성
         try await appendUserReferenceCounts(channelID: chID, createUsers: createResponses.map(\.user))
-        // 2. 유저 프로필 업데이트 진행 -- 모든 response의 유저 중 한 개씩만 존재하면 된다.
+        // 2. 유저 프로필 업데이트 진행 -- 모든 response의 유저 중 한 개씩만 존재하면 된다. + 채널 멤버들을 조회한다..?
         let allUsers = responses.map{$0.user.userID}.makeSet()
         try await updateUserInformationToDataBase(userIDs: allUsers)
     }

@@ -26,12 +26,17 @@ final class ProfileService:ProfileProtocol{
     @DefaultsState(\.myInfo) var myInfo
     @DefaultsState(\.myProfile) var profile
     @DefaultsState(\.userID) var userID
+    @BackgroundActor var userRepository:UserInfoRepository!
+    init(){
+        Task{@BackgroundActor in
+            userRepository = try await UserInfoRepository()
+        }
+    }
     func updateNickname(name:String){
         Task{
             do{
                 guard let myInfo else { throw AuthFailed.authFailed }
                 let res:MyInfo = try await NM.shared.updateMyInfo(nickName: name,phone:myInfo.phone)
-                
                 await updateInfo(info: res)
                 event.onNext(.myInfo(res))
             }catch{
@@ -57,12 +62,13 @@ final class ProfileService:ProfileProtocol{
         Task{
             do{
                 let res: MyInfo = try await NM.shared.updateMyInfo(profileImage: imageData)
-                await updateInfo(info: res)
-                if let imageURL = res.profileImage,let imageData = await NM.shared.getThumbnail(imageURL){
-                    self.profile = imageData
+                let imageData:Data? = if let imageURL = res.profileImage,let imageData = await NM.shared.getThumbnail(imageURL){
+                    imageData
                 }else{
-                    self.profile = nil
+                    nil
                 }
+                self.profile = imageData
+                await updateInfo(info: res,imageData: imageData)
                 event.onNext(.myInfo(res))
                 event.onNext(.updatedImage)
             }catch{
@@ -71,7 +77,7 @@ final class ProfileService:ProfileProtocol{
             }
         }
     }
-    private func updateInfo(info: MyInfo) async{
+    private func updateInfo(info: MyInfo,imageData:Data? = nil) async{
         let prevImage = myInfo?.profileImage
         self.myInfo = info
         self.userID = info.userID
@@ -79,6 +85,7 @@ final class ProfileService:ProfileProtocol{
             let data = await NM.shared.getThumbnail(webImage)
             profile = data
         }
+        await updateInfoDB(info: info,imageData: imageData)
     }
     func checkProfile(userID:Int){
         Task{

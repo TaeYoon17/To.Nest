@@ -19,6 +19,12 @@ typealias UIRepository = UserInfoRepository
             table.profileImage = response.profileImage
         })
     }
+    func update(table:UserInfoTable,nickName:String,imagePath:String?) async{
+        try! await self.realm.asyncWrite({
+            table.nickName = nickName
+            table.profileImage = imagePath
+        })
+    }
     func getTableBy(userID:Int) -> UserInfoTable?{
         return self.getTableBy(tableID: userID)
     }

@@ -60,7 +60,7 @@ final class DMChatReactor:Reactor{
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .initChat:
-            provider.msgService.fetchDirectMessageDB(userID: mainWS.id, roomID: roomID)
+            provider.msgService.fetchDirectMessageDB(userID: userID, roomID: roomID)
             return Observable.concat([.just(.setTitle(title))])
         case .actionSendChat:
             provider.msgService.create(roomID: self.roomID, dmChat: chatMessage)

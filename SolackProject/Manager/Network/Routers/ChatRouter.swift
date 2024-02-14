@@ -60,7 +60,6 @@ enum ChatRouter:URLRequestConvertible{
         case .check:
             if let queryItem = params.urlQueryItems{
                 urlRequest.url?.append(queryItems: queryItem)
-                print(urlRequest.url)
             }
             return urlRequest
         }
@@ -71,7 +70,6 @@ enum ChatRouter:URLRequestConvertible{
         case .create(wsID: _, chName: _, info: let info):
             for file in info.files{
                 let fileName = "\(file.name).\(file.type.rawValue)"
-                print(fileName, fileName,file.type.mimeType)
                 multipartFormData.append(file.file, withName: "files",fileName: fileName,mimeType: file.type.mimeType)
             }
             multipartFormData.append(Data(info.content.utf8), withName: "content")

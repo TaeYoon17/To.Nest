@@ -99,7 +99,6 @@ extension HomeReactor{
             case .allMy(let responses):
                 return Observable.concat([.just(.setDMList(responses))])
             case .unreads(let unreads): return Observable.concat(.just(.setDMUnreads(unreads)))
-
             default: return Observable.concat([])
             }
         }

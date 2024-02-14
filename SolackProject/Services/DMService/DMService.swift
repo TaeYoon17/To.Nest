@@ -49,6 +49,7 @@ final class DMService:DMProtocol{
                     var sendResponses:[DMRoomResponse] = []
                     for var response in responses{
                         try await Task.sleep(for: .microseconds(10))
+                        await updateDBRoomProfileImage(response: &response)
                         if let table = repository.getTableBy(tableID: response.roomID){
                             response.content = table.lastContent
                             response.lastDate = table.lastContentDate
@@ -57,7 +58,6 @@ final class DMService:DMProtocol{
                         }
                         sendResponses.append(response)
                     }
-                    
                     event.onNext(.allMy(sendResponses))
                     let existed = repository.getTasks.where{$0.wsID == self.mainWS.id}
                     let checkUnreads = Array(existed.map{($0.lastReadDate,$0.roomID)})

@@ -25,7 +25,6 @@ final class OnboardingView:BaseVC,View{
             guard a, let signInType = b else {return}
             switch signInType{
             case .apple:
-                print("asdfasdf")
                 owner.appleLoginButtonClicked()
             case .email:
                 let vc = SignInEmailView()
@@ -39,7 +38,6 @@ final class OnboardingView:BaseVC,View{
             }
         }.disposed(by: disposeBag)
         reactor.state.map{$0.isLoading && $0.isAuthPresent}.throttle(.nanoseconds(1000), scheduler: MainScheduler.instance).subscribe(with: self) { owner, val in
-            print(val)
             guard val else {return}
             let vc = AuthPresentView()
             let nav = UINavigationController(rootViewController: vc)

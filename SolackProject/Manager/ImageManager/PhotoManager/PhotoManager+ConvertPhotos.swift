@@ -50,7 +50,7 @@ extension UIImage{
         //1. 도큐먼트 경로 찾기
         guard let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         //2. 저장할 파일의 세부 경로 설정
-        let fileURL = documentDir.appendingPathComponent("\(fileName).jpg")
+        let fileURL = documentDir.appendingPathComponent("\(fileName)")
         //3. 이미지 변환 -> 세부 경로 파일을 열어서 저장
         guard let data = self.jpegData(compressionQuality: 1) else {return}
         let mbBytes = bytesToMegabytes(bytes: data.count)
