@@ -14,6 +14,12 @@ struct MessageCell:View{
     @State private var date:String = "08:16 오전"
     @State private var dateWidth:CGFloat = 0
     @State private var show = false
+    let profileAction: ((Int)->Void)
+    init(msgItem: MessageCellItem, images: MessageAsset,  profileAction: @escaping (Int) -> Void) {
+        self.msgItem = msgItem
+        self.images = images
+        self.profileAction = profileAction
+    }
     var body: some View{
         if userID == msgItem.profileID{
             myUser
@@ -58,10 +64,14 @@ struct MessageCell:View{
 }
 extension MessageCell{
     var profile:some View{
-        Image(.asyncSwift).resizable().scaledToFill()
-            .background(.gray6)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .frame(width:34,height:34)
+        Button(action: {
+            self.profileAction(msgItem.profileID)
+        }, label: {
+            images.profileImages.resizable().scaledToFill()
+                .background(.gray6)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .frame(width:34,height:34)
+        })
     }
     var contents: some View{
         VStack(alignment:.leading,spacing:5){

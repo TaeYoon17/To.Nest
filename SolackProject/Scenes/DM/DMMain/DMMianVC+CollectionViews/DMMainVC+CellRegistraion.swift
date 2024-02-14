@@ -22,7 +22,7 @@ extension DMMainVC{
                 section.contentInsets = .init(top: 16, leading: 0, bottom: 0, trailing: 0)
                 return section
             case .member:
-                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(76), heightDimension: .fractionalHeight(1)))
+                let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(74), heightDimension: .fractionalHeight(1)))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(98)), subitems: [item])
                 group.interItemSpacing = .flexible(0)
                 let section = NSCollectionLayoutSection(group: group)

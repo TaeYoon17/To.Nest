@@ -32,14 +32,19 @@ extension DMChatView:UICollectionViewDelegate,UICollectionViewDataSourcePrefetch
             guard let item:DMCellItem = dataSource.msgModel.fetchByID(itemIdentifier) else {return}
             cell.backgroundColor = .clear
             cell.selectedBackgroundView = .none
+            let profileViewAction:(Int) -> Void = { [weak self] userID in
+                guard let self else {return}
+                let vc = ProfileViewerVC(provider: self.reactor!.provider, userID: userID)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             if let itemAssets = dataSource.msgAssetModel.object(forKey: "\(item.id)" as NSString){
                 cell.contentConfiguration = UIHostingConfiguration(content: {
-                    MessageCell(msgItem: item, images: itemAssets)
+                    MessageCell(msgItem: item, images: itemAssets, profileAction: profileViewAction)
                 })
             }else{
                 let itemAsset = self.dataSource.appendChatAssetModel(item: item)
                 cell.contentConfiguration = UIHostingConfiguration(content: {
-                    MessageCell(msgItem: item, images: itemAsset)
+                    MessageCell(msgItem: item, images: itemAsset,profileAction: profileViewAction)
                 })
             }
         }

@@ -48,7 +48,7 @@ struct ChatCell:View{
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .overlay(content: {
                             RoundedRectangle(cornerRadius: 12).strokeBorder()
-                    })
+                        })
                 }
                 if !images.images.isEmpty{
                     ContainerImage(realImage: $images.images)
@@ -66,20 +66,11 @@ extension ChatCell{
         Button(action: {
             self.profileAction(chatItem.profileID)
         }, label: {
-            if let profileImage = images.profileImages{
-                profileImage.resizable().scaledToFill()
-                    .background(.gray6)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width:34,height:34)
-            }else{
-                Image(.noPhotoA)
-                    .resizable().scaledToFill()
-                        .background(.gray6)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .frame(width:34,height:34)
-            }
+            images.profileImages.resizable().scaledToFill()
+                .background(.gray6)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .frame(width:34,height:34)
         })
-        
     }
     var contents: some View{
         VStack(alignment:.leading,spacing:5){
@@ -90,7 +81,7 @@ extension ChatCell{
                     .padding(.all,8)
                     .overlay(content: {
                         RoundedRectangle(cornerRadius: 12).strokeBorder()
-                })
+                    })
             }
             if !images.images.isEmpty{
                 ContainerImage(realImage: $images.images)

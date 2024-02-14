@@ -35,9 +35,6 @@ extension UIImage{
     }
     static func fetchBy(fileName:String,ofSize size: CGSize? = nil) -> UIImage{
         let image = IM.shared.fetchBy(fileName: fileName,size: size)
-//        if let size{
-//            return try! image.downSample(size: size)
-//        }
         return image
     }
     // 단순 pixel 수 줄여 용량 줄이기용

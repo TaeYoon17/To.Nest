@@ -40,7 +40,9 @@ final class CHEditReactor: CHWriterReactor{
         state.flatMap { [weak self] state -> Observable<State> in
             guard let self else {return .just(state)}
             var st = state
-            st.isCreatable = !st.name.isEmpty && st.name != initialState.name
+            let nameAvailable = !st.name.isEmpty && st.name != initialState.name
+            let descAvailable = st.description != initialState.description
+            st.isCreatable = nameAvailable || descAvailable
             return .just(st)
         }
     }

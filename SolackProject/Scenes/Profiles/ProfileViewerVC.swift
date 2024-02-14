@@ -24,6 +24,15 @@ final class ProfileViewerVC:UIHostingController<ProfileViewer>{
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        let label = UILabel()
+        label.text = "프로필"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        navigationItem.titleView = label
+        navigationItem.leftBarButtonItem = .getBackBtn
+        navigationItem.leftBarButtonItem?.tintColor = .text
+        navigationItem.leftBarButtonItem!.rx.tap.bind { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
+        }.disposed(by: disposeBag)
     }
 }
 struct ProfileViewer:View{
@@ -55,18 +64,18 @@ struct ProfileViewer:View{
                 .listRowSeparator(.hidden)
         }.listStyle(.insetGrouped)
             .navigationBarBackButtonHidden()
-            .toolbar(content: {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button{
-                        vm.goBackNavigation.onNext(())
-                    }label: {
-                        Image(systemName: "chevron.left").font(.system(size: 17,weight: .bold))
-                    }.tint(.text)
-                }
-                ToolbarItem(placement: .principal) {
-                    Text("프로필").font(.system(size: 17,weight: .bold))
-                        .foregroundStyle(.text)
-                }
-            })
+//            .toolbar(content: {
+//                ToolbarItem(placement: .topBarLeading) {
+//                    Button{
+//                        vm.goBackNavigation.onNext(())
+//                    }label: {
+//                        Image(systemName: "chevron.left").font(.system(size: 17,weight: .bold))
+//                    }.tint(.text)
+//                }
+//                ToolbarItem(placement: .principal) {
+//                    Text("프로필").font(.system(size: 17,weight: .bold))
+//                        .foregroundStyle(.text)
+//                }
+//            })
     }
 }
