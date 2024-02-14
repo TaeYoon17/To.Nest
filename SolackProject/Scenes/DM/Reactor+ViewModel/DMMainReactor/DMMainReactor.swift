@@ -10,6 +10,7 @@ import ReactorKit
 import RxSwift
 enum DMMainPresent:Equatable{
     case room(roomID:Int,user:UserResponse)
+    case inviteMemberView
 }
 final class DMMainReactor: Reactor{
     @DefaultsState(\.mainWS) var mainWS
@@ -21,6 +22,7 @@ final class DMMainReactor: Reactor{
     enum Action{
         case initAction
         case setRoom(UserResponse)
+        case inviteMemberAction
     }
     enum Mutation{
         case setPresent(DMMainPresent?)
@@ -47,6 +49,11 @@ final class DMMainReactor: Reactor{
         case .setRoom(let response):
             provider.dmService.getRoomID(user: response)
             return Observable.concat([])
+        case .inviteMemberAction:
+            return Observable.concat([
+                .just(.setPresent(.inviteMemberView)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                .just(.setPresent(nil))
+            ])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {

@@ -63,6 +63,7 @@
 		6323E1C52B60F70100D91E46 /* CHSetting+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */; };
 		6323E1C62B60F70100D91E46 /* CHSettingCollectionStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */; };
 		6323E1C82B60F73400D91E46 /* CHSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */; };
+		6326FE312B7CA3AF00122D9C /* DMEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */; };
 		6329FE452B6E75160018909F /* DM+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE442B6E75160018909F /* DM+NM.swift */; };
 		6329FE472B6E75470018909F /* DMRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE462B6E75470018909F /* DMRouter.swift */; };
 		6329FE4A2B6E7E6F0018909F /* DMRoomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE492B6E7E6F0018909F /* DMRoomResponse.swift */; };
@@ -381,6 +382,7 @@
 		6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CHSetting+CollectionView.swift"; sourceTree = "<group>"; };
 		6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingCollectionStructures.swift; sourceTree = "<group>"; };
 		6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingReactor.swift; sourceTree = "<group>"; };
+		6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMEmptyView.swift; sourceTree = "<group>"; };
 		6329FE442B6E75160018909F /* DM+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DM+NM.swift"; sourceTree = "<group>"; };
 		6329FE462B6E75470018909F /* DMRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMRouter.swift; sourceTree = "<group>"; };
 		6329FE492B6E7E6F0018909F /* DMRoomResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMRoomResponse.swift; sourceTree = "<group>"; };
@@ -1132,6 +1134,7 @@
 				636B2B122B6D4B9700BE9751 /* DMMainVC.swift */,
 				636F16022B6FEA3600536E6F /* DMMainVC+Binding.swift */,
 				636F16042B6FEAAB00536E6F /* DMMianVC+CollectionViews */,
+				6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */,
 			);
 			path = DMMain;
 			sourceTree = "<group>";
@@ -2110,6 +2113,7 @@
 				630763F22B639484000747F8 /* MSGTextField+TextViewDelegate.swift in Sources */,
 				636F162D2B71381C00536E6F /* DMRoomRepository.swift in Sources */,
 				63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */,
+				6326FE312B7CA3AF00122D9C /* DMEmptyView.swift in Sources */,
 				631A60FF2B452976005509C2 /* SecretKey.swift in Sources */,
 				63358D6F2B540213005C5BD4 /* CHExploreView+CollectionView.swift in Sources */,
 				636F16102B6FF76C00536E6F /* MSGTextField.swift in Sources */,
