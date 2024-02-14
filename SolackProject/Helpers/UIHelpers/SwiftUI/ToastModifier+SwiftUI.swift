@@ -30,11 +30,11 @@ struct ToastModifier:ViewModifier{
     func body(content: Content) -> some View {
         content.overlay(alignment:alignment) {
             if let undertype{
-                ToastView(type: undertype )
-                    .padding(.bottom)
-                    .transition(.opacity)
-                    .zIndex(10)
-                    .position(x: position.x,y:position.y)
+                if position == .zero{
+                    contentView(underType: undertype)
+                }else{
+                    contentView(underType: undertype).position(x: position.x,y:position.y)
+                }
             }
         }.onChange(of: type?.contents,perform:{ _ in
             guard let type else {return}
@@ -47,6 +47,12 @@ struct ToastModifier:ViewModifier{
                 }
             }
         })
+    }
+    func contentView(underType: any ToastType) -> some View{
+        ToastView(type: underType )
+            .padding(.bottom)
+            .transition(.opacity)
+            .zIndex(10)
     }
 }
 //struct ToastModifier<P>:ViewModifier where P : Publisher, P.Failure == Never,P.Output == ToastType?{
@@ -75,7 +81,7 @@ extension View{
 //    func toast<P>(alignment:Alignment,publisher: P) -> some View where P : Publisher, P.Failure == Never,P.Output == ToastType?{
 //        self.modifier(ToastModifier(publisher: publisher, alignment: alignment))
 //    }
-    func toast(type:Binding<ToastType?>,alignment:Alignment,position:CGPoint) -> some View{
+    func toast(type:Binding<ToastType?>,alignment:Alignment,position:CGPoint = .zero) -> some View{
         self.modifier(ToastModifier(type: type, alignment: alignment,position: position))
     }
 }

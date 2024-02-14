@@ -70,6 +70,7 @@
 		6323E1C82B60F73400D91E46 /* CHSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */; };
 		6326FE2D2B7C993F00122D9C /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE2C2B7C993F00122D9C /* UIViewController.swift */; };
 		6326FE2F2B7C9A1500122D9C /* SceneDelegate+AccessConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE2E2B7C9A1500122D9C /* SceneDelegate+AccessConnect.swift */; };
+		6326FE332B7CB06E00122D9C /* ProfileToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE322B7CB06E00122D9C /* ProfileToastType.swift */; };
 		6329FE452B6E75160018909F /* DM+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE442B6E75160018909F /* DM+NM.swift */; };
 		6329FE472B6E75470018909F /* DMRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE462B6E75470018909F /* DMRouter.swift */; };
 		6329FE4A2B6E7E6F0018909F /* DMRoomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE492B6E7E6F0018909F /* DMRoomResponse.swift */; };
@@ -152,7 +153,6 @@
 		636F162F2B713A9E00536E6F /* DMChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636F162E2B713A9E00536E6F /* DMChatRepository.swift */; };
 		636FB1602B4851B2000E5F03 /* AuthBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636FB15F2B4851B2000E5F03 /* AuthBtn.swift */; };
 		637318432B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */; };
-		637318452B6A1DA90001B4A9 /* MyProfileToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */; };
 		6373AAFA2B594C260010968C /* CHSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAF92B594C260010968C /* CHSettingView.swift */; };
 		6373AAFC2B5952400010968C /* UINavigationSwipable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373AAFB2B5952400010968C /* UINavigationSwipable.swift */; };
 		637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C12B50C739008AAD4A /* ScreenSize.swift */; };
@@ -391,6 +391,7 @@
 		6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingReactor.swift; sourceTree = "<group>"; };
 		6326FE2C2B7C993F00122D9C /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		6326FE2E2B7C9A1500122D9C /* SceneDelegate+AccessConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SceneDelegate+AccessConnect.swift"; sourceTree = "<group>"; };
+		6326FE322B7CB06E00122D9C /* ProfileToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileToastType.swift; sourceTree = "<group>"; };
 		6329FE442B6E75160018909F /* DM+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DM+NM.swift"; sourceTree = "<group>"; };
 		6329FE462B6E75470018909F /* DMRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMRouter.swift; sourceTree = "<group>"; };
 		6329FE492B6E7E6F0018909F /* DMRoomResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMRoomResponse.swift; sourceTree = "<group>"; };
@@ -473,7 +474,6 @@
 		636F162E2B713A9E00536E6F /* DMChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMChatRepository.swift; sourceTree = "<group>"; };
 		636FB15F2B4851B2000E5F03 /* AuthBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthBtn.swift; sourceTree = "<group>"; };
 		637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyProfileVM+TextValidation.swift"; sourceTree = "<group>"; };
-		637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileToastType.swift; sourceTree = "<group>"; };
 		6373AAF92B594C260010968C /* CHSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHSettingView.swift; sourceTree = "<group>"; };
 		6373AAFB2B5952400010968C /* UINavigationSwipable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationSwipable.swift; sourceTree = "<group>"; };
 		637488C12B50C739008AAD4A /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
@@ -1480,6 +1480,7 @@
 				63E38EE22B5167E500BD6C93 /* WSTostType.swift */,
 				636028092B555DB200AF8731 /* CHToastType.swift */,
 				6340ACB32B7A83CC008C672F /* DMToastType.swift */,
+				6326FE322B7CB06E00122D9C /* ProfileToastType.swift */,
 			);
 			path = ToastService;
 			sourceTree = "<group>";
@@ -1655,7 +1656,6 @@
 				63E974C62B691E15004BCA00 /* Reactor+ViewModel */,
 				63E974C42B690B19004BCA00 /* MyProfileVC.swift */,
 				63E974C92B693397004BCA00 /* InfoUpdateView.swift */,
-				637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */,
 				6340ACB52B7A911F008C672F /* ProfileViewerVC.swift */,
 			);
 			path = Profiles;
@@ -2090,6 +2090,7 @@
 				63F7C4BC2B4FDC5A003D8447 /* WSwriter+Binding.swift in Sources */,
 				63E793DF2B6785CD00ACA963 /* ArrayExtensions.swift in Sources */,
 				63358D6A2B53FD89005C5BD4 /* CHWriterView.swift in Sources */,
+				6326FE332B7CB06E00122D9C /* ProfileToastType.swift in Sources */,
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
 				63E974C52B690B19004BCA00 /* MyProfileVC.swift in Sources */,
 				636F16152B6FFFD700536E6F /* MSGCollectionLayouts.swift in Sources */,
@@ -2196,7 +2197,6 @@
 				63D2899F2B6ABEC90002A61C /* MyProfileEditImageView.swift in Sources */,
 				636B2B1B2B6D51CA00BE9751 /* DMMainVC+CollectionStructures.swift in Sources */,
 				6312A25D2B618DB700593117 /* RCMSnapshot.swift in Sources */,
-				637318452B6A1DA90001B4A9 /* MyProfileToastType.swift in Sources */,
 				63FF41222B62820F004CD7EA /* FileType.swift in Sources */,
 				6384A9C72B47125600AA2F1B /* NetworkManager.swift in Sources */,
 				631A60EA2B44EE0B005509C2 /* BaseService.swift in Sources */,

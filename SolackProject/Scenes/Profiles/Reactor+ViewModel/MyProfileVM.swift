@@ -10,12 +10,14 @@ import Combine
 import RxSwift
 import RxCombine
 import ReactorKit
+
 final class MyProfileReactor:Reactor,ObservableObject{
     var logOutTapped = PassthroughSubject<(),Never>()
     @MainActor @DefaultsState(\.myInfo) var myInfo
     @DefaultsState(\.myProfile) var myProfile
     @MainActor @Published var st: State = .init()
     @MainActor @Published var info:MyInfo = MyInfo(userID: 0, email: "", nickname: "", profileImage: "", phone: "", vendor: "", createdAt: "")
+    @MainActor @Published var toastType: ProfileToastType? = nil
     @MainActor var goHome = PassthroughSubject<(),Never>()
     var initialState: State = State()
     weak var provider: ServiceProviderProtocol!
@@ -35,6 +37,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
         case setPhone(String)
         case setImage(Data?)
         case initVM
+        case setImageChanged(Bool)
         case applyNicknameUpdate
         case applyPhoneUpdate
     }
@@ -47,7 +50,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
         case isCompletedChanged(Bool)
         case isNickNameConvertable(Bool)
         case isPhoneConvertable(Bool)
-        case profileToast(MyProfileToastType?)
+        case profileToast(ProfileToastType?)
     }
     struct State{
         var image: Data? = nil
@@ -94,6 +97,12 @@ final class MyProfileReactor:Reactor,ObservableObject{
                 .just(.setPhone(phoneText)),
                 .just(.isPhoneConvertable(!(phoneText.isEmpty || phoneText == myInfo?.phone)))
             ])
+        case .setImageChanged(let isChanged):
+            self.toastType = isChanged ? .imageSuccess : .imageError
+            return Observable.concat([
+                .just(.profileToast(isChanged ? .imageSuccess : .imageError)).delay(.microseconds(100), scheduler: MainScheduler.instance),
+                .just(.profileToast(nil))
+            ])
         }
     }
     func reduce(state: State, mutation: Mutation) -> State {
@@ -128,6 +137,10 @@ final class MyProfileReactor:Reactor,ObservableObject{
             case .toast(let toast):
                 return Observable.concat([ .just(.profileToast(toast)) ])
             case .updatedImage:
+                Task{@MainActor in
+                    print("이미지 업데이트!!")
+                    await self.toastType = .imageSuccess
+                }
                 return Observable.concat([ .just(.setImage(self.myProfile))])
             case .otherUserProfile(_):
                 return Observable.concat([])

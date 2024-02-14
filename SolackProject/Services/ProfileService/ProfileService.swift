@@ -19,7 +19,7 @@ final class ProfileService:ProfileProtocol{
     enum Event{
         case myInfo(MyInfo)
         case updatedImage
-        case toast(MyProfileToastType)
+        case toast(ProfileToastType)
         case otherUserProfile(UserResponse)
     }
     var event:PublishSubject<Event> = .init()
