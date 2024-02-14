@@ -56,11 +56,6 @@ extension OnboardingView: ASAuthorizationControllerDelegate{
                 return
             }
             
-            // UserDefaults
-            print(userIdentifier)
-            print(fullName)
-            print(email)
-            print(token)
             
             if email?.isEmpty ?? true{
                 let result = tokenToString.jwtTokenDecode()["email"] as? String ?? ""

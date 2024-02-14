@@ -91,6 +91,7 @@ extension PM:PHPickerViewControllerDelegate{
                 self.prevIdentifiers = nil
                 self.viewController = nil
             }catch{
+                print("PHPicker finish error")
                 print(error)
             }
         }

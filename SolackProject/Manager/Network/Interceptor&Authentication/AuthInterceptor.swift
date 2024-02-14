@@ -33,17 +33,13 @@ final class AuthenticatorInterceptor:RequestInterceptor{
                 let val = try await NM.shared.refresh(session: session)
                 expiration = Date(timeIntervalSince1970: NetworkManager.accessExpireSeconds)
                 accessToken = val.accessToken
-                print("리프레시 성공!")
                 completion(.retry)
             }catch let fail where fail is AuthFailed{ // 인증 실패(리프레시)를 제외하고 원래 로직을 따라가게 함...
-                print("리프레시 실패!!")
                 accessToken = ""
                 completion(.doNotRetryWithError(fail as! AuthFailed))
             }catch let commonFailed where commonFailed is CommonFailed{
-                print("리프레시 실패2!!: \(commonFailed)")
                 completion(.doNotRetryWithError(commonFailed))
             }catch{
-                print("리프레시 실패3!!: \(error)")
                 completion(.doNotRetry)
             }
         }

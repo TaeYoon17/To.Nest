@@ -18,6 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @DefaultsState(\.accessToken) var accessToken
     @DefaultsState(\.refreshToken) var refreshToken
     @DefaultsState(\.appleID) var appleID
+    @DefaultsState(\.mainWS) var mainWS
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
@@ -109,7 +110,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        print("변화가 일어난다!!")
         AppManager.shared.provider.chService.checkAllMy()
+        AppManager.shared.provider.dmService.checkAll(wsID: mainWS.id)
+        AppManager.shared.provider.wsService.checkAllMembers()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {

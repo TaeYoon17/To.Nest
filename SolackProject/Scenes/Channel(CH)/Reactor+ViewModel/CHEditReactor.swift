@@ -13,7 +13,6 @@ final class CHEditReactor: CHWriterReactor{
     typealias Mut = Observable<WriterReactor<CHFailed, CHToastType>.Mutation>
     var info: CHInfo
     init(provider:ServiceProviderProtocol,info: CHInfo) {
-        print(info)
         self.info = info
         super.init(provider)
         self.initialState = .init(name: info.name, description: info.description, erroredName: false, erroredDescription: false, isCreatable: false, isLoading: false, failAlert: nil, toast: nil, isClose: false)
@@ -41,7 +40,9 @@ final class CHEditReactor: CHWriterReactor{
         state.flatMap { [weak self] state -> Observable<State> in
             guard let self else {return .just(state)}
             var st = state
-            st.isCreatable = !st.name.isEmpty && st.name != initialState.name
+            let nameAvailable = !st.name.isEmpty && st.name != initialState.name
+            let descAvailable = st.description != initialState.description
+            st.isCreatable = nameAvailable || descAvailable
             return .just(st)
         }
     }

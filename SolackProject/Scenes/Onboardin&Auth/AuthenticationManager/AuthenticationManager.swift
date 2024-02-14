@@ -26,11 +26,9 @@ final class AuthenticationManager{
         context.localizedCancelTitle = "FaceID 인증 취소"
         context.localizedFallbackTitle = "비밀번호 대신 인증"
         context.evaluatePolicy(selectedPoilicy, localizedReason: "페이스 아이디 인증이 필요합니다.") { isSuccess, error in
-            print(isSuccess)
             if let error{
                 let code = error._code
                 let laError = LAError(LAError.Code(rawValue: code)!)
-                print(laError)
             }
         }
     }

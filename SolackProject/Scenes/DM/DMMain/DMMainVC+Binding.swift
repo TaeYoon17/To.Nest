@@ -38,7 +38,8 @@ extension DMMainVC{
             let vc = MyProfileVC(provider: reactor.provider)
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
-        reactor.state.map{$0.isProfileUpdated}.delay(.microseconds(100), scheduler: MainScheduler.instance).bind(with: self) { owner, value in
+        reactor.state.map{$0.isProfileUpdated}
+            .delay(.microseconds(100), scheduler: MainScheduler.instance).bind(with: self) { owner, value in
             guard value else {return}
             owner.navBar.updateMyProfileImage.onNext(())
         }.disposed(by: disposeBag)

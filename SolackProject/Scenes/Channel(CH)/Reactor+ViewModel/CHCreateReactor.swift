@@ -38,7 +38,6 @@ final class CHCreateReactor: CHWriterReactor{
         let res = provider.chService.event.flatMap {[weak self] event -> Mut in
             switch event{
             case .create(_):
-                print("여기 받음")
                 return Observable.concat([.just(.isClose(true))])
             case .failed(let failed):
                 switch failed{

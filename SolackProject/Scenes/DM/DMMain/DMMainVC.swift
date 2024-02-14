@@ -54,7 +54,9 @@ final class DMMainVC:BaseVC ,View{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        reactor!.provider.dmService.checkAll(wsID: mainWS.id)
+//        reactor!.provider.dmService.checkAll(wsID: mainWS.id)
+//        reactor!.action.onNext(.updateUnreads)
+//        reactor!.provider.wsService.checkAllMembers()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

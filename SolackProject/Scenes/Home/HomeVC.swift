@@ -92,8 +92,8 @@ final class HomeVC: BaseVC, View,Toastable{
         if self.tabBarController!.tabBar.isHidden{
             self.tabBarController?.tabBar.layer.opacity = 0
         }
-        print("Home view will appear")
         reactor?.action.onNext(.updateUnreads)
+//        reactor!.provider.wsService.checkAllMembers()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

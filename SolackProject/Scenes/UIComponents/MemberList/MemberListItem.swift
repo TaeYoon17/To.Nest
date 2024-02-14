@@ -21,6 +21,8 @@ struct MemberButton: View{
                 Text(
                     item.userResponse.nickname.isEmpty ? "이름 없는 사용자" : item.userResponse.nickname
                 ).font(FontType.body.font)
+                    .lineLimit(2)
+                    .minimumScaleFactor(item.userResponse.nickname.count <= 4 ? 0.95 : 1)
             }
         }.tint(.text)
     }

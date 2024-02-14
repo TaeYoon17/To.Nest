@@ -33,11 +33,11 @@ class MessageCellItem:ObservableObject,Hashable,Identifiable{
 class MessageAsset:ObservableObject,Identifiable{
     var id: Int{ messageID }
     @Published var messageID:Int = 0
-    @Published var profileImages: Image?
+    @Published var profileImages: Image
     @Published var images:[Image] = []
     required init(messageID: Int, images: [Image],profileImage:Image?) {
         self.messageID = messageID
         self.images = images
-        self.profileImages = profileImage
+        self.profileImages = profileImage ?? Image(.noPhotoA)
     }
 }

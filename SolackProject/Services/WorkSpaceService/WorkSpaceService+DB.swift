@@ -32,4 +32,23 @@ extension WorkSpaceService{
         imageReferenceCountManager.apply(imageRC)
         userReferenceCountManager.apply(userRC)
     }
+    @BackgroundActor func updateUserProfile(responses:[UserResponse]) async {
+        for var response in responses{
+            guard let table = userRepository.getTableBy(tableID: response.userID),
+                  table.profileImage != response.profileImage else {return}
+            let newImageURL = response.profileImage
+            if let prevProfileImage = table.profileImage,FileManager.checkExistDocument(fileName: prevProfileImage){
+                FileManager.removeFromDocument(fileName: prevProfileImage)
+            }
+            if let newImageURL, let imageData = await NM.shared.getThumbnail(newImageURL){
+                do{
+                    try imageData.saveToDocument(fileName: newImageURL.webFileToDocFile())
+                }catch{
+                    print("updateUserProfile error",error)
+                }
+            }
+            response.profileImage = response.profileImage?.webFileToDocFile()
+            await userRepository.update(table: table, response: response)
+        }
+    }
 }

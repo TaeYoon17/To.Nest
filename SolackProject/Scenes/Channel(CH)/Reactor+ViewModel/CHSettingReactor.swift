@@ -95,7 +95,6 @@ final class CHSettingReactor:Reactor{
             switch event{
             case .check(let response),.channelAdminChange(let response):
                 if response.channelID == self.channelID{
-                    print("여기 response \(response)")
                     self.title = response.name
                     self.info.name = response.name
                     self.info.description = response.description ?? ""
@@ -110,7 +109,6 @@ final class CHSettingReactor:Reactor{
                 }
             case .channelUsers(id: let channelID, let response):
                 if channelID == self.channelID{
-                    print("channelUsers \(response)")
                     return Observable.concat([.just(.setMembers(response))])
                 }else{
                     return Observable.concat([])

@@ -38,7 +38,6 @@ extension CHSettingView{
 //MARK: -- Edit 구성
             reactor.state.map{$0.ownerType}.distinctUntilChanged().bind(with: self) { owner, ownerType in
                 guard let ownerType else {return}
-                print("ownerType called \(ownerType)")
                 switch ownerType{
                 case .my:
                     let editListItems:[EditListItem] = [EditListItem(editingType: .edit),.init(editingType: .exit),

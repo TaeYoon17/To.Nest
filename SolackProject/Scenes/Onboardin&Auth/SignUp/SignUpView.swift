@@ -147,7 +147,6 @@ extension SignUpView{
         if let userInfo = notification.userInfo {
             if let keyboardFrameValue = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue) {
                 let keyboardFrame = keyboardFrameValue.cgRectValue
-                //                print(keyboardFrame)
                 self.isShowKeyboard = keyboardFrame.minY
                 let contentInset = UIEdgeInsets(
                     top: 0.0,
@@ -160,7 +159,6 @@ extension SignUpView{
         }
     }
     @objc func handleKeyboardHide(notification: Notification){
-        print("Keyboard will Hide")
         self.isShowKeyboard = nil
         let contentInset:UIEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
         scrollView.scrollIndicatorInsets = contentInset

@@ -18,18 +18,17 @@ extension DMMainVC{
         init(reactor: DMMainReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<DMMainVC.SectionType, DMMainVC.Item>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
             initDataSource(memberItem: [])
-            reactor.state.map{$0.membsers}.bind { [weak self] responses in
-                guard let self else {return}
+            reactor.state.map{$0.membsers}.throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind { [weak self] responses in
                 Task{
                     var items:[Item] = []
                     for response in responses{
-                        if response.userID == self.userID { continue }
+                        if response.userID == self?.userID { continue }
                         let memberItem = DMMemberItem(userResponse: response)
-                        await self.appendDMAsset(memberItem: memberItem)
-                        self.memberModel.insertModel(item: memberItem)
+                        await self?.appendDMAsset(memberItem: memberItem)
+                        self?.memberModel.insertModel(item: memberItem)
                         items.append(Item(memberItem: memberItem))
                     }
-                    self.setDataSource(memberItem: items)
+                    self?.setDataSource(memberItem: items)
                 }
             }.disposed(by: disposeBag)
             reactor.state.map{$0.rooms}.throttle(.microseconds(100), scheduler: MainScheduler.asyncInstance).bind { [weak self] responses in
@@ -39,9 +38,6 @@ extension DMMainVC{
                         if response.user.userID == self?.userID {
                             continue
                         }
-//                        if response.content == nil{
-//                            continue
-//                        }
                         let dmItem = DMRoomItem(roomResponse: response)
                         await self?.appendDMAsset(roomItem: dmItem)
                         self?.roomModel.insertModel(item: dmItem)
@@ -70,13 +66,17 @@ extension DMMainVC{
             }.disposed(by: disposeBag)
         }
         @MainActor func setDataSource(memberItem:[Item]){
+            
             var snapshot = snapshot()
             let items = snapshot.itemIdentifiers(inSection: .member)
             snapshot.deleteItems(items)
             snapshot.appendItems(memberItem,toSection: .member)
-//            Task{@MainActor in
+            Task{@MainActor in
                 apply(snapshot,animatingDifferences: true)
-//            }
+                var snapshot = self.snapshot()
+                snapshot.reconfigureItems(memberItem)
+                apply(snapshot)
+            }
         }
         @MainActor func setDataSource(roomItem:[Item]){
             var snapshot = snapshot()

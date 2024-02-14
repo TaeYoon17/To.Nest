@@ -17,6 +17,7 @@ extension MessageService{
             try await Task.sleep(nanoseconds: 100)
             if let table:UserInfoTable = self.userRepository.getTableBy(userID: response.userID){
                 if table.getResponse.profileImage == response.profileImage?.webFileToDocFile() && table.getResponse.nickname == response.nickname{return}
+                // 프로필 이미지 업데이트
                 response.profileImage = updateProfileImage(prevFilePath:table.profileImage,newImageWebPath:response.profileImage)
                 await self.userRepository.update(table: table, response: response)
             }else{
@@ -32,10 +33,8 @@ extension MessageService{
     func updateProfileImage(prevFilePath:String?,newImageWebPath:String?) -> String?{
         let newFilePath = newImageWebPath?.webFileToDocFile()
         guard prevFilePath != newFilePath else { return newFilePath}
-        if let prevFilePath{
-            if !FileManager.checkExistDocument(fileName: prevFilePath){
-                FileManager.removeFromDocument(fileName: prevFilePath)
-            }
+        if let prevFilePath, FileManager.checkExistDocument(fileName: prevFilePath){
+            FileManager.removeFromDocument(fileName: prevFilePath)
         }
         if let newImageWebPath{
             Task{ try await saveProfileImageAsDocumentThumbnail(webPath: newImageWebPath) }
@@ -46,7 +45,11 @@ extension MessageService{
     private func saveProfileImageAsDocumentThumbnail(webPath:String) async throws{
         let filePath = webPath.webFileToDocFile()
         guard let profileOriginalData = await NM.shared.getThumbnail(webPath) else { fatalError("Can't find profileThumbnail")}
-        try profileOriginalData.saveToDocument(fileName: filePath)
+        do{
+            try profileOriginalData.saveToDocument(fileName: filePath)
+        }catch{
+            fatalError("이상해")
+        }
     }
 }
 //MARK: -- Channel 관련

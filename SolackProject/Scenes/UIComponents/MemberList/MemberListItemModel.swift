@@ -27,7 +27,7 @@ class MemberListAsset:Identifiable,ObservableObject{
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    var id: String
+    @Published var id: String
     @Published var image:Image
     init(userId: String,image:UIImage){
         self.id = userId

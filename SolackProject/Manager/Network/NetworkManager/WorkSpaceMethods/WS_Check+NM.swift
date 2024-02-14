@@ -36,7 +36,6 @@ extension NM{
                         continuation.resume(throwing: Errors.API.FailFetchToken)
                         return
                     }
-                    print(res)
                     generalResponse(err: WSFailed.self, result: WSDetailResponse.self, res: res, continuation: continuation)
                 }
         }

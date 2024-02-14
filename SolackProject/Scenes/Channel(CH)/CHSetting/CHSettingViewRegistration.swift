@@ -43,8 +43,10 @@ extension CHSettingView{
                 }
                 await MainActor.run{
                     cell.contentConfiguration = UIHostingConfiguration(content: {
-                        MemberButton(item: item, asset: asset) { response in
-                            print(response)
+                        MemberButton(item: item, asset: asset) {[weak self] response in
+                            guard let self else {return}
+                            let vc = ProfileViewerVC(provider: reactor!.provider, userID: response.userID)
+                            self.navigationController?.pushViewController(vc, animated: true)
                         }
                     }).background(.gray2)
                 }

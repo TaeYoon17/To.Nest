@@ -125,7 +125,7 @@ fileprivate extension MessageService{
             await userReferenceCountManager.saveRepository()
             self.event.onNext(.check(response: .dm(chatResponses)))
         }catch{
-            print("_getDirectMessageDatas")
+            print("_getDirectMessageDatas error")
             print(error)
         }
     }

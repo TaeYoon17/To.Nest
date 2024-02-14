@@ -34,8 +34,6 @@ class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsse
         snapshot.appendItems(items, toSection: "Hello")
         Task{@MainActor in
             await apply(snapshot,animatingDifferences: false)
-            print("재확인")
-            print(goDown,collectionView.isScrollable)
             if goDown,collectionView.isScrollable{
                 let lastIdx = self.snapshot(for: "Hello").items.count
                 let lastIndexPath = IndexPath(item: lastIdx - 1, section: 0)

@@ -21,7 +21,6 @@ final class NetworkManager{
             return .success(())
         }
         if let data, let errorData = try? JSONDecoder().decode(ErrorCode.self, from: data){
-            print(errorData)
             if let code = CommonFailed(rawValue: errorData.errorCode){
                 switch code{
                 case .expiredAccess,.tokenAuthFailed:
@@ -36,7 +35,6 @@ final class NetworkManager{
     }
     func getThumbnail(_ urlStr: String) async -> Data?{
         let router = ImageRouter.get(urlStr: urlStr)
-        print(urlStr)
         return await withCheckedContinuation { continuation in
             AF.request(router,interceptor: authInterceptor)
                 .validate(customValidation)

@@ -34,14 +34,10 @@ fileprivate struct WorkSpaceListInner<T: View>:View{
                 //                goAnim { managerChangeError = true }
                 vm.changeWorkSpaceManagerTapped.send(())
             }, exit: { goAnim { managerExit = true }
-            }, cancel: {
-                print("나가기")
-            })
+            }, cancel: {})
             .userDialog($defaultWorkSpace, exit: {
                 goAnim { userExit = true }
-            }, cancel: {
-                print("나가기")
-            })
+            }, cancel: {})
         //MARK: -- SolackAlert 내부에 애니메이션 처리가 되어있음!!
             .solackAlert($managerDelete, title: "채널 삭제", description: "정말 이 채널을 삭제하시겠습니까? 삭제 시 멤버/채팅 등 채널 내의 모든 정보가 삭제되며 복구할 수 없습니다.", cancelTitle: "취소", cancel: {
                 
