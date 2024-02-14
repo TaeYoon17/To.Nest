@@ -41,7 +41,7 @@ final class SignService: SignServiceProtocol{
             }catch let fail where fail is Errors.API{
                 event.onNext(.failedSign(.signInFailed))
             }catch{
-                print("error Occured!!")
+                print("Email SignIn Error \(error)")
             }
         }
     }
@@ -57,7 +57,7 @@ final class SignService: SignServiceProtocol{
             }catch let fail where fail is Errors.API{
                 event.onNext(.failedSign(.signInFailed))
             }catch{
-                print("error Occured!!")
+                print("Apple SignIn Error \(error)")
             }
         }
     }
@@ -99,7 +99,6 @@ extension SignService{
         }
         print("사인 myInfo \(myInfo)")
         self.userID = myInfo.userID
-        
             if let webImageURL = response.profileImage{
                 let data = await NM.shared.getThumbnail(webImageURL)
                 self.myProfile = data

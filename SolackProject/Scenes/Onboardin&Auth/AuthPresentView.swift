@@ -26,9 +26,6 @@ final class AuthPresentView: BaseVC,View{
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
-    deinit{
-        print("is deinited!!")
-    }
     var disposeBag = DisposeBag()
     
     let appleBtn = {

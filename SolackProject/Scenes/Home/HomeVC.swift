@@ -34,7 +34,11 @@ final class HomeVC: BaseVC, View,Toastable{
     let newMessageBtn = NewMessageBtn()
     var sliderVM = SliderVM()
     lazy var sliderVC = WSSliderVC(reactor!.provider, sliderVM: sliderVM)
-    var wsEmpty: WSEmpty = .init()
+    var wsEmpty: WSEmpty = {
+        let view = WSEmpty()
+        view.isHidden = true
+        return view
+    }()
     var isShowKeyboard: CGFloat? = nil
     var toastY: CGFloat{ collectionView.frame.maxY-(toastHeight / 2) - 20 }
     var toastHeight: CGFloat = 0

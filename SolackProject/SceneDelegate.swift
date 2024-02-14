@@ -23,6 +23,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         AppManager.shared.initNavigationAppearances()
+        RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
+        userAccessConnect()
+        firstAccessConnect()
         print("-------accessToken-------")
         print(accessToken)
         Task{
@@ -33,23 +36,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 fatalError("리포지토리 생성 오류 \(error)")
             }
         }
-        RxKakaoSDK.initSDK(appKey: Kakao.nativeKey)
-        userAccessConnect()
-        if accessToken.isEmpty{
-            let reactor = OnboardingViewReactor(AppManager.shared.provider)
-            let vc = OnboardingView()
-            vc.reactor = reactor
-            window?.rootViewController = vc
-        }else{
-            window?.rootViewController = TabController()
-        }
-        window?.makeKeyAndVisible()
+        accessByAppleSignIn()
     }
+    //MARK: -- 애플로그인 접근 결과를 보여주는 것
     func accessByAppleSignIn(){
         guard let appleID else {return}
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         appleIDProvider.getCredentialState(forUserID: appleID) {[weak self] credintialState, error in
             guard let self else {return}
+            print("* getCredintailState 발생")
             switch credintialState{
             case .revoked:
                 print("Revoked")
@@ -59,6 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
+    //MARK: -- 카카오 웹 페이지 로그인 결과
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         if let url = URLContexts.first?.url {
             if (AuthApi.isKakaoTalkLoginUrl(url)) {
@@ -71,35 +67,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
-    func userAccessConnect(){
-        AppManager.shared.userAccessable.debounce(.nanoseconds(100), scheduler: MainScheduler.asyncInstance).bind(with: self) { owner, isLogIn in
-            guard let view = owner.window?.rootViewController?.view else {
-                print("여기서 문제가 발생함!!")
-                return
-            }
-            print("userAccessConnect 발생한다")
-            let vc: UIViewController
-            if isLogIn{
-                vc = TabController()
-            }else{
-                let onboardvc = OnboardingView()
-                let reactor = OnboardingViewReactor(AppManager.shared.provider)
-                onboardvc.reactor = reactor
-                vc = onboardvc
-            }
-            let coverView = UIView()
-            coverView.backgroundColor = .gray1
-            vc.view.addSubview(coverView)
-            coverView.frame = vc.view.bounds
-            owner.window?.rootViewController = vc
-            owner.window?.makeKeyAndVisible()
-            UIView.animate(withDuration: 0.5) {
-                coverView.alpha = 0
-            }completion: { _ in
-                coverView.removeFromSuperview()
-            }
-        }.disposed(by: disposeBag)
-    }
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
@@ -107,13 +74,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
     }
 
+    //MARK: -- 앱이 다시 foreground로 돌아올 때
     func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         print("변화가 일어난다!!")
-        AppManager.shared.provider.chService.checkAllMy()
-        AppManager.shared.provider.dmService.checkAll(wsID: mainWS.id)
-        AppManager.shared.provider.wsService.checkAllMembers()
+// MARK: -- 프로필 업데이트 시점... 계정 변환 고려사항으로 인해 잠시 작동 멈춤
+//        AppManager.shared.provider.chService.checkAllMy()
+//        AppManager.shared.provider.dmService.checkAll(wsID: mainWS.id)
+//        AppManager.shared.provider.wsService.checkAllMembers()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -133,3 +100,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
+
+extension RxKakaoSDK{
+    
+}
