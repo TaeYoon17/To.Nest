@@ -57,6 +57,7 @@ extension MyProfileView{
     enum NaviType{
         case nickname
         case call
+        case pay
     }
     enum VendorType:String{
         case kakao
@@ -91,7 +92,7 @@ struct MyProfileView:View{
                             Text("충전하기").font(FontType.body.font)
                             Image(systemName: "chevron.right").fontWeight(.semibold)
                         }.foregroundStyle(.secondary)
-                    }
+                    }.overlay{NavigationLink(value: NaviType.pay, label: {EmptyView()}).opacity(0)}
                     defaultListItemView(title: "닉네임", description: vm.info.nickname)
                         .overlay { NavigationLink(value: NaviType.nickname, label: {EmptyView()}).opacity(0)}
                     defaultListItemView(title: "연락처", description: vm.info.phone)
@@ -122,6 +123,7 @@ struct MyProfileView:View{
             }
             .navigationDestination(for: NaviType.self, destination: { navi in
                 switch navi{
+                case .pay
                 case .call: InfoUpdateView(type:.phone).environmentObject(vm)
                 case .nickname: InfoUpdateView(type:.nickname).environmentObject(vm)
                 }

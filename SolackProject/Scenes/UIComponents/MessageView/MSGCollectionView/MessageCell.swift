@@ -5,7 +5,6 @@
 //  Created by 김태윤 on 2/5/24.
 //
 
-import Foundation
 import SwiftUI
 struct MessageCell:View{
     @ObservedObject var msgItem: MessageCellItem

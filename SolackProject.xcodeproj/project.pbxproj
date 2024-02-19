@@ -242,6 +242,7 @@
 		63C346F42B55738C00293991 /* WSInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346F32B55738C00293991 /* WSInviteView.swift */; };
 		63C346F72B55754C00293991 /* CHChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346F62B55754C00293991 /* CHChatView.swift */; };
 		63C346FD2B55882700293991 /* WriterConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346FC2B55882700293991 /* WriterConfiguration.swift */; };
+		63C942A52B8339F9004AC8F3 /* PayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942A42B8339F9004AC8F3 /* PayView.swift */; };
 		63D2899F2B6ABEC90002A61C /* MyProfileEditImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D2899E2B6ABEC90002A61C /* MyProfileEditImageView.swift */; };
 		63DFDF862B4D00B600F47AB5 /* ManagerDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */; };
 		63DFDF882B4D00DC00F47AB5 /* UserDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */; };
@@ -552,6 +553,7 @@
 		63C346F32B55738C00293991 /* WSInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSInviteView.swift; sourceTree = "<group>"; };
 		63C346F62B55754C00293991 /* CHChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatView.swift; sourceTree = "<group>"; };
 		63C346FC2B55882700293991 /* WriterConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterConfiguration.swift; sourceTree = "<group>"; };
+		63C942A42B8339F9004AC8F3 /* PayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayView.swift; sourceTree = "<group>"; };
 		63D2899E2B6ABEC90002A61C /* MyProfileEditImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileEditImageView.swift; sourceTree = "<group>"; };
 		63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDialog.swift; sourceTree = "<group>"; };
 		63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDialog.swift; sourceTree = "<group>"; };
@@ -1643,6 +1645,7 @@
 				63E974C92B693397004BCA00 /* InfoUpdateView.swift */,
 				637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */,
 				6340ACB52B7A911F008C672F /* ProfileViewerVC.swift */,
+				63C942A42B8339F9004AC8F3 /* PayView.swift */,
 			);
 			path = Profiles;
 			sourceTree = "<group>";
@@ -1918,6 +1921,7 @@
 				636213142B4EA0DD0093D089 /* CropImageModifier.swift in Sources */,
 				6312A2522B61820800593117 /* RCMTable.swift in Sources */,
 				637C38EB2B7948F500ADFCA1 /* WSMainItemMaker.swift in Sources */,
+				63C942A52B8339F9004AC8F3 /* PayView.swift in Sources */,
 				637B157A2B4CD72500B68963 /* TransparentBackground.swift in Sources */,
 				637C38E72B786C4200ADFCA1 /* WSManagerView+Binding.swift in Sources */,
 				6376BAF62B5A8B30000FBBF8 /* CHChatView+DS.swift in Sources */,
