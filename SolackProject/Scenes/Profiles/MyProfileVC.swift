@@ -123,7 +123,7 @@ struct MyProfileView:View{
             }
             .navigationDestination(for: NaviType.self, destination: { navi in
                 switch navi{
-                case .pay
+                case .pay: PayView(provider: vm.provider).environmentObject(vm)
                 case .call: InfoUpdateView(type:.phone).environmentObject(vm)
                 case .nickname: InfoUpdateView(type:.nickname).environmentObject(vm)
                 }

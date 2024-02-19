@@ -243,6 +243,12 @@
 		63C346F72B55754C00293991 /* CHChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346F62B55754C00293991 /* CHChatView.swift */; };
 		63C346FD2B55882700293991 /* WriterConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C346FC2B55882700293991 /* WriterConfiguration.swift */; };
 		63C942A52B8339F9004AC8F3 /* PayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942A42B8339F9004AC8F3 /* PayView.swift */; };
+		63C942A72B8343C7004AC8F3 /* PayVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942A62B8343C7004AC8F3 /* PayVM.swift */; };
+		63C942AA2B834596004AC8F3 /* PayAmountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942A92B834596004AC8F3 /* PayAmountResponse.swift */; };
+		63C942AD2B83473D004AC8F3 /* PayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942AC2B83473D004AC8F3 /* PayService.swift */; };
+		63C942AF2B8347D9004AC8F3 /* PayRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942AE2B8347D9004AC8F3 /* PayRouter.swift */; };
+		63C942B12B834AD6004AC8F3 /* Pay+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942B02B834AD6004AC8F3 /* Pay+NM.swift */; };
+		63C942B32B834C7A004AC8F3 /* BillResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942B22B834C7A004AC8F3 /* BillResponse.swift */; };
 		63D2899F2B6ABEC90002A61C /* MyProfileEditImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D2899E2B6ABEC90002A61C /* MyProfileEditImageView.swift */; };
 		63DFDF862B4D00B600F47AB5 /* ManagerDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */; };
 		63DFDF882B4D00DC00F47AB5 /* UserDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */; };
@@ -554,6 +560,12 @@
 		63C346F62B55754C00293991 /* CHChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatView.swift; sourceTree = "<group>"; };
 		63C346FC2B55882700293991 /* WriterConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriterConfiguration.swift; sourceTree = "<group>"; };
 		63C942A42B8339F9004AC8F3 /* PayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayView.swift; sourceTree = "<group>"; };
+		63C942A62B8343C7004AC8F3 /* PayVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayVM.swift; sourceTree = "<group>"; };
+		63C942A92B834596004AC8F3 /* PayAmountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayAmountResponse.swift; sourceTree = "<group>"; };
+		63C942AC2B83473D004AC8F3 /* PayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayService.swift; sourceTree = "<group>"; };
+		63C942AE2B8347D9004AC8F3 /* PayRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayRouter.swift; sourceTree = "<group>"; };
+		63C942B02B834AD6004AC8F3 /* Pay+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pay+NM.swift"; sourceTree = "<group>"; };
+		63C942B22B834C7A004AC8F3 /* BillResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillResponse.swift; sourceTree = "<group>"; };
 		63D2899E2B6ABEC90002A61C /* MyProfileEditImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileEditImageView.swift; sourceTree = "<group>"; };
 		63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDialog.swift; sourceTree = "<group>"; };
 		63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDialog.swift; sourceTree = "<group>"; };
@@ -855,6 +867,7 @@
 		631A60E62B44EE0B005509C2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				63C942AB2B83472F004AC8F3 /* PayService */,
 				6329FE4E2B6E80BE0018909F /* DMService */,
 				63E974CB2B6957A3004BCA00 /* ProfileService */,
 				63FA692A2B64FE250045B851 /* MessageService */,
@@ -1428,6 +1441,7 @@
 				6384A9C32B47125600AA2F1B /* UserInfo+NM.swift */,
 				63FF411C2B626AE1004CD7EA /* Chat+NM.swift */,
 				6329FE442B6E75160018909F /* DM+NM.swift */,
+				63C942B02B834AD6004AC8F3 /* Pay+NM.swift */,
 			);
 			path = NetworkManager;
 			sourceTree = "<group>";
@@ -1435,6 +1449,7 @@
 		639CA1BA2B5F7E4D00C21006 /* NetworkSchemes */ = {
 			isa = PBXGroup;
 			children = (
+				63C942A82B83458B004AC8F3 /* Pay */,
 				6329FE482B6E7E660018909F /* DM */,
 				639CA1BB2B5F7E6A00C21006 /* CommonSchemes */,
 				6389CEAB2B5D7C8C002A70A9 /* Channel */,
@@ -1560,6 +1575,23 @@
 			path = WriterView;
 			sourceTree = "<group>";
 		};
+		63C942A82B83458B004AC8F3 /* Pay */ = {
+			isa = PBXGroup;
+			children = (
+				63C942A92B834596004AC8F3 /* PayAmountResponse.swift */,
+				63C942B22B834C7A004AC8F3 /* BillResponse.swift */,
+			);
+			path = Pay;
+			sourceTree = "<group>";
+		};
+		63C942AB2B83472F004AC8F3 /* PayService */ = {
+			isa = PBXGroup;
+			children = (
+				63C942AC2B83473D004AC8F3 /* PayService.swift */,
+			);
+			path = PayService;
+			sourceTree = "<group>";
+		};
 		63D2899D2B6ABEB50002A61C /* UIComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -1601,6 +1633,7 @@
 				639CA1B42B5F770D00C21006 /* ChannelRouter.swift */,
 				63FF411E2B626CDD004CD7EA /* ChatRouter.swift */,
 				6329FE462B6E75470018909F /* DMRouter.swift */,
+				63C942AE2B8347D9004AC8F3 /* PayRouter.swift */,
 			);
 			path = Routers;
 			sourceTree = "<group>";
@@ -1656,6 +1689,7 @@
 				63E974C72B691E24004BCA00 /* MyProfileVM.swift */,
 				637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */,
 				6340ACB72B7A98F7008C672F /* ProfileViewerVM.swift */,
+				63C942A62B8343C7004AC8F3 /* PayVM.swift */,
 			);
 			path = "Reactor+ViewModel";
 			sourceTree = "<group>";
@@ -1985,6 +2019,7 @@
 				63F265FC2B53F1EF007D865C /* WSManagerReactor.swift in Sources */,
 				636F160D2B6FF5E100536E6F /* ProgressVC.swift in Sources */,
 				6360280A2B555DB200AF8731 /* CHToastType.swift in Sources */,
+				63C942AA2B834596004AC8F3 /* PayAmountResponse.swift in Sources */,
 				63F7C4A82B4F77BA003D8447 /* WSResponse.swift in Sources */,
 				63FA653F2B49ADBB00C744C8 /* TabController.swift in Sources */,
 				639CA1B72B5F7DD500C21006 /* CHInfo.swift in Sources */,
@@ -2012,6 +2047,7 @@
 				63F7C4BA2B4FD931003D8447 /* AuthInterceptor.swift in Sources */,
 				63E4AFCC2B491CED00E0B6A1 /* SignUpReactor+Mutate.swift in Sources */,
 				6329FE522B6E86EA0018909F /* WSInviteReactor.swift in Sources */,
+				63C942AD2B83473D004AC8F3 /* PayService.swift in Sources */,
 				6384A9BB2B47123400AA2F1B /* KakaoAuthManager.swift in Sources */,
 				638C8FBF2B600CD3005A5F82 /* HomeReactor+TransformMutation.swift in Sources */,
 				637B157F2B4CF20600B68963 /* WorkSpaceListView.swift in Sources */,
@@ -2081,6 +2117,7 @@
 				63C0C3812B724B3600BAE99B /* WorkSpaceService+DB.swift in Sources */,
 				639CA1C02B5F86D500C21006 /* Channel+NM.swift in Sources */,
 				63F7C4AA2B4F7CE8003D8447 /* ErrorCode.swift in Sources */,
+				63C942AF2B8347D9004AC8F3 /* PayRouter.swift in Sources */,
 				63775F452B54D66500F54F9A /* AuthenticationManager+JWTDecode.swift in Sources */,
 				63F7C4B22B4F929F003D8447 /* BaseAuthenticator.swift in Sources */,
 				63F7C4A62B4F772E003D8447 /* WSInfo.swift in Sources */,
@@ -2139,7 +2176,9 @@
 				630763FE2B63C420000747F8 /* ItemProvider.swift in Sources */,
 				63152F302B6644A6003F3B55 /* UserInfoRepository.swift in Sources */,
 				636990B92B6CB7C000E9FFBA /* CHAdminChangeView.swift in Sources */,
+				63C942A72B8343C7004AC8F3 /* PayVM.swift in Sources */,
 				6340ACA92B7A6E57008C672F /* DMExplore.swift in Sources */,
+				63C942B12B834AD6004AC8F3 /* Pay+NM.swift in Sources */,
 				639CFE652B5801D40030729E /* HomeVC+Animation.swift in Sources */,
 				63F7C4A12B4EEA4B003D8447 /* WorkSpaceService.swift in Sources */,
 				6340ACB82B7A98F7008C672F /* ProfileViewerVM.swift in Sources */,
@@ -2200,6 +2239,7 @@
 				63FF411B2B622419004CD7EA /* TempActorPlayer.swift in Sources */,
 				63FF410D2B621637004CD7EA /* DBMErrorPolicy.swift in Sources */,
 				6389CEB12B5D7DB1002A70A9 /* UserResponse.swift in Sources */,
+				63C942B32B834C7A004AC8F3 /* BillResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
