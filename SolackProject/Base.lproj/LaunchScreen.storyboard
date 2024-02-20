@@ -47,7 +47,7 @@
     </scenes>
     <resources>
         <image name="onboardText 1" width="252" height="50.666667938232422"/>
-        <image name="onboarding" width="368" height="368"/>
+        <image name="onboarding" width="2000" height="2000"/>
         <namedColor name="gray1">
             <color red="0.96862745098039216" green="0.97254901960784312" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>

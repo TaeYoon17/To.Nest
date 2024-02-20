@@ -48,4 +48,13 @@ extension DMMainVC{
     func memberBind(reactor:DMMainReactor){
         
     }
+    func dmEmptyBind(reactor: DMMainReactor){
+        reactor.state.map{$0.membsers.count > 1 }.distinctUntilChanged().subscribe(on: MainScheduler.instance).bind(with: self) { owner, otherMemberExist in
+            print("isEmpty!! \(otherMemberExist)")
+            Task{@MainActor in
+                owner.dmEmptyView.isHidden = otherMemberExist
+            }
+        }.disposed(by: disposeBag)
+        dmEmptyView.tap.map{DMMainReactor.Action.inviteMemberAction}.bind(to: reactor.action).disposed(by: disposeBag)
+    }
 }

@@ -84,3 +84,10 @@ enum DMFailed: String,FailedProtocol{
         DMFailed(rawValue: val)
     }
 }
+enum PayFailed:String, FailedProtocol{
+    case nonExistedPay = "E82"
+    case alreadyExistPay = "E81"
+    static func converter(val: String) -> PayFailed? {
+        PayFailed(rawValue: val)
+    }
+}

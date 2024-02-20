@@ -45,7 +45,11 @@ final class MyProfileVC: UIHostingController<MyProfileView>{
         }
     }
     private func logOutAction(vm:MyProfileReactor){
-        let vc = SolackAlertVC(title: "로그아웃", description: "정말 로그아웃 할까요?", cancelTitle: "취소", cancel: {},confirmTitle: "로그아웃",
+        let vc = SolackAlertVC(title: "로그아웃",
+                               description: "정말 로그아웃 할까요?",
+                               cancelTitle: "취소",
+                               cancel: {},
+                               confirmTitle: "로그아웃",
                                confirm: {[weak self] in
             vm.logOut()
         })
@@ -57,6 +61,7 @@ extension MyProfileView{
     enum NaviType{
         case nickname
         case call
+        case pay
     }
     enum VendorType:String{
         case kakao
@@ -85,14 +90,14 @@ struct MyProfileView:View{
                 Section {
                     HStack{
                         (
-                            Text("내 새싹 코인 ")+Text(" 130").foregroundColor(.accent)
+                            Text("내 새싹 코인 ")+Text(" \(vm.info.sesacCoin)").foregroundColor(.accent)
                         ).font(FontType.bodyBold.font).foregroundStyle(.text)
                         Spacer()
                         HStack{
                             Text("충전하기").font(FontType.body.font)
                             Image(systemName: "chevron.right").fontWeight(.semibold)
                         }.foregroundStyle(.secondary)
-                    }
+                    }.overlay{NavigationLink(value: NaviType.pay, label: {EmptyView()}).opacity(0)}
                     defaultListItemView(title: "닉네임", description: vm.info.nickname)
                         .overlay { NavigationLink(value: NaviType.nickname, label: {EmptyView()}).opacity(0)}
                     defaultListItemView(title: "연락처", description: vm.info.phone)
@@ -132,6 +137,7 @@ struct MyProfileView:View{
             })
             .navigationDestination(for: NaviType.self, destination: { navi in
                 switch navi{
+                case .pay: PayView(provider: vm.provider).environmentObject(vm)
                 case .call: InfoUpdateView(type:.phone).environmentObject(vm)
                 case .nickname: InfoUpdateView(type:.nickname).environmentObject(vm)
                 }

@@ -13,6 +13,7 @@ final class DMMainVC:BaseVC ,View{
     func bind(reactor: DMMainReactor) {
         configureCollectionView(reactor: reactor)
         navBarBind(reactor: reactor)
+        dmEmptyBind(reactor:reactor)
         reactor.state.map{$0.dialog}.distinctUntilChanged().bind {[weak self] present in
             guard let self,let present else {return}
             switch present{
@@ -20,6 +21,12 @@ final class DMMainVC:BaseVC ,View{
                 let vc = DMChatView()
                 vc.reactor = DMChatReactor(reactor.provider, roomID: roomID, userID: userResponse.userID, title: userResponse.nickname)
                 self.navigationController?.pushViewController(vc, animated: true)
+            case .inviteMemberView:
+                let vc = WSInviteView()
+                vc.reactor = WSInviteReactor(reactor.provider)
+                let nav = UINavigationController(rootViewController: vc)
+                nav.fullSheetSetting()
+                self.present(nav, animated: true)
             }
         }.disposed(by: disposeBag)
     }
@@ -28,9 +35,14 @@ final class DMMainVC:BaseVC ,View{
     }
     let navBar = NaviBar()
     lazy var collectionView = UICollectionView(frame: .zero,collectionViewLayout: layout)
+    let dmEmptyView = {
+        let view = DMEmptyView()
+        view.isHidden = false
+        return view
+    }()
     var dataSource: DataSource!
     override func configureLayout() {
-        [navBar,collectionView].forEach { view.addSubview($0) }
+        [navBar,collectionView,dmEmptyView].forEach { view.addSubview($0) }
     }
     override func configureNavigation() {
         navBar.title = "Direct Message"
@@ -43,6 +55,11 @@ final class DMMainVC:BaseVC ,View{
             make.height.equalTo(46)
         }
         collectionView.snp.makeConstraints { make in
+            make.top.equalTo(navBar.snp.bottom)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        dmEmptyView.snp.makeConstraints { make in
             make.top.equalTo(navBar.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()

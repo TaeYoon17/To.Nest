@@ -23,6 +23,7 @@ struct MemberButton: View{
                 ).font(FontType.body.font)
                     .lineLimit(2)
                     .minimumScaleFactor(item.userResponse.nickname.count <= 4 ? 0.95 : 1)
+                Spacer(minLength: 0)
             }
         }.tint(.text)
     }

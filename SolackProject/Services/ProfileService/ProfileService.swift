@@ -14,6 +14,7 @@ protocol ProfileProtocol{
     func updatePhone(phone:String)
     func updateImage(imageData:Data?)
     func checkProfile(userID:Int)
+    func checkMy()
 }
 final class ProfileService:ProfileProtocol{
     enum Event{
@@ -36,9 +37,9 @@ final class ProfileService:ProfileProtocol{
         Task{
             do{
                 guard let myInfo else { throw AuthFailed.authFailed }
-                let res:MyInfo = try await NM.shared.updateMyInfo(nickName: name,phone:myInfo.phone)
+                let res:MyUpdateInfo = try await NM.shared.updateMyInfo(nickName: name,phone:myInfo.phone)
                 await updateInfo(info: res)
-                event.onNext(.myInfo(res))
+                event.onNext(.myInfo(self.myInfo!))
             }catch{
                 print("nickname failed \(error)")
                 event.onNext(.toast(.nicknameEditFailed))
@@ -49,9 +50,9 @@ final class ProfileService:ProfileProtocol{
         Task{
             do{
                 guard let myInfo else { throw AuthFailed.authFailed }
-                let res:MyInfo = try await NM.shared.updateMyInfo(nickName: myInfo.nickname,phone:phone)
+                let res:MyUpdateInfo = try await NM.shared.updateMyInfo(nickName: myInfo.nickname,phone:phone)
                 await updateInfo(info: res)
-                event.onNext(.myInfo(res))
+                event.onNext(.myInfo(self.myInfo!))
             }catch{
                 print("phone failed \(error)")
                 event.onNext(.toast(.phoneNumberEditFailed))
@@ -61,7 +62,7 @@ final class ProfileService:ProfileProtocol{
     func updateImage(imageData: Data?) {
         Task{
             do{
-                let res: MyInfo = try await NM.shared.updateMyInfo(profileImage: imageData)
+                let res: MyUpdateInfo = try await NM.shared.updateMyInfo(profileImage: imageData)
                 let imageData:Data? = if let imageURL = res.profileImage,let imageData = await NM.shared.getThumbnail(imageURL){
                     imageData
                 }else{
@@ -69,7 +70,7 @@ final class ProfileService:ProfileProtocol{
                 }
                 self.profile = imageData
                 await updateInfo(info: res,imageData: imageData)
-                event.onNext(.myInfo(res))
+                event.onNext(.myInfo(self.myInfo!))
                 event.onNext(.updatedImage)
             }catch{
                 print("update image error")
@@ -77,15 +78,15 @@ final class ProfileService:ProfileProtocol{
             }
         }
     }
-    private func updateInfo(info: MyInfo,imageData:Data? = nil) async{
+    private func updateInfo(info: MyUpdateInfo,imageData:Data? = nil) async{
         let prevImage = myInfo?.profileImage
-        self.myInfo = info
+        self.myInfo?.updateInfo(info)
         self.userID = info.userID
         if let webImage = info.profileImage, prevImage != webImage{
             let data = await NM.shared.getThumbnail(webImage)
             profile = data
         }
-        await updateInfoDB(info: info,imageData: imageData)
+        await updateInfoDB(info: self.myInfo!,imageData: imageData)
     }
     func checkProfile(userID:Int){
         Task{
@@ -94,6 +95,17 @@ final class ProfileService:ProfileProtocol{
                 self.event.onNext(.otherUserProfile(res))
             }catch{
                 print("checkProfile Error \(error)")
+            }
+        }
+    }
+    func checkMy(){
+        Task{
+            do{
+                let res = try await NM.shared.checkMy()
+                self.myInfo = res
+                self.event.onNext(.myInfo(res))
+            }catch{
+                print("checkMyProfileError \(error)")
             }
         }
     }
