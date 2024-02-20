@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import iamport_ios
 enum PayAmount:Int, CaseIterable{
     case won100 = 10
     case won500 = 50
@@ -14,15 +15,46 @@ enum PayAmount:Int, CaseIterable{
 struct PayView: View{
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var profileVM: MyProfileReactor
-    @ObservedObject var vm: PayVM
+    @StateObject var vm: PayVM
+    @State var paymentView: PaymentView = PaymentView()
+    @State private var toastType:ToastType? = nil
     init(provider:ServiceProviderProtocol!) {
-        self._vm = .init(initialValue: PayVM(provider: provider))
+        self._vm = .init(wrappedValue: PayVM(provider: provider))
     }
     var body: some View{
+        ZStack{
+            listView
+            if vm.isPayment {
+                paymentView.frame(width: 0, height: 0).opacity(0)
+                    .onBackgroundDisappear({
+                        vm.action(type: .closePay)
+                    }).environmentObject(vm)
+            }
+        }
+        .toast(type: $toastType, alignment: .bottom, position: .zero)
+        .onChange(of: vm.toastType, perform: { value in
+            toastType = value
+        })
+        .navigationTitle("코인샵")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar(content: {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {
+                    dismiss()
+                }, label: {
+                    Image(systemName: "chevron.left").foregroundStyle(.text).font(.system(size: 17,weight: .bold))
+                })
+            }
+        })
+    }
+}
+extension PayView{
+    @ViewBuilder var listView: some View{
         List{
             Section{
                 HStack{
-                    (Text("🌱 현재 보유한 코인") + Text(" 330개").foregroundColor(.accentColor)).font(FontType.bodyBold.font)
+                    (Text("🌱 현재 보유한 코인") + Text(" \(vm.nowPossessionCoin)개").foregroundColor(.accentColor)).font(FontType.bodyBold.font)
                     Spacer()
                     Text("코인이란?").foregroundStyle(.secondary).font(FontType.caption.font)
                 }
@@ -33,7 +65,7 @@ struct PayView: View{
                         Text("🌱 \(payAmount.item)").foregroundStyle(.text).font(FontType.bodyBold.font)
                         Spacer()
                         Button(action: {
-                            print("결제 클릭!!")
+                            vm.action(type: .requirePay(payAmount: payAmount))
                         }, label: {
                             Text("₩\(payAmount.amount)")
                                 .font(FontType.title2.font)
@@ -52,17 +84,5 @@ struct PayView: View{
         .listRowBackground(Color.white)
         .scrollContentBackground(.hidden)
         .background(.gray2)
-        .navigationTitle("코인샵")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
-        .toolbar(content: {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    Image(systemName: "chevron.left").foregroundStyle(.text).font(.system(size: 17,weight: .bold))
-                })
-            }
-        })
     }
 }

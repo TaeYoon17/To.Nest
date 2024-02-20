@@ -17,7 +17,7 @@ struct BillResponse: Codable{
         case billID = "billing_id"
         case merchantID = "merchant_uid"
         case amount = "amount"
-        case sesacCoin = "sesacCoint"
+        case sesacCoin = "sesacCoin"
         case success = "success"
         case createdAt = "createdAt"
     }

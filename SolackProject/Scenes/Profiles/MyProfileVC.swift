@@ -45,7 +45,11 @@ final class MyProfileVC: UIHostingController<MyProfileView>{
         }
     }
     private func logOutAction(vm:MyProfileReactor){
-        let vc = SolackAlertVC(title: "로그아웃", description: "정말 로그아웃 할까요?", cancelTitle: "취소", cancel: {},confirmTitle: "로그아웃",
+        let vc = SolackAlertVC(title: "로그아웃",
+                               description: "정말 로그아웃 할까요?",
+                               cancelTitle: "취소",
+                               cancel: {},
+                               confirmTitle: "로그아웃",
                                confirm: {[weak self] in
             vm.logOut()
         })
@@ -85,7 +89,7 @@ struct MyProfileView:View{
                 Section {
                     HStack{
                         (
-                            Text("내 새싹 코인 ")+Text(" 130").foregroundColor(.accent)
+                            Text("내 새싹 코인 ")+Text(" \(vm.info.sesacCoin)").foregroundColor(.accent)
                         ).font(FontType.bodyBold.font).foregroundStyle(.text)
                         Spacer()
                         HStack{

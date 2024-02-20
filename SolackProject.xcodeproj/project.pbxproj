@@ -226,6 +226,13 @@
 		63A148AC2B45564F005CF155 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AB2B45564F005CF155 /* RxCocoa */; };
 		63A148B02B45564F005CF155 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 63A148AF2B45564F005CF155 /* RxRelay */; };
 		63A597FB2B6A4AFD00C4646D /* RxCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 63A597FA2B6A4AFD00C4646D /* RxCombine */; };
+		63AB21332B83B41900AADD10 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB21322B83B41900AADD10 /* iamport-ios */; };
+		63AB21352B84537100AADD10 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AB21342B84537100AADD10 /* PaymentView.swift */; };
+		63AB21372B84563900AADD10 /* PaymentVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AB21362B84563900AADD10 /* PaymentVM.swift */; };
+		63AB21392B8458E700AADD10 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AB21382B8458E700AADD10 /* ViewExtension.swift */; };
+		63AB213B2B846BD100AADD10 /* BillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AB213A2B846BD100AADD10 /* BillView.swift */; };
+		63AB213D2B8486EA00AADD10 /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AB213C2B8486EA00AADD10 /* LazyView.swift */; };
+		63AB213F2B84AAED00AADD10 /* PayToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AB213E2B84AAED00AADD10 /* PayToastType.swift */; };
 		63AD48A42B79F8E500A72720 /* CHAdminChangeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD48A32B79F8E500A72720 /* CHAdminChangeReactor.swift */; };
 		63AD48A62B79F9F500A72720 /* ChannelService_Check.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD48A52B79F9F500A72720 /* ChannelService_Check.swift */; };
 		63AD48A82B7A036800A72720 /* CHAdminChangeView+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD48A72B7A036800A72720 /* CHAdminChangeView+Binding.swift */; };
@@ -274,7 +281,7 @@
 		63E974CA2B693397004BCA00 /* InfoUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974C92B693397004BCA00 /* InfoUpdateView.swift */; };
 		63E974CD2B6957AE004BCA00 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974CC2B6957AE004BCA00 /* ProfileService.swift */; };
 		63E974CF2B696101004BCA00 /* ProfileService+DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974CE2B696101004BCA00 /* ProfileService+DB.swift */; };
-		63E974D12B6962FF004BCA00 /* MyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974D02B6962FF004BCA00 /* MyInfo.swift */; };
+		63E974D12B6962FF004BCA00 /* MyUpdateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E974D02B6962FF004BCA00 /* MyUpdateInfo.swift */; };
 		63F0AEC22B4AB8C8000A597B /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AEC12B4AB8C8000A597B /* HomeVC.swift */; };
 		63F0AEC42B4AB920000A597B /* HomeVC+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AEC32B4AB920000A597B /* HomeVC+CollectionView.swift */; };
 		63F0AEC62B4ABA1E000A597B /* HomeVC+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0AEC52B4ABA1E000A597B /* HomeVC+DS.swift */; };
@@ -547,6 +554,12 @@
 		639E0C9D2B5832FA0076A4D8 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		639E0C9F2B583DE00076A4D8 /* WSMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSMainView.swift; sourceTree = "<group>"; };
 		639E0CA12B5843F30076A4D8 /* WSSliderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSSliderVC.swift; sourceTree = "<group>"; };
+		63AB21342B84537100AADD10 /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
+		63AB21362B84563900AADD10 /* PaymentVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentVM.swift; sourceTree = "<group>"; };
+		63AB21382B8458E700AADD10 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		63AB213A2B846BD100AADD10 /* BillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillView.swift; sourceTree = "<group>"; };
+		63AB213C2B8486EA00AADD10 /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
+		63AB213E2B84AAED00AADD10 /* PayToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayToastType.swift; sourceTree = "<group>"; };
 		63AD48A32B79F8E500A72720 /* CHAdminChangeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHAdminChangeReactor.swift; sourceTree = "<group>"; };
 		63AD48A52B79F9F500A72720 /* ChannelService_Check.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelService_Check.swift; sourceTree = "<group>"; };
 		63AD48A72B7A036800A72720 /* CHAdminChangeView+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHAdminChangeView+Binding.swift"; sourceTree = "<group>"; };
@@ -591,7 +604,7 @@
 		63E974C92B693397004BCA00 /* InfoUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoUpdateView.swift; sourceTree = "<group>"; };
 		63E974CC2B6957AE004BCA00 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		63E974CE2B696101004BCA00 /* ProfileService+DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileService+DB.swift"; sourceTree = "<group>"; };
-		63E974D02B6962FF004BCA00 /* MyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfo.swift; sourceTree = "<group>"; };
+		63E974D02B6962FF004BCA00 /* MyUpdateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUpdateInfo.swift; sourceTree = "<group>"; };
 		63F0AEC12B4AB8C8000A597B /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		63F0AEC32B4AB920000A597B /* HomeVC+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+CollectionView.swift"; sourceTree = "<group>"; };
 		63F0AEC52B4ABA1E000A597B /* HomeVC+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+DS.swift"; sourceTree = "<group>"; };
@@ -657,6 +670,7 @@
 				631E339E2B45553B0053DBD7 /* RxRelay in Frameworks */,
 				6312A24A2B61714900593117 /* Realm in Frameworks */,
 				63A148A82B45564F005CF155 /* RxBlocking in Frameworks */,
+				63AB21332B83B41900AADD10 /* iamport-ios in Frameworks */,
 				63A148B02B45564F005CF155 /* RxRelay in Frameworks */,
 				6312A24C2B61714900593117 /* RealmSwift in Frameworks */,
 				631E339A2B45553B0053DBD7 /* RxCocoa in Frameworks */,
@@ -1282,6 +1296,8 @@
 			children = (
 				637B15792B4CD72500B68963 /* TransparentBackground.swift */,
 				639AFDE62B52E49600FA8280 /* ToastModifier+SwiftUI.swift */,
+				63AB21382B8458E700AADD10 /* ViewExtension.swift */,
+				63AB213C2B8486EA00AADD10 /* LazyView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -1346,7 +1362,7 @@
 				6384A9C52B47125600AA2F1B /* SingInInfo.swift */,
 				63E4AFCD2B49525300E0B6A1 /* SignResponse.swift */,
 				6389CEB02B5D7DB1002A70A9 /* UserResponse.swift */,
-				63E974D02B6962FF004BCA00 /* MyInfo.swift */,
+				63E974D02B6962FF004BCA00 /* MyUpdateInfo.swift */,
 			);
 			path = UserInfos;
 			sourceTree = "<group>";
@@ -1483,6 +1499,7 @@
 				63E38EE22B5167E500BD6C93 /* WSTostType.swift */,
 				636028092B555DB200AF8731 /* CHToastType.swift */,
 				6340ACB32B7A83CC008C672F /* DMToastType.swift */,
+				63AB213E2B84AAED00AADD10 /* PayToastType.swift */,
 			);
 			path = ToastService;
 			sourceTree = "<group>";
@@ -1672,13 +1689,15 @@
 		63E974C32B690B04004BCA00 /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
-				63D2899D2B6ABEB50002A61C /* UIComponents */,
 				63E974C62B691E15004BCA00 /* Reactor+ViewModel */,
+				63D2899D2B6ABEB50002A61C /* UIComponents */,
 				63E974C42B690B19004BCA00 /* MyProfileVC.swift */,
 				63E974C92B693397004BCA00 /* InfoUpdateView.swift */,
 				637318442B6A1DA90001B4A9 /* MyProfileToastType.swift */,
 				6340ACB52B7A911F008C672F /* ProfileViewerVC.swift */,
 				63C942A42B8339F9004AC8F3 /* PayView.swift */,
+				63AB21342B84537100AADD10 /* PaymentView.swift */,
+				63AB213A2B846BD100AADD10 /* BillView.swift */,
 			);
 			path = Profiles;
 			sourceTree = "<group>";
@@ -1690,6 +1709,7 @@
 				637318422B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift */,
 				6340ACB72B7A98F7008C672F /* ProfileViewerVM.swift */,
 				63C942A62B8343C7004AC8F3 /* PayVM.swift */,
+				63AB21362B84563900AADD10 /* PaymentVM.swift */,
 			);
 			path = "Reactor+ViewModel";
 			sourceTree = "<group>";
@@ -1882,6 +1902,7 @@
 				6312A24B2B61714900593117 /* RealmSwift */,
 				6364BC732B6BAB8800C311CE /* SocketIO */,
 				63A597FA2B6A4AFD00C4646D /* RxCombine */,
+				63AB21322B83B41900AADD10 /* iamport-ios */,
 			);
 			productName = SolackProject;
 			productReference = 631A60A62B44ECEE005509C2 /* SolackProject.app */;
@@ -1921,6 +1942,7 @@
 				6312A2482B61714900593117 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				6364BC722B6BAB8800C311CE /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
 				63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */,
+				63AB21312B83B41900AADD10 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
 			productRefGroup = 631A60A72B44ECEE005509C2 /* Products */;
 			projectDirPath = "";
@@ -1967,11 +1989,12 @@
 				63C346F72B55754C00293991 /* CHChatView.swift in Sources */,
 				633E51B52B77671100A87D29 /* WS_Check+NM.swift in Sources */,
 				6340ACB42B7A83CC008C672F /* DMToastType.swift in Sources */,
+				63AB213B2B846BD100AADD10 /* BillView.swift in Sources */,
 				63358D712B540256005C5BD4 /* CHExploreView+DS.swift in Sources */,
 				6340ACAF2B7A6F52008C672F /* DMExplore+CollectionView.swift in Sources */,
 				632A2D632B4DAD7400E21DE8 /* WScreateReactor.swift in Sources */,
 				636213062B4E95F60093D089 /* ImageManager.swift in Sources */,
-				63E974D12B6962FF004BCA00 /* MyInfo.swift in Sources */,
+				63E974D12B6962FF004BCA00 /* MyUpdateInfo.swift in Sources */,
 				638FCD2C2B48002C0053D1BB /* CheckFieldView.swift in Sources */,
 				63FF41192B622172004CD7EA /* ChannelRepository.swift in Sources */,
 				637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */,
@@ -1989,6 +2012,7 @@
 				634C4C612B4E2EDA006B6CCC /* ProfileImgView.swift in Sources */,
 				6389CEB32B5D830D002A70A9 /* WorkSpace.swift in Sources */,
 				63F7C4B62B4FB2D3003D8447 /* AuthRouter.swift in Sources */,
+				63AB213F2B84AAED00AADD10 /* PayToastType.swift in Sources */,
 				636990BD2B6CC0B900E9FFBA /* ChangeManager.swift in Sources */,
 				637318432B6A11C50001B4A9 /* MyProfileVM+TextValidation.swift in Sources */,
 				636CFBB42B510743003F02ED /* WSMainVM.swift in Sources */,
@@ -2012,8 +2036,10 @@
 				639A4AEF2B52C798005360F6 /* SolackAlert+SwiftUI.swift in Sources */,
 				63E38EE12B515FE800BD6C93 /* ToastType.swift in Sources */,
 				63152F342B66A87A003F3B55 /* UserRCM.swift in Sources */,
+				63AB21352B84537100AADD10 /* PaymentView.swift in Sources */,
 				63F7C4AE2B4F8A04003D8447 /* ImageManager+Compression.swift in Sources */,
 				6368352A2B47A56C00E38683 /* AppManager.swift in Sources */,
+				63AB21372B84563900AADD10 /* PaymentVM.swift in Sources */,
 				6323E1C42B60F70100D91E46 /* CHSettingViewRegistration.swift in Sources */,
 				636213122B4E9FE70093D089 /* CropImageManager.swift in Sources */,
 				63F265FC2B53F1EF007D865C /* WSManagerReactor.swift in Sources */,
@@ -2021,6 +2047,7 @@
 				6360280A2B555DB200AF8731 /* CHToastType.swift in Sources */,
 				63C942AA2B834596004AC8F3 /* PayAmountResponse.swift in Sources */,
 				63F7C4A82B4F77BA003D8447 /* WSResponse.swift in Sources */,
+				63AB213D2B8486EA00AADD10 /* LazyView.swift in Sources */,
 				63FA653F2B49ADBB00C744C8 /* TabController.swift in Sources */,
 				639CA1B72B5F7DD500C21006 /* CHInfo.swift in Sources */,
 				63F7C4B82B4FB49B003D8447 /* Auth+NM.swift in Sources */,
@@ -2103,6 +2130,7 @@
 				63FF41172B62212A004CD7EA /* ChannelChatRepository.swift in Sources */,
 				63F0AED52B4B0889000A597B /* NaviBar.swift in Sources */,
 				63817E932B73D2410034EA1D /* DMChatCollectionView.swift in Sources */,
+				63AB21392B8458E700AADD10 /* ViewExtension.swift in Sources */,
 				63817E982B73F4AF0034EA1D /* UnreadsChannelRes.swift in Sources */,
 				63E38ED32B510A4600BD6C93 /* TaskCounter.swift in Sources */,
 				636F16252B712CAA00536E6F /* DMChatReactor.swift in Sources */,
@@ -2398,6 +2426,7 @@
 				DEVELOPMENT_TEAM = 3W9F68ZTUJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SolackProject/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = NSPhotoLibraryUsageDescription;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2435,6 +2464,7 @@
 				DEVELOPMENT_TEAM = 3W9F68ZTUJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SolackProject/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = NSPhotoLibraryUsageDescription;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2548,6 +2578,14 @@
 				minimumVersion = 2.0.1;
 			};
 		};
+		63AB21312B83B41900AADD10 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 		63ADEA072B4648B2000A0CB4 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
@@ -2633,6 +2671,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */;
 			productName = RxCombine;
+		};
+		63AB21322B83B41900AADD10 /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63AB21312B83B41900AADD10 /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
 		};
 		63ADEA082B4648B2000A0CB4 /* RxKakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;

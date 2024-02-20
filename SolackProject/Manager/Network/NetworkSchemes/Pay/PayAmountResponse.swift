@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct PayAmountResponse:Codable,Identifiable{
+struct PayAmountResponse:Codable,Identifiable,Equatable{
     var id: String{item}
     var item:String
     var amount:String

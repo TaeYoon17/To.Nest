@@ -25,6 +25,11 @@ enum PayRouter:URLRequestConvertible{
     }
     var header: HTTPHeaders{
         var header = HTTPHeaders()
+        switch self{
+        case .validation:
+            header["Content-Type"] = "application/json"
+        default:break
+        }
         return header
     }
     var params: Parameters{

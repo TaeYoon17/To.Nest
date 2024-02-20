@@ -32,7 +32,7 @@ extension NM{
                 continuation.resume(throwing: Errors.API.FailFetchToken)
                 return
             }
-            AF.request(router, interceptor: baseInterceptor).validate(customValidation).response {[weak self] res in
+            AF.request(router, interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
                 guard let self else {
                     continuation.resume(throwing: Errors.API.FailFetchToken)
                     return

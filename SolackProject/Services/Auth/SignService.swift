@@ -106,9 +106,9 @@ extension SignService{
             }
     }
 }
-extension MyInfo{
+fileprivate extension MyInfo{
     static func getBySignResponse(_ res: SignResponse) -> MyInfo {
-        Self.init(userID: res.userID,
+        Self.init(userID: res.userID,sesacCoin: -1,
                   email: res.email,
                   nickname: res.nickname,
                   profileImage: res.profileImage,

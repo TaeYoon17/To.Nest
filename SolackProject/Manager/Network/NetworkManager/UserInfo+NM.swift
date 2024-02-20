@@ -83,7 +83,7 @@ extension NetworkManager{
             }
         }
     }
-    func updateMyInfo(nickName:String? = nil,phone:String? = nil) async throws -> MyInfo{
+    func updateMyInfo(nickName:String? = nil,phone:String? = nil) async throws -> MyUpdateInfo{
         let router = UserRouter.putMy(nickName: nickName, phone: phone)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
@@ -91,7 +91,7 @@ extension NetworkManager{
                 return
             }
             AF.request(router, interceptor: authInterceptor).response { res in
-                self.generalResponse(err: AuthFailed.self, result: MyInfo.self, res: res, continuation: continuation)
+                self.generalResponse(err: AuthFailed.self, result: MyUpdateInfo.self, res: res, continuation: continuation)
             }
         }
     }
@@ -107,7 +107,19 @@ extension NetworkManager{
             }
         }
     }
-    func updateMyInfo(profileImage:Data?) async throws -> MyInfo{
+    func checkMy() async throws -> MyInfo{
+        let router = UserRouter.getMy
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router, interceptor: authInterceptor).response { res in
+                self.generalResponse(err: AuthFailed.self, result: MyInfo.self, res: res, continuation: continuation)
+            }
+        }
+    }
+    func updateMyInfo(profileImage:Data?) async throws -> MyUpdateInfo{
         let router = UserRouter.putMyImage(image: profileImage)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
@@ -116,7 +128,7 @@ extension NetworkManager{
             }
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: authInterceptor)
                 .response{ res in
-                self.generalResponse(err: AuthFailed.self, result: MyInfo.self, res: res, continuation: continuation)
+                self.generalResponse(err: AuthFailed.self, result: MyUpdateInfo.self, res: res, continuation: continuation)
             }
         }
     }

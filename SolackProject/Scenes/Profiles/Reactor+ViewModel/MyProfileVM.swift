@@ -15,7 +15,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
     @MainActor @DefaultsState(\.myInfo) var myInfo
     @DefaultsState(\.myProfile) var myProfile
     @MainActor @Published var st: State = .init()
-    @MainActor @Published var info:MyInfo = MyInfo(userID: 0, email: "", nickname: "", profileImage: "", phone: "", vendor: "", createdAt: "")
+    @MainActor @Published var info:MyInfo = MyInfo(userID: 0, sesacCoin: 0, email: "", nickname: "", profileImage: "", phone: "", vendor: "", createdAt: "")
     @MainActor var goHome = PassthroughSubject<(),Never>()
     var initialState: State = State()
     weak var provider: ServiceProviderProtocol!
@@ -44,6 +44,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
         case setPhone(String)
         case setEmail(String)
         case setVendor(String?)
+        case setSessacCoin(Int)
         case isCompletedChanged(Bool)
         case isNickNameConvertable(Bool)
         case isPhoneConvertable(Bool)
@@ -54,6 +55,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
         var nickname:String = ""
         var phone:String = ""
         var email:String = ""
+        var sessacCoin:Int = 0
         var isCompletedChanged: Bool = false
         var isNickNameConvertable: Bool = false
         var isPhoneConvertable: Bool = false
@@ -65,7 +67,6 @@ final class MyProfileReactor:Reactor,ObservableObject{
         case .initVM:
             guard let myInfo else {return  Observable.concat([])}
             self.info = myInfo
-            print("vendorCheck",self.info.vendor)
             return Observable.concat([
                 .just(.setNickName(myInfo.nickname)),
                 .just(.setPhone(myInfo.phone ?? "")),
@@ -109,6 +110,8 @@ final class MyProfileReactor:Reactor,ObservableObject{
         case .isCompletedChanged(let completed): state.isCompletedChanged = completed
         case .profileToast(let toast): state.toast = toast
         case .setVendor(let vendor): state.mySocial = vendor ?? ""
+        case .setSessacCoin(let coin):
+            state.sessacCoin = coin
         }
         return state
     }
@@ -122,6 +125,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
                     .just(.setNickName(info.nickname)),
                     .just(.setPhone(info.phone ?? "")),
                     .just(.setEmail(info.email)),
+                    .just(.setSessacCoin(info.sesacCoin)),
                     .just(.isCompletedChanged(true)).delay(.microseconds(200), scheduler: MainScheduler.instance),
                     .just(.isCompletedChanged(false)).delay(.microseconds(200), scheduler: MainScheduler.instance)
                 ])
@@ -133,7 +137,16 @@ final class MyProfileReactor:Reactor,ObservableObject{
                 return Observable.concat([])
             }
         }
-        return Observable.merge(mutation,profileTransform)
+        let payTransform = self.provider.payService.event.flatMap { [weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            switch event{
+            case .bill(_):
+                Task{@MainActor in self.info = self.myInfo! }
+            default:break
+            }
+            return Observable.concat([])
+        }
+        return Observable.merge(mutation,profileTransform,payTransform)
     }
 }
 extension MyProfileReactor{
