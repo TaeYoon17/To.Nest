@@ -88,6 +88,7 @@ extension MessageService{
 }
 //MARK: -- DM 관련
 extension MessageService{
+    // 데이터 베이스에 채팅 메시지 저장
     func appendChatResponseToDataBase(roomID:Int,createResponses:[DMResponse]) async throws{
         try await taskCounter.run(createResponses) {[weak self] res in // 채팅 이미지 썸네일 중 기존에 없던 것을 새로 저장한다.
             try await self?.saveDMImageAsDocumentThumbnail(response: res)
@@ -105,11 +106,13 @@ extension MessageService{
         await roomRepository.appendChat(roomID: roomID, chatTables: tables)
         await imageReferenceCountManager.apply(ircSnapshot)
     }
+    // 유저 카운트
     func appendUserReferenceCounts(roomID:Int,createUsers: [UserResponse]) async throws{
         var userSnapshot = await self.userReferenceCountManager.snapshot
         await createUsers.asyncForEach { await userSnapshot.plucCount(roomID: roomID, userID: $0.userID) }
         await self.userReferenceCountManager.apply(userSnapshot)
     }
+    // 메세지 이미지 저장
     private func saveDMImageAsDocumentThumbnail(response:DMResponse) async throws{
         for webPath in response.files{
             let filePath = webPath.webFileToDocFile()

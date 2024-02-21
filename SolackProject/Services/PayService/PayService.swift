@@ -35,6 +35,7 @@ final class PayService: PayProtocol{
         Task{
             do{
                 let res = try await NM.shared.payValidation(imp: imp, merchant: merchant)
+                print("validation: \(res)")
                 self.myInfo?.sesacCoin += res.sesacCoin
                 event.onNext(.bill(res))
             }catch{

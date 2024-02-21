@@ -6,7 +6,8 @@
 //
 
 import UIKit
-import iamport_iosimport Firebase
+import iamport_ios
+import Firebase
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     @DefaultsState(\.deviceToken) var deviceToken

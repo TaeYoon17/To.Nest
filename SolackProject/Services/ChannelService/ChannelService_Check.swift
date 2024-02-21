@@ -72,7 +72,7 @@ extension ChannelService{
                 let checkUnreads = Array(exiseted.map{ ($0.lastReadDate,$0.channelName) })
                 let existedChannels = exiseted.map{$0.channelID}
                 let removeChannelIDs = Set(existedChannels).subtracting(results.map{$0.channelID})
-                Task.detached {
+                Task {
                     var unreadsResponses: [UnreadsChannelRes] = []
                     for checks in checkUnreads{
                         do{

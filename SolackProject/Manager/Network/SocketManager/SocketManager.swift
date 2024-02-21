@@ -69,22 +69,31 @@ extension NetworkManager{
         }
         func closeChatSocket(){
             print("소켓을 닫는다...")
-            self.channelID = nil
-            self.roomID = nil
-            self.delegate = nil
             socket.on(clientEvent: .disconnect) {[weak self] data, ack in
                 guard let self else {return}
                 print("SOCKET IS DISCONNECTED", data, ack)
                 self.isOpen = false
                 self.socket = nil
+                self.channelID = nil
+                self.roomID = nil
+                self.delegate = nil
+                timer?.invalidate()
+                timer = nil
             }
-            timer?.invalidate()
-            timer = nil
-            isOpen = false
+            Task{
+                try await Task.sleep(for: .seconds(3))
+                self.channelID = nil
+                self.roomID = nil
+                self.delegate = nil
+                isOpen = false
+                self.delegate = nil
+                timer?.invalidate()
+                timer = nil
+            }
         }
         private func ping(){
-            Task{@MainActor in
-                self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [weak self] _ in // 10초마다 반복적으로 실행
+            Task{@MainActor [weak self] in
+                self?.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [weak self] _ in // 10초마다 반복적으로 실행
                     self?.socket.on(clientEvent: .ping, callback: { data, ack in
                         print("SOCKET IS PING", data, ack)
                     })

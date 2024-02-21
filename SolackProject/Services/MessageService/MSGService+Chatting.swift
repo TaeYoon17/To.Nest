@@ -69,6 +69,8 @@ extension MessageService:SocketReceivable{
                 await channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
                 try await appendUserReferenceCounts(channelID: chID, createUsers: [result.user])
                 try await updateUserInformationToDataBase(userIDs: [result.user.userID])
+                await channelRepostory.updateChannelReadDate(channelID: chID)
+                await channelRepostory?.updateChannelCheckDate(channelID: chID)
                 event.onNext(.create(response: .channel([result])))
             }catch{
                 print("create error",error)
@@ -95,6 +97,7 @@ extension MessageService:SocketReceivable{
                 guard let userTable = userRepository.getTableBy(userID: chatTable.userID) else {fatalError("존재하지 않는 유저 정보")}
                 let userResponse = userTable.getResponse
                 let chatResponse = chatTable.getResponse(userResponse: userResponse)
+                print("chat Created At \(chatResponse.createdAt)")
                 chResponses.append(chatResponse)
             }
             self.event.onNext(.check(response: .channel(chResponses)))
@@ -144,6 +147,8 @@ extension UserInfoTable{
 }
 extension CHChatTable{
     func getResponse(userResponse: UserResponse) -> ChatResponse{
-        ChatResponse(channelID: self.chatID, channelName:self.channelName ?? "", chatID: self.chatID, content: self.content, createdAt: self.createdAt.convertToString(), files: Array(self.imagePathes), user: userResponse)
+        let str = self.createdAt.convertToString()
+        print(self.createdAt,str)
+        return ChatResponse(channelID: self.chatID, channelName:self.channelName ?? "", chatID: self.chatID, content: self.content, createdAt: self.createdAt.convertToString(), files: Array(self.imagePathes), user: userResponse)
     }
 }

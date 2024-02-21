@@ -45,25 +45,6 @@ extension HomeVC{
                         owner.apply(snapshot,to:channelHeader.sectionType)
                     }
                 }).disposed(by: disposeBag)
-            reactor.state.map{$0.channelUnreads}.bind(with: self) { owner, responses in
-                guard let responses else {return}
-                var items:[Item] = []
-                for response in responses{
-                    guard var channelItem = owner.channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(response.channelID)") else {
-                        fatalError("Empty Channel Item")
-                    }
-                    channelItem.messageCount = response.count
-                    channelItem.isRecent = response.count != 0
-                    owner.channelListModel.insertModel(item: channelItem)
-                    items.append(Item(channelItem))
-                }
-                Task{@MainActor in
-                    var snapshot = owner.snapshot()
-                    let sectionItems = snapshot.itemIdentifiers(inSection: .channel)
-                    snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
-                    owner.apply(snapshot,animatingDifferences: false)
-                }
-            }.disposed(by: disposeBag)
             reactor.state.map{$0.dmList}.bind { [weak self] roomResponses in
                 guard let self,let roomResponses else {return}
                 guard let headerItem = headerModel.fetchByID(SectionType.direct.rawValue + ItemType.header.rawValue) else {return}
@@ -94,23 +75,44 @@ extension HomeVC{
                     }
                 }
             }.disposed(by: disposeBag)
+            reactor.state.map{$0.channelUnreads}.bind(with: self) { owner, responses in
+                guard let responses else {return}
+                var items:[Item] = []
+                for response in responses{
+                    guard var channelItem = owner.channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(response.channelID)") else {
+                        fatalError("Empty Channel Item")
+                    }
+                    channelItem.messageCount = response.count
+                    channelItem.isRecent = response.count != 0
+                    owner.channelListModel.insertModel(item: channelItem)
+                    items.append(Item(channelItem))
+                }
+                DispatchQueue.main.async{
+                    var snapshot = owner.snapshot()
+                    let sectionItems = snapshot.itemIdentifiers(inSection: .channel)
+                    snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
+                    owner.apply(snapshot,animatingDifferences: false)
+                }
+            }.disposed(by: disposeBag)
             reactor.state.map{$0.dmUnreads}.bind { [weak self] unreads in
                 guard let self, let unreads else {return}
                 Task{
                     var items:[Item] = []
                     for unread in unreads{
-                        guard var unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
-                            continue
+                        guard let unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
+                            fatalError("내가 이상해?")
                         }
                         unreadItem.messageCount = unread.count
                         self.directListModel.insertModel(item: unreadItem)
                         items.append(Item(unreadItem))
                     }
-                    Task{@MainActor in
+                    DispatchQueue.main.async{
                         var snapshot = self.snapshot()
                         let sectionItems = snapshot.itemIdentifiers(inSection: .direct)
-                        snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
+                        snapshot.reloadItems(items)
+                        
                         self.apply(snapshot,animatingDifferences: false)
+                        
                     }
                 }
             }.disposed(by: disposeBag)

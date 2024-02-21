@@ -98,7 +98,10 @@ extension HomeReactor{
             switch event{
             case .allMy(let responses):
                 return Observable.concat([.just(.setDMList(responses))])
-            case .unreads(let unreads): return Observable.concat(.just(.setDMUnreads(unreads)))
+            case .unreads(let unreads):
+                return Observable.concat([.just(.setDMUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                                          .just(.setDMUnreads(nil))
+                                         ])
             default: return Observable.concat([])
             }
         }

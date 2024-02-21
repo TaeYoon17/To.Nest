@@ -8,6 +8,8 @@
 import UIKit
 
 enum PayToastType: ToastType{
+    case success
+    case validFailure,payFailure
     var contents: String{
         switch self{
         case .success: "코인 결제가 성공적으로 완료되었어요"
@@ -22,8 +24,4 @@ enum PayToastType: ToastType{
         case .validFailure,.payFailure:UIColor.error
         }
     }
-    
-    case success
-    case validFailure
-    case payFailure
 }

@@ -42,6 +42,10 @@ extension MessageService{
                 await roomRepository.appendChat(roomID: roomID, chatTables: [dmTable])
                 try await appendUserReferenceCounts(roomID: roomID, createUsers: [result.user])
                 try await updateUserInformationToDataBase(userIDs: [result.user.userID])
+                let text = res.content ?? "사진"
+                await roomRepository.updateLastContent(roomID: roomID, text: text,date: res.createdAt.convertToDate())
+                await roomRepository.updateRoomReadDate(roomID: roomID)
+                await roomRepository.updateRoomCheckDate(roomID: roomID)
                 event.onNext(.create(response: .dm([result])))
             }catch{
                 print("MessageService DM Error!!")
@@ -60,7 +64,10 @@ extension MessageService{
                 Task{@BackgroundActor in
                     do{
                         try await Task.sleep(for: .milliseconds(100))
+                        let text = responseData.content ?? "사진"
+                        await roomRepository.updateLastContent(roomID: roomID, text: text,date: responseData.createdAt.convertToDate())
                         await roomRepository.updateRoomReadDate(roomID: roomID)
+                        await roomRepository.updateRoomCheckDate(roomID: roomID)
                         try await getResponses(responses: [responseData], roomID: roomID)
                         Task{
                             var response = responseData
@@ -109,6 +116,8 @@ extension MessageService{
     }
 }
 fileprivate extension MessageService{
+    
+    // 핵심 데이터 가저오기 처리 로직
     @BackgroundActor func _getDirectMessageDatas(wsID:Int,roomID:Int,userID:Int) async{
         do{
             let lastCheckDate = self.roomRepository.getTableBy(tableID: roomID)?.lastCheckDate
@@ -131,7 +140,8 @@ fileprivate extension MessageService{
     }
     @BackgroundActor func getResponses(responses:[DMResponse],roomID:Int) async throws{
         await roomRepository.updateRoomCheckDate(roomID: roomID)
-        let createResponses =  await responses.asyncFilter {// 이미 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
+        await roomRepository.updateRoomReadDate(roomID: roomID)
+        let createResponses =  await responses.asyncFilter {// 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
             !self.dmChatRepository.isExistTable(dmID: $0.dmID)
         }
         try await appendChatResponseToDataBase(roomID: roomID, createResponses: createResponses)
@@ -142,6 +152,11 @@ fileprivate extension MessageService{
 }
 extension DMChatTable{
     func getResponse(userResponse: UserResponse) -> DMResponse{
-        DMResponse(dmID: self.dmID, roomID: self.roomID, content: self.content, createdAt: self.createdAt.convertToString(), files: Array(self.imagePathes), user: userResponse)
+        DMResponse(dmID: self.dmID,
+                   roomID: self.roomID,
+                   content: self.content,
+                   createdAt: self.createdAt.convertToString(),
+                   files: Array(self.imagePathes),
+                   user: userResponse)
     }
 }

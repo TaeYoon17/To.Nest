@@ -23,6 +23,8 @@ extension String{
     func convertToDate() -> Date{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.locale = .current
+        dateFormatter.timeZone = .current
         if let date = dateFormatter.date(from: self){
             return date
         }else{

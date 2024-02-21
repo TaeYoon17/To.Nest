@@ -101,7 +101,7 @@ final class ProfileService:ProfileProtocol{
     func checkMy(){
         Task{
             do{
-                let res = try await NM.shared.checkMy()
+                let res:MyInfo = try await NM.shared.checkMy()
                 self.myInfo = res
                 self.event.onNext(.myInfo(res))
             }catch{

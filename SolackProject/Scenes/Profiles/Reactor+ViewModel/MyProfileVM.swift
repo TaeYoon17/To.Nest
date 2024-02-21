@@ -17,6 +17,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
     @DefaultsState(\.myProfile) var myProfile
     @MainActor @Published var st: State = .init()
     @MainActor @Published var info:MyInfo = MyInfo(userID: 0, sesacCoin: 0, email: "", nickname: "", profileImage: "", phone: "", vendor: "", createdAt: "")
+    @MainActor @Published var toastType: ProfileToastType? = nil
     @MainActor var goHome = PassthroughSubject<(),Never>()
     var initialState: State = State()
     weak var provider: ServiceProviderProtocol!
@@ -69,6 +70,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
         case .initVM:
             guard let myInfo else {return  Observable.concat([])}
             self.info = myInfo
+            provider.profileService.checkMy()
             return Observable.concat([
                 .just(.setNickName(myInfo.nickname)),
                 .just(.setPhone(myInfo.phone ?? "")),
