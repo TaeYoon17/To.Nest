@@ -29,8 +29,8 @@ struct ChatCell:View{
     var otherUser: some View{
         HStack(alignment:.top){
             profile
-            contents
-            dates
+            otherContents
+//            dates
         }.transaction{ transaction in
             transaction.animation = nil
         }
@@ -72,21 +72,27 @@ extension ChatCell{
                 .frame(width:34,height:34)
         })
     }
-    var contents: some View{
+    var otherContents: some View{
         VStack(alignment:.leading,spacing:5){
             Text(chatItem.profileName).font(FontType.caption.font).foregroundStyle(.text)
-            if let content = chatItem.content, !content.isEmpty{
-                Text(content)
-                    .font(FontType.body.font)
-                    .padding(.all,8)
-                    .overlay(content: {
-                        RoundedRectangle(cornerRadius: 12).strokeBorder()
-                    })
-            }
-            if !images.images.isEmpty{
-                ContainerImage(realImage: $images.images)
-                    .drawingGroup()
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            HStack{
+                VStack(alignment:.leading,spacing:5){
+                    if let content = chatItem.content, !content.isEmpty{
+                        Text(content)
+                            .font(FontType.body.font)
+                            .padding(.all,8)
+                            .overlay(content: {
+                                RoundedRectangle(cornerRadius: 12).strokeBorder()
+                            })
+                    }
+                    if !images.images.isEmpty{
+                        ContainerImage(realImage: $images.images)
+                            .drawingGroup()
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                }
+                dates
+                Spacer()
             }
         }
     }

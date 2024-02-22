@@ -75,47 +75,89 @@ extension HomeVC{
                     }
                 }
             }.disposed(by: disposeBag)
-            reactor.state.map{$0.channelUnreads}.bind(with: self) { owner, responses in
-                guard let responses else {return}
-                var items:[Item] = []
-                for response in responses{
-                    guard var channelItem = owner.channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(response.channelID)") else {
-                        fatalError("Empty Channel Item")
-                    }
-                    channelItem.messageCount = response.count
-                    channelItem.isRecent = response.count != 0
-                    owner.channelListModel.insertModel(item: channelItem)
-                    items.append(Item(channelItem))
-                }
-                DispatchQueue.main.async{
-                    var snapshot = owner.snapshot()
-                    let sectionItems = snapshot.itemIdentifiers(inSection: .channel)
-                    snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
-                    owner.apply(snapshot,animatingDifferences: false)
-                }
-            }.disposed(by: disposeBag)
-            reactor.state.map{$0.dmUnreads}.bind { [weak self] unreads in
-                guard let self, let unreads else {return}
+//            reactor.state.map{$0.channelUnreads}.bind(with: self) { owner, responses in
+//                guard let responses else {return}
+//                var items:[Item] = []
+//                for response in responses{
+//                    guard var channelItem = owner.channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(response.channelID)") else {
+//                        fatalError("Empty Channel Item")
+//                    }
+//                    channelItem.messageCount = response.count
+//                    channelItem.isRecent = response.count != 0
+//                    owner.channelListModel.insertModel(item: channelItem)
+//                    items.append(Item(channelItem))
+//                }
+//                DispatchQueue.main.async{
+//                    var snapshot = owner.snapshot()
+//                    let sectionItems = snapshot.itemIdentifiers(inSection: .channel)
+//                    snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
+//                    owner.apply(snapshot,animatingDifferences: false)
+//                }
+//            }.disposed(by: disposeBag)
+//            reactor.state.map{$0.dmUnreads}.bind { [weak self] unreads in
+//                guard let self, let unreads else {return}
+//                Task{
+//                    var items:[Item] = []
+//                    for unread in unreads{
+//                        guard let unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
+//                            continue
+//                        }
+//                        unreadItem.messageCount = unread.count
+//                        self.directListModel.insertModel(item: unreadItem)
+//                        items.append(Item(unreadItem))
+//                    }
+//                    DispatchQueue.main.async{
+//                        var snapshot = self.snapshot()
+//                        let sectionItems = snapshot.itemIdentifiers(inSection: .direct)
+//                        snapshot.reloadItems(Array(Set(items).intersection(sectionItems)))
+//                        self.apply(snapshot,animatingDifferences: false)
+//                    }
+//                }
+//            }.disposed(by: disposeBag)
+            let chUnread = reactor.state.map({$0.channelUnreads})
+            let dmUnread = reactor.state.map{$0.dmUnreads}
+            Observable.combineLatest(chUnread, dmUnread).bind { [weak self](channelUnreads, dmUnreads) in
+                guard let self, let channelUnreads,let dmUnreads else {return}
+                print("결과들 \(channelUnreads) \(dmUnreads)")
                 Task{
-                    var items:[Item] = []
-                    for unread in unreads{
-                        guard let unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
-                            fatalError("내가 이상해?")
-                        }
-                        unreadItem.messageCount = unread.count
-                        self.directListModel.insertModel(item: unreadItem)
-                        items.append(Item(unreadItem))
-                    }
-                    DispatchQueue.main.async{
+                    let dmItems:[Item] = self.dmItems(dmUnreads: dmUnreads)
+                    let channelItems:[Item] = self.channelItems(channelUnreads: channelUnreads)
+                    await MainActor.run{
                         var snapshot = self.snapshot()
-                        let sectionItems = snapshot.itemIdentifiers(inSection: .direct)
-                        snapshot.reloadItems(items)
-                        
-                        self.apply(snapshot,animatingDifferences: false)
-                        
+                        let dmSectionItems = snapshot.itemIdentifiers(inSection: .direct)
+                        let channelSectionItems = snapshot.itemIdentifiers(inSection: .channel)
+                        let remainItems = (Set(dmItems).union(channelItems)).intersection(Set(dmSectionItems).union(channelSectionItems))
+                        print("--------update 진행", remainItems)
+                        snapshot.reloadItems(Array(remainItems))
+                        self.apply(snapshot,animatingDifferences: true)
                     }
                 }
             }.disposed(by: disposeBag)
+        }
+        func channelItems(channelUnreads:[UnreadsChannelRes]) ->[Item]{
+            var channelItems:[Item] = []
+            for unread in channelUnreads{
+                guard var channelItem = channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(unread.channelID)") else {
+                    fatalError("Empty Channel Item")
+                }
+                channelItem.messageCount = unread.count
+                channelItem.isRecent = unread.count != 0
+                channelListModel.insertModel(item: channelItem)
+                channelItems.append(Item(channelItem))
+            }
+            return channelItems
+        }
+        func dmItems(dmUnreads:[UnreadDMRes]) -> [Item]{
+            var dmItems:[Item] = []
+            for unread in dmUnreads{
+                guard let unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
+                    continue
+                }
+                unreadItem.messageCount = unread.count
+                self.directListModel.insertModel(item: unreadItem)
+                dmItems.append(Item(unreadItem))
+            }
+            return dmItems
         }
         func fetchDirect(item:Item) -> DirectListItem{
             directListModel.fetchByID(item.id)

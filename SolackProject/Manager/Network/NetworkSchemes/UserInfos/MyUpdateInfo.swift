@@ -35,7 +35,7 @@ struct MyInfo:Codable{
     mutating func updateInfo(_ updateInfo: MyUpdateInfo){
         self.userID = updateInfo.userID
         self.email = updateInfo.email
-        self.nickname = updateInfo.email
+        self.nickname = updateInfo.nickname
         self.profileImage = updateInfo.profileImage
         self.phone = updateInfo.phone
         self.vendor = updateInfo.vendor

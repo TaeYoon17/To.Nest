@@ -21,6 +21,14 @@ final class HomeVC: BaseVC, View,Toastable{
             guard let type else {return}
             owner.toastUp(type: type)
         }.disposed(by: disposeBag)
+        reactor.state.map{$0.isLoading}
+            .debounce(.microseconds(660), scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, isLoading in
+            Task{@MainActor in
+                owner.isLoading = isLoading
+                owner.view.isUserInteractionEnabled = !isLoading
+            }
+        }.disposed(by: disposeBag)
         wsEmpty.btnTapped.bind(with: self) { owner, _ in
             let vc = WSwriterView(.create, reactor: WScreateReactor(reactor.provider))
             let nav = UINavigationController(rootViewController: vc)

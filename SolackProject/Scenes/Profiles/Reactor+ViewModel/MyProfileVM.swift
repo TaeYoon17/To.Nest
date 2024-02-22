@@ -110,8 +110,7 @@ final class MyProfileReactor:Reactor,ObservableObject{
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
         switch mutation{
-        case .setImage(let image):
-            state.image = image
+        case .setImage(let image): state.image = image
         case .setNickName(let nickname): state.nickname = nickname
         case .setPhone(let phone): state.phone = phone
         case .setEmail(let email): state.email = email

@@ -38,6 +38,7 @@ final class HomeReactor: Reactor{
         case setDMList([DMRoomResponse]?)
         case isProfileUpdated(Bool)
         case setToast(ToastType?)
+        case setLoading(Bool)
     }
     struct State{
         var channelDialog:HomePresent? = nil
@@ -50,6 +51,7 @@ final class HomeReactor: Reactor{
         var wsLogo: String = ""
         var isProfileUpdated:Bool = false
         var toast:ToastType? = nil
+        var isLoading:Bool = false
     }
     init(_ provider: ServiceProviderProtocol){
         self.provider = provider
@@ -61,7 +63,7 @@ final class HomeReactor: Reactor{
                 case .chatting(chID: let id, chName: let name):
                 let unreads = UnreadsChannelRes(channelID: id, name: name, count: 0)
                 return Observable.concat([
-                    .just(.setChannelUnreads([unreads])),
+//                    .just(.setChannelUnreads([unreads])),
                     Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
                     Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
                 ])
@@ -80,7 +82,7 @@ final class HomeReactor: Reactor{
             ])
         case .setMainWS(wsID: let wsID):
             provider.wsService.setHomeWS(wsID: Int(wsID)!)
-            return Observable.concat([])
+            return Observable.concat([.just(.setLoading(true)).delay(.microseconds(100), scheduler: MainScheduler.instance)])
         case .initMainWS:
             provider.wsService.initHome()
             return Observable.concat([])
@@ -113,6 +115,8 @@ final class HomeReactor: Reactor{
             state.dmUnreads = unreads
         case .setDMList(let dmList):
             state.dmList = dmList
+        case .setLoading(let isLoading):
+            state.isLoading = isLoading
         }
         return state
     }
@@ -121,6 +125,7 @@ final class HomeReactor: Reactor{
         let chService = chMutationTransform
         let dmService = dmMutationTransform
         let profileService = profileMutationTransform
-        return Observable.merge(mutation,wsService,chService,dmService,profileService)
+        let msgService = messageMutationTransform
+        return Observable.merge(mutation,wsService,chService,dmService,profileService,msgService)
     }
 }

@@ -31,7 +31,6 @@ extension Date{
         dateFormatter.locale = Locale(identifier: "ko_KR")
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: self.addingTimeInterval(-9 * 3600))
-
         if let currentDate = calendar.date(from: components) {
             let now = Date()
             

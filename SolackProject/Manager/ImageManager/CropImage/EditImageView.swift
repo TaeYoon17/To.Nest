@@ -84,7 +84,11 @@ extension ImageManager.CropImageManager{
                     
                 })
                 .onTapGesture { isPresented.toggle() }
+                .onDisappear(){
+                    self.imageState = .empty
+                }
         }
+        
     }
 }
 

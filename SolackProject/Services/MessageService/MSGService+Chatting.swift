@@ -79,7 +79,15 @@ extension MessageService:SocketReceivable{
             await userReferenceCountManager.saveRepository()
         }
     }
-    func getChannelDatas(chID:Int,chName:String){
+    func getChannelsMessages(chResponse:[CHResponse]){
+        Task{@BackgroundActor in
+            for res in chResponse{
+                await _getChannelDatas(chID: res.channelID, chName: res.name)
+            }
+            event.onNext(.completedFetchChannelsMessage)
+        }
+    }
+    func getChannelMessages(chID:Int,chName:String){
         Task{@BackgroundActor in
             await _getChannelDatas(chID:chID,chName:chName)
         }

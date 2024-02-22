@@ -70,6 +70,7 @@ extension NetworkManager{
         func closeChatSocket(){
             print("소켓을 닫는다...")
             socket.on(clientEvent: .disconnect) {[weak self] data, ack in
+                print("SOCKET IS DISCONNECTED", data, ack)
                 guard let self else {return}
                 print("SOCKET IS DISCONNECTED", data, ack)
                 self.isOpen = false
@@ -82,6 +83,7 @@ extension NetworkManager{
             }
             Task{
                 try await Task.sleep(for: .seconds(3))
+                print("소켓 강제종료")
                 self.channelID = nil
                 self.roomID = nil
                 self.delegate = nil

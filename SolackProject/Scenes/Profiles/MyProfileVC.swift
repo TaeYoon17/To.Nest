@@ -69,8 +69,8 @@ extension MyProfileView{
     }
 }
 struct MyProfileView:View{
-    @ObservedObject var vm: MyProfileReactor
-    @ObservedObject var imgVM :ProfileImgVM
+    @StateObject var vm: MyProfileReactor
+    @StateObject var imgVM :ProfileImgVM
     @DefaultsState(\.myInfo) var myInfo
     @State var vendor: VendorType? = nil
     @State var isLogOut:Bool = false
@@ -133,6 +133,7 @@ struct MyProfileView:View{
                 Task{@MainActor in
                     try await Task.sleep(for: .milliseconds(100))
                     vm.toastType = nil
+                    self.toastType = nil
                 }
             })
             .navigationDestination(for: NaviType.self, destination: { navi in

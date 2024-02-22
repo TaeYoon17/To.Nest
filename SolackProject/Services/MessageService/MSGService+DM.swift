@@ -138,9 +138,10 @@ fileprivate extension MessageService{
             print(error)
         }
     }
+    // 새로운 데이터 저장 및 디비 업데이트
     @BackgroundActor func getResponses(responses:[DMResponse],roomID:Int) async throws{
         await roomRepository.updateRoomCheckDate(roomID: roomID)
-        await roomRepository.updateRoomReadDate(roomID: roomID)
+//        await roomRepository.updateRoomReadDate(roomID: roomID)
         let createResponses =  await responses.asyncFilter {// 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
             !self.dmChatRepository.isExistTable(dmID: $0.dmID)
         }

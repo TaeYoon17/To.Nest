@@ -12,7 +12,8 @@ typealias MSGService = MessageService
 protocol MessageProtocol{
     var event:PublishSubject<MSGService.Event> {get}
     // 채널
-    func getChannelDatas(chID:Int,chName:String)
+    func getChannelsMessages(chResponse:[CHResponse])
+    func getChannelMessages(chID:Int,chName:String)
     func fetchChannelDB(channelID:Int,channelName:String)
     func create(chID:Int,chName:String,chat: ChatInfo)
     func openSocket(channelID: Int)
@@ -55,6 +56,7 @@ final class MessageService:MessageProtocol{
         case create(response:MSGResponse)
         case check(response:MSGResponse)
         case socketReceive(response:MSGResponse)
+        case completedFetchChannelsMessage
     }
 }
 

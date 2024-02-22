@@ -68,9 +68,9 @@
 		6323E1C52B60F70100D91E46 /* CHSetting+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */; };
 		6323E1C62B60F70100D91E46 /* CHSettingCollectionStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */; };
 		6323E1C82B60F73400D91E46 /* CHSettingReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */; };
-		6326FE312B7CA3AF00122D9C /* DMEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */; };
 		6326FE2D2B7C993F00122D9C /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE2C2B7C993F00122D9C /* UIViewController.swift */; };
 		6326FE2F2B7C9A1500122D9C /* SceneDelegate+AccessConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE2E2B7C9A1500122D9C /* SceneDelegate+AccessConnect.swift */; };
+		6326FE312B7CA3AF00122D9C /* DMEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */; };
 		6326FE332B7CB06E00122D9C /* ProfileToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326FE322B7CB06E00122D9C /* ProfileToastType.swift */; };
 		6329FE452B6E75160018909F /* DM+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE442B6E75160018909F /* DM+NM.swift */; };
 		6329FE472B6E75470018909F /* DMRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6329FE462B6E75470018909F /* DMRouter.swift */; };
@@ -93,6 +93,7 @@
 		633E51B22B77645A00A87D29 /* Channel_User+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E51B12B77645A00A87D29 /* Channel_User+NM.swift */; };
 		633E51B52B77671100A87D29 /* WS_Check+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E51B42B77671100A87D29 /* WS_Check+NM.swift */; };
 		633E51B72B7768AC00A87D29 /* WS_Member+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E51B62B7768AC00A87D29 /* WS_Member+NM.swift */; };
+		633E76FC2B85D44900C3EEED /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E76FB2B85D44900C3EEED /* ImageViewer.swift */; };
 		6340ACA92B7A6E57008C672F /* DMExplore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACA82B7A6E57008C672F /* DMExplore.swift */; };
 		6340ACAB2B7A6EC5008C672F /* DMExplore+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACAA2B7A6EC5008C672F /* DMExplore+DS.swift */; };
 		6340ACAD2B7A6F2A008C672F /* DMExplore+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340ACAC2B7A6F2A008C672F /* DMExplore+Binding.swift */; };
@@ -404,9 +405,9 @@
 		6323E1C02B60F70100D91E46 /* CHSetting+CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CHSetting+CollectionView.swift"; sourceTree = "<group>"; };
 		6323E1C12B60F70100D91E46 /* CHSettingCollectionStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingCollectionStructures.swift; sourceTree = "<group>"; };
 		6323E1C72B60F73400D91E46 /* CHSettingReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHSettingReactor.swift; sourceTree = "<group>"; };
-		6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMEmptyView.swift; sourceTree = "<group>"; };
 		6326FE2C2B7C993F00122D9C /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		6326FE2E2B7C9A1500122D9C /* SceneDelegate+AccessConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SceneDelegate+AccessConnect.swift"; sourceTree = "<group>"; };
+		6326FE302B7CA3AF00122D9C /* DMEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMEmptyView.swift; sourceTree = "<group>"; };
 		6326FE322B7CB06E00122D9C /* ProfileToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileToastType.swift; sourceTree = "<group>"; };
 		6329FE442B6E75160018909F /* DM+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DM+NM.swift"; sourceTree = "<group>"; };
 		6329FE462B6E75470018909F /* DMRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMRouter.swift; sourceTree = "<group>"; };
@@ -430,6 +431,7 @@
 		633E51B12B77645A00A87D29 /* Channel_User+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel_User+NM.swift"; sourceTree = "<group>"; };
 		633E51B42B77671100A87D29 /* WS_Check+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WS_Check+NM.swift"; sourceTree = "<group>"; };
 		633E51B62B7768AC00A87D29 /* WS_Member+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WS_Member+NM.swift"; sourceTree = "<group>"; };
+		633E76FB2B85D44900C3EEED /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		6340ACA82B7A6E57008C672F /* DMExplore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMExplore.swift; sourceTree = "<group>"; };
 		6340ACAA2B7A6EC5008C672F /* DMExplore+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMExplore+DS.swift"; sourceTree = "<group>"; };
 		6340ACAC2B7A6F2A008C672F /* DMExplore+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DMExplore+Binding.swift"; sourceTree = "<group>"; };
@@ -1220,6 +1222,7 @@
 				636F16112B6FFF5A00536E6F /* MSGCollectionView */,
 				630763F02B639471000747F8 /* MSGField */,
 				636F16002B6FE9ED00536E6F /* MessageView.swift */,
+				633E76FB2B85D44900C3EEED /* ImageViewer.swift */,
 			);
 			path = MessageView;
 			sourceTree = "<group>";
@@ -2165,6 +2168,7 @@
 				631A60EB2B44EE0B005509C2 /* BasicProvider.swift in Sources */,
 				63E974C52B690B19004BCA00 /* MyProfileVC.swift in Sources */,
 				636F16152B6FFFD700536E6F /* MSGCollectionLayouts.swift in Sources */,
+				633E76FC2B85D44900C3EEED /* ImageViewer.swift in Sources */,
 				63F0AECB2B4AD886000A597B /* ChannelListItemView.swift in Sources */,
 				636B2B172B6D4E0800BE9751 /* DMMainVC+CellRegistraion.swift in Sources */,
 				63C0C3812B724B3600BAE99B /* WorkSpaceService+DB.swift in Sources */,

@@ -23,6 +23,7 @@ extension HomeReactor{
                     observeList.append(contentsOf: [.just(.isMasking(false)),
                                                     .just(.wsTitle(response.name)),
                                                     .just(.wsLogo(response.thumbnail)),
+                                                    
                                                     ])
                 }else{
                     observeList.append(.just(.isMasking(true)))
@@ -58,14 +59,15 @@ extension HomeReactor{
                 provider.wsService.setHomeWS(wsID: mainWS.id)
                 return Observable.concat([])
             case .allMy(let responses):
-                responses.forEach { res in // 채널들의 메시지들 업데이트
-                    self.provider.msgService.getChannelDatas(chID: res.channelID, chName: res.name)
-                }
-                return Observable.concat([.just(.setChannelList(responses)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance)])
+                self.provider.msgService.getChannelsMessages(chResponse: responses)
+                return Observable.concat([
+                    .just(.setChannelList(responses)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                    .just(.setLoading(true))
+                ])
             case .unreads(let unreads):
                 return Observable.concat([
                     .just(.setChannelUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-                    .just(.setChannelUnreads(nil))
+//                    .just(.setChannelUnreads(nil))
                 ])
             case .update(let response):
                 guard response.workspaceID == mainWS.id else {return Observable.concat([])}
@@ -100,7 +102,7 @@ extension HomeReactor{
                 return Observable.concat([.just(.setDMList(responses))])
             case .unreads(let unreads):
                 return Observable.concat([.just(.setDMUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
-                                          .just(.setDMUnreads(nil))
+//                                          .just(.setDMUnreads(nil))
                                          ])
             default: return Observable.concat([])
             }
@@ -111,11 +113,26 @@ extension HomeReactor{
             case .goDM(id: let roomID, userResponse: let userResponse):
                 return Observable.concat([
                     .just(.channelDialog(.dm(roomID: roomID, user: userResponse))).delay(.milliseconds(100), scheduler: MainScheduler.asyncInstance),
-                    .just(.channelDialog(nil))
+//                    .just(.channelDialog(nil))
                 ])
             }
         }
         return Observable.merge(eventMutation,transitionMutation)
+    }
+}
+//MARK: -- Message Transform
+extension HomeReactor{
+    var messageMutationTransform: Observable<Mutation>{
+        provider.msgService.event.flatMap { [weak self] event -> Observable<Mutation> in
+            guard let self else {return Observable.concat([])}
+            var observes : [Observable<Mutation>] = []
+            switch event{
+            case .completedFetchChannelsMessage:
+                observes.append(.just(.setLoading(false)))
+            default: break
+            }
+            return Observable.concat(observes)
+        }
     }
 }
 //MARK: -- Profile Transform
