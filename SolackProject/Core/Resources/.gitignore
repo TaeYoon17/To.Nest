@@ -3,4 +3,4 @@ SecretKey.swift
 UserInterfaceState.xcuserstate
 Config.xcconfig
 *.xcuserstate
-GoogleService-Info.plist
+*.plist
