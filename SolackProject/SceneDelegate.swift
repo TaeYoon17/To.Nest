@@ -44,7 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         appleIDProvider.getCredentialState(forUserID: appleID) {[weak self] credintialState, error in
             guard let self else {return}
-            print("* getCredintailState 발생")
+//            print("* getCredintailState 발생")
             switch credintialState{
             case .revoked:
                 print("Revoked")

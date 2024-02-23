@@ -23,10 +23,6 @@ extension SceneDelegate{
                 onboardvc.reactor = reactor
                 vc = onboardvc
             }
-//            let coverView = UIView()
-//            coverView.backgroundColor = .gray1
-//            vc.view.addSubview(coverView)
-//            coverView.frame = vc.view.bounds
             owner.window?.rootViewController = vc
             owner.window?.makeKeyAndVisible()
             vc.coverAction()

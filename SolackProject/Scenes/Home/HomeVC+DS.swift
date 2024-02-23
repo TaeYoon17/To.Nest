@@ -127,7 +127,7 @@ extension HomeVC{
                         let dmSectionItems = snapshot.itemIdentifiers(inSection: .direct)
                         let channelSectionItems = snapshot.itemIdentifiers(inSection: .channel)
                         let remainItems = (Set(dmItems).union(channelItems)).intersection(Set(dmSectionItems).union(channelSectionItems))
-                        print("--------update 진행", remainItems)
+//                        print("--------update 진행", remainItems)
                         snapshot.reloadItems(Array(remainItems))
                         self.apply(snapshot,animatingDifferences: true)
                     }

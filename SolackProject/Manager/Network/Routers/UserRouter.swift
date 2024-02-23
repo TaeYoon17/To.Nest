@@ -51,7 +51,9 @@ enum UserRouter: URLRequestConvertible{
             var params = Parameters()
             params["email"] = email
             return params
-        case .signIn(_,let body): return body.getParameter()
+        case .signIn(_,let body):
+            let params = body.getParameter()
+            return params
         case .putMy(nickName: let nickName, phone: let phone):
             var params = Parameters()
             if let nickName{ params["nickname"] = nickName }

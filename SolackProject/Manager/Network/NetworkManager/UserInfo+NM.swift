@@ -25,6 +25,7 @@ extension NetworkManager{
             }
             AF.request(router,interceptor: authInterceptor).response{res in
                 if res.response?.statusCode == 200{
+                    print("updatedevicetoken success")
                     continuation.resume()
                     return
                 }
