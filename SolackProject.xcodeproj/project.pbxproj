@@ -16,7 +16,6 @@
 		630763FE2B63C420000747F8 /* ItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630763FD2B63C420000747F8 /* ItemProvider.swift */; };
 		630764052B640B82000747F8 /* CHChatView+Bindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630764042B640B82000747F8 /* CHChatView+Bindings.swift */; };
 		630764072B640DDF000747F8 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630764062B640DDF000747F8 /* ProgressView.swift */; };
-		6312A20E2B6107C700593117 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6312A20D2B6107C700593117 /* GoogleService-Info.plist */; };
 		6312A2112B61082300593117 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6312A2102B61082300593117 /* FirebaseAnalytics */; };
 		6312A2152B61082300593117 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6312A2142B61082300593117 /* FirebaseAnalyticsSwift */; };
 		6312A2212B61082300593117 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6312A2202B61082300593117 /* FirebaseCrashlytics */; };
@@ -362,7 +361,6 @@
 		630763FD2B63C420000747F8 /* ItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemProvider.swift; sourceTree = "<group>"; };
 		630764042B640B82000747F8 /* CHChatView+Bindings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHChatView+Bindings.swift"; sourceTree = "<group>"; };
 		630764062B640DDF000747F8 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
-		6312A20D2B6107C700593117 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6312A24E2B617FF800593117 /* RCMREADME.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RCMREADME.md; sourceTree = "<group>"; };
 		6312A24F2B6181F400593117 /* RCMCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCMCounter.swift; sourceTree = "<group>"; };
 		6312A2512B61820800593117 /* RCMTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCMTable.swift; sourceTree = "<group>"; };
@@ -793,7 +791,6 @@
 		631A60A82B44ECEE005509C2 /* SolackProject */ = {
 			isa = PBXGroup;
 			children = (
-				6312A20D2B6107C700593117 /* GoogleService-Info.plist */,
 				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
 				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
@@ -1999,7 +1996,6 @@
 				631A60B62B44ECEF005509C2 /* LaunchScreen.storyboard in Resources */,
 				631A60B32B44ECEF005509C2 /* Assets.xcassets in Resources */,
 				631A60FD2B452953005509C2 /* .gitignore in Resources */,
-				6312A20E2B6107C700593117 /* GoogleService-Info.plist in Resources */,
 				631A60B12B44ECEE005509C2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2462,9 +2458,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SolackProject/SolackProject.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3W9F68ZTUJ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VYC9A4SEQS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SolackProject/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = NSPhotoLibraryUsageDescription;
@@ -2481,8 +2479,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ii.SolackProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sesac.SeSACTalkSLP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = SeSACTalkSLP;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -2500,9 +2500,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SolackProject/SolackProject.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3W9F68ZTUJ;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VYC9A4SEQS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SolackProject/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = NSPhotoLibraryUsageDescription;
@@ -2519,8 +2521,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ii.SolackProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sesac.SeSACTalkSLP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = SeSACTalkSLP;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
