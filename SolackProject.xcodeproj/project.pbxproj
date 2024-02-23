@@ -304,6 +304,7 @@
 		63F265F82B53AFAE007D865C /* WSEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F265F72B53AFAE007D865C /* WSEditReactor.swift */; };
 		63F265FA2B53BA76007D865C /* WSService+AvailCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F265F92B53BA76007D865C /* WSService+AvailCheck.swift */; };
 		63F265FC2B53F1EF007D865C /* WSManagerReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F265FB2B53F1EF007D865C /* WSManagerReactor.swift */; };
+		63F7C11D2B8880D100490BC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63F7C11C2B8880D100490BC2 /* GoogleService-Info.plist */; };
 		63F7C4A12B4EEA4B003D8447 /* WorkSpaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7C4A02B4EEA4B003D8447 /* WorkSpaceService.swift */; };
 		63F7C4A42B4EEBC8003D8447 /* WorkSpaceRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7C4A32B4EEBC8003D8447 /* WorkSpaceRouter.swift */; };
 		63F7C4A62B4F772E003D8447 /* WSInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7C4A52B4F772E003D8447 /* WSInfo.swift */; };
@@ -631,6 +632,7 @@
 		63F265F72B53AFAE007D865C /* WSEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEditReactor.swift; sourceTree = "<group>"; };
 		63F265F92B53BA76007D865C /* WSService+AvailCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WSService+AvailCheck.swift"; sourceTree = "<group>"; };
 		63F265FB2B53F1EF007D865C /* WSManagerReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSManagerReactor.swift; sourceTree = "<group>"; };
+		63F7C11C2B8880D100490BC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63F7C4A02B4EEA4B003D8447 /* WorkSpaceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceService.swift; sourceTree = "<group>"; };
 		63F7C4A32B4EEBC8003D8447 /* WorkSpaceRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSpaceRouter.swift; sourceTree = "<group>"; };
 		63F7C4A52B4F772E003D8447 /* WSInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSInfo.swift; sourceTree = "<group>"; };
@@ -791,6 +793,7 @@
 		631A60A82B44ECEE005509C2 /* SolackProject */ = {
 			isa = PBXGroup;
 			children = (
+				63F7C11C2B8880D100490BC2 /* GoogleService-Info.plist */,
 				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
 				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
@@ -1994,6 +1997,7 @@
 				631A60F72B45018D005509C2 /* SF-Pro-Italic.ttf in Resources */,
 				631A60F62B450189005509C2 /* SF-Pro.ttf in Resources */,
 				631A60B62B44ECEF005509C2 /* LaunchScreen.storyboard in Resources */,
+				63F7C11D2B8880D100490BC2 /* GoogleService-Info.plist in Resources */,
 				631A60B32B44ECEF005509C2 /* Assets.xcassets in Resources */,
 				631A60FD2B452953005509C2 /* .gitignore in Resources */,
 				631A60B12B44ECEE005509C2 /* Main.storyboard in Resources */,
