@@ -118,7 +118,6 @@ extension HomeVC{
             let dmUnread = reactor.state.map{$0.dmUnreads}
             Observable.combineLatest(chUnread, dmUnread).bind { [weak self](channelUnreads, dmUnreads) in
                 guard let self, let channelUnreads,let dmUnreads else {return}
-                print("결과들 \(channelUnreads) \(dmUnreads)")
                 Task{
                     let dmItems:[Item] = self.dmItems(dmUnreads: dmUnreads)
                     let channelItems:[Item] = self.channelItems(channelUnreads: channelUnreads)

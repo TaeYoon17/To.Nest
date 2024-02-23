@@ -22,30 +22,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                                                 completionHandler: { _, _ in})
         application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
+        
+        return true
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
         Messaging.messaging().token { token, error in
             if let error = error{
                 print("Error fetching FCM Token : \(error)")
             }else if let token{
-                print("here is token \(token)")
+                print("successToken \(token)")
+                Task{
+                    do{
+                        try await NM.shared.updateDeviceToken(deviceToken: token)
+                        self.deviceToken = token
+                    }catch{
+                        print(error)
+                    }
+                }
             }
         }
-        return true
     }
     
-//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        Messaging.messaging().apnsToken = deviceToken
-//        Messaging.messaging().setAPNSToken(deviceToken, type: .unknown)
-//        var token: String = ""
-////        for i in 0..<deviceToken.count {
-////            token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
-////        }
-////        self.deviceToken = token
-////        print("token---")
-////        print(token)
-//    }
-    
     // MARK: UISceneSession Lifecycle
-    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
@@ -61,25 +61,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         Iamport.shared.receivedURL(url)
         return true
-    }    
+    }
 }
 
 extension AppDelegate:MessagingDelegate{
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         let token = String(describing: fcmToken)
         print("Firebase registration token: \(token)")
-        self.deviceToken = token
-        print("token---")
-//        print(token)
-        Task{
-            if let fcmToken{
-                do{
-                    try await NM.shared.updateDeviceToken(deviceToken: fcmToken)
-                }catch{
-                    print(error)
-                }
-            }
-        }
         let dataDict: [String: String] = ["token": fcmToken ?? ""]
         NotificationCenter.default.post( name: Notification.Name("FCMToken"),object: nil,userInfo: dataDict)
     }

@@ -72,7 +72,7 @@ enum UserRouter: URLRequestConvertible{
     var headers: HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
-        case .putMy:
+        case .putMy,.deviceToken:
             headers["Content-Type"] = "application/json"
         case .putMyImage:
             headers["Content-Type"] = "multipart/form-data"
