@@ -32,11 +32,19 @@ extension String{
         }
     }
     func webFileToDocFile(labelType: LabelType? = nil)->String{
-        let new = self.replacingOccurrences(of: "/", with: "_")
+        let new = self.replacingOccurrences(of: "/", with: "-")
         return if let type = labelType{
             "\(type.label)\(new)"
         }else{
             new
+        }
+    }
+    func docFileToWebFile(labelType: LabelType? = nil)->String{
+        if let type = labelType{
+            let new = self.replacingOccurrences(of: "\(type.label)", with: "")
+            return new.replacingOccurrences(of: "-", with: "/")
+        }else{
+            return self.replacingOccurrences(of: "-", with: "/")
         }
     }
 }

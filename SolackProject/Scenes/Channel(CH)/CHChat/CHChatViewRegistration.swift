@@ -25,22 +25,25 @@ extension CHChatView{
             cell.selectedBackgroundView = .none
             if let itemAssets = dataSource.chatAssetModel.object(forKey: "\(item.chatID)" as NSString){
                 cell.contentConfiguration = UIHostingConfiguration(content: {
-                    ChatCell(chatItem: item,images: itemAssets, profileAction: {[weak self] userID in
-                        guard let self else {return}
-                        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
-                        navigationController?.pushViewController(vc, animated: true)
-                    })
-                })
+                    ChatCell(chatItem: item,images: itemAssets, profileAction: self.profileAction(userID:), imageAction: self.imageAction)
+                }).background(.white)
             }else{
                 let itemAsset = self.dataSource.appendChatAssetModel(item: item)
                 cell.contentConfiguration = UIHostingConfiguration(content: {
-                    ChatCell(chatItem: item,images: itemAsset, profileAction: {[weak self] userID in
-                        guard let self else {return}
-                        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
-                        navigationController?.pushViewController(vc, animated: true)
-                    })
-                })
+                    ChatCell(chatItem: item,images: itemAsset, profileAction: self.profileAction(userID:), imageAction: self.imageAction)
+                }).background(.white)
             }
         }
+    }
+    private func imageAction(imageURLs:[String]){
+        print("여기 탭탭탭")
+        let vc = ImageViewer()
+        vc.imagePathes = imageURLs
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
+    }
+    private func profileAction(userID:Int){
+        let vc = ProfileViewerVC(provider: reactor!.provider, userID: userID)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

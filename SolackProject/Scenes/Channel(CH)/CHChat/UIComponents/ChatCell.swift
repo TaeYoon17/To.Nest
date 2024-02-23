@@ -14,10 +14,13 @@ struct ChatCell:View{
     @State private var date:String = "08:16 오전"
     @State private var dateWidth:CGFloat = 0
     let profileAction: ((Int)->Void)
-    init(chatItem: CHChatView.ChatItem, images: CHChatView.ChatAssets, profileAction: @escaping (Int) -> Void) {
+    let imageAction:(([String])->Void)
+    init(chatItem: CHChatView.ChatItem, images: CHChatView.ChatAssets,
+         profileAction: @escaping (Int) -> Void,imageAction:@escaping ([String]) -> Void) {
         self.chatItem = chatItem
         self.images = images
         self.profileAction = profileAction
+        self.imageAction = imageAction
     }
     var body: some View{
         if userID == chatItem.profileID{
@@ -54,6 +57,9 @@ struct ChatCell:View{
                     ContainerImage(realImage: $images.images)
                         .drawingGroup()
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .onTapGesture {
+                            imageAction(chatItem.images.map{$0.docFileToWebFile()})
+                        }
                 }
             }
         }.transaction{ transaction in
@@ -89,6 +95,9 @@ extension ChatCell{
                         ContainerImage(realImage: $images.images)
                             .drawingGroup()
                             .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .onTapGesture {
+                                imageAction(chatItem.images.map{$0.docFileToWebFile()})
+                            }
                     }
                 }
                 dates

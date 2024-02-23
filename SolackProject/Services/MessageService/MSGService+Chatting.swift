@@ -58,6 +58,7 @@ extension MessageService:SocketReceivable{
                 var ircSnapshot = await imageReferenceCountManager.snapshot
                 var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS.id,chName: chName,info: chat)
                 for (fileName, file) in zip(res.files,chat.files){// 파일 데이터 저장하기
+                    
                     if !FileManager.checkExistDocument(fileName: fileName.webFileToDocFile()){ try file.file.saveToDocument(fileName: fileName) }
                     await ircSnapshot.plusCount(id: fileName)
                 }
