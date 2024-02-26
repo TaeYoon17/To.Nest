@@ -37,8 +37,7 @@ extension CHChatView{
     }
     private func imageAction(imageURLs:[String]){
         print("여기 탭탭탭")
-        let vc = ImageViewer()
-        vc.imagePathes = imageURLs
+        let vc = ImgViewerVC(imagePathes: imageURLs)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }

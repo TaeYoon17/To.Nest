@@ -265,6 +265,8 @@
 		63C942B12B834AD6004AC8F3 /* Pay+NM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942B02B834AD6004AC8F3 /* Pay+NM.swift */; };
 		63C942B32B834C7A004AC8F3 /* BillResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C942B22B834C7A004AC8F3 /* BillResponse.swift */; };
 		63D2899F2B6ABEC90002A61C /* MyProfileEditImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D2899E2B6ABEC90002A61C /* MyProfileEditImageView.swift */; };
+		63D4F5102B8C555E008D4943 /* ImageViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D4F50F2B8C555E008D4943 /* ImageViewerVM.swift */; };
+		63D4F5122B8C5635008D4943 /* ImageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D4F5112B8C5635008D4943 /* ImageCellView.swift */; };
 		63DFDF862B4D00B600F47AB5 /* ManagerDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */; };
 		63DFDF882B4D00DC00F47AB5 /* UserDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */; };
 		63E38ED32B510A4600BD6C93 /* TaskCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E38ED22B510A4600BD6C93 /* TaskCounter.swift */; };
@@ -321,7 +323,6 @@
 		63F7C4BE2B4FE72F003D8447 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7C4BD2B4FE72F003D8447 /* UINavigationController.swift */; };
 		63FA653F2B49ADBB00C744C8 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FA653E2B49ADBB00C744C8 /* TabController.swift */; };
 		63FA692C2B64FE340045B851 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FA692B2B64FE340045B851 /* MessageService.swift */; };
-		63FF0AA62B87792800F14599 /* ImageViewerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF0AA52B87792800F14599 /* ImageViewerCollectionView.swift */; };
 		63FF410B2B621620004CD7EA /* TableRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF410A2B621620004CD7EA /* TableRepository.swift */; };
 		63FF410D2B621637004CD7EA /* DBMErrorPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF410C2B621637004CD7EA /* DBMErrorPolicy.swift */; };
 		63FF41112B621744004CD7EA /* ChannelChatTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF41102B621744004CD7EA /* ChannelChatTable.swift */; };
@@ -593,6 +594,8 @@
 		63C942B02B834AD6004AC8F3 /* Pay+NM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pay+NM.swift"; sourceTree = "<group>"; };
 		63C942B22B834C7A004AC8F3 /* BillResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillResponse.swift; sourceTree = "<group>"; };
 		63D2899E2B6ABEC90002A61C /* MyProfileEditImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileEditImageView.swift; sourceTree = "<group>"; };
+		63D4F50F2B8C555E008D4943 /* ImageViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerVM.swift; sourceTree = "<group>"; };
+		63D4F5112B8C5635008D4943 /* ImageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCellView.swift; sourceTree = "<group>"; };
 		63DFDF852B4D00B600F47AB5 /* ManagerDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerDialog.swift; sourceTree = "<group>"; };
 		63DFDF872B4D00DC00F47AB5 /* UserDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDialog.swift; sourceTree = "<group>"; };
 		63E38ED22B510A4600BD6C93 /* TaskCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCounter.swift; sourceTree = "<group>"; };
@@ -649,7 +652,6 @@
 		63F7C4BD2B4FE72F003D8447 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		63FA653E2B49ADBB00C744C8 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		63FA692B2B64FE340045B851 /* MessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
-		63FF0AA52B87792800F14599 /* ImageViewerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerCollectionView.swift; sourceTree = "<group>"; };
 		63FF410A2B621620004CD7EA /* TableRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableRepository.swift; sourceTree = "<group>"; };
 		63FF410C2B621637004CD7EA /* DBMErrorPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBMErrorPolicy.swift; sourceTree = "<group>"; };
 		63FF41102B621744004CD7EA /* ChannelChatTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelChatTable.swift; sourceTree = "<group>"; };
@@ -1818,7 +1820,8 @@
 			isa = PBXGroup;
 			children = (
 				633E76FB2B85D44900C3EEED /* ImageViewer.swift */,
-				63FF0AA52B87792800F14599 /* ImageViewerCollectionView.swift */,
+				63D4F50F2B8C555E008D4943 /* ImageViewerVM.swift */,
+				63D4F5112B8C5635008D4943 /* ImageCellView.swift */,
 			);
 			path = ImageViewer;
 			sourceTree = "<group>";
@@ -2141,9 +2144,9 @@
 				631A60F12B44EE15005509C2 /* OnboardingView.swift in Sources */,
 				63775F412B54C41F00F54F9A /* AuthenticationManager.swift in Sources */,
 				63E974CD2B6957AE004BCA00 /* ProfileService.swift in Sources */,
+				63D4F5102B8C555E008D4943 /* ImageViewerVM.swift in Sources */,
 				636F161C2B7007AC00536E6F /* DMChatViewCellStructure.swift in Sources */,
 				639B8A752B491C1A0024B4DD /* SignUpFieldType.swift in Sources */,
-				63FF0AA62B87792800F14599 /* ImageViewerCollectionView.swift in Sources */,
 				6389CEA82B5D6102002A70A9 /* WSEmptyView.swift in Sources */,
 				632A2D612B4DAD1800E21DE8 /* WSwriterReactor.swift in Sources */,
 				63FA692C2B64FE340045B851 /* MessageService.swift in Sources */,
@@ -2198,6 +2201,7 @@
 				63817E9C2B74042D0034EA1D /* DMRoomCell.swift in Sources */,
 				63F0AECD2B4AE21A000A597B /* AppendListBottom.swift in Sources */,
 				6384A9CB2B47125600AA2F1B /* SingInInfo.swift in Sources */,
+				63D4F5122B8C5635008D4943 /* ImageCellView.swift in Sources */,
 				6329FE4D2B6E80630018909F /* MSGService+DM.swift in Sources */,
 				63F0B1A52B5FEC7B008C8C98 /* CHExploreVM.swift in Sources */,
 				6389CEAD2B5D7D3C002A70A9 /* CHResponse.swift in Sources */,
