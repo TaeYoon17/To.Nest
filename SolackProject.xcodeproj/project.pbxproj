@@ -159,7 +159,6 @@
 		637488C42B50C739008AAD4A /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C12B50C739008AAD4A /* ScreenSize.swift */; };
 		637488C52B50C739008AAD4A /* UserDefaults+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C22B50C739008AAD4A /* UserDefaults+State.swift */; };
 		637488C62B50C739008AAD4A /* AnyModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637488C32B50C739008AAD4A /* AnyModelStore.swift */; };
-		637608172B88AC9500FC8EF7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 637608162B88AC9500FC8EF7 /* GoogleService-Info.plist */; };
 		6376BAF22B5A8964000FBBF8 /* CHChatCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */; };
 		6376BAF42B5A8986000FBBF8 /* CHChatViewRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */; };
 		6376BAF62B5A8B30000FBBF8 /* CHChatView+DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */; };
@@ -499,7 +498,6 @@
 		637488C12B50C739008AAD4A /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
 		637488C22B50C739008AAD4A /* UserDefaults+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+State.swift"; sourceTree = "<group>"; };
 		637488C32B50C739008AAD4A /* AnyModelStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyModelStore.swift; sourceTree = "<group>"; };
-		637608162B88AC9500FC8EF7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6376BAF12B5A8964000FBBF8 /* CHChatCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatCollectionView.swift; sourceTree = "<group>"; };
 		6376BAF32B5A8986000FBBF8 /* CHChatViewRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CHChatViewRegistration.swift; sourceTree = "<group>"; };
 		6376BAF52B5A8B30000FBBF8 /* CHChatView+DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHChatView+DS.swift"; sourceTree = "<group>"; };
@@ -795,7 +793,6 @@
 		631A60A82B44ECEE005509C2 /* SolackProject */ = {
 			isa = PBXGroup;
 			children = (
-				637608162B88AC9500FC8EF7 /* GoogleService-Info.plist */,
 				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
 				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
@@ -2000,7 +1997,6 @@
 				631A60F72B45018D005509C2 /* SF-Pro-Italic.ttf in Resources */,
 				631A60F62B450189005509C2 /* SF-Pro.ttf in Resources */,
 				631A60B62B44ECEF005509C2 /* LaunchScreen.storyboard in Resources */,
-				637608172B88AC9500FC8EF7 /* GoogleService-Info.plist in Resources */,
 				631A60B32B44ECEF005509C2 /* Assets.xcassets in Resources */,
 				631A60FD2B452953005509C2 /* .gitignore in Resources */,
 				631A60B12B44ECEE005509C2 /* Main.storyboard in Resources */,
@@ -2340,6 +2336,7 @@
 /* Begin XCBuildConfiguration section */
 		631A60B82B44ECEF005509C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63222C2C2B88B02900D888CE /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -2403,6 +2400,7 @@
 		};
 		631A60B92B44ECEF005509C2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63222C2C2B88B02900D888CE /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -2459,6 +2457,7 @@
 		};
 		631A60BB2B44ECEF005509C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63222C2C2B88B02900D888CE /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2498,6 +2497,7 @@
 		};
 		631A60BC2B44ECEF005509C2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63222C2C2B88B02900D888CE /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
