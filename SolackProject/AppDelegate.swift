@@ -14,13 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     @DefaultsState(\.deviceToken) var deviceToken
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
+
+//        FirebaseApp.configure()
         UNUserNotificationCenter.current().delegate = self
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         // 권한 요청
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: { _, _ in})
-        application.registerForRemoteNotifications()
-        Messaging.messaging().delegate = self
+//        application.registerForRemoteNotifications()
+//        Messaging.messaging().delegate = self
         
         return true
     }

@@ -19,13 +19,11 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao${KAKAO_NATIVE_APP_KEY}</string>
+				<string>kakao91daae63f6b4bbd984fd6b889811b47d://oauth</string>
 			</array>
 		</dict>
 		<dict/>
 	</array>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
 	<key>KAKAO_NATIVE_APP_KEY</key>
 	<string>${KAKAO_NATIVE_APP_KEY}</string>
 	<key>LSApplicationQueriesSchemes</key>

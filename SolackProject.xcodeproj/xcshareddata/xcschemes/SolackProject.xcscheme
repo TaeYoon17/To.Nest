@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "631A60A52B44ECEE005509C2"
-               BuildableName = "SolackProject.app"
+               BuildableName = "To.Nest.app"
                BlueprintName = "SolackProject"
                ReferencedContainer = "container:SolackProject.xcodeproj">
             </BuildableReference>
@@ -44,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631A60A52B44ECEE005509C2"
-            BuildableName = "SolackProject.app"
+            BuildableName = "To.Nest.app"
             BlueprintName = "SolackProject"
             ReferencedContainer = "container:SolackProject.xcodeproj">
          </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631A60A52B44ECEE005509C2"
-            BuildableName = "SolackProject.app"
+            BuildableName = "To.Nest.app"
             BlueprintName = "SolackProject"
             ReferencedContainer = "container:SolackProject.xcodeproj">
          </BuildableReference>

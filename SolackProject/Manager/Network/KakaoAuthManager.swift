@@ -26,8 +26,10 @@ final class KakaoManager{
                     print("loginWithKakaoTalk() success.")
                     if let accessToken = oauthToken?.accessToken{
                         continuation.resume(returning: accessToken)
+                        return
                     }else{
                         continuation.resume(throwing: Errors.API.FailFetchToken)
+                        return
                     }
                 }
             }

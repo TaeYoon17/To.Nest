@@ -376,7 +376,7 @@
 		63152F312B664844003F3B55 /* CHChat+CollectionStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CHChat+CollectionStructure.swift"; sourceTree = "<group>"; };
 		63152F332B66A87A003F3B55 /* UserRCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRCM.swift; sourceTree = "<group>"; };
 		63152F362B66B268003F3B55 /* URCMTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URCMTable.swift; sourceTree = "<group>"; };
-		631A60A62B44ECEE005509C2 /* SolackProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SolackProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		631A60A62B44ECEE005509C2 /* To.Nest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = To.Nest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		631A60A92B44ECEE005509C2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		631A60AB2B44ECEE005509C2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		631A60AD2B44ECEE005509C2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -787,7 +787,7 @@
 		631A60A72B44ECEE005509C2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				631A60A62B44ECEE005509C2 /* SolackProject.app */,
+				631A60A62B44ECEE005509C2 /* To.Nest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1943,7 +1943,7 @@
 				63AB21322B83B41900AADD10 /* iamport-ios */,
 			);
 			productName = SolackProject;
-			productReference = 631A60A62B44ECEE005509C2 /* SolackProject.app */;
+			productReference = 631A60A62B44ECEE005509C2 /* To.Nest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2473,7 +2473,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -2484,7 +2484,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ii.SolackProject;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = To.Nest;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -2512,7 +2512,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -2523,7 +2523,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ii.SolackProject;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = To.Nest;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
