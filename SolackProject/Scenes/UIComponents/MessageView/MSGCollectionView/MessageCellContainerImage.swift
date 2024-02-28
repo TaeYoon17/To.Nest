@@ -18,29 +18,29 @@ struct ContainerImage:View{
                 .frame(height: 160)
         case 2:
             HStack(spacing: 4, content: {
-                realImage[0].resizable().scaledToFill().clipped()
-                realImage[1].resizable().scaledToFill().clipped()
+                realImage[0].resizable().clipped()
+                realImage[1].resizable().clipped()
             })
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(height: 80)
         case 3:
             HStack(spacing: 2, content: {
-                realImage[0].resizable().scaledToFill().clipped()
-                realImage[1].resizable().scaledToFill().clipped()
-                realImage[2].resizable().scaledToFill().clipped()
+                realImage[0].resizable().clipped()
+                realImage[1].resizable().clipped()
+                realImage[2].resizable().clipped()
             }).clipShape(RoundedRectangle(cornerRadius: 8))
                 .frame(height: 80)
         case 4:
             VStack(alignment:.center,spacing: 2, content: {
                 HStack(spacing:2,content: {
-                    realImage[0].resizable().scaledToFill().clipped()
-                    realImage[1].resizable().scaledToFill().clipped()
+                    realImage[0].resizable().clipped()
+                    realImage[1].resizable().clipped()
                 })
                 .frame(height:80)
                     .clipped()
                 HStack(alignment:.center,spacing:2,content: {
-                    realImage[2].resizable().scaledToFill().clipped()
-                    realImage[3].resizable().scaledToFill().clipped()
+                    realImage[2].resizable().clipped()
+                    realImage[3].resizable().clipped()
                 })
                 .frame(height: 80)
                     .clipped()
@@ -51,15 +51,15 @@ struct ContainerImage:View{
         default:
             VStack(alignment:.center , spacing:2,content: {
                 HStack(spacing:2,content: {
-                    realImage[0].resizable().scaledToFill().clipped()
-                    realImage[1].resizable().scaledToFill().clipped()
-                    realImage[2].resizable().scaledToFill().clipped()
+                    realImage[0].resizable().clipped()
+                    realImage[1].resizable().clipped()
+                    realImage[2].resizable().clipped()
                 })
                 .frame(height: 80)
                     .clipped()
                 HStack(alignment:.center, spacing:2,content: {
-                    realImage[3].resizable().scaledToFill().clipped()
-                    realImage[4].resizable().scaledToFill().clipped()
+                    realImage[3].resizable().clipped()
+                    realImage[4].resizable().clipped()
                 })
                 .frame(height: 80)
                     .clipped()
