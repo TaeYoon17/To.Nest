@@ -24,6 +24,20 @@ extension SignService{
             }
         }
     }
+    func _signOut() async{
+        do{
+            let isOut = try await NM.shared.signOut()
+            if isOut{
+                cleanDefaultsState()
+                await cleanDocument()
+                await cleanDB()
+                print("모두 삭제 완셩")
+            }
+        }catch{
+            print("signout error")
+            print(error)
+        }
+    }
     @BackgroundActor private func cleanDB(){
         do {
             let realm = try Realm()

@@ -12,7 +12,7 @@ import ReactorKit
 import SwiftUI
 class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsset:MessageAsset>: UICollectionViewDiffableDataSource<String,CellItem.ID>{
     var bottomFinished: PublishSubject<()> = .init()
-    var collectionView:UICollectionView!
+    weak var collectionView:UICollectionView!
     var disposeBag = DisposeBag()
     var msgModel = AnyModelStore<CellItem>([])
     var msgAssetModel = NSCache<NSString,CellAsset>()

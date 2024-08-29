@@ -41,7 +41,7 @@ final class SignService: SignServiceProtocol{
             }catch let fail where fail is Errors.API{
                 event.onNext(.failedSign(.signInFailed))
             }catch{
-                print("error Occured!!")
+                print("Email SignIn Error \(error)")
             }
         }
     }
@@ -57,7 +57,7 @@ final class SignService: SignServiceProtocol{
             }catch let fail where fail is Errors.API{
                 event.onNext(.failedSign(.signInFailed))
             }catch{
-                print("error Occured!!")
+                print("Apple SignIn Error \(error)")
             }
         }
     }
@@ -89,17 +89,16 @@ final class SignService: SignServiceProtocol{
     }
 }
 extension SignService{
-    fileprivate func defaultsSign(_ response: SignResponse)async {
+    fileprivate func defaultsSign(_ response: SignResponse) async {
+        // 기존 유저 아이디가 존재하고 이 유저아이디가 응답 받은 유저아이디와 다른 경우에 로그아웃을 진행한다.
+        if self.userID != -1 && response.userID != userID { await _signOut() }
         accessToken = response.token.accessToken
         refreshToken = response.token.refreshToken
         expiration = Date(timeIntervalSinceNow: NetworkManager.accessExpireSeconds)
         let myInfo = MyInfo.getBySignResponse(response)
-        Task{@MainActor in
+
             self.myInfo = myInfo
-        }
-        print("사인 myInfo \(myInfo)")
         self.userID = myInfo.userID
-        
             if let webImageURL = response.profileImage{
                 let data = await NM.shared.getThumbnail(webImageURL)
                 self.myProfile = data

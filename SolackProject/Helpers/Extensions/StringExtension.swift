@@ -23,6 +23,8 @@ extension String{
     func convertToDate() -> Date{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.locale = .current
+        dateFormatter.timeZone = .current
         if let date = dateFormatter.date(from: self){
             return date
         }else{
@@ -30,11 +32,19 @@ extension String{
         }
     }
     func webFileToDocFile(labelType: LabelType? = nil)->String{
-        let new = self.replacingOccurrences(of: "/", with: "_")
+        let new = self.replacingOccurrences(of: "/", with: "-")
         return if let type = labelType{
             "\(type.label)\(new)"
         }else{
             new
+        }
+    }
+    func docFileToWebFile(labelType: LabelType? = nil)->String{
+        if let type = labelType{
+            let new = self.replacingOccurrences(of: "\(type.label)", with: "")
+            return new.replacingOccurrences(of: "-", with: "/")
+        }else{
+            return self.replacingOccurrences(of: "-", with: "/")
         }
     }
 }

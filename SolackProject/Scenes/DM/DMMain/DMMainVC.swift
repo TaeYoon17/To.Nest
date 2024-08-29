@@ -72,7 +72,8 @@ final class DMMainVC:BaseVC ,View{
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
 //        reactor!.provider.dmService.checkAll(wsID: mainWS.id)
-//        reactor!.action.onNext(.updateUnreads)
+        print("액션 시작")
+        reactor!.action.onNext(.initAction)
 //        reactor!.provider.wsService.checkAllMembers()
     }
     override func viewDidAppear(_ animated: Bool) {

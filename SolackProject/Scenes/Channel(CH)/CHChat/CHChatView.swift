@@ -87,7 +87,6 @@ final class CHChatView: BaseVC,View{
         }
     }
     override func configureView() {
-
         view.endEditing(true)
         collectionView.endEditing(true)
         collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Self.dismissMyKeyboard)))

@@ -59,7 +59,7 @@ final class ChannelService:ChannelProtocol{
         }
     }
     func updateChannelUnreads(channelName: String,lastDate:Date?) async throws -> UnreadsChannelRes{
-        try await NM.shared.checkUnreads(wsID: mainWS.id, channelName: channelName, date: lastDate)
+        return try await NM.shared.checkUnreads(wsID: mainWS.id, channelName: channelName, date: lastDate)
     }
     func authValidCheck(error: Error)->Bool{
         print("ChannelService authValidCheck")

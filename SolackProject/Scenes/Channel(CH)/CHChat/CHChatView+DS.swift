@@ -16,9 +16,7 @@ extension CHChatView{
         var chatModel = AnyModelStore<ChatItem>([])
         var chatAssetModel = NSCache<NSString,ChatAssets>()
         private weak var collectionView: UICollectionView!
-        deinit{
-            print("채널 데이터 소스가 사라짐!!")
-        }
+        deinit{ print("채널 데이터 소스가 사라짐!!") }
         init(reactor:CHChatReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, ChatItem.ID>.CellProvider){
             super.init(collectionView: collectionView, cellProvider: cellProvider)
             initDataSource()

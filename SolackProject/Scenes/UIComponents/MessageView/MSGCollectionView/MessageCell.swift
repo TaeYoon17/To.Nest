@@ -31,6 +31,7 @@ struct MessageCell:View{
             profile
             contents
             dates
+            Spacer()
         }.transaction{ transaction in
             transaction.animation = nil
         }
@@ -91,7 +92,7 @@ extension MessageCell{
         }
     }
     var dates: some View{
-        Rectangle().fill(.clear).overlay(alignment:.bottomTrailing) {
+        Rectangle().fill(.clear).overlay(alignment: msgItem.profileID == userID ? .bottomTrailing : .bottomLeading) {
             Text(msgItem.createdAt)
                 .foregroundStyle(.secondary)
                 .font(FontType.caption.font)

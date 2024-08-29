@@ -10,6 +10,7 @@ import Alamofire
 
 enum AuthRouter:URLRequestConvertible{
     case refresh(refreshToken:String,accessToken:String)
+    
     static let baseURL = URL(string: API.baseURL + "/v1/auth")
     var endPoint:String{
         switch self{

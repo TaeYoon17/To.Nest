@@ -63,7 +63,8 @@ final class DMService:DMProtocol{
                     let checkUnreads = Array(existed.map{($0.lastReadDate,$0.roomID)})
                     let existedRooms = existed.map{$0.roomID}
                     let removeRoomIDs = Set(existedRooms).subtracting(responses.map(\.roomID))
-                    Task.detached {
+                    print(checkUnreads)
+                    Task {
                         var unreadsResponses:[UnreadDMRes] = []
                         for checkUnread in checkUnreads{
                             do{

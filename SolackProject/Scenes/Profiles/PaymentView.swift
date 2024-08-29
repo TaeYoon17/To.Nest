@@ -21,8 +21,7 @@ struct PaymentView: UIViewControllerRepresentable {
         return view
     }
     
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-    }
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
 }
 
 class PaymentViewController: UIViewController, WKNavigationDelegate {
@@ -66,8 +65,7 @@ class PaymentViewController: UIViewController, WKNavigationDelegate {
         
         Iamport.shared.useNavigationButton(enable: true)
         if let payment = viewModel.makePayment(){
-            Iamport.shared.payment(viewController: self,
-                                   userCode: IamportPay.userCode, payment: payment) {[weak self] response in
+            Iamport.shared.payment(viewController: self, userCode: IamportPay.userCode, payment: payment) {[weak self] response in
                 guard let self,let response else {return}
                 viewModel.action(type: .requireValidation(imp: response.imp_uid ?? "", merchant: response.merchant_uid ?? ""))
             }

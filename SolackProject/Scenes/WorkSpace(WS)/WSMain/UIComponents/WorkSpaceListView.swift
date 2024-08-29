@@ -123,6 +123,9 @@ struct WorkSpaceList:View{
                     }
                 }label: {
                     Image(systemName: "ellipsis").fontWeight(.medium)
+                        .padding(.leading,20)
+                        .padding(.vertical,4)
+                        .padding(.horizontal,4)
                 }.tint(.text)
                     .zIndex(2)
             }

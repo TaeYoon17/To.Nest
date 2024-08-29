@@ -42,7 +42,7 @@ final class PayVM:ObservableObject{
             case .bill(let bill):
                 Task{@MainActor in
                     self.nowPossessionCoin = self.myInfo!.sesacCoin
-                    self.toastType = .success
+                    self.toastType = bill.success ? .success : nil
                     try await Task.sleep(for: .seconds(2))
                     self.toastType = nil
                 }

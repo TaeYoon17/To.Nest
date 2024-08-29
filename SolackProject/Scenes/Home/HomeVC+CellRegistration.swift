@@ -52,7 +52,7 @@ extension HomeVC{
     var expandableSectionHeaderRegistration:  UICollectionView.CellRegistration<UICollectionViewListCell, Item>{
         UICollectionView.CellRegistration{[weak self] (cell, indexPath, item) in
             guard let self else {return}
-            var header = dataSource.fetchHeader(item: item)
+            let header = dataSource.fetchHeader(item: item)
             var contentConfiguration = cell.defaultContentConfiguration()
             contentConfiguration.textProperties.font = FontType.title2.get()
             contentConfiguration.text = header.name

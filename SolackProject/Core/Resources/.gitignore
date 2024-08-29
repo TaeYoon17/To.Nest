@@ -3,3 +3,4 @@ SecretKey.swift
 UserInterfaceState.xcuserstate
 Config.xcconfig
 *.xcuserstate
+*.plist

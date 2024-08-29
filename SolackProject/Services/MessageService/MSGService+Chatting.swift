@@ -58,6 +58,7 @@ extension MessageService:SocketReceivable{
                 var ircSnapshot = await imageReferenceCountManager.snapshot
                 var res:ChatResponse = try await NM.shared.createChat(wsID:mainWS.id,chName: chName,info: chat)
                 for (fileName, file) in zip(res.files,chat.files){// 파일 데이터 저장하기
+                    
                     if !FileManager.checkExistDocument(fileName: fileName.webFileToDocFile()){ try file.file.saveToDocument(fileName: fileName) }
                     await ircSnapshot.plusCount(id: fileName)
                 }
@@ -69,6 +70,8 @@ extension MessageService:SocketReceivable{
                 await channelRepostory.appendChat(channelID: chID, chatTables: [chatTable])
                 try await appendUserReferenceCounts(channelID: chID, createUsers: [result.user])
                 try await updateUserInformationToDataBase(userIDs: [result.user.userID])
+                await channelRepostory.updateChannelReadDate(channelID: chID)
+                await channelRepostory?.updateChannelCheckDate(channelID: chID)
                 event.onNext(.create(response: .channel([result])))
             }catch{
                 print("create error",error)
@@ -77,7 +80,15 @@ extension MessageService:SocketReceivable{
             await userReferenceCountManager.saveRepository()
         }
     }
-    func getChannelDatas(chID:Int,chName:String){
+    func getChannelsMessages(chResponse:[CHResponse]){
+        Task{@BackgroundActor in
+            for res in chResponse{
+                await _getChannelDatas(chID: res.channelID, chName: res.name)
+            }
+            event.onNext(.completedFetchChannelsMessage)
+        }
+    }
+    func getChannelMessages(chID:Int,chName:String){
         Task{@BackgroundActor in
             await _getChannelDatas(chID:chID,chName:chName)
         }
@@ -95,6 +106,7 @@ extension MessageService:SocketReceivable{
                 guard let userTable = userRepository.getTableBy(userID: chatTable.userID) else {fatalError("존재하지 않는 유저 정보")}
                 let userResponse = userTable.getResponse
                 let chatResponse = chatTable.getResponse(userResponse: userResponse)
+                print("chat Created At \(chatResponse.createdAt)")
                 chResponses.append(chatResponse)
             }
             self.event.onNext(.check(response: .channel(chResponses)))
@@ -144,6 +156,8 @@ extension UserInfoTable{
 }
 extension CHChatTable{
     func getResponse(userResponse: UserResponse) -> ChatResponse{
-        ChatResponse(channelID: self.chatID, channelName:self.channelName ?? "", chatID: self.chatID, content: self.content, createdAt: self.createdAt.convertToString(), files: Array(self.imagePathes), user: userResponse)
+        let str = self.createdAt.convertToString()
+        print(self.createdAt,str)
+        return ChatResponse(channelID: self.chatID, channelName:self.channelName ?? "", chatID: self.chatID, content: self.content, createdAt: self.createdAt.convertToString(), files: Array(self.imagePathes), user: userResponse)
     }
 }

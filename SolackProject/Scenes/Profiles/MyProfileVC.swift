@@ -69,11 +69,12 @@ extension MyProfileView{
     }
 }
 struct MyProfileView:View{
-    @ObservedObject var vm: MyProfileReactor
-    @ObservedObject var imgVM :ProfileImgVM
+    @StateObject var vm: MyProfileReactor
+    @StateObject var imgVM :ProfileImgVM
     @DefaultsState(\.myInfo) var myInfo
     @State var vendor: VendorType? = nil
     @State var isLogOut:Bool = false
+    @State var toastType:ToastType? = nil
     var body: some View{
         NavigationStack {
             List{
@@ -103,7 +104,7 @@ struct MyProfileView:View{
                         .overlay { NavigationLink(value:NaviType.call,label: { EmptyView() }).opacity(0) }
                 }.listRowSeparator(.hidden)
                 Section {
-                    defaultListItemView(title: "이메일", description: vm.info.email)
+                    defaultListItemView(title: "이메일", description: vm.info.email,isNaviItem: false)
                     HStack {
                         Text("연결된 소셜 계정").font(FontType.bodyBold.font).foregroundStyle(.text)
                         Spacer()
@@ -125,6 +126,16 @@ struct MyProfileView:View{
                     }
                 }.listRowSeparator(.hidden)
             }
+            .toast(type: $toastType, alignment: .bottom, position: .zero)
+            .onChange(of: vm.toastType,perform:{ value in
+                guard let value else {return }
+                self.toastType = value
+                Task{@MainActor in
+                    try await Task.sleep(for: .milliseconds(100))
+                    vm.toastType = nil
+                    self.toastType = nil
+                }
+            })
             .navigationDestination(for: NaviType.self, destination: { navi in
                 switch navi{
                 case .pay: PayView(provider: vm.provider).environmentObject(vm)
@@ -143,14 +154,16 @@ struct MyProfileView:View{
             })
         }
     }
-    func defaultListItemView(title:String,description:String? = nil)-> some View{
+    func defaultListItemView(title:String,description:String? = nil,isNaviItem:Bool = true)-> some View{
         HStack{
             Text(title).font(FontType.bodyBold.font).foregroundStyle(.text)
             Spacer()
             if let description{
                 HStack{
                     Text(description).font(FontType.body.font)
-                    Image(systemName: "chevron.right").fontWeight(.semibold)
+                    if isNaviItem{
+                        Image(systemName: "chevron.right").fontWeight(.semibold)
+                    }
                 }.foregroundStyle(.secondary)
             }
         }

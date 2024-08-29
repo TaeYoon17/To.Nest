@@ -20,7 +20,6 @@ final class TabController: UITabBarController{
 }
 extension TabController{
     func setTabItems(){        
-//        let vc1 = HomeHosting()
         let provider = AppManager.shared.provider
         let vc1 = HomeVC()
         vc1.reactor = HomeReactor(provider)

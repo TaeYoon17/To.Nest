@@ -148,6 +148,7 @@ final class CHChatReactor:Reactor{
                     ])
                 default: break
                 }
+            case .completedFetchChannelsMessage:break
             }
             return Observable.concat(resList)
         }

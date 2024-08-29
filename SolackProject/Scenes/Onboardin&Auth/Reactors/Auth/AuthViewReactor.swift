@@ -37,7 +37,6 @@ final class AuthViewReactor: Reactor{
     }
     
     init(provider: ServiceProviderProtocol){
-        print("AuthViewReactor 생성!!")
         self.provider = provider
     }
     func mutate(action: Action) -> Observable<Mutation> {
@@ -72,7 +71,6 @@ final class AuthViewReactor: Reactor{
         case .complete(let str):
             state.accessToken = ""
         case .dismiss:
-            print("dismiss 시작")
             state.shouldDimsiss = true
         }
         return state

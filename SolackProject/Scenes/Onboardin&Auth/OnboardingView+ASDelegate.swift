@@ -57,14 +57,14 @@ extension OnboardingView: ASAuthorizationControllerDelegate{
             }
             
             
-            if email?.isEmpty ?? true{
-                let result = tokenToString.jwtTokenDecode()["email"] as? String ?? ""
-                print("email empty result, apple privacy email 반환")
-                print(result)
-            }
+//            if email?.isEmpty ?? true{
+//                let result = tokenToString.jwtTokenDecode()["email"] as? String ?? ""
+//                print("email empty result, apple privacy email 반환")
+//                print(result)
+//            }
             // 이메일, 토큰, 이름 -> UserDefaults & API로 서버에 POST
             // 서버에 Request 후 Response를 받게 되면, 성공 시 화면 전환
-            var formatter = PersonNameComponentsFormatter()
+            let formatter = PersonNameComponentsFormatter()
             let name = if let fullName{ formatter.string(from: fullName) }else { "" }
             let info = AppleInfo(idToken: tokenToString, nickName: name)
 //            UserDefaults.standard.set(userIdentifier,forKey: "User")

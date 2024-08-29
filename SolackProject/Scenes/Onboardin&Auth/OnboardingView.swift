@@ -53,7 +53,15 @@ final class OnboardingView:BaseVC,View{
         }.disposed(by: disposeBag)
         
     }
-    private let titleImage = UIImageView()
+//    private let titleImage = UIImageView()
+    private let titleLabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 24, weight: .heavy)
+        label.text = "To.Nest로 팀을 꾸리고\n각자의 관심사에 대해 소통하세요"
+        label.numberOfLines = 2
+        return label
+    }()
     private let imageView = UIImageView()
     private var startBtn = AuthBtn()
     var disposeBag = DisposeBag()
@@ -62,11 +70,11 @@ final class OnboardingView:BaseVC,View{
         view.backgroundColor = .gray1
     }
     override func configureLayout() {
-        [titleImage,imageView,startBtn].forEach{view.addSubview($0)}
+        [titleLabel,imageView,startBtn].forEach{view.addSubview($0)}
     }
     
     override func configureConstraints() {
-        titleImage.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).inset(39)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(App.Contraints.multi)
         }
@@ -85,8 +93,8 @@ final class OnboardingView:BaseVC,View{
     override func configureView() {
         imageView.image = UIImage.onboarding
         imageView.contentMode = .scaleAspectFill
-        titleImage.image = .onboardText1
-        titleImage.contentMode = .scaleAspectFit
+//        titleImage.image = .onboardText1
+//        titleImage.contentMode = .scaleAspectFit
         startBtn.text = "시작하기"
         startBtn.isAvailable = true
     }

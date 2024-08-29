@@ -20,9 +20,18 @@ class BaseVC: UIViewController{
                 await MainActor.run {
                     if isLoading{
                         overLayer.isHidden = false
+                        overLayer.opacity = 0
+                        UIView.animate(withDuration: 0.2) {
+                            self.overLayer.opacity = 1
+                        }
                         activitiIndicator.startAnimating()
                     }else{
-                        overLayer.isHidden = true
+                        overLayer.opacity = 1
+                        UIView.animate(withDuration: 0.2) {
+                            self.overLayer.opacity = 0
+                        }completion: { _ in
+                            self.overLayer.isHidden = true
+                        }
                         activitiIndicator.stopAnimating()
                     }
                 }

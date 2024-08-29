@@ -16,6 +16,42 @@ import RxSwift
  010-1111-2222
  */
 extension NetworkManager{
+    func updateDeviceToken(deviceToken:String) async throws{
+        let router = UserRouter.deviceToken(deviceToken)
+        return try await withCheckedThrowingContinuation {[weak self] continuation in
+            guard let self else{
+                continuation.resume(throwing: Errors.API.FailFetchToken)
+                return
+            }
+            AF.request(router,interceptor: authInterceptor).response{res in
+                if res.response?.statusCode == 200{
+                    print("updatedevicetoken success")
+                    continuation.resume()
+                    return
+                }
+                switch res.result{
+                case .success(let data):
+                    guard let data, let errorData = try? JSONDecoder().decode(ErrorCode.self, from: data) else{
+                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        return
+                    }
+                    if let failType = SignFailed(rawValue: errorData.errorCode){
+                        continuation.resume(throwing: failType)
+                        return
+                    }else if let failType = CommonFailed(rawValue: errorData.errorCode){
+                        continuation.resume(throwing: failType)
+                        return
+                    }
+                case .failure(let error):
+                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    return
+                }
+            }
+        }
+    }
+}
+
+extension NetworkManager{
     func signUp(_ info : SignUpInfo) async throws -> SignResponse{
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {

@@ -8,7 +8,8 @@
 import Foundation
 import Alamofire
 enum UserRouter: URLRequestConvertible{
-    case signUp(info:SignUpInfo),signIn(type:SignInType,body:SignInBody),validation(email:String),deviceToken
+    case signUp(info:SignUpInfo),signIn(type:SignInType,body:SignInBody),validation(email:String)
+    case deviceToken(String)
     case signOut,getMy,getUser(id:String)
     case putMy(nickName:String?,phone:String?),putMyImage(image:Data?)
     static private let baseURL = URL(string: API.baseURL)
@@ -50,7 +51,9 @@ enum UserRouter: URLRequestConvertible{
             var params = Parameters()
             params["email"] = email
             return params
-        case .signIn(_,let body): return body.getParameter()
+        case .signIn(_,let body):
+            let params = body.getParameter()
+            return params
         case .putMy(nickName: let nickName, phone: let phone):
             var params = Parameters()
             if let nickName{ params["nickname"] = nickName }
@@ -60,17 +63,16 @@ enum UserRouter: URLRequestConvertible{
             return Parameters()
             
         case .signOut,.getMy,.getUser: return Parameters()
-        case .deviceToken:
-            @DefaultsState(\.deviceToken) var deviceToken
+        case .deviceToken(let deviceToken):
             var params = Parameters()
-            params["deviceToken"] = deviceToken ?? ""
+            params["deviceToken"] = deviceToken
             return params
         }
     }
     var headers: HTTPHeaders{
         var headers = HTTPHeaders()
         switch self{
-        case .putMy:
+        case .putMy,.deviceToken:
             headers["Content-Type"] = "application/json"
         case .putMyImage:
             headers["Content-Type"] = "multipart/form-data"
@@ -118,7 +120,7 @@ extension SignUpInfo{
         }
         parameters["phone"] = phone
         @DefaultsState(\.deviceToken) var deviceToken
-        parameters["deviceToken"] = deviceToken ?? ""
+        parameters["deviceToken"] = deviceToken
         return parameters
     }
 }
@@ -128,7 +130,7 @@ extension EmailInfo:SignInBody{
         params["email"] = email
         params["password"] = password
         @DefaultsState(\.deviceToken) var deviceToken
-        params["deviceToken"] = deviceToken ?? ""
+        params["deviceToken"] = deviceToken
         return params
     }
 }
@@ -137,7 +139,7 @@ extension KakaoInfo:SignInBody{
         var params = Parameters()
         params["oauthToken"] = oauthToken
         @DefaultsState(\.deviceToken) var deviceToken
-        params["deviceToken"] = deviceToken ?? ""
+        params["deviceToken"] = deviceToken
         return params
     }
 }
@@ -150,7 +152,7 @@ extension AppleInfo:SignInBody{
             params["nickname"] = nickName
         }
         @DefaultsState(\.deviceToken) var deviceToken
-        params["deviceToken"] = deviceToken ?? ""
+        params["deviceToken"] = deviceToken
         return params
     }
 }

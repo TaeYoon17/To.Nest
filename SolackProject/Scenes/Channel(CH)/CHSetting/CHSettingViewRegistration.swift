@@ -49,6 +49,7 @@ extension CHSettingView{
                             self.navigationController?.pushViewController(vc, animated: true)
                         }
                     }).background(.gray2)
+                        .margins(.all, 2)
                 }
             }
         }
@@ -112,7 +113,7 @@ extension CHSettingView{
                         .fractionalWidth(1), heightDimension: .fractionalWidth(1/5)), subitems: [item,item,item,item,item])
                 let itemHeader = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension:
                         .fractionalWidth(1), heightDimension: .estimated(44)),subitems: [headerItem])
-                let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300)), subitems: [itemHeader,itemGroup])
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300)), subitems: [itemHeader,itemGroup,itemGroup,itemGroup,itemGroup])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
             case .editing:

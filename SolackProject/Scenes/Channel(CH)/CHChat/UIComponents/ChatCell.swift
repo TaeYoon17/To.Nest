@@ -14,10 +14,13 @@ struct ChatCell:View{
     @State private var date:String = "08:16 오전"
     @State private var dateWidth:CGFloat = 0
     let profileAction: ((Int)->Void)
-    init(chatItem: CHChatView.ChatItem, images: CHChatView.ChatAssets, profileAction: @escaping (Int) -> Void) {
+    let imageAction:(([String])->Void)
+    init(chatItem: CHChatView.ChatItem, images: CHChatView.ChatAssets,
+         profileAction: @escaping (Int) -> Void,imageAction:@escaping ([String]) -> Void) {
         self.chatItem = chatItem
         self.images = images
         self.profileAction = profileAction
+        self.imageAction = imageAction
     }
     var body: some View{
         if userID == chatItem.profileID{
@@ -29,8 +32,8 @@ struct ChatCell:View{
     var otherUser: some View{
         HStack(alignment:.top){
             profile
-            contents
-            dates
+            otherContents
+//            dates
         }.transaction{ transaction in
             transaction.animation = nil
         }
@@ -54,6 +57,9 @@ struct ChatCell:View{
                     ContainerImage(realImage: $images.images)
                         .drawingGroup()
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .onTapGesture {
+                            imageAction(chatItem.images.map{$0.docFileToWebFile()})
+                        }
                 }
             }
         }.transaction{ transaction in
@@ -72,21 +78,30 @@ extension ChatCell{
                 .frame(width:34,height:34)
         })
     }
-    var contents: some View{
+    var otherContents: some View{
         VStack(alignment:.leading,spacing:5){
             Text(chatItem.profileName).font(FontType.caption.font).foregroundStyle(.text)
-            if let content = chatItem.content, !content.isEmpty{
-                Text(content)
-                    .font(FontType.body.font)
-                    .padding(.all,8)
-                    .overlay(content: {
-                        RoundedRectangle(cornerRadius: 12).strokeBorder()
-                    })
-            }
-            if !images.images.isEmpty{
-                ContainerImage(realImage: $images.images)
-                    .drawingGroup()
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            HStack{
+                VStack(alignment:.leading,spacing:5){
+                    if let content = chatItem.content, !content.isEmpty{
+                        Text(content)
+                            .font(FontType.body.font)
+                            .padding(.all,8)
+                            .overlay(content: {
+                                RoundedRectangle(cornerRadius: 12).strokeBorder()
+                            })
+                    }
+                    if !images.images.isEmpty{
+                        ContainerImage(realImage: $images.images)
+                            .drawingGroup()
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .onTapGesture {
+                                imageAction(chatItem.images.map{$0.docFileToWebFile()})
+                            }
+                    }
+                }
+                dates
+                Spacer()
             }
         }
     }
