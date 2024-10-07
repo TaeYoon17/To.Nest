@@ -120,7 +120,7 @@ UIKit, SwiftUI 모두 작동 원리를 잘 이해 해야 함을 알게 됨
 
 ### Swift Concurrency 사용
 
-Realm 기본 사항은 **`MainActor`**에서 DB 요청을 처리해 화면 처리에 딜레이가 발생하는 문제가 있었다.
+Realm 기본 사항은 `MainActor`에서 DB 요청을 처리해 화면 처리에 딜레이가 발생하는 문제가 있었다.
 이를 해결하기 위해 `@globalActor`를 이용해 Serial Global Custom Actor에서 Realm을 구동했다.
 길고 복잡한 GCD 없이 RealmDB Update시 Race Condition이 발생하지 않았다.
 하지만, 안전한 공통된 값을 가져와 다른 화면에 나태낼 때, 각각의 화면 렌더링이 동시에 발생하는 충돌이 발생했다.
