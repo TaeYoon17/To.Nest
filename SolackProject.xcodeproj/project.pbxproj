@@ -226,6 +226,7 @@
 		639CFE672B5808A40030729E /* SliderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639CFE662B5808A40030729E /* SliderVC.swift */; };
 		639DEAFB2B452E8300108979 /* AuthViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639DEAFA2B452E8300108979 /* AuthViewReactor.swift */; };
 		639DEB002B4534CB00108979 /* SignUpViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */; };
+		639DF2D42DA6A6A90084EF17 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 639DF2D32DA6A6A90084EF17 /* .swiftlint.yml */; };
 		639E0C9E2B5832FA0076A4D8 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639E0C9D2B5832FA0076A4D8 /* Slider.swift */; };
 		639E0CA02B583DE00076A4D8 /* WSMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639E0C9F2B583DE00076A4D8 /* WSMainView.swift */; };
 		639E0CA22B5843F30076A4D8 /* WSSliderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639E0CA12B5843F30076A4D8 /* WSSliderVC.swift */; };
@@ -564,6 +565,7 @@
 		639CFE662B5808A40030729E /* SliderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderVC.swift; sourceTree = "<group>"; };
 		639DEAFA2B452E8300108979 /* AuthViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewReactor.swift; sourceTree = "<group>"; };
 		639DEAFF2B4534CB00108979 /* SignUpViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewReactor.swift; sourceTree = "<group>"; };
+		639DF2D32DA6A6A90084EF17 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		639E0C9D2B5832FA0076A4D8 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		639E0C9F2B583DE00076A4D8 /* WSMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSMainView.swift; sourceTree = "<group>"; };
 		639E0CA12B5843F30076A4D8 /* WSSliderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSSliderVC.swift; sourceTree = "<group>"; };
@@ -793,6 +795,7 @@
 		631A60A82B44ECEE005509C2 /* SolackProject */ = {
 			isa = PBXGroup;
 			children = (
+				639DF2D32DA6A6A90084EF17 /* .swiftlint.yml */,
 				6331232C2B54BFBA00742FB0 /* SolackProject.entitlements */,
 				63775F3E2B54C12800F54F9A /* SolackProject.entitlements */,
 				631A60ED2B44EE15005509C2 /* Scenes */,
@@ -1906,10 +1909,12 @@
 				631A60A32B44ECEE005509C2 /* Frameworks */,
 				631A60A42B44ECEE005509C2 /* Resources */,
 				631E338E2B4554F60053DBD7 /* Embed Frameworks */,
+				639DF2DE2DA6A6C50084EF17 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				639DF2E02DA6A6D10084EF17 /* PBXTargetDependency */,
 			);
 			name = SolackProject;
 			packageProductDependencies = (
@@ -1979,6 +1984,7 @@
 				63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */,
 				63AB21312B83B41900AADD10 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 				6312A20F2B61082300593117 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				639DF2D22DA6A63E0084EF17 /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = 631A60A72B44ECEE005509C2 /* Products */;
 			projectDirPath = "";
@@ -1997,6 +2003,7 @@
 				631A60F72B45018D005509C2 /* SF-Pro-Italic.ttf in Resources */,
 				631A60F62B450189005509C2 /* SF-Pro.ttf in Resources */,
 				631A60B62B44ECEF005509C2 /* LaunchScreen.storyboard in Resources */,
+				639DF2D42DA6A6A90084EF17 /* .swiftlint.yml in Resources */,
 				631A60B32B44ECEF005509C2 /* Assets.xcassets in Resources */,
 				631A60FD2B452953005509C2 /* .gitignore in Resources */,
 				631A60B12B44ECEE005509C2 /* Main.storyboard in Resources */,
@@ -2004,6 +2011,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		639DF2DE2DA6A6C50084EF17 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# 기기가 arm64 - 애플 실리콘이면 현재 경로를 홈브류 경로로 이동시킨다.\nif [[ \"$(uname -m)\" == arm64 ]]; then \n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# 명령어의 출력을 버리는(화면에 표시하지 않는) 리다이렉션입니다\nif which swiftlint >/dev/null; then  \n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		631A60A22B44ECEE005509C2 /* Sources */ = {
@@ -2314,6 +2341,13 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		639DF2E02DA6A6D10084EF17 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 639DF2DF2DA6A6D10084EF17 /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		631A60AF2B44ECEE005509C2 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -2623,6 +2657,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		639DF2D22DA6A63E0084EF17 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.59.0;
+			};
+		};
 		63A597F92B6A4AFD00C4646D /* XCRemoteSwiftPackageReference "RxCombine" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/CombineCommunity/RxCombine.git";
@@ -2724,6 +2766,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 638FCD252B47FB700053D1BB /* XCRemoteSwiftPackageReference "Toast-Swift" */;
 			productName = Toast;
+		};
+		639DF2DF2DA6A6D10084EF17 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 639DF2D22DA6A63E0084EF17 /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 		63A148A72B45564F005CF155 /* RxBlocking */ = {
 			isa = XCSwiftPackageProductDependency;

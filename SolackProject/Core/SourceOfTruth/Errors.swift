@@ -6,18 +6,18 @@
 //
 
 import Foundation
-enum Errors:Error{
-    enum API:Error{
-        case FailResponseDataDecoding
-        case FailFetchToken
+enum Errors:Error {
+    enum API:Error {
+        case failResponseDataDecoding
+        case failFetchToken
     }
     case compresstionFail
     case cachingEmpty
 }
-protocol FailedProtocol:Error{
+protocol FailedProtocol:Error {
     static func converter(val:String) -> Self?
 }
-enum SignFailed:String,FailedProtocol{
+enum SignFailed: String, FailedProtocol {
     case signUpDoubled = "E12" // 중복
     case signUpwrong = "E11" // 잘못됨
     case signInFailed = "E03" // 로그인 실패
@@ -27,7 +27,7 @@ enum SignFailed:String,FailedProtocol{
     }
 }
 typealias WSFailed = WorkSpaceFailed
-enum WorkSpaceFailed:String,FailedProtocol{
+enum WorkSpaceFailed: String, FailedProtocol {
     case unknwonAccount = "E03"
     case lackCoin = "E21"
     case bad = "E11"
@@ -40,7 +40,7 @@ enum WorkSpaceFailed:String,FailedProtocol{
     }
 }
 typealias CHFailed = ChannelFailed
-enum ChannelFailed: String,FailedProtocol{
+enum ChannelFailed: String, FailedProtocol {
     case bad = "E11"
     case doubled = "E12"
     case nonExistData = "E13"
@@ -50,7 +50,7 @@ enum ChannelFailed: String,FailedProtocol{
         ChannelFailed(rawValue: val)
     }
 }
-enum AuthFailed: String,FailedProtocol{
+enum AuthFailed: String, FailedProtocol {
     case isValid = "E04"
     case unknownAccount = "E03"
     case expiredRefresh = "E06"
@@ -59,7 +59,7 @@ enum AuthFailed: String,FailedProtocol{
         AuthFailed(rawValue: val)
     }
 }
-enum CommonFailed: String, FailedProtocol{
+enum CommonFailed: String, FailedProtocol {
     case notAuthority = "E01"
     case noneRouter = "E97"
     case expiredAccess = "E05"
@@ -71,20 +71,20 @@ enum CommonFailed: String, FailedProtocol{
         CommonFailed(rawValue: val)
     }
 }
-enum MessageFailed: String, FailedProtocol{
+enum MessageFailed: String, FailedProtocol {
     case badRequest = "E11"
     case nonExistData = "E13"
     static func converter(val: String) -> MessageFailed? {
         MessageFailed(rawValue: val)
     }
 }
-enum DMFailed: String,FailedProtocol{
+enum DMFailed: String,FailedProtocol {
     case nonExistData = "E13"
     static func converter(val: String) -> DMFailed? {
         DMFailed(rawValue: val)
     }
 }
-enum PayFailed:String, FailedProtocol{
+enum PayFailed:String, FailedProtocol {
     case nonExistedPay = "E82"
     case alreadyExistPay = "E81"
     static func converter(val: String) -> PayFailed? {

@@ -1,4 +1,5 @@
 {
+  "originHash" : "55067e454c529d82e4b3dde53556a193bdee7fc248088c685fbb1fa3842445b4",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -25,6 +26,24 @@
       "state" : {
         "revision" : "3e464dad87dad2d29bb29a97836789bf0f8f67d2",
         "version" : "10.18.1"
+      }
+    },
+    {
+      "identity" : "collectionconcurrencykit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JohnSundell/CollectionConcurrencyKit.git",
+      "state" : {
+        "revision" : "b4f23e24b5a1bff301efc5e70871083ca029ff95",
+        "version" : "0.2.0"
+      }
+    },
+    {
+      "identity" : "cryptoswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
+      "state" : {
+        "revision" : "729e01bc9b9dab466ac85f21fb9ee2bc1c61b258",
+        "version" : "1.8.4"
       }
     },
     {
@@ -235,6 +254,15 @@
       }
     },
     {
+      "identity" : "sourcekitten",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/SourceKitten.git",
+      "state" : {
+        "revision" : "eb6656ed26bdef967ad8d07c27e2eab34dc582f2",
+        "version" : "0.37.0"
+      }
+    },
+    {
       "identity" : "starscream",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/daltoniam/Starscream",
@@ -244,12 +272,57 @@
       }
     },
     {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
+        "version" : "1.5.0"
+      }
+    },
+    {
       "identity" : "swift-protobuf",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
         "revision" : "65e8f29b2d63c4e38e736b25c27b83e012159be8",
         "version" : "1.25.2"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "1103c45ece4f7fe160b8f75b4ea1ee2e5fac1841",
+        "version" : "601.0.0"
+      }
+    },
+    {
+      "identity" : "swiftlint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/SwiftLint.git",
+      "state" : {
+        "revision" : "ce8ca6a6e7e4038235af3d7319a872e6b87e4137",
+        "version" : "0.59.0"
+      }
+    },
+    {
+      "identity" : "swiftytexttable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scottrhoyt/SwiftyTextTable.git",
+      "state" : {
+        "revision" : "c6df6cf533d120716bff38f8ff9885e1ce2a4ac3",
+        "version" : "0.9.0"
+      }
+    },
+    {
+      "identity" : "swxmlhash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/drmohundro/SWXMLHash.git",
+      "state" : {
+        "revision" : "a853604c9e9a83ad9954c7e3d2a565273982471f",
+        "version" : "7.0.2"
       }
     },
     {
@@ -278,7 +351,16 @@
         "revision" : "cb05d64cef2bbf51e85c53adee937df46540a74e",
         "version" : "1.2.1"
       }
+    },
+    {
+      "identity" : "yams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/Yams.git",
+      "state" : {
+        "revision" : "b4b8042411dc7bbb696300a34a4bf3ba1b7ad19b",
+        "version" : "5.3.1"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

@@ -76,16 +76,16 @@ extension ImageManager.CropImageManager{
         
     }
 }
-extension ImageManager.CropImageManager.CropView{
-    @ViewBuilder func imageView()->some View{
-        let cropSize = switch cropType{
+extension ImageManager.CropImageManager.CropView {
+    @ViewBuilder func imageView()->some View {
+        let cropSize = switch cropType {
         case .circle(let size): size
         case .rectangle(let size): size
         }
-        ZStack(alignment: .center){
-            GeometryReader{ proxy in
+        ZStack(alignment: .center) {
+            GeometryReader { proxy in
                 let size = proxy.size
-                if let image{
+                if let image {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -96,22 +96,22 @@ extension ImageManager.CropImageManager.CropView{
                                     /// true -> 드래그
                                     /// false -> 드래그 멈춤
                                     /// 이거 사용해서 최소 x,y / 최대 x,y를 알 수 있다.
-                                    withAnimation(.easeInOut(duration: 0.2)){
-                                        if rect.minX > 0{
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        if rect.minX > 0 {
                                             offset.width = (offset.width - rect.minX)
                                         }
-                                        if rect.minY > 0{
-                                            offset.height = offset.height - rect.minY
+                                        if rect.minY > 0 {
+                                            offset.height -= rect.minY
                                         }
-                                        if rect.maxX < size.width{
+                                        if rect.maxX < size.width {
                                             offset.width = rect.minX - offset.width
                                         }
-                                        if rect.maxY < size.height{
+                                        if rect.maxY < size.height {
                                             offset.height = rect.minY - offset.height
                                         }
                                     }
                                     
-                                    if !newValue{
+                                    if !newValue {
                                         lastStoredOffset = offset
                                     }
                                 }
@@ -124,13 +124,13 @@ extension ImageManager.CropImageManager.CropView{
             .offset(offset)
             .coordinateSpace(name:"CROPVIEW")
             .frame(cropSize)
-            if maskHidden{
-                ZStack(alignment: .center){
+            if maskHidden {
+                ZStack(alignment: .center) {
                     Rectangle()
                         .animation(.easeInOut(duration: 0.2), value: isInteracting)
                         .foregroundStyle(Color.black.opacity(isInteracting ? 0.5 : 1))
                     
-                    switch cropType{
+                    switch cropType {
                     case .circle:
                         Circle().frame(cropSize)
                             .blendMode(.destinationOut)

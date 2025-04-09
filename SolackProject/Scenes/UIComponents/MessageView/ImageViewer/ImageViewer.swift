@@ -12,8 +12,9 @@ import SwiftUI
 import Combine
 import CoreTransferable
 import UniformTypeIdentifiers
-final class ImgViewerVC: UIHostingController<ImgViewer>{
-    init(imagePathes: [String]){
+
+final class ImgViewerVC: UIHostingController<ImgViewer> {
+    init(imagePathes: [String]) {
         let vm = ImageViewerVM(imagePathes: imagePathes)
         super.init(rootView: ImgViewer(vm: vm))
     }
@@ -21,8 +22,8 @@ final class ImgViewerVC: UIHostingController<ImgViewer>{
         fatalError("Don't use storyboard")
     }
     deinit{ UINavigationBar.appearance().barStyle = .default }
-    struct ImageItem:Identifiable,Hashable{
-        var id:String{imageURL}
+    struct ImageItem: Identifiable, Hashable {
+        var id:String { imageURL }
         let imageURL:String
         let image: UIImage
         init(imageURL: String, image: UIImage) {
@@ -31,18 +32,18 @@ final class ImgViewerVC: UIHostingController<ImgViewer>{
         }
     }
 }
-struct ImgViewer: View{
+struct ImgViewer: View {
     @StateObject var vm: ImageViewerVM
     @State var showNavigation = true
     @Environment(\.dismiss) var dismiss
     @State var pageIndex = 0
-    var body: some View{
-        Group{
-            if vm.isLoading{
+    var body: some View {
+        Group {
+            if vm.isLoading {
                 Color.black.overlay {
                     ProgressView().tint(.accent)
                 }
-            }else{
+            } else {
                 TabView(selection: $pageIndex,content: {
                     ForEach(vm.images.indices,id:\.self) { idx in
                         ImageCellView(image: vm.images[idx].image).ignoresSafeArea(.all)
@@ -52,15 +53,15 @@ struct ImgViewer: View{
                 }).tabViewStyle(.page(indexDisplayMode: .never)).ignoresSafeArea(.all)
             }
         }.overlay(alignment: .top) {
-            if showNavigation{ navigationBar }
+            if showNavigation { navigationBar }
         }
         .statusBar(hidden: !showNavigation)
         .onTapGesture { withAnimation { showNavigation.toggle() } }
         .background(.black)
     }
 }
-extension ImgViewer{
-    var navigationBar: some View{
+extension ImgViewer {
+    var navigationBar: some View {
         HStack(content: {
             Button(action: {
                 dismiss()
@@ -70,7 +71,7 @@ extension ImgViewer{
                     .imageScale(.large)
             }).padding(.leading,16.5)
             Spacer()
-            ShareLink(items: vm.images.map{Image(uiImage: $0.image)}) { image in
+            ShareLink(items: shareLinkItems) { image in
                 SharePreview("\(vm.images.count)개의 이미지", image: image)
             }
             .labelStyle(.iconOnly)
@@ -79,11 +80,14 @@ extension ImgViewer{
         })
         .padding(.bottom,8)
         .overlay(alignment: .center, content: {
-            if vm.images.count > 0{
+            if !vm.images.isEmpty {
                 Text("\(pageIndex + 1) / \(vm.images.count)")
                     .font(.system(size: 17,weight: .bold)).foregroundStyle(.white)
             }
         })
         .background(.black.opacity(0.66)).tint(.white)
+    }
+    private var shareLinkItems: [Image] {
+        vm.images.map{ Image(uiImage: $0.image) }
     }
 }

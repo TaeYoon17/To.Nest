@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct LazyView<c:View>:View{
-    var content:() -> c
-    init(content: @escaping () -> c) {
+struct LazyView<Content: View> : View {
+    var content:() -> Content
+    init(content: @escaping () -> Content) {
         self.content = content
     }
-    var body: some View{
+    var body: some View {
         content()
     }
 }

@@ -28,7 +28,7 @@ final class KakaoManager{
                         continuation.resume(returning: accessToken)
                         return
                     }else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                 }

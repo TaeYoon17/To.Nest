@@ -12,12 +12,12 @@ extension NM{
         let router = DMRouter.checkRoom(wsID: wsID)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 self.generalResponse(err: DMFailed.self, result: [DMRoomResponse].self, res: res, continuation: continuation)
@@ -28,12 +28,12 @@ extension NM{
         let router = DMRouter.create(wsID: wsID, roomID: roomID, dmInfo: info)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 self.generalResponse(err: DMFailed.self, result: DMResponse.self, res: res, continuation: continuation)
@@ -44,12 +44,12 @@ extension NM{
         let router = DMRouter.check(wsID: wsID, userID: userID, date: date)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 self.generalResponse(err: DMFailed.self, result: DMChatsResponse.self, res: res, continuation: continuation)
@@ -60,12 +60,12 @@ extension NM{
         let router = DMRouter.unread(wsID: wsID, roomID: roomID, date: date)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response {[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 self.generalResponse(err: DMFailed.self, result: UnreadDMRes.self, res: res, continuation: continuation)

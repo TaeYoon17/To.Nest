@@ -103,7 +103,7 @@ struct SolackAlertView:View{
                     .multilineTextAlignment(.center)
                 if !infos.isEmpty{
                     HStack{
-                        Text(infos.reduce(into: "") { $0 = $0 + "• \($1)\n" })
+                        Text(infos.reduce(into: "") { $0 += "• \($1)\n" })
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
                             .font(FontType.body.font)

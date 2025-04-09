@@ -8,12 +8,12 @@
 import UIKit
 import RxSwift
 import RxCocoa
-final class NaviBar: BaseView{
+final class NaviBar: BaseView {
     @DefaultsState(\.myProfile) var data
     var workSpaceTap: ControlEvent<Void>!
     var updateMyProfileImage: PublishSubject<()> = .init()
-    var title:String = ""{
-        didSet{
+    var title:String = "" {
+        didSet {
             let attr = title.attr(type: FontType.title1)
             workSpaceLabel.attributedText = NSAttributedString(attr)
         }

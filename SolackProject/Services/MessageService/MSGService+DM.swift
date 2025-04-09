@@ -56,26 +56,30 @@ extension MessageService{
         }
     }
     
-    func receivedSocketData(result: Result<Data,Error>,roomID:Int){
+    func receivedSocketData(result: Result<Data,Error>, roomID: Int) {
         do{
             switch result{
             case .success(let data):
                 let responseData = try JSONDecoder().decode(DMResponse.self, from: data)
-                Task{@BackgroundActor in
-                    do{
+                Task { @BackgroundActor in
+                    do {
                         try await Task.sleep(for: .milliseconds(100))
                         let text = responseData.content ?? "사진"
-                        await roomRepository.updateLastContent(roomID: roomID, text: text,date: responseData.createdAt.convertToDate())
+                        await roomRepository.updateLastContent(
+                            roomID: roomID,
+                            text: text,
+                            date: responseData.createdAt.convertToDate()
+                        )
                         await roomRepository.updateRoomReadDate(roomID: roomID)
                         await roomRepository.updateRoomCheckDate(roomID: roomID)
                         try await getResponses(responses: [responseData], roomID: roomID)
-                        Task{
+                        Task {
                             var response = responseData
                             response.files = response.files.map{$0.webFileToDocFile()}
                             response.user.profileImage = response.user.profileImage?.webFileToDocFile()
                             self.event.onNext(.socketReceive(response: .dm([response])))
                         }
-                    }catch{
+                    } catch {
                         print(#function)
                         print(error)
                     }
@@ -84,29 +88,31 @@ extension MessageService{
                 }
             case .failure(let error): throw error
             }
-        }catch{
+        } catch {
             print(#function)
             print(error)
         }
     }
-    func getDirectMessageDatas(roomID:Int,userID:Int){
+    func getDirectMessageDatas(roomID:Int,userID:Int) {
         let wsID = mainWS.id
-        Task{@BackgroundActor in
-            await _getDirectMessageDatas(wsID: wsID,roomID:roomID,userID:userID)
+        Task { @BackgroundActor in
+            await getDirectMessageDatas(wsID: wsID,roomID:roomID,userID:userID)
         }
     }
-    func fetchDirectMessageDB(userID:Int,roomID: Int){
+    func fetchDirectMessageDB(userID:Int,roomID: Int) {
         let wsID = mainWS.id
-        Task{@BackgroundActor in
-            await self._getDirectMessageDatas(wsID: wsID,roomID:roomID,userID:userID)
+        Task { @BackgroundActor in
+            await self.getDirectMessageDatas(wsID: wsID,roomID:roomID,userID:userID)
             guard let chatTablesList = self.roomRepository.getTableBy(tableID: roomID)?.chatList else {
                 fatalError("존재하지 않는 채팅")
             }
             let allUsers = chatTablesList.map(\.userID).makeSet()
             try await updateUserInformationToDataBase(userIDs: allUsers)
             var dmResponses:[DMResponse] = []
-            for chatTable in chatTablesList{
-                guard let userTable = userRepository.getTableBy(userID: chatTable.userID) else {fatalError("존재하지 않는 유저 정보")}
+            for chatTable in chatTablesList {
+                guard let userTable = userRepository.getTableBy(userID: chatTable.userID) else {
+                    fatalError("존재하지 않는 유저 정보")
+                }
                 let userResponse = userTable.getResponse
                 let chatResponse = chatTable.getResponse(userResponse: userResponse)
                 dmResponses.append(chatResponse)
@@ -115,10 +121,10 @@ extension MessageService{
         }
     }
 }
-fileprivate extension MessageService{
+fileprivate extension MessageService {
     
     // 핵심 데이터 가저오기 처리 로직
-    @BackgroundActor func _getDirectMessageDatas(wsID:Int,roomID:Int,userID:Int) async{
+    @BackgroundActor func getDirectMessageDatas(wsID: Int, roomID: Int, userID: Int) async {
         do{
             let lastCheckDate = self.roomRepository.getTableBy(tableID: roomID)?.lastCheckDate
             let dmChatsResponse:DMChatsResponse = try await NM.shared.checkDM(wsID: wsID, userID: userID, date: lastCheckDate)

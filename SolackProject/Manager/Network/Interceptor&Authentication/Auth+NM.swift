@@ -16,12 +16,12 @@ extension NetworkManager{
         let router = AuthRouter.refresh(refreshToken: refreshToken, accessToken: accessToken)
         return try await withCheckedThrowingContinuation {[weak self ] continuation in
             guard let self else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             session.request(router,interceptor: baseInterceptor).response{[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 generalResponse(err: AuthFailed.self, result: RefreshResponse.self, res: res, continuation: continuation)

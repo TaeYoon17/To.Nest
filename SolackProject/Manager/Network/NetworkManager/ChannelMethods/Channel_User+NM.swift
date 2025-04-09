@@ -12,12 +12,12 @@ extension NM{
         let router = ChannelRouter.check(wsID: wsID, .members(chName: channelName))
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response { [weak self] res in
                 guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 generalResponse(err: CHFailed.self, result: [UserResponse].self, res: res, continuation: continuation)
@@ -28,12 +28,12 @@ extension NM{
         let router = ChannelRouter.changeAdmin(wsID: wsID, chName: channelName, userID: userID)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router, interceptor: authInterceptor).validate(customValidation).response { [weak self] res in
                 guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 generalResponse(err: CHFailed.self, result: CHResponse.self, res: res, continuation: continuation)

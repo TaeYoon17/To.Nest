@@ -59,9 +59,11 @@ extension MSGField.MSGTextField{
             var id:String{imageID}
             var imageID:String
             var image:UIImage
+            
             static func ==(lhs: Item, rhs: Item) -> Bool {
                 return lhs.id == rhs.id
             }
+            
             func hash(into hasher: inout Hasher) {
                 hasher.combine(id)
             }

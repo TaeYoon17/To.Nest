@@ -17,7 +17,7 @@ extension NM{
                     print("\(progress)")
                 }.response{ [weak self] res in
                     guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: MessageFailed.self, result: ChatResponse.self, res: res, continuation: continuation)
@@ -31,7 +31,7 @@ extension NM{
                 .validate(customValidation)
                 .response{ [weak self] res in
                     guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: MessageFailed.self, result: [ChatResponse].self, res: res, continuation: continuation)

@@ -60,7 +60,7 @@ final class CHChatReactor:Reactor{
         provider.msgService.closeSocket(channelID: channelID)
     }
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action{
+        switch action {
         case .initChat:
         provider.msgService.fetchChannelDB(channelID: channelID,channelName: title)
         provider.chService.checkUser(channelID: channelID, title: title)
@@ -97,7 +97,7 @@ final class CHChatReactor:Reactor{
     }
     func reduce(state: State, mutation: Mutation) -> State {
         var state = state
-        switch mutation{
+        switch mutation {
         case .setMemberCount(let count):
             state.memberCount = count
         case .setChatText(let text):
@@ -113,23 +113,25 @@ final class CHChatReactor:Reactor{
         }
         return state
     }
-    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let msgMutation = provider.msgService.event.flatMap {[weak self] event -> Observable<Mutation> in
-            guard let self else {return Observable.concat([])}
+    
+    private var messageProviderMutation: Observable<CHChatReactor.Mutation> {
+        provider.msgService.event.flatMap {[weak self] event -> Observable<Mutation> in
+            guard let self else { return Observable.concat([]) }
             var resList: [Observable<Mutation>] = []
-            switch event{
+            switch event {
             case .create(response: let response):
-                switch response{
+                switch response {
                 case .channel(let channelRes):
                     guard let res = channelRes.first else {break}
                     resList.append(contentsOf: [
-                        .just(.appendChat(.create(res))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                        .just(
+                            .appendChat(.create(res))).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                         .just(.appendChat(nil))
                     ])
                 default: break
                 }
             case .check(response: let responses):
-                switch responses{
+                switch responses {
                 case .channel(let channels):
                     provider.msgService.openSocket(channelID: self.channelID)
                     resList.append(contentsOf:[
@@ -139,7 +141,7 @@ final class CHChatReactor:Reactor{
                 default:break
                 }
             case .socketReceive(response: let response):
-                switch response{
+                switch response {
                 case .channel(let channelRes):
                     guard let res = channelRes.first else {break}
                     resList.append(contentsOf: [
@@ -152,20 +154,23 @@ final class CHChatReactor:Reactor{
             }
             return Observable.concat(resList)
         }
-        let chMutation = provider.chService.event.flatMap { [weak self] event -> Observable<Mutation> in
+    }
+    
+    private var channelProviderMustation: Observable<CHChatReactor.Mutation> {
+        provider.chService.event.flatMap { [weak self] event -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
-            switch event{
+            switch event {
             case .update(let response):
                 guard self.channelID == response.channelID else {return Observable.concat([])}
                 self.title = response.name
                 return Observable.concat([
-                    .just(.setTitle(response.name)),
+                    .just(.setTitle(response.name))
                 ])
             case .check(let response):
                 guard self.channelID == response.channelID else {return Observable.concat([])}
                 self.title = response.name
                 return Observable.concat([
-                    .just(.setTitle(response.name)),
+                    .just(.setTitle(response.name))
                 ])
             case .channelUsers(id: let channelID, let responses):
                 guard self.channelID == channelID else {return Observable.concat([])}
@@ -174,13 +179,16 @@ final class CHChatReactor:Reactor{
             default: return Observable.concat([])
             }
         }
-        return Observable.merge([mutation,msgMutation,chMutation])
+    }
+    
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        return Observable.merge([mutation, messageProviderMutation, channelProviderMustation])
     }
     func transform(state: Observable<State>) -> Observable<State> {
         return state.flatMap { state -> Observable<State> in
-            var st = state
-            st.isActiveSend = !st.sendFiles.isEmpty || !st.chatText.isEmpty
-            return .just(st)
+            var state = state
+            state.isActiveSend = !state.sendFiles.isEmpty || !state.chatText.isEmpty
+            return .just(state)
         }
     }
 }

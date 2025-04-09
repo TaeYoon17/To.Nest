@@ -7,38 +7,38 @@
 
 import Foundation
 import RealmSwift
-extension SignService{
-    func signOut(){
-        Task{
-            do{
+extension SignService {
+    func signOut() {
+        Task {
+            do {
                 let isOut = try await NM.shared.signOut()
-                if isOut{
+                if isOut {
                     cleanDefaultsState()
                     await cleanDocument()
                     await cleanDB()
                     print("모두 삭제 완셩")
                 }
-            }catch{
+            } catch {
                 print("signout error")
                 print(error)
             }
         }
     }
-    func _signOut() async{
-        do{
+    private func innerSignOut() async {
+        do {
             let isOut = try await NM.shared.signOut()
-            if isOut{
+            if isOut {
                 cleanDefaultsState()
                 await cleanDocument()
                 await cleanDB()
                 print("모두 삭제 완셩")
             }
-        }catch{
+        } catch {
             print("signout error")
             print(error)
         }
     }
-    @BackgroundActor private func cleanDB(){
+    @BackgroundActor private func cleanDB() {
         do {
             let realm = try Realm()
             try realm.write {
@@ -48,7 +48,7 @@ extension SignService{
             print("Realm 데이터 삭제 중 오류 발생: \(error.localizedDescription)")
         }
     }
-    @BackgroundActor private func cleanDocument() async{
+    @BackgroundActor private func cleanDocument() async {
         var imageSnapshot = ImageRCM.shared.snapshot
         var profileSnapshot = UserRCM.shared.snapshot
         await imageSnapshot.allResetCount()
@@ -58,7 +58,7 @@ extension SignService{
         await UserRCM.shared.saveRepository()
         await ImageRCM.shared.saveRepository()
     }
-    private func cleanDefaultsState(){
+    private func cleanDefaultsState() {
         self.accessToken = ""
         self.refreshToken = ""
         self.myInfo = nil

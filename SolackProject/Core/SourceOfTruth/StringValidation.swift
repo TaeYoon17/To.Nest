@@ -7,20 +7,20 @@
 
 import Foundation
 //MARK: -- Mutation 변경 확인 사항
- extension String{
-         func validationEmail()->Bool{
+ extension String {
+         func validationEmail()->Bool {
              let email = ".*\\.(com|co\\.kr|net).*"
              let emailRegex = ".*@.*"
-             do{
+             do {
                  let val = try Regex(emailRegex)
                  let one = try Regex(email)
                  guard self.contains(one) else {return false}
                  return self.contains(val)
-             }catch{
+             } catch {
                  return false
              }
          }
-    func validationNick()->Bool{
+    func validationNick() -> Bool {
         0 < self.count && self.count <= 30
     }
      func validataionPhone()->Bool{

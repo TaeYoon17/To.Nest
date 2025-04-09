@@ -116,22 +116,26 @@ extension MessageService:SocketReceivable{
 fileprivate extension MessageService{
     
     // 서버 채팅 데이터 내역 가져오기
-    @BackgroundActor func _getChannelDatas(chID:Int,chName:String) async {
-        do{
+    @BackgroundActor private func _getChannelDatas(chID: Int, chName: String) async {
+        do {
             let lastCheckDate = self.channelRepostory.getTableBy(tableID: chID)?.lastCheckDate
-            let responses:[ChatResponse] = try await NM.shared.checkChat(wsID: mainWS.id, chName: chName, date: lastCheckDate)
+            let responses:[ChatResponse] = try await NM.shared.checkChat(
+                wsID: mainWS.id,
+                chName: chName,
+                date: lastCheckDate
+            )
             guard !responses.isEmpty else {return}
             try await getResponses(responses: responses, channelID: chID)
             await imageReferenceCountManager.saveRepository()
             await userReferenceCountManager.saveRepository()
-        }catch{
+        } catch {
             print("_getChannelDatasError!!")
             print(error)
         }
     }
     
     // 채팅 내역들 디비에 저장하기
-    @BackgroundActor func getResponses(responses:[ChatResponse],channelID chID: Int) async throws{
+    @BackgroundActor func getResponses(responses:[ChatResponse], channelID chID: Int) async throws {
         await channelRepostory?.updateChannelCheckDate(channelID: chID)
         let createResponses =  await responses.asyncFilter {// 이미 해당 채팅이 디비에 존재하지 않은 것만 가져온다. -> 채팅 내용 저장
             !self.chChatrepository.isExistTable(chatID: $0.chatID)
@@ -148,16 +152,27 @@ fileprivate extension MessageService{
 
 
 
-extension UserInfoTable{
-    var getResponse:UserResponse{
-        UserResponse(userID: self.userID, email: self.email, nickname: self.nickName, profileImage: self.profileImage)
-        
+extension UserInfoTable {
+    var getResponse: UserResponse {
+        UserResponse(
+            userID: userID,
+            email: email,
+            nickname: nickName,
+            profileImage: profileImage
+        )
     }
 }
-extension CHChatTable{
-    func getResponse(userResponse: UserResponse) -> ChatResponse{
+extension CHChatTable {
+    func getResponse(userResponse: UserResponse) -> ChatResponse {
         let str = self.createdAt.convertToString()
-        print(self.createdAt,str)
-        return ChatResponse(channelID: self.chatID, channelName:self.channelName ?? "", chatID: self.chatID, content: self.content, createdAt: self.createdAt.convertToString(), files: Array(self.imagePathes), user: userResponse)
+        return ChatResponse(
+            channelID: chatID,
+            channelName: channelName ?? "",
+            chatID: chatID,
+            content: content,
+            createdAt: createdAt.convertToString(),
+            files: Array(imagePathes),
+            user: userResponse
+        )
     }
 }

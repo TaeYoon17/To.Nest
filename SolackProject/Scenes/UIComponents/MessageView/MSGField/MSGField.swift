@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-final class MSGField:UIView{
+final class MSGField:UIView {
     let isActiveSend:BehaviorSubject<Bool> = .init(value: false)
     let text:PublishSubject<String> = .init()
     var send: ControlEvent<Void>!
@@ -18,31 +18,31 @@ final class MSGField:UIView{
     weak var deleteImageItem: PublishSubject<String>!
     weak var needsUpdateCollectionViewLayout:PublishSubject<()>!
     let placeholder:String
-    var hiddenImageView:Bool = false{
-        didSet{
+    var hiddenImageView: Bool = false {
+        didSet {
             self.textField.hiddenImageView = hiddenImageView
         }
     }
     private var textField = MSGTextField()
     private var disposeBag = DisposeBag()
     private let sendBtn = {
-        let btn = UIButton()
+        let button = UIButton()
         var configuration = UIButton.Configuration.plain()
         configuration.image = .send
         configuration.contentInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)
-        btn.configuration = configuration
-        return btn
+        button.configuration = configuration
+        return button
     }()
     let addItemBtn = {
-        let btn = UIButton()
+        let button = UIButton()
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "plus" ,withConfiguration: UIImage.SymbolConfiguration(font: FontType.body.get()))
         configuration.baseForegroundColor = .secondary
         configuration.contentInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)
-        btn.configuration = configuration
-        return btn
+        button.configuration = configuration
+        return button
     }()
-    init(placeholder:String){
+    init(placeholder: String) {
         self.placeholder = placeholder
         super.init(frame: .zero)
         configureView()
@@ -54,17 +54,17 @@ final class MSGField:UIView{
         self.deleteImageItem = textField.imageVierwer.deleteItemID
         self.needsUpdateCollectionViewLayout = textField.needsUpdateCollectionViewLayout
         self.send.bind(with: self) { owner, _ in
-            if owner.textField.textField.textColor == .text{
+            if owner.textField.textField.textColor == .text {
                 owner.textField.textField.text = ""
             }
         }.disposed(by: disposeBag)
         self.isActiveSend.distinctUntilChanged()
             .bind(with: self) { owner, value in
-                Task{@MainActor in
-                    if value{
+                Task { @MainActor in
+                    if value {
                         owner.sendBtn.configuration?.image = .sendActive
                         owner.sendBtn.isUserInteractionEnabled = true
-                    }else{
+                    } else {
                         owner.sendBtn.configuration?.image = .send
                         owner.sendBtn.isUserInteractionEnabled = false
                     }
@@ -74,7 +74,7 @@ final class MSGField:UIView{
     required init?(coder: NSCoder) {
         fatalError()
     }
-    func configureView(){
+    func configureView() {
         addSubview(addItemBtn)
         addSubview(textField)
         addSubview(sendBtn)

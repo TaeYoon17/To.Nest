@@ -10,26 +10,34 @@ import UIKit
 import RxSwift
 import ReactorKit
 import SwiftUI
-class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsset:MessageAsset>: UICollectionViewDiffableDataSource<String,CellItem.ID>{
+class MessageDataSource<MessageReactor: Reactor,
+                        CellItem: MessageCellItem,
+                        CellAsset:MessageAsset>: UICollectionViewDiffableDataSource<String,CellItem.ID> {
+    
     var bottomFinished: PublishSubject<()> = .init()
     weak var collectionView:UICollectionView!
     var disposeBag = DisposeBag()
     var msgModel = AnyModelStore<CellItem>([])
     var msgAssetModel = NSCache<NSString,CellAsset>()
-    init(reactor:MessageReactor,collectionView: UICollectionView, cellProvider: @escaping UICollectionViewDiffableDataSource<String, CellItem.ID>.CellProvider){
+    
+    init(
+        reactor: MessageReactor,
+        collectionView: UICollectionView,
+        cellProvider: @escaping UICollectionViewDiffableDataSource<String, CellItem.ID>.CellProvider
+    ) {
         super.init(collectionView: collectionView, cellProvider: cellProvider)
         self.initDataSource()
         self.collectionView = collectionView
         collectionView.layer.opacity = 0
     }
-    @MainActor func initDataSource(){
+    @MainActor func initDataSource() {
         var snapshot = NSDiffableDataSourceSnapshot<String,CellItem.ID>()
         snapshot.appendSections(["Hello"])
-        var arr:[CellItem.ID] = []
-        snapshot.appendItems(arr, toSection: "Hello")
+        var cellItemIDs: [CellItem.ID] = []
+        snapshot.appendItems(cellItemIDs, toSection: "Hello")
         apply(snapshot,animatingDifferences: true)
     }
-    @MainActor func appendDataSource(items:[CellItem.ID],goDown:Bool = false) async{
+    @MainActor func appendDataSource(items:[CellItem.ID], goDown:Bool = false) async {
         var snapshot = snapshot()
         snapshot.appendItems(items, toSection: "Hello")
         Task{@MainActor in
@@ -46,16 +54,15 @@ class MessageDataSource<MessageReactor:Reactor,CellItem:MessageCellItem,CellAsse
             }
         }
     }
-    @discardableResult func appendChatAssetModel(item: MessageCellItem) -> MessageAsset{
+    @discardableResult func appendChatAssetModel(item: MessageCellItem) -> MessageAsset {
         var images:[Image] = []
-        for imageName in item.images{
+        for imageName in item.images {
             let image = UIImage.fetchBy(fileName: imageName, type: .messageThumbnail)
             images.append(Image(uiImage: image))
         }
-        let profileImage:Image? = if let profileFile = item.profileImage?.webFileToDocFile(){
-            
+        let profileImage: Image? = if let profileFile = item.profileImage?.webFileToDocFile() {
             Image(uiImage: UIImage.fetchBy(fileName: profileFile, type: .small))
-        }else{nil}
+        }else{ nil }
         let msgAssets = CellAsset(messageID: item.id, images: images, profileImage: profileImage)
         msgAssetModel.setObject(msgAssets, forKey: "\(item.id)" as NSString)
         return msgAssets

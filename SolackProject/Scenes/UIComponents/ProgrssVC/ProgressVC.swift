@@ -9,14 +9,14 @@ import Foundation
 import UIKit
 import SnapKit
 import RxSwift
-final class ProgressVC: BaseVC{
+final class ProgressVC: BaseVC {
     var progressNumber: BehaviorSubject<Float> = .init(value: 0)
-    var placeholder = ""{
-        didSet{
+    var placeholder = "" {
+        didSet {
             self.progressView.placeholder = placeholder
         }
     }
-    func makeInit(){
+    func makeInit() {
         self.progressView.progress.setProgress(0, animated: false)
     }
     private var disposeBag = DisposeBag()
@@ -24,7 +24,7 @@ final class ProgressVC: BaseVC{
     override func viewDidLoad() {
         super.viewDidLoad()
         progressNumber.subscribe(on: MainScheduler.instance).bind(with: self) { owner, value in
-            Task{@MainActor in
+            Task { @MainActor in
                 owner.progressView.progress.setProgress(value, animated: true)
             }
         }.disposed(by: disposeBag)
@@ -38,10 +38,10 @@ final class ProgressVC: BaseVC{
     }
 }
 
-    final class ImageProgressView: UIView{
+    final class ImageProgressView: UIView {
         var progress = UIProgressView()
         var progressNumber: BehaviorSubject<Float> = .init(value: 0)
-        var placeholder:String = ""{
+        var placeholder:String = "" {
             didSet{ label.text = placeholder }
         }
         let label = UILabel()

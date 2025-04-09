@@ -133,22 +133,23 @@ extension HomeVC{
                 }
             }.disposed(by: disposeBag)
         }
-        func channelItems(channelUnreads:[UnreadsChannelRes]) ->[Item]{
+        func channelItems(channelUnreads: [UnreadsChannelRes]) ->[Item] {
             var channelItems:[Item] = []
             for unread in channelUnreads{
                 guard var channelItem = channelListModel.fetchByID("\(SectionType.channel.rawValue)_\(unread.channelID)") else {
                     fatalError("Empty Channel Item")
                 }
                 channelItem.messageCount = unread.count
-                channelItem.isRecent = unread.count != 0
+                let isRecent = unread.count != 0 ? true : false
+                channelItem.isRecent = isRecent
                 channelListModel.insertModel(item: channelItem)
                 channelItems.append(Item(channelItem))
             }
             return channelItems
         }
-        func dmItems(dmUnreads:[UnreadDMRes]) -> [Item]{
+        func dmItems(dmUnreads: [UnreadDMRes]) -> [Item] {
             var dmItems:[Item] = []
-            for unread in dmUnreads{
+            for unread in dmUnreads {
                 guard let unreadItem = self.directListModel.fetchByID("\(SectionType.direct.rawValue)_\(unread.roomID)") else {
                     continue
                 }
@@ -158,36 +159,36 @@ extension HomeVC{
             }
             return dmItems
         }
-        func fetchDirect(item:Item) -> DirectListItem{
+        func fetchDirect(item:Item) -> DirectListItem {
             directListModel.fetchByID(item.id)
         }
-        func fetchChannel(item:Item) -> ChannelListItem{
+        func fetchChannel(item:Item) -> ChannelListItem {
             channelListModel.fetchByID(item.id)
         }
-        func fetchHeader(item:Item) -> HeaderItem{
+        func fetchHeader(item:Item) -> HeaderItem {
             headerModel.fetchByID(item.id)
         }
-        func fetchBottom(item:Item) -> BottomItem{
+        func fetchBottom(item:Item) -> BottomItem {
             bottomModel.fetchByID(item.id)
         }
-        func initChannel(channelLists:[ChannelListItem] = []){
-            channelLists.forEach { channelListModel.insertModel(item: $0)}
+        func initChannel(channelLists:[ChannelListItem] = []) {
+            channelLists.forEach { channelListModel.insertModel(item: $0) }
             let channelBottom = BottomItem(sectionType: .channel, name: "채널 추가하기")
             bottomModel.insertModel(item: channelBottom)
             let channelHeader = HeaderItem(sectionType: .channel, name: "채널")
             headerModel.insertModel(item: channelHeader)
-            initSnapshot(list: channelLists.map{Item($0)}, bottom: Item(channelBottom), top: Item(channelHeader))
+            initSnapshot(list: channelLists.map{ Item($0) }, bottom: Item(channelBottom), top: Item(channelHeader))
         }
-        func initDirect(){
+        func initDirect() {
             let directLists:[DirectListItem] = []
-            directLists.forEach { directListModel.insertModel(item: $0)}
+            directLists.forEach { directListModel.insertModel(item: $0) }
             let directBottom = BottomItem(sectionType: .direct, name: "새 메시지 시작")
             bottomModel.insertModel(item: directBottom)
             let directHeader = HeaderItem(sectionType: .direct, name: "다이렉트 메시지")
             headerModel.insertModel(item: directHeader)
-            initSnapshot(list: directLists.map{Item($0)}, bottom: Item(directBottom), top: Item(directHeader))
+            initSnapshot(list: directLists.map{ Item($0) }, bottom: Item(directBottom), top: Item(directHeader))
         }
-        func initTeamOne(){
+        func initTeamOne() {
             let teamBottom = BottomItem(sectionType: .team, name: "팀원 추가")
             bottomModel.insertModel(item: teamBottom)
             var snapshot = snapshot()
@@ -195,7 +196,7 @@ extension HomeVC{
             snapshot.appendItems([Item(teamBottom)])
             apply(snapshot,animatingDifferences: true)
         }
-        @MainActor func initSnapshot(list:[Item],bottom:Item,top:Item){
+        @MainActor func initSnapshot(list: [Item] ,bottom: Item, top: Item) {
             var snapshot = NSDiffableDataSourceSectionSnapshot<Item>()
             var items = list
             items.append(bottom)
@@ -205,7 +206,4 @@ extension HomeVC{
             apply(snapshot,to:top.sectionType)
         }
     }
-}
-extension HomeVC.HomeDataSource{
-    
 }

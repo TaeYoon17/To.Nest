@@ -20,7 +20,7 @@ extension NM{
                 .validate(customValidation)
                 .response { [weak self] res in
                     guard let self else{
-                        contiuation.resume(throwing: Errors.API.FailFetchToken)
+                        contiuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: CHFailed.self, result: CHResponse.self, res: res, continuation: contiuation)
@@ -31,12 +31,12 @@ extension NM{
         let router = ChannelRouter.edit(wsID: wsID, chName: name, info: info)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response { [weak self] res in
                 guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 generalResponse(err: CHFailed.self, result: CHResponse.self, res: res, continuation: continuation)
@@ -47,7 +47,7 @@ extension NM{
         let router = ChannelRouter.delete(wsID: wsID, chName: channelName)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response { result in
@@ -65,12 +65,12 @@ extension NM{
                             continuation.resume(throwing: failType)
                             return
                         }else {
-                            continuation.resume(throwing: Errors.API.FailFetchToken)
+                            continuation.resume(throwing: Errors.API.failFetchToken)
                             return
                         }
                     }
                 case .failure(let error):
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                 }
             }
         }
@@ -79,12 +79,12 @@ extension NM{
         let router = CHRouter.leave(wsID: wsID, chName: channelNmae)
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response { [weak self] res in
                 guard let self else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 generalResponse(err: CHFailed.self, result: [CHResponse].self, res: res, continuation: continuation)

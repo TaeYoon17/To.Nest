@@ -18,7 +18,7 @@ extension NM{
                 .validate(customValidation)
                 .response{ [weak self] res in
                     guard let self else{
-                        contiuation.resume(throwing: Errors.API.FailFetchToken)
+                        contiuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: WSFailed.self, result: [WSResponse].self, res: res, continuation: contiuation)
@@ -33,7 +33,7 @@ extension NM{
                 .validate(customValidation)
                 .response{ [weak self] res in
                     guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: WSFailed.self, result: WSDetailResponse.self, res: res, continuation: continuation)

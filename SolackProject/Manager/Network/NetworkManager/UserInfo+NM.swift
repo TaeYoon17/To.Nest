@@ -20,7 +20,7 @@ extension NetworkManager{
         let router = UserRouter.deviceToken(deviceToken)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).response{res in
@@ -32,7 +32,7 @@ extension NetworkManager{
                 switch res.result{
                 case .success(let data):
                     guard let data, let errorData = try? JSONDecoder().decode(ErrorCode.self, from: data) else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     if let failType = SignFailed(rawValue: errorData.errorCode){
@@ -43,7 +43,7 @@ extension NetworkManager{
                         return
                     }
                 case .failure(let error):
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
             }
@@ -55,12 +55,12 @@ extension NetworkManager{
     func signUp(_ info : SignUpInfo) async throws -> SignResponse{
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(UserRouter.signUp(info: info),interceptor: self.baseInterceptor).response {[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 signResponse(res: res, continuation: continuation)
@@ -70,7 +70,7 @@ extension NetworkManager{
     func emailCheck(_ email:String) -> Observable<Bool>{
         Observable.create {[weak self] observer -> Disposable in
             guard let self else {
-                observer.onError(Errors.API.FailFetchToken)
+                observer.onError(Errors.API.failFetchToken)
                 return Disposables.create()
             }
             AF.request(UserRouter.validation(email: email),interceptor: self.baseInterceptor).response { res in
@@ -78,7 +78,7 @@ extension NetworkManager{
                 case .success(let val):
                     
                     guard let code = res.response?.statusCode else{
-                        observer.onError(Errors.API.FailFetchToken)
+                        observer.onError(Errors.API.failFetchToken)
                         break
                     }
                     if code == 400,let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
@@ -86,7 +86,7 @@ extension NetworkManager{
                             observer.onNext(false)
                             observer.onCompleted()
                         }else{
-                            observer.onError(Errors.API.FailFetchToken)
+                            observer.onError(Errors.API.failFetchToken)
                             observer.onCompleted()
                         }
                     }
@@ -106,12 +106,12 @@ extension NetworkManager{
     func signIn<T:SignInBody>(type:SignInType,body:T) async throws -> SignResponse {
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(UserRouter.signIn(type: type, body: body),interceptor: baseInterceptor).response {[weak self] res in
                 guard let self else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
                 signResponse(res: res, continuation: continuation)
@@ -123,7 +123,7 @@ extension NetworkManager{
         let router = UserRouter.putMy(nickName: nickName, phone: phone)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router, interceptor: authInterceptor).response { res in
@@ -135,7 +135,7 @@ extension NetworkManager{
         let router = UserRouter.getUser(id: "\(userID)")
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router, interceptor: authInterceptor).response { res in
@@ -147,7 +147,7 @@ extension NetworkManager{
         let router = UserRouter.getMy
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router, interceptor: authInterceptor).response { res in
@@ -159,7 +159,7 @@ extension NetworkManager{
         let router = UserRouter.putMyImage(image: profileImage)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: authInterceptor)
@@ -172,7 +172,7 @@ extension NetworkManager{
         let router = UserRouter.signOut
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             AF.request(router,interceptor: authInterceptor).validate(customValidation).response { res in
@@ -187,15 +187,15 @@ extension NetworkManager{
                             continuation.resume(throwing: failType)
                             return
                         }else{
-                            continuation.resume(throwing: Errors.API.FailFetchToken)
+                            continuation.resume(throwing: Errors.API.failFetchToken)
                             return
                         }
                     }else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                 case .failure(let error):
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
             }
@@ -208,7 +208,7 @@ extension NetworkManager{
         switch res.result{
         case .success(let val):
             guard let code = res.response?.statusCode else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             if let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
@@ -219,7 +219,7 @@ extension NetworkManager{
                     continuation.resume(throwing: failType)
                     return
                 }else{
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
             }
@@ -239,7 +239,7 @@ extension NetworkManager{
         switch res.result{
         case .success(let val):
             guard let code = res.response?.statusCode else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
             if let val,let errorData = try? JSONDecoder().decode(ErrorCode.self, from: val){
@@ -251,7 +251,7 @@ extension NetworkManager{
                     continuation.resume(throwing: failType)
                     return
                 }else {
-                    continuation.resume(throwing: Errors.API.FailFetchToken)
+                    continuation.resume(throwing: Errors.API.failFetchToken)
                     return
                 }
             }
@@ -268,6 +268,6 @@ extension NetworkManager{
             }
             return
         }
-        continuation.resume(throwing: Errors.API.FailResponseDataDecoding)
+        continuation.resume(throwing: Errors.API.failResponseDataDecoding)
     }
 }

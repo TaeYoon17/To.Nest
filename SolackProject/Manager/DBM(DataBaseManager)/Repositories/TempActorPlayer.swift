@@ -56,10 +56,10 @@ actor RealmActor {
         return TodoStruct(id: todo._id, name: todo.name, owner: todo.owner, status: todo.status)
     }
     
-    func updateTodo(_id: ObjectId, name: String, owner: String, status: String) async throws {
+    func updateTodo(id: ObjectId, name: String, owner: String, status: String) async throws {
         try await realm.asyncWrite {
             realm.create(Todo.self, value: [
-                "_id": _id,
+                "_id": id,
                 "name": name,
                 "owner": owner,
                 "status": status

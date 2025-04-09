@@ -24,7 +24,7 @@ extension NM{
                 .validate(customValidation)
                 .response {[weak self] res in
                     guard let self else{
-                        continutaion.resume(throwing: Errors.API.FailFetchToken)
+                        continutaion.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: WSFailed.self, result: WSResponse.self, res: res, continuation: continutaion)
@@ -41,7 +41,7 @@ extension NM{
                 .validate(customValidation)
                 .response {[weak self] res in
                     guard let self else{
-                        continutaion.resume(throwing: Errors.API.FailFetchToken)
+                        continutaion.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     generalResponse(err: WSFailed.self, result: WSResponse.self, res: res, continuation: continutaion)
@@ -52,14 +52,14 @@ extension NM{
         let router = WSRouter.delete(wsID: wsID)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else{
-                continuation.resume(throwing: Errors.API.FailResponseDataDecoding)
+                continuation.resume(throwing: Errors.API.failResponseDataDecoding)
                 return
             }
             AF.request(router,interceptor: authInterceptor)
                 .validate(customValidation)
                 .response {[weak self] res in
                     guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     checkCompleteResponse(result: res, continuation: continuation)
@@ -70,14 +70,14 @@ extension NM{
         let router = WSRouter.leave(wsID: wsID)
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else{
-                continuation.resume(throwing: Errors.API.FailResponseDataDecoding)
+                continuation.resume(throwing: Errors.API.failResponseDataDecoding)
                 return
             }
             AF.request(router,interceptor: authInterceptor)
                 .validate(customValidation)
                 .response {[weak self] res in
                     guard let self else{
-                        continuation.resume(throwing: Errors.API.FailFetchToken)
+                        continuation.resume(throwing: Errors.API.failFetchToken)
                         return
                     }
                     checkCompleteResponse(result: res, continuation: continuation)
@@ -103,11 +103,11 @@ extension NM{
                     return
                 }
             }else{
-                continuation.resume(throwing: Errors.API.FailFetchToken)
+                continuation.resume(throwing: Errors.API.failFetchToken)
                 return
             }
         case .failure(let error):
-            continuation.resume(throwing: Errors.API.FailFetchToken)
+            continuation.resume(throwing: Errors.API.failFetchToken)
             return
         }
     }

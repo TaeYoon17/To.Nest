@@ -5,7 +5,7 @@
 //  Created by 김태윤 on 1/15/24.
 //
 import Foundation
-extension AuthenticationManager{
+extension AuthenticationManager {
     fileprivate func decode(jwtToken jwt: String) -> [String: Any] {
         
         func base64UrlDecode(_ value: String) -> Data? {
@@ -18,14 +18,15 @@ extension AuthenticationManager{
             let paddingLength = requiredLength - length
             if paddingLength > 0 {
                 let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
-                base64 = base64 + padding
+                base64 += padding
             }
             return Data(base64Encoded: base64, options: .ignoreUnknownCharacters)
         }
     
         func decodeJWTPart(_ value: String) -> [String: Any]? {
             guard let bodyData = base64UrlDecode(value),
-                  let json = try? JSONSerialization.jsonObject(with: bodyData, options: []), let payload = json as? [String: Any] else {
+                  let json = try? JSONSerialization.jsonObject(with: bodyData, options: []),
+                  let payload = json as? [String: Any] else {
                 return nil
             }
 
@@ -36,7 +37,7 @@ extension AuthenticationManager{
         return decodeJWTPart(segments[1]) ?? [:]
     }
 }
-extension String{
+extension String {
     func jwtTokenDecode() -> [String: Any] {
         AuthenticationManager.shared.decode(jwtToken: self)
     }
