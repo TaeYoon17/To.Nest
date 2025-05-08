@@ -24,7 +24,7 @@ protocol WorkSpaceProtocol{
     func checkAllMembers() // 워크스페이스 내부 모든 멤버 조회
     func changeAdmin(userID:Int)
 }
-final class WorkSpaceService:WorkSpaceProtocol{
+final class WorkSpaceService:WorkSpaceProtocol {
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var channelRepository: ChannelRepository!

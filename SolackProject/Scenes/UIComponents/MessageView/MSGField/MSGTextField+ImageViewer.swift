@@ -11,8 +11,9 @@ import SwiftUI
 import RxSwift
 typealias MSGImageViewerItem = MSGField.MSGTextField.ImageViewer.Item
 extension MSGField.MSGTextField{
-    final class ImageViewer:UIView{
-        private lazy var collectionView:UICollectionView = .init(frame: .zero, collectionViewLayout: MSGField.MSGTextField.ImageViewer.layout)
+    
+    final class ImageViewer:UIView {
+        private lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: MSGField.MSGTextField.ImageViewer.layout)
         private var dataSource: UICollectionViewDiffableDataSource<String,Item>!
         var deleteItemID: PublishSubject<String> = .init()
         var updatedFileDatas: PublishSubject<[MSGImageViewerItem]> = .init()
@@ -55,10 +56,10 @@ extension MSGField.MSGTextField{
             snapshot.appendItems(newItems, toSection: "a")
             dataSource.apply(snapshot,animatingDifferences: true)
         }
-        struct Item:Hashable,Identifiable,Equatable{
-            var id:String{imageID}
-            var imageID:String
-            var image:UIImage
+        struct Item: Hashable, Identifiable, Equatable {
+            var id: String{ imageID }
+            var imageID: String
+            var image: UIImage
             
             static func ==(lhs: Item, rhs: Item) -> Bool {
                 return lhs.id == rhs.id

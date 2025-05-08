@@ -8,17 +8,17 @@
 import Foundation
 import SwiftUI
 extension HomeVC{
-    enum SectionType:String{
+    enum SectionType:String {
         case channel
         case direct
         case team
     }
-    enum ItemType:String{
+    enum ItemType:String {
         case header
         case list
         case bottom
     }
-    struct Item:Identifiable,Hashable{
+    struct Item:Identifiable, Hashable {
         var id:String // 문자열로 고유값 적용... uuidString 및 identifier uuidString이 달라야한다.
         var sectionType:SectionType
         var itemType: ItemType
@@ -32,7 +32,8 @@ extension HomeVC{
             hasher.combine(id)
         }
     }
-    final class ChannelListItem:ObservableObject,Identifiable,CollectionItemable{
+    
+    final class ChannelListItem: ObservableObject, Identifiable, CollectionItemable {
         static func == (lhs: HomeVC.ChannelListItem, rhs: HomeVC.ChannelListItem) -> Bool {
             lhs.id == rhs.id
         }

@@ -8,16 +8,20 @@
 import Foundation
 import RealmSwift
 
-@BackgroundActor class TableRepository<T> where T: Object{
+@BackgroundActor
+class TableRepository<T> where T: Object {
     var realm: Realm!
     private(set) var tasks: Results<T>!
     var getTasks:Results<T>{ realm.objects(T.self) }
     init() async throws {
         realm = try await Realm(actor: BackgroundActor.shared)
     }
-    func checkPath(){
+    
+    /// Debug에서 경로 찾는 메서드
+    func checkPath() {
         print(Realm.Configuration.defaultConfiguration.fileURL ?? "경로 없음")
     }
+    
     func checkSchemaVersion(){
         do {
             let version = try schemaVersionAtURL(realm.configuration.fileURL!)

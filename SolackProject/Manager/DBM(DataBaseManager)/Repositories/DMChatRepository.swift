@@ -7,12 +7,14 @@
 
 import Foundation
 import RealmSwift
-@BackgroundActor final class DMChatRepository: TableRepository<DMChatTable>{
+
+@BackgroundActor
+final class DMChatRepository: TableRepository<DMChatTable> {
     func isExistTable(dmID: Int)-> Bool{
         self.getTableBy(tableID: dmID) != nil
     }
     func deleteAllChatList(tables:[DMChatTable]){
-        Task{@BackgroundActor in
+        Task{ @BackgroundActor in
             try await realm.asyncWrite {
                 realm.delete(tables)
             }

@@ -7,11 +7,11 @@
 
 import Foundation
 //MARK: -- Chat관련 서비스
-extension MessageService:SocketReceivable{
+extension MessageService: SocketReceivable {
     func openSocket(channelID: Int){
         do{
             try SocketManagerr.shared.openSocket(connect: .chat(channelID: channelID), delegate: self)
-            Task{@BackgroundActor in
+            Task{ @BackgroundActor in
                 await channelRepostory.updateChannelReadDate(channelID: channelID)
             }
         }catch{

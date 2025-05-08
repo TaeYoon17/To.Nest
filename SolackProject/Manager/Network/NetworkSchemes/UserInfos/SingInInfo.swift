@@ -7,15 +7,17 @@
 
 import Foundation
 // MARK: -- 추후에 재사용 가능한 타입들
-struct EmailInfo{
+struct EmailInfo {
     var email: String = ""
     var password: String = ""
 }
-struct KakaoInfo{
-    var oauthToken:String
-    var deviceToken:String = ""
+
+struct KakaoInfo {
+    var oauthToken: String
+    var deviceToken: String = ""
 }
-struct AppleInfo{
+
+struct AppleInfo {
     var idToken: String
-    var nickName:String
+    var nickName: String
 }

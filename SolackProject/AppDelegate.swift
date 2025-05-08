@@ -26,7 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     // Firebase에서 APNS 토큰 연동이 끝났다.
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
         Messaging.messaging().apnsToken = deviceToken
         Messaging.messaging().token { token, error in
             if let error = error{
@@ -64,21 +67,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 }
 
-extension AppDelegate:MessagingDelegate{
+extension AppDelegate: MessagingDelegate{
     // FCM 토큰을 등록한다.
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         let token = String(describing: fcmToken)
         print("Firebase registration token: \(token)")
         let dataDict: [String: String] = ["token": fcmToken ?? ""]
-        NotificationCenter.default.post( name: Notification.Name("FCMToken"),object: nil,userInfo: dataDict)
+        NotificationCenter.default.post(
+            name: Notification.Name("FCMToken"),
+            object: nil,
+            userInfo: dataDict
+        )
     }
-    // foreground에서 메시지 받기
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    
+    /// foreground에서 메시지 받기
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
         print("message recive!!")
         completionHandler([.list, .banner,.badge])
     }
-    // background에서 메시지 받기
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+    
+    /// background에서 메시지 받기
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
         print("message receive!!")
         print(response.notification.request.content.userInfo)
     }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-struct MessageCell:View{
+struct MessageCell: View {
     @ObservedObject var msgItem: MessageCellItem
     @ObservedObject var images: MessageAsset
     @DefaultsState(\.userID) var userID

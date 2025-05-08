@@ -20,12 +20,12 @@ extension HomeReactor{
                 if let response{
                     provider.chService.checkAllMy()
                     provider.dmService.checkAll(wsID: mainWS.id)
-                    observeList.append(contentsOf: [.just(.isMasking(false)),
-                                                    .just(.wsTitle(response.name)),
-                                                    .just(.wsLogo(response.thumbnail)),
-                                                    
-                                                    ])
-                }else{
+                    observeList.append(contentsOf: [
+                        .just(.isMasking(false)),
+                        .just(.wsTitle(response.name)),
+                        .just(.wsLogo(response.thumbnail)),
+                    ])
+                } else {
                     observeList.append(.just(.isMasking(true)))
                 }
             case .create(let response): // 새로 만든 것
@@ -40,7 +40,8 @@ extension HomeReactor{
                 }
             case .invited(_):
                 observeList.append(contentsOf: [
-                    .just(.setToast(WSInviteToastType.inviteSuccess)).delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
+                    .just(.setToast(WSInviteToastType.inviteSuccess))
+                    .delay(.microseconds(100), scheduler: MainScheduler.asyncInstance),
                     .just(.setToast(nil))
                 ])
             default: break
@@ -52,8 +53,10 @@ extension HomeReactor{
 //MARK: -- 채널 Transform
 extension HomeReactor{
     var chMutationTransform:Observable<Mutation>{
-        let service = provider.chService.event.flatMap {[weak self] event -> Observable<Mutation> in
-            guard let self else {return Observable.concat([])}
+        let service = provider.chService.event.flatMap { [weak self] event -> Observable<Mutation> in
+            guard let self else {
+                return Observable.concat([])
+            }
             switch event{
             case .create(let chInfo):
                 provider.wsService.setHomeWS(wsID: mainWS.id)
@@ -67,7 +70,6 @@ extension HomeReactor{
             case .unreads(let unreads):
                 return Observable.concat([
                     .just(.setChannelUnreads(unreads)).delay(.microseconds(100), scheduler: MainScheduler.instance),
-//                    .just(.setChannelUnreads(nil))
                 ])
             case .update(let response):
                 guard response.workspaceID == mainWS.id else {return Observable.concat([])}
@@ -80,11 +82,18 @@ extension HomeReactor{
             default: return Observable.concat([])
             }
         }
-        let transition = provider.chService.transition.flatMap {[weak self] transition -> Observable<Mutation> in
+        let transition = provider.chService.transition.flatMap { [weak self] transition -> Observable<Mutation> in
             guard let self else {return Observable.concat([])}
             switch transition{
-            case .goChatting(let chID,let chName): return Observable.concat([
-                .just(.channelDialog(.chatting(chID: chID, chName: chName))).delay(.milliseconds(100), scheduler: MainScheduler.asyncInstance),
+            case .goChatting(let chID,let chName): return Observable.concat(
+                [
+                    .just(
+                        .channelDialog(.chatting(chID: chID, chName: chName))
+                    )
+                    .delay(
+                        .milliseconds(100),
+                        scheduler: MainScheduler.asyncInstance
+                    ),
                 .just(.channelDialog(nil))
             ])
             }

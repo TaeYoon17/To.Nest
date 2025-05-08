@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 typealias CHChatTable = ChannelChatTable
-final class ChannelChatTable: Object,Identifiable{
+final class ChannelChatTable: Object, Identifiable {
     @Persisted(primaryKey: true) var chatID: Int
     @Persisted(originProperty: "chatList") var parentSet: LinkingObjects<CHTable>
     @Persisted var chID: Int

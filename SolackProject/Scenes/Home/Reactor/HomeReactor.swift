@@ -9,7 +9,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import ReactorKit
-enum HomePresent:Equatable{
+enum HomePresent: Equatable {
     case create
     case explore
     case chatting(chID:Int,chName:String)
@@ -17,17 +17,20 @@ enum HomePresent:Equatable{
     case dmExplore
     case dm(roomID:Int,user:UserResponse)
 }
-final class HomeReactor: Reactor{
+final class HomeReactor: Reactor {
     let initialState: State = .init()
     weak var provider: ServiceProviderProtocol!
+    
     @DefaultsState(\.mainWS) var mainWS
-    enum Action{
+    
+    enum Action {
         case setPresent(HomePresent?)
         case setMainWS(wsID:String)
         case initMainWS
         case updateUnreads
     }
-    enum Mutation{
+    
+    enum Mutation {
         case channelDialog(HomePresent?)
         case isMasking(Bool)
         case wsTitle(String)
@@ -53,18 +56,22 @@ final class HomeReactor: Reactor{
         var toast:ToastType? = nil
         var isLoading:Bool = false
     }
-    init(_ provider: ServiceProviderProtocol){
+    init(_ provider: ServiceProviderProtocol) {
         self.provider = provider
     }
+    
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action{
+        switch action {
         case .setPresent(let present):
             switch present{
                 case .chatting(chID: let id, chName: let name):
                 let unreads = UnreadsChannelRes(channelID: id, name: name, count: 0)
                 return Observable.concat([
-//                    .just(.setChannelUnreads([unreads])),
-                    Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                    Observable.just(.channelDialog(present))
+                        .delay(
+                            .milliseconds(100),
+                            scheduler: MainScheduler.instance
+                        ),
                     Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
                 ])
             case .invite:
@@ -77,8 +84,10 @@ final class HomeReactor: Reactor{
                 default:break
             }
             return Observable.concat([
-                Observable.just(.channelDialog(present)).delay(.milliseconds(100), scheduler: MainScheduler.instance),
-                Observable.just(.channelDialog(nil)).delay(.milliseconds(100), scheduler: MainScheduler.instance)
+                Observable.just(.channelDialog(present))
+                    .delay(.milliseconds(100), scheduler: MainScheduler.instance),
+                Observable.just(.channelDialog(nil))
+                    .delay(.milliseconds(100), scheduler: MainScheduler.instance)
             ])
         case .setMainWS(wsID: let wsID):
             provider.wsService.setHomeWS(wsID: Int(wsID)!)

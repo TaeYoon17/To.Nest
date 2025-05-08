@@ -29,11 +29,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         firstAccessConnect()
         print("-------accessToken-------")
         print(accessToken)
-        Task{
-            do{
+        Task {
+            do {
                 let repository = try await TableRepository()
                 await repository.checkPath()
-            }catch{
+            } catch {
                 fatalError("리포지토리 생성 오류 \(error)")
             }
         }
@@ -41,16 +41,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     //MARK: -- 애플로그인 접근 결과를 보여주는 것
     func accessByAppleSignIn(){
-        guard let appleID else {return}
+        guard let appleID else { return }
         let appleIDProvider = ASAuthorizationAppleIDProvider()
-        appleIDProvider.getCredentialState(forUserID: appleID) {[weak self] credintialState, error in
-            guard let self else {return}
-//            print("* getCredintailState 발생")
-            switch credintialState{
-            case .revoked:
-                print("Revoked")
-            case .authorized:
-                print("Authorized")
+        appleIDProvider.getCredentialState(forUserID: appleID) { [weak self] credintialState, error in
+            guard let self else { return }
+            switch credintialState {
+            case .revoked: print("Revoked")
+            case .authorized: print("Authorized")
             default: print("NOT FOUND")
             }
         }

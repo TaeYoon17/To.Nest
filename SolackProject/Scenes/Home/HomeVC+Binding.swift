@@ -44,11 +44,13 @@ extension HomeVC{
 }
 //MARK: -- 화면전환 바인딩
 extension HomeVC{
-    func transitionBinding(reactor: HomeReactor){
-        reactor.state.map{$0.channelDialog}.distinctUntilChanged().subscribe(on: MainScheduler.instance)
+    func transitionBinding(reactor: HomeReactor) {
+        reactor.state.map{ $0.channelDialog }
+            .distinctUntilChanged()
+            .subscribe(on: MainScheduler.instance)
             .bind(onNext: { [weak self] presentType in
                 guard let self, let presentType else {return}
-                switch presentType{
+                switch presentType {
                 case .create:
                     let vc = CHWriterView(reactor.provider,type: .create)
                     let nav = UINavigationController(rootViewController: vc)

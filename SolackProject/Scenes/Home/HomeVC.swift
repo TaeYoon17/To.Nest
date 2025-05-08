@@ -14,9 +14,12 @@ import ReactorKit
 final class HomeVC: BaseVC, View,Toastable{
     var disposeBag = DisposeBag()
     var subscription = Set<AnyCancellable>()
+    
     func bind(reactor: HomeReactor) {
+        
         naviBinding(reactor: reactor)
         transitionBinding(reactor: reactor)
+        
         reactor.state.map{$0.toast}.delay(.microseconds(100), scheduler: MainScheduler.instance).bind(with: self) { owner, type in
             guard let type else {return}
             owner.toastUp(type: type)
@@ -36,21 +39,27 @@ final class HomeVC: BaseVC, View,Toastable{
             owner.present(nav, animated: true)
         }.disposed(by: disposeBag)
     }
-    @MainActor lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    
+    @MainActor
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     let navBar = NaviBar()
     var dataSource: HomeDataSource!
     let newMessageBtn = NewMessageBtn()
     var sliderVM = SliderVM()
     lazy var sliderVC = WSSliderVC(reactor!.provider, sliderVM: sliderVM)
+    
     var wsEmpty: WSEmpty = {
         let view = WSEmpty()
         view.isHidden = true
         return view
     }()
+    
     var isShowKeyboard: CGFloat? = nil
     var toastY: CGFloat{ collectionView.frame.maxY-(toastHeight / 2) - 20 }
     var toastHeight: CGFloat = 0
+    
     override var prefersStatusBarHidden: Bool { false }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -68,16 +77,19 @@ final class HomeVC: BaseVC, View,Toastable{
             owner.navigationController?.pushViewController(vc, animated: true)
         }.disposed(by: disposeBag)
     }
+    
     override func configureLayout() {
         view.addSubview(navBar)
         view.addSubview(collectionView)
         view.addSubview(newMessageBtn)
         view.addSubview(wsEmpty)
     }
+    
     override func configureNavigation() {
         self.navigationItem.largeTitleDisplayMode = .never
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
+    
     override func configureConstraints() {
         navBar.snp.makeConstraints { make in
             make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide)
@@ -116,6 +128,7 @@ final class HomeVC: BaseVC, View,Toastable{
             self.tabBarController?.tabBar.layer.opacity = 1
         }
     }
+    
     override func configureView() {
         collectionView.backgroundColor = .gray1
         configureCollectionView()

@@ -50,7 +50,7 @@ final class ChannelService:ChannelProtocol{
         case goChatting(chID:Int,chName:String)
     }
     init(){
-        Task{@BackgroundActor in
+        Task{ @BackgroundActor in
             repository = try await ChannelRepository()
             chChatrepository = try await ChannelChatRepository()
             userRepository = try await UserInfoRepository()
@@ -73,8 +73,9 @@ final class ChannelService:ChannelProtocol{
     }
 }
 // MARK: --  CRUD
-extension ChannelService{
-    func create(_ info: CHInfo){
+extension ChannelService {
+    
+    func create(_ info: CHInfo) {
         Task{
             do{
                 let result:CHResponse = try await NM.shared.createCH(wsID: mainWS.id, info)
@@ -91,7 +92,8 @@ extension ChannelService{
             }
         }
     }
-    func delete(channelID:Int,channelName:String){
+    
+    func delete(channelID:Int,channelName:String) {
         Task{
             do{
                 let response = try await NM.shared.deleteCH(wsID: mainWS.id, channelName: channelName)
@@ -106,6 +108,7 @@ extension ChannelService{
             }
         }
     }
+    
     func edit(channelName:String,_ info: CHInfo) {
         Task{
             do{
@@ -125,9 +128,9 @@ extension ChannelService{
             }
         }
     }
-    func exit(channelID:Int,channelName:String){
-        Task{
-            do{
+    func exit(channelID:Int,channelName:String) {
+        Task {
+            do {
                 let wsID = mainWS.id
                 let res = try await NM.shared.exitCH(wsID: wsID, channelNmae: channelName)
                 Task{ @BackgroundActor in

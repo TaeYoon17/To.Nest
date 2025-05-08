@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import UIKit
 typealias MSGService = MessageService
-protocol MessageProtocol{
+protocol MessageProtocol {
     var event:PublishSubject<MSGService.Event> {get}
     // 채널
     func getChannelsMessages(chResponse:[CHResponse])
@@ -25,7 +25,8 @@ protocol MessageProtocol{
     func openSocket(roomID:Int)
     func closeSocket(roomID:Int)
 }
-final class MessageService:MessageProtocol{
+
+final class MessageService:MessageProtocol {
     @DefaultsState(\.mainWS) var mainWS
     @DefaultsState(\.userID) var userID
     var event = PublishSubject<MSGService.Event>()
@@ -38,7 +39,7 @@ final class MessageService:MessageProtocol{
     @BackgroundActor var userReferenceCountManager: UserRCM!
     var taskCounter:TaskCounter = .init()
     init(){
-        Task{@BackgroundActor in
+        Task{ @BackgroundActor in
             channelRepostory = try await ChannelRepository()
             chChatrepository = try await ChannelChatRepository()
             userRepository = try await UserInfoRepository()

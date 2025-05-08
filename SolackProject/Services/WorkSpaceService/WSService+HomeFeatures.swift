@@ -7,14 +7,14 @@
 
 import Foundation
 import RxSwift
-extension WSService{
-    func initHome(){
+extension WSService {
+    func initHome() {
         Task{
             do{
                 let allWS = try await NM.shared.checkAllWS()
-                if let id = allWS.first?.workspaceID{
+                if let id = allWS.first?.workspaceID {
                     let homeWS = try await NM.shared.checkWS(wsID: id)
-                    if let members = homeWS.workspaceMembers{
+                    if let members = homeWS.workspaceMembers {
                         await updateUserProfile(responses: members)
                     }
                     mainWS.updateMainWSID(id: id, myManaging: homeWS.ownerID == userID)

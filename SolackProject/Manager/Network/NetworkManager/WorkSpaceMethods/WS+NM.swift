@@ -13,7 +13,7 @@ import Alamofire
 /// 3. 워크스페이스 삭제 -> 관리자일 경우만 실행
 /// 4. 워크스페이스 나가기 -> 관리자가 아닐 경우에만 실행
 extension NM{
-    func createWS(_ info:WSInfo) async throws -> WSResponse{
+    func createWS(_ info:WSInfo) async throws -> WSResponse {
         let router = WSRouter.create(info: info)
         return try await withCheckedThrowingContinuation { continutaion in
             AF.upload(multipartFormData: router.multipartFormData, with: router,interceptor: self.authInterceptor)
@@ -22,7 +22,7 @@ extension NM{
                     print("\(progress)")
                 }
                 .validate(customValidation)
-                .response {[weak self] res in
+                .response { [weak self] res in
                     guard let self else{
                         continutaion.resume(throwing: Errors.API.failFetchToken)
                         return

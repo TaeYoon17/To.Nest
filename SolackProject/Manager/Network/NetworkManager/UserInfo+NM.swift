@@ -24,7 +24,7 @@ extension NetworkManager{
                 return
             }
             AF.request(router,interceptor: authInterceptor).response{res in
-                if res.response?.statusCode == 200{
+                if res.response?.statusCode == 200 {
                     print("updatedevicetoken success")
                     continuation.resume()
                     return
@@ -52,7 +52,7 @@ extension NetworkManager{
 }
 
 extension NetworkManager{
-    func signUp(_ info : SignUpInfo) async throws -> SignResponse{
+    func signUp(_ info : SignUpInfo) async throws -> SignResponse {
         return try await withCheckedThrowingContinuation {[weak self] continuation in
             guard let self else {
                 continuation.resume(throwing: Errors.API.failFetchToken)

@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 extension CHSettingView{
-    final class DataSource: UICollectionViewDiffableDataSource<SectionType,Item>{
+    final class DataSource: UICollectionViewDiffableDataSource<SectionType,Item> {
         var disposeBag = DisposeBag()
         var infoItem = InfoItem()
         private(set) var memberListHeader: MemberListHeader!

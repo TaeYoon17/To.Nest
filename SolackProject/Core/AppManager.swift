@@ -13,6 +13,7 @@ final class AppManager{
     static let shared = AppManager()
     let provider = ServiceProvider()
     let userAccessable = PublishSubject<Bool>()
+    
     func accessErrorHandler<T:FailedProtocol>(of: T.Type,_ error:Error,completion: (T?)->()){
         guard authValidCheck(error: error) else {
             AppManager.shared.userAccessable.onNext(false)
@@ -20,6 +21,7 @@ final class AppManager{
         }
         completion(error as? T)
     }
+    
     private func authValidCheck(error: Error)->Bool{
         print(error)
         if let auth = error as? AuthFailed{

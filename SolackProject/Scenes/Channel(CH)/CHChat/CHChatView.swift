@@ -139,7 +139,7 @@ extension CHChatView{
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     @objc func handleKeyboardShow(notification: Notification) {
-        guard showKeyboard == false else {return}
+        guard showKeyboard == false else { return }
         if let userInfo = notification.userInfo {
             if let keyboardFrameValue = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue) {
                 let keyboardFrame = keyboardFrameValue.cgRectValue
